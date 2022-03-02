@@ -1,0 +1,26 @@
+.table-view, .text-field:focused, .date-picker:focused {
+    -fx-border-color: #f5bf42;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #f5bf42;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-size: 35px;
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+}
+
+.text-field, .date-picker {
+    -fx-background-color: white;
+    -fx-border-color: #424242;
+    -fx-border-width: 0 0 2 0;
+}
+
+.date-picker .text-field {
+    -fx-border-width: 0;
+}
