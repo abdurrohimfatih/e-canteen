@@ -113,7 +113,6 @@ public class ProductController implements Initializable {
         categoryComboBox.setItems(categories);
         supplierComboBox.setItems(suppliers);
         dateAddedDatePicker.setValue(LocalDate.now());
-        addButton.setDefaultButton(true);
 
         productTableView.setItems(products);
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
@@ -250,7 +249,6 @@ public class ProductController implements Initializable {
             barcodeTextField.setDisable(true);
             addButton.setDisable(true);
             updateButton.setDisable(false);
-            updateButton.setDefaultButton(true);
             deleteButton.setDisable(false);
             resetButton.setDisable(false);
         }
@@ -289,7 +287,6 @@ public class ProductController implements Initializable {
         selectedProduct = null;
         barcodeTextField.setDisable(false);
         addButton.setDisable(false);
-        addButton.setDefaultButton(true);
         updateButton.setDisable(true);
         deleteButton.setDisable(true);
         resetButton.setDisable(true);
