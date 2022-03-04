@@ -285,6 +285,7 @@ public class ProductController implements Initializable {
         expiredDateDatePicker.setValue(null);
         countTextField.clear();
         selectedProduct = null;
+        productTableView.getSelectionModel().clearSelection();
         barcodeTextField.setDisable(false);
         addButton.setDisable(false);
         updateButton.setDisable(true);
