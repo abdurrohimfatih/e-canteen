@@ -155,7 +155,7 @@
             <font>
                <Font size="16.0" />
             </font></TextField>
-         <TableView fx:id="promotionTableView" layoutX="34.0" layoutY="57.0" onMouseClicked="#categoryTableViewClicked" prefWidth="439.0" AnchorPane.bottomAnchor="57.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="57.0">
+         <TableView fx:id="promotionTableView" layoutX="34.0" layoutY="57.0" onMouseClicked="#promotionTableViewClicked" prefWidth="439.0" AnchorPane.bottomAnchor="57.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="57.0">
             <columns>
                <TableColumn fx:id="idTableColumn" prefWidth="75.0" text="ID Promosi" />
                <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="Nama Promosi" />

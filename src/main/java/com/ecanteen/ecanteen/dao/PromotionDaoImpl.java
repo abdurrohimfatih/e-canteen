@@ -66,11 +66,45 @@ public class PromotionDaoImpl implements DaoService<Promotion> {
 
     @Override
     public int updateData(Promotion object) throws SQLException, ClassNotFoundException {
-        return 0;
+        int result = 0;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "UPDATE promotion SET name = ?, product_barcode = ?, percentage = ?, description = ? WHERE id = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, object.getName());
+                ps.setString(2, object.getProduct().getBarcode());
+                ps.setInt(3, object.getPercentage());
+                ps.setString(4, object.getDescription());
+                ps.setString(5, object.getId());
+
+                if (ps.executeUpdate() != 0) {
+                    connection.commit();
+                    result = 1;
+                } else {
+                    connection.rollback();
+                }
+            }
+        }
+
+        return result;
     }
 
     @Override
     public int deleteData(Promotion object) throws SQLException, ClassNotFoundException {
-        return 0;
+        int result = 0;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "DELETE FROM promotion WHERE id = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, object.getId());
+
+                if (ps.executeUpdate() != 0) {
+                    connection.commit();
+                    result = 1;
+                } else {
+                    connection.rollback();
+                }
+            }
+        }
+
+        return result;
     }
 }

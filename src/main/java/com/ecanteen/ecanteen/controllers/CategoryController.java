@@ -206,6 +206,7 @@ public class CategoryController implements Initializable {
         nameTextField.clear();
         dateCreatedDatePicker.setValue(null);
         selectedCategory = null;
+        categoryTableView.getSelectionModel().clearSelection();
         idTextField.setDisable(false);
         addButton.setDisable(false);
         updateButton.setDisable(true);

@@ -203,6 +203,7 @@ public class SupplierController implements Initializable {
         nameTextField.clear();
         lastSuppliedDateTextField.setValue(null);
         selectedSupplier = null;
+        supplierTableView.getSelectionModel().clearSelection();
         idTextField.setDisable(false);
         addButton.setDisable(false);
         updateButton.setDisable(true);
