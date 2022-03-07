@@ -1,4 +1,4 @@
-.table-view, .text-field:focused, .date-picker:focused {
+.table-view, .text-field:focused, .date-picker:focused, .text-area:focused {
     -fx-border-color: #f5bf42;
 }
 
@@ -15,7 +15,7 @@
     -fx-text-fill: white;
 }
 
-.text-field, .date-picker {
+.text-field, .date-picker, .text-area {
     -fx-background-color: white;
     -fx-border-color: #424242;
     -fx-border-width: 0 0 2 0;
