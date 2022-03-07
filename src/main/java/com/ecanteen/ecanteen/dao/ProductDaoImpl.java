@@ -18,7 +18,7 @@ public class ProductDaoImpl implements DaoService<Product> {
         List<Product> products = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()){
             String query =
-                    "SELECT p.barcode, p.name, p.category_id, p.price, p.stock_amount, p.supplier_id, p.date_added, p.expired_date, p.count, c.name AS category_name, s.name AS supplier_name FROM product p JOIN category c ON p.category_id = c.id JOIN supplier s ON p.supplier_id = s.id ORDER BY barcode";
+                    "SELECT p.barcode, p.name, p.category_id, p.price, p.stock_amount, p.supplier_id, p.date_added, p.expired_date, p.count, c.name AS category_name, s.name AS supplier_name FROM product p JOIN category c ON p.category_id = c.id JOIN supplier s ON p.supplier_id = s.id ORDER BY p.barcode";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {

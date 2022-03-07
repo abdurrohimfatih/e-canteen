@@ -89,7 +89,7 @@
             <TextField fx:id="idTextField" layoutX="110.0" layoutY="62.0" GridPane.columnIndex="1" />
             <Label text="Nama Promosi" GridPane.rowIndex="1" />
             <TextField fx:id="nameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="Nama Produk" GridPane.rowIndex="2" />
+            <Label text="Produk" GridPane.rowIndex="2" />
             <ComboBox fx:id="productComboBox" prefHeight="27.0" prefWidth="190.0" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label layoutX="10.0" layoutY="117.0" text="Persentase" GridPane.rowIndex="3" />
             <TextField fx:id="percentageTextField" layoutX="110.0" layoutY="62.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
