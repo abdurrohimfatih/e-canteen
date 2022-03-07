@@ -42,7 +42,26 @@ public class PromotionDaoImpl implements DaoService<Promotion> {
 
     @Override
     public int addData(Promotion object) throws SQLException, ClassNotFoundException {
-        return 0;
+        int result = 0;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "INSERT INTO promotion(id, name, product_barcode, percentage, description) VALUES(?, ?, ?, ?, ?)";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, object.getId());
+                ps.setString(2, object.getName());
+                ps.setString(3, object.getProduct().getBarcode());
+                ps.setInt(4, object.getPercentage());
+                ps.setString(5, object.getDescription());
+
+                if (ps.executeUpdate() != 0) {
+                    connection.commit();
+                    result = 1;
+                } else {
+                    connection.rollback();
+                }
+            }
+        }
+
+        return result;
     }
 
     @Override
