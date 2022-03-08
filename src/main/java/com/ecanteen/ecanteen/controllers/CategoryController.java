@@ -32,6 +32,8 @@ public class CategoryController implements Initializable {
     @FXML
     private Button supplierMenuButton;
     @FXML
+    private Button promotionMenuButton;
+    @FXML
     private Button logoutButton;
     @FXML
     private TextField idTextField;
@@ -241,6 +243,20 @@ public class CategoryController implements Initializable {
         supplierStage.show();
 
         Stage stage = (Stage) supplierMenuButton.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    private void promotionMenuButtonAction(ActionEvent actionEvent) throws IOException {
+        Stage promotionStage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("promotion-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        promotionStage.setTitle("Promotion | e-Canteen");
+        promotionStage.setMaximized(true);
+        promotionStage.setScene(scene);
+        promotionStage.show();
+
+        Stage stage = (Stage) promotionMenuButton.getScene().getWindow();
         stage.close();
     }
 }
