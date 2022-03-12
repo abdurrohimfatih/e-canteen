@@ -190,7 +190,7 @@ public class SupplierController implements Initializable {
 
             String searchKeyword = newValue.toLowerCase().trim();
 
-            if (String.valueOf(supplier.getId()).toLowerCase().contains(searchKeyword)) {
+            if (supplier.getId().toLowerCase().contains(searchKeyword)) {
                 return true;
             } else return supplier.getName().toLowerCase().contains(searchKeyword);
         }));

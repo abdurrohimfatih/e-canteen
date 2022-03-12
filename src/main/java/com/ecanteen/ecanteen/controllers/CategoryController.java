@@ -178,7 +178,7 @@ public class CategoryController implements Initializable {
 
             String searchKeyword = newValue.toLowerCase().trim();
 
-            if (String.valueOf(category.getId()).toLowerCase().contains(searchKeyword)) {
+            if (category.getId().toLowerCase().contains(searchKeyword)) {
                 return true;
             } else return category.getName().toLowerCase().contains(searchKeyword);
         }));
