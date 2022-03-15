@@ -1,10 +1,11 @@
 package com.ecanteen.ecanteen.entities;
 
 public class Product {
-    private String barcode, name, supplierId, dateAdded, expiredDate;
-    private int price, stockAmount, count;
+    private String barcode, name, dateAdded, expiredDate;
+    private int purchasePrice, sellingPrice, stockAmount;
     private Category category;
     private Supplier supplier;
+    private Promotion promotion;
 
     public String getBarcode() {
         return barcode;
@@ -20,30 +21,6 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public Supplier getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
     }
 
     public String getDateAdded() {
@@ -62,6 +39,22 @@ public class Product {
         this.expiredDate = expiredDate;
     }
 
+    public int getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(int purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public int getSellingPrice() {
+        return sellingPrice;
+    }
+
+    public void setSellingPrice(int sellingPrice) {
+        this.sellingPrice = sellingPrice;
+    }
+
     public int getStockAmount() {
         return stockAmount;
     }
@@ -70,16 +63,27 @@ public class Product {
         this.stockAmount = stockAmount;
     }
 
-    public int getCount() {
-        return count;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    @Override
-    public String toString() {
-        return barcode + " - " + name;
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+
+    public Promotion getPromotion() {
+        return promotion;
+    }
+
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
     }
 }

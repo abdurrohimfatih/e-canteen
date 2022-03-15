@@ -1,9 +1,8 @@
 package com.ecanteen.ecanteen.entities;
 
 public class Promotion {
-    private String id, name, description;
+    private String id, name, dateAdded, expiredDate;
     private int percentage;
-    private Product product;
 
     public String getId() {
         return id;
@@ -21,12 +20,20 @@ public class Promotion {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDateAdded() {
+        return dateAdded;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDateAdded(String dateAdded) {
+        this.dateAdded = dateAdded;
+    }
+
+    public String getExpiredDate() {
+        return expiredDate;
+    }
+
+    public void setExpiredDate(String expiredDate) {
+        this.expiredDate = expiredDate;
     }
 
     public int getPercentage() {
@@ -37,11 +44,8 @@ public class Promotion {
         this.percentage = percentage;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
+    @Override
+    public String toString() {
+        return name;
     }
 }

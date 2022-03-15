@@ -1,8 +1,8 @@
 package com.ecanteen.ecanteen.controllers;
 
-import com.ecanteen.ecanteen.Main;
 import com.ecanteen.ecanteen.dao.CategoryDaoImpl;
 import com.ecanteen.ecanteen.entities.Category;
+import com.ecanteen.ecanteen.utils.Helper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,13 +10,10 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -25,6 +22,8 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class CategoryController implements Initializable {
+    @FXML
+    private Button userMenuButton;
     @FXML
     private Button productMenuButton;
     @FXML
@@ -39,8 +38,6 @@ public class CategoryController implements Initializable {
     private TextField idTextField;
     @FXML
     private TextField nameTextField;
-    @FXML
-    private DatePicker dateCreatedDatePicker;
     @FXML
     private Button addButton;
     @FXML
@@ -77,8 +74,8 @@ public class CategoryController implements Initializable {
             e.printStackTrace();
         }
 
-        dateCreatedDatePicker.setValue(LocalDate.now());
-
+        Helper.addTextLimiter(idTextField, 5);
+        Helper.addTextLimiter(nameTextField, 30);
         categoryTableView.setItems(categories);
         idTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
@@ -96,7 +93,7 @@ public class CategoryController implements Initializable {
             Category category = new Category();
             category.setId(idTextField.getText().trim());
             category.setName(nameTextField.getText().trim());
-            category.setDateCreated(String.valueOf(dateCreatedDatePicker.getValue()));
+            category.setDateCreated(String.valueOf(LocalDate.now()));
 
             try {
                 if (categoryDao.addData(category) == 1) {
@@ -123,7 +120,7 @@ public class CategoryController implements Initializable {
             alert.showAndWait();
         } else {
             selectedCategory.setName(nameTextField.getText().trim());
-            selectedCategory.setDateCreated(String.valueOf(dateCreatedDatePicker.getValue()));
+            selectedCategory.setDateCreated(String.valueOf(LocalDate.now()));
 
             try {
                 if (categoryDao.updateData(selectedCategory) == 1) {
@@ -194,7 +191,6 @@ public class CategoryController implements Initializable {
         if (selectedCategory != null) {
             idTextField.setText(selectedCategory.getId());
             nameTextField.setText(selectedCategory.getName());
-            dateCreatedDatePicker.setValue(LocalDate.parse(selectedCategory.getDateCreated()));
             idTextField.setDisable(true);
             addButton.setDisable(true);
             updateButton.setDisable(false);
@@ -206,7 +202,6 @@ public class CategoryController implements Initializable {
     private void resetCategory() {
         idTextField.clear();
         nameTextField.clear();
-        dateCreatedDatePicker.setValue(null);
         selectedCategory = null;
         categoryTableView.getSelectionModel().clearSelection();
         idTextField.setDisable(false);
@@ -219,44 +214,22 @@ public class CategoryController implements Initializable {
     }
 
     @FXML
-    private void productMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        Stage productStage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("product-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        productStage.setTitle("Produk | e-Canteen");
-        productStage.setMaximized(true);
-        productStage.setScene(scene);
-        productStage.show();
+    private void userMenuButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(userMenuButton, "Admin - User", "user-view.fxml");
+    }
 
-        Stage stage = (Stage) productMenuButton.getScene().getWindow();
-        stage.close();
+    @FXML
+    private void productMenuButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(productMenuButton, "Admin - Produk", "product-view.fxml");
     }
 
     @FXML
     private void supplierMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        Stage supplierStage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("supplier-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        supplierStage.setTitle("Supplier | e-Canteen");
-        supplierStage.setMaximized(true);
-        supplierStage.setScene(scene);
-        supplierStage.show();
-
-        Stage stage = (Stage) supplierMenuButton.getScene().getWindow();
-        stage.close();
+        Helper.changePage(supplierMenuButton, "Admin - Supplier", "supplier-view.fxml");
     }
 
     @FXML
     private void promotionMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        Stage promotionStage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("promotion-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        promotionStage.setTitle("Promotion | e-Canteen");
-        promotionStage.setMaximized(true);
-        promotionStage.setScene(scene);
-        promotionStage.show();
-
-        Stage stage = (Stage) promotionMenuButton.getScene().getWindow();
-        stage.close();
+        Helper.changePage(promotionMenuButton, "Admin - Promosi", "promotion-view.fxml");
     }
 }

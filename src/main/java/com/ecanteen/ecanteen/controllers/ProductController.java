@@ -1,12 +1,14 @@
 package com.ecanteen.ecanteen.controllers;
 
-import com.ecanteen.ecanteen.Main;
 import com.ecanteen.ecanteen.dao.CategoryDaoImpl;
 import com.ecanteen.ecanteen.dao.ProductDaoImpl;
+import com.ecanteen.ecanteen.dao.PromotionDaoImpl;
 import com.ecanteen.ecanteen.dao.SupplierDaoImpl;
 import com.ecanteen.ecanteen.entities.Category;
 import com.ecanteen.ecanteen.entities.Product;
+import com.ecanteen.ecanteen.entities.Promotion;
 import com.ecanteen.ecanteen.entities.Supplier;
+import com.ecanteen.ecanteen.utils.Helper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -16,13 +18,10 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -30,6 +29,8 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class ProductController implements Initializable {
+    @FXML
+    private Button userMenuButton;
     @FXML
     private Button productMenuButton;
     @FXML
@@ -47,17 +48,17 @@ public class ProductController implements Initializable {
     @FXML
     private ComboBox<Category> categoryComboBox;
     @FXML
-    private TextField priceTextField;
+    private TextField purchasePriceTextField;
+    @FXML
+    private TextField sellingPriceTextField;
     @FXML
     private TextField stockAmountTextField;
     @FXML
     private ComboBox<Supplier> supplierComboBox;
     @FXML
-    private DatePicker dateAddedDatePicker;
-    @FXML
     private DatePicker expiredDateDatePicker;
     @FXML
-    private TextField countTextField;
+    private ComboBox<Promotion> promotionComboBox;
     @FXML
     private Button addButton;
     @FXML
@@ -77,19 +78,17 @@ public class ProductController implements Initializable {
     @FXML
     private TableColumn<Product, String> nameTableColumn;
     @FXML
-    private TableColumn<Product, Category> categoryTableColumn;
+    private TableColumn<Product, Integer> purchasePriceTableColumn;
     @FXML
-    private TableColumn<Product, Integer> priceTableColumn;
+    private TableColumn<Product, Integer> sellingPriceTableColumn;
     @FXML
     private TableColumn<Product, Integer> stockAmountTableColumn;
     @FXML
     private TableColumn<Product, Supplier> supplierTableColumn;
     @FXML
-    private TableColumn<Product, String> dateAddedTableColumn;
-    @FXML
     private TableColumn<Product, String> expiredDateTableColumn;
     @FXML
-    private TableColumn<Product, Integer> countTableColumn;
+    private TableColumn<Product, Promotion> promotionTableColumn;
 
     private ObservableList<Product> products;
     private ProductDaoImpl productDao;
@@ -100,32 +99,34 @@ public class ProductController implements Initializable {
         productDao = new ProductDaoImpl();
         CategoryDaoImpl categoryDao = new CategoryDaoImpl();
         SupplierDaoImpl supplierDao = new SupplierDaoImpl();
+        PromotionDaoImpl promotionDao = new PromotionDaoImpl();
         products = FXCollections.observableArrayList();
         ObservableList<Category> categories = FXCollections.observableArrayList();
         ObservableList<Supplier> suppliers = FXCollections.observableArrayList();
+        ObservableList<Promotion> promotions = FXCollections.observableArrayList();
 
         try {
             products.addAll(productDao.fetchAll());
             categories.addAll(categoryDao.fetchAll());
             suppliers.addAll(supplierDao.fetchAll());
+            promotions.addAll(promotionDao.fetchAll());
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         categoryComboBox.setItems(categories);
         supplierComboBox.setItems(suppliers);
-        dateAddedDatePicker.setValue(LocalDate.now());
+        promotionComboBox.setItems(promotions);
 
         productTableView.setItems(products);
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
-        categoryTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getCategory()));
-        priceTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getPrice()).asObject());
+        purchasePriceTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getPurchasePrice()).asObject());
+        sellingPriceTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getSellingPrice()).asObject());
         stockAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStockAmount()).asObject());
         supplierTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getSupplier()));
-        dateAddedTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDateAdded()));
         expiredDateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getExpiredDate()));
-        countTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getCount()).asObject());
+        promotionTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getPromotion()));
     }
 
     @FXML
@@ -133,11 +134,12 @@ public class ProductController implements Initializable {
         if (barcodeTextField.getText().trim().isEmpty() ||
                 nameTextField.getText().isEmpty() ||
                 categoryComboBox.getValue() == null ||
-                priceTextField.getText().trim().isEmpty() ||
+                purchasePriceTextField.getText().trim().isEmpty() ||
+                sellingPriceTextField.getText().trim().isEmpty() ||
                 stockAmountTextField.getText().trim().isEmpty() ||
                 supplierComboBox.getValue() == null ||
                 expiredDateDatePicker.getValue() == null ||
-                countTextField.getText().trim().isEmpty()) {
+                promotionComboBox.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Silakan isi semua field!");
             alert.setHeaderText("Error");
@@ -147,12 +149,13 @@ public class ProductController implements Initializable {
             product.setBarcode(barcodeTextField.getText().trim());
             product.setName(nameTextField.getText().trim());
             product.setCategory(categoryComboBox.getValue());
-            product.setPrice(Integer.parseInt(priceTextField.getText()));
+            product.setPurchasePrice(Integer.parseInt(purchasePriceTextField.getText()));
+            product.setSellingPrice(Integer.parseInt(sellingPriceTextField.getText()));
             product.setStockAmount(Integer.parseInt(stockAmountTextField.getText().trim()));
             product.setSupplier(supplierComboBox.getValue());
-            product.setDateAdded(String.valueOf(dateAddedDatePicker.getValue()));
+            product.setDateAdded(String.valueOf(LocalDate.now()));
             product.setExpiredDate(String.valueOf(expiredDateDatePicker.getValue()));
-            product.setCount(Integer.parseInt(countTextField.getText().trim()));
+            product.setPromotion(promotionComboBox.getValue());
 
             try {
                 if (productDao.addData(product) == 1) {
@@ -173,11 +176,12 @@ public class ProductController implements Initializable {
         if (barcodeTextField.getText().trim().isEmpty() ||
                 nameTextField.getText().isEmpty() ||
                 categoryComboBox.getValue() == null ||
-                priceTextField.getText().trim().isEmpty() ||
+                purchasePriceTextField.getText().trim().isEmpty() ||
+                sellingPriceTableColumn.getText().trim().isEmpty() ||
                 stockAmountTextField.getText().trim().isEmpty() ||
                 supplierComboBox.getValue() ==  null ||
                 expiredDateDatePicker.getValue() == null ||
-                countTextField.getText().trim().isEmpty()) {
+                promotionComboBox.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Silakan isi semua field!");
             alert.setHeaderText("Error");
@@ -185,12 +189,13 @@ public class ProductController implements Initializable {
         } else {
             selectedProduct.setName(nameTextField.getText().trim());
             selectedProduct.setCategory(categoryComboBox.getValue());
-            selectedProduct.setPrice(Integer.parseInt(priceTextField.getText().trim()));
+            selectedProduct.setPurchasePrice(Integer.parseInt(purchasePriceTextField.getText().trim()));
+            selectedProduct.setSellingPrice(Integer.parseInt(sellingPriceTextField.getText().trim()));
             selectedProduct.setStockAmount(Integer.parseInt(stockAmountTextField.getText().trim()));
             selectedProduct.setSupplier(supplierComboBox.getValue());
-            selectedProduct.setDateAdded(String.valueOf(dateAddedDatePicker.getValue()));
+            selectedProduct.setDateAdded(String.valueOf(LocalDate.now()));
             selectedProduct.setExpiredDate(String.valueOf(expiredDateDatePicker.getValue()));
-            selectedProduct.setCount(Integer.parseInt(countTextField.getText().trim()));
+            selectedProduct.setPromotion(promotionComboBox.getValue());
 
             try {
                 if (productDao.updateData(selectedProduct) == 1) {
@@ -241,12 +246,12 @@ public class ProductController implements Initializable {
             barcodeTextField.setText(selectedProduct.getBarcode());
             nameTextField.setText(selectedProduct.getName());
             categoryComboBox.setValue(selectedProduct.getCategory());
-            priceTextField.setText(String.valueOf(selectedProduct.getPrice()));
+            purchasePriceTextField.setText(String.valueOf(selectedProduct.getPurchasePrice()));
+            sellingPriceTextField.setText(String.valueOf(selectedProduct.getSellingPrice()));
             stockAmountTextField.setText(String.valueOf(selectedProduct.getStockAmount()));
             supplierComboBox.setValue(selectedProduct.getSupplier());
-            dateAddedDatePicker.setValue(LocalDate.parse(selectedProduct.getDateAdded()));
             expiredDateDatePicker.setValue(LocalDate.parse(selectedProduct.getExpiredDate()));
-            countTextField.setText(String.valueOf(selectedProduct.getCount()));
+            promotionComboBox.setValue(selectedProduct.getPromotion());
 
             barcodeTextField.setDisable(true);
             addButton.setDisable(true);
@@ -280,12 +285,12 @@ public class ProductController implements Initializable {
         barcodeTextField.clear();
         nameTextField.clear();
         categoryComboBox.setValue(null);
-        priceTextField.clear();
+        purchasePriceTextField.clear();
+        sellingPriceTextField.clear();
         stockAmountTextField.clear();
         supplierComboBox.setValue(null);
-        dateAddedDatePicker.setValue(LocalDate.now());
         expiredDateDatePicker.setValue(null);
-        countTextField.clear();
+        promotionComboBox.setValue(null);
         selectedProduct = null;
         productTableView.getSelectionModel().clearSelection();
         barcodeTextField.setDisable(false);
@@ -298,44 +303,22 @@ public class ProductController implements Initializable {
     }
 
     @FXML
-    private void categoryMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        Stage categoryStage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("category-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        categoryStage.setTitle("Kategori | e-Canteen");
-        categoryStage.setMaximized(true);
-        categoryStage.setScene(scene);
-        categoryStage.show();
+    private void userMenuButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(userMenuButton, "Admin - User", "user-view.fxml");
+    }
 
-        Stage stage = (Stage) categoryMenuButton.getScene().getWindow();
-        stage.close();
+    @FXML
+    private void categoryMenuButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(categoryMenuButton, "Admin - Kategori", "category-view.fxml");
     }
 
     @FXML
     private void supplierMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        Stage supplierStage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("supplier-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        supplierStage.setTitle("Supplier | e-Canteen");
-        supplierStage.setMaximized(true);
-        supplierStage.setScene(scene);
-        supplierStage.show();
-
-        Stage stage = (Stage) supplierMenuButton.getScene().getWindow();
-        stage.close();
+        Helper.changePage(supplierMenuButton, "Admin - Supplier", "supplier-view.fxml");
     }
 
     @FXML
     private void promotionMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        Stage promotionStage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("promotion-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        promotionStage.setTitle("Promotion | e-Canteen");
-        promotionStage.setMaximized(true);
-        promotionStage.setScene(scene);
-        promotionStage.show();
-
-        Stage stage = (Stage) promotionMenuButton.getScene().getWindow();
-        stage.close();
+        Helper.changePage(promotionMenuButton, "Admin - Promosi", "promotion-view.fxml");
     }
 }

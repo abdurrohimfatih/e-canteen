@@ -2,6 +2,7 @@ package com.ecanteen.ecanteen.dao;
 
 import com.ecanteen.ecanteen.entities.Category;
 import com.ecanteen.ecanteen.entities.Product;
+import com.ecanteen.ecanteen.entities.Promotion;
 import com.ecanteen.ecanteen.entities.Supplier;
 import com.ecanteen.ecanteen.utils.DaoService;
 import com.ecanteen.ecanteen.utils.MySQLConnection;
@@ -18,7 +19,7 @@ public class ProductDaoImpl implements DaoService<Product> {
         List<Product> products = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()){
             String query =
-                    "SELECT p.barcode, p.name, p.category_id, p.price, p.stock_amount, p.supplier_id, p.date_added, p.expired_date, p.count, c.name AS category_name, s.name AS supplier_name FROM product p JOIN category c ON p.category_id = c.id JOIN supplier s ON p.supplier_id = s.id ORDER BY p.barcode";
+                    "SELECT p.barcode, p.name, p.category_id, p.purchase_price, p.selling_price, p.stock_amount, p.supplier_id, p.date_added, p.expired_date, p.promotion_id, c.name AS category_name, s.name AS supplier_name, pm.name AS promotion_name FROM product p JOIN category c ON p.category_id = c.id JOIN supplier s ON p.supplier_id = s.id JOIN promotion pm ON p.promotion_id = pm.id ORDER BY p.barcode";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
@@ -30,16 +31,21 @@ public class ProductDaoImpl implements DaoService<Product> {
                         supplier.setId(rs.getString("supplier_id"));
                         supplier.setName(rs.getString("supplier_name"));
 
+                        Promotion promotion = new Promotion();
+                        promotion.setId(rs.getString("promotion_id"));
+                        promotion.setName(rs.getString("promotion_name"));
+
                         Product product = new Product();
                         product.setBarcode(rs.getString("barcode"));
                         product.setName(rs.getString("name"));
                         product.setCategory(category);
-                        product.setPrice(rs.getInt("price"));
+                        product.setPurchasePrice(rs.getInt("purchase_price"));
+                        product.setSellingPrice(rs.getInt("selling_price"));
                         product.setStockAmount(rs.getInt("stock_amount"));
                         product.setSupplier(supplier);
                         product.setDateAdded(rs.getString("date_added"));
                         product.setExpiredDate(rs.getString("expired_date"));
-                        product.setCount(rs.getInt("count"));
+                        product.setPromotion(promotion);
                         products.add(product);
                     }
                 }
@@ -53,17 +59,18 @@ public class ProductDaoImpl implements DaoService<Product> {
     public int addData(Product object) throws SQLException, ClassNotFoundException {
         int result = 0;
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "INSERT INTO product(barcode, name, category_id, price, stock_amount, supplier_id, date_added, expired_date, count) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO product(barcode, name, category_id, purchase_price, selling_price, stock_amount, supplier_id, date_added, expired_date, promotion_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setString(1, object.getBarcode());
                 ps.setString(2, object.getName());
                 ps.setString(3, object.getCategory().getId());
-                ps.setInt(4, object.getPrice());
-                ps.setInt(5, object.getStockAmount());
-                ps.setString(6, object.getSupplier().getId());
-                ps.setString(7, object.getDateAdded());
-                ps.setString(8, object.getExpiredDate());
-                ps.setInt(9, object.getCount());
+                ps.setInt(4, object.getPurchasePrice());
+                ps.setInt(5, object.getSellingPrice());
+                ps.setInt(6, object.getStockAmount());
+                ps.setString(7, object.getSupplier().getId());
+                ps.setString(8, object.getDateAdded());
+                ps.setString(9, object.getExpiredDate());
+                ps.setString(10, object.getPromotion().getId());
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();
@@ -81,17 +88,18 @@ public class ProductDaoImpl implements DaoService<Product> {
     public int updateData(Product object) throws SQLException, ClassNotFoundException {
         int result = 0;
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "UPDATE product SET name = ?, category_id = ?, price = ?, stock_amount = ?, supplier_id = ?, date_added = ?, expired_date = ?, count = ? WHERE barcode = ?";
+            String query = "UPDATE product SET name = ?, category_id = ?, purchase_price = ?, selling_price = ?, stock_amount = ?, supplier_id = ?, date_added = ?, expired_date = ?, promotion_id = ? WHERE barcode = ?";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setString(1, object.getName());
                 ps.setString(2, object.getCategory().getId());
-                ps.setInt(3, object.getPrice());
-                ps.setInt(4, object.getStockAmount());
-                ps.setString(5, object.getSupplier().getId());
-                ps.setString(6, object.getDateAdded());
-                ps.setString(7, object.getExpiredDate());
-                ps.setInt(8, object.getCount());
-                ps.setString(9, object.getBarcode());
+                ps.setInt(3, object.getPurchasePrice());
+                ps.setInt(4, object.getSellingPrice());
+                ps.setInt(5, object.getStockAmount());
+                ps.setString(6, object.getSupplier().getId());
+                ps.setString(7, object.getDateAdded());
+                ps.setString(8, object.getExpiredDate());
+                ps.setString(9, object.getPromotion().getId());
+                ps.setString(10, object.getBarcode());
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();
