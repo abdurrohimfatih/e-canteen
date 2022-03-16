@@ -117,7 +117,6 @@ public class ProductController implements Initializable {
         categoryComboBox.setItems(categories);
         supplierComboBox.setItems(suppliers);
         promotionComboBox.setItems(promotions);
-
         productTableView.setItems(products);
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
@@ -141,7 +140,7 @@ public class ProductController implements Initializable {
                 expiredDateDatePicker.getValue() == null ||
                 promotionComboBox.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Silakan isi semua field!");
+            alert.setContentText("Silakan isi semua field yang wajib diisi!");
             alert.setHeaderText("Error");
             alert.showAndWait();
         } else {
@@ -183,7 +182,7 @@ public class ProductController implements Initializable {
                 expiredDateDatePicker.getValue() == null ||
                 promotionComboBox.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Silakan isi semua field!");
+            alert.setContentText("Silakan isi semua field yang wajib diisi!");
             alert.setHeaderText("Error");
             alert.showAndWait();
         } else {
@@ -252,7 +251,6 @@ public class ProductController implements Initializable {
             supplierComboBox.setValue(selectedProduct.getSupplier());
             expiredDateDatePicker.setValue(LocalDate.parse(selectedProduct.getExpiredDate()));
             promotionComboBox.setValue(selectedProduct.getPromotion());
-
             barcodeTextField.setDisable(true);
             addButton.setDisable(true);
             updateButton.setDisable(false);

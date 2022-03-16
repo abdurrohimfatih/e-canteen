@@ -14,7 +14,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -94,6 +93,10 @@ public class UserController implements Initializable {
             e.printStackTrace();
         }
 
+        Helper.addTextLimiter(usernameTextField, 20);
+        Helper.addTextLimiter(nameTextField, 30);
+        Helper.addTextLimiterTextArea(addressTextArea, 15);
+        Helper.addTextLimiter(phoneTextField, 14);
         genderComboBox.setItems(FXCollections.observableArrayList("Laki-laki", "Perempuan"));
         levelComboBox.setItems(FXCollections.observableArrayList("Admin", "Kasir"));
         statusComboBox.setItems(FXCollections.observableArrayList("Aktif", "Tidak Aktif"));
@@ -108,15 +111,13 @@ public class UserController implements Initializable {
 
     @FXML
     private void addButtonAction(ActionEvent actionEvent) {
-        if (addressTextArea.getText().length() > 15) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Error");
-            alert.setContentText("Alamat diisi maksimal 15 karakter!");
-            alert.showAndWait();
-            return;
-        }
-
-        if (usernameTextField.getText().trim().isEmpty() || passwordTextField.getText().isEmpty() || nameTextField.getText().trim().isEmpty() || genderComboBox.getValue() == null || levelComboBox.getValue() == null || statusComboBox.getValue() == null) {
+        if (usernameTextField.getText().trim().isEmpty() ||
+                passwordTextField.getText().isEmpty() ||
+                nameTextField.getText().trim().isEmpty() ||
+                addressTextArea.getText().trim().isEmpty() ||
+                genderComboBox.getValue().isEmpty() ||
+                levelComboBox.getValue().isEmpty() ||
+                statusComboBox.getValue().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Error");
             alert.setContentText("Silakan isi semua field yang wajib diisi!");
@@ -126,17 +127,9 @@ public class UserController implements Initializable {
             user.setUsername(usernameTextField.getText().trim());
             user.setPassword(passwordTextField.getText());
             user.setName(nameTextField.getText().trim());
-            if (addressTextArea.getText().trim().isEmpty()) {
-                user.setAddress("-");
-            } else {
-                user.setAddress(addressTextArea.getText().trim());
-            }
+            user.setAddress(addressTextArea.getText().trim());
             user.setGender(genderComboBox.getValue());
-            if (phoneTextField.getText().trim().isEmpty()) {
-                user.setPhone("-");
-            } else {
-                user.setPhone(phoneTextField.getText().trim());
-            }
+            user.setPhone(phoneTextField.getText().trim());
             if (emailTextField.getText().trim().isEmpty()) {
                 user.setEmail("-");
             } else {
@@ -163,15 +156,13 @@ public class UserController implements Initializable {
 
     @FXML
     private void updateButtonAction(ActionEvent actionEvent) {
-        if (addressTextArea.getText().length() > 15) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Error");
-            alert.setContentText("Alamat diisi maksimal 15 karakter!");
-            alert.showAndWait();
-            return;
-        }
-
-        if (usernameTextField.getText().trim().isEmpty() || passwordTextField.getText().isEmpty() || nameTextField.getText().trim().isEmpty() || genderComboBox.getValue() == null || levelComboBox.getValue() == null || statusComboBox.getValue() == null) {
+        if (usernameTextField.getText().trim().isEmpty() ||
+                passwordTextField.getText().isEmpty() ||
+                nameTextField.getText().trim().isEmpty() ||
+                addressTextArea.getText().trim().isEmpty() ||
+                genderComboBox.getValue().isEmpty() ||
+                levelComboBox.getValue().isEmpty() ||
+                statusComboBox.getValue().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Error");
             alert.setContentText("Silakan isi semua field yang wajib diisi!");
@@ -180,17 +171,9 @@ public class UserController implements Initializable {
             selectedUser.setUsername(usernameTextField.getText().trim());
             selectedUser.setPassword(passwordTextField.getText());
             selectedUser.setName(nameTextField.getText().trim());
-            if (addressTextArea.getText().trim().isEmpty()) {
-                selectedUser.setAddress("-");
-            } else {
-                selectedUser.setAddress(addressTextArea.getText().trim());
-            }
+            selectedUser.setAddress(addressTextArea.getText().trim());
             selectedUser.setGender(genderComboBox.getValue());
-            if (phoneTextField.getText().trim().isEmpty()) {
-                selectedUser.setPhone("-");
-            } else {
-                selectedUser.setPhone(phoneTextField.getText().trim());
-            }
+            selectedUser.setPhone(phoneTextField.getText().trim());
             if (emailTextField.getText().trim().isEmpty()) {
                 selectedUser.setEmail("-");
             } else {

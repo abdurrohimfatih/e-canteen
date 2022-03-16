@@ -83,6 +83,8 @@ public class PromotionController implements Initializable {
             e.printStackTrace();
         }
 
+        Helper.addTextLimiter(idTextField, 10);
+        Helper.addTextLimiter(percentageTextField, 3);
         promotionTableView.setItems(promotions);
         idTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
@@ -98,7 +100,7 @@ public class PromotionController implements Initializable {
                 percentageTextField.getText().trim().isEmpty() ||
                 expiredDateDatePicker.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Silakan isi semua field!");
+            alert.setContentText("Silakan isi semua field yang wajib diisi!");
             alert.setHeaderText("Error");
             alert.showAndWait();
         } else {
@@ -125,12 +127,11 @@ public class PromotionController implements Initializable {
 
     @FXML
     private void updateButtonAction(ActionEvent actionEvent) {
-        if (idTextField.getText().trim().isEmpty() ||
-                nameTextField.getText().trim().isEmpty() ||
+        if (nameTextField.getText().trim().isEmpty() ||
                 percentageTextField.getText().trim().isEmpty() ||
                 expiredDateDatePicker.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Silakan isi semua field!");
+            alert.setContentText("Silakan isi semua field yang wajib diisi!");
             alert.setHeaderText("Error");
             alert.showAndWait();
         } else {
@@ -188,7 +189,6 @@ public class PromotionController implements Initializable {
             nameTextField.setText(selectedPromotion.getName());
             percentageTextField.setText(String.valueOf(selectedPromotion.getPercentage()));
             expiredDateDatePicker.setValue(LocalDate.parse(selectedPromotion.getExpiredDate()));
-
             idTextField.setDisable(true);
             addButton.setDisable(true);
             updateButton.setDisable(false);

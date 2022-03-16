@@ -110,7 +110,7 @@
                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <Label layoutX="10.0" layoutY="67.0" text="ID Promosi" />
-            <TextField fx:id="idTextField" layoutX="110.0" layoutY="62.0" GridPane.columnIndex="1" />
+            <TextField fx:id="idTextField" promptText="maks. 10 karakter" layoutX="110.0" layoutY="62.0" GridPane.columnIndex="1" />
             <Label text="Nama Promosi" GridPane.rowIndex="1" />
             <TextField fx:id="nameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label layoutX="10.0" layoutY="117.0" text="Persentase" GridPane.rowIndex="2" />

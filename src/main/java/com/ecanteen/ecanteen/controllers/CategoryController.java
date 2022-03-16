@@ -84,10 +84,11 @@ public class CategoryController implements Initializable {
 
     @FXML
     private void addButtonAction(ActionEvent actionEvent) {
-        if (idTextField.getText().trim().isEmpty() || nameTextField.getText().trim().isEmpty()) {
+        if (idTextField.getText().trim().isEmpty() ||
+                nameTextField.getText().trim().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Error");
-            alert.setContentText("Silakan isi id dan nama supplier!");
+            alert.setContentText("Silakan isi semua field yang wajib diisi!");
             alert.showAndWait();
         } else {
             Category category = new Category();
@@ -116,7 +117,7 @@ public class CategoryController implements Initializable {
         if (nameTextField.getText().trim().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Error");
-            alert.setContentText("Silakan isi nama supplier!");
+            alert.setContentText("Silakan isi semua field yang wajib diisi!");
             alert.showAndWait();
         } else {
             selectedCategory.setName(nameTextField.getText().trim());

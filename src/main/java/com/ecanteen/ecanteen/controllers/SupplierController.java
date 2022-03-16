@@ -17,7 +17,6 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class SupplierController implements Initializable {
@@ -38,7 +37,17 @@ public class SupplierController implements Initializable {
     @FXML
     private TextField nameTextField;
     @FXML
-    private DatePicker lastSuppliedDateDatePicker;
+    private TextArea addressTextArea;
+    @FXML
+    private ComboBox<String> genderComboBox;
+    @FXML
+    private TextField phoneTextField;
+    @FXML
+    private TextField emailTextField;
+    @FXML
+    private TextField bankAccountTextField;
+    @FXML
+    private TextField accountNumberTextField;
     @FXML
     private Button addButton;
     @FXML
@@ -58,7 +67,13 @@ public class SupplierController implements Initializable {
     @FXML
     private TableColumn<Supplier, String> nameTableColumn;
     @FXML
-    private TableColumn<Supplier, String> lastSuppliedDateTableColumn;
+    private TableColumn<Supplier, String> addressTableColumn;
+    @FXML
+    private TableColumn<Supplier, String> phoneTableColumn;
+    @FXML
+    private TableColumn<Supplier, String> bankAccountTableColumn;
+    @FXML
+    private TableColumn<Supplier, String> accountNumberTableColumn;
 
     private ObservableList<Supplier> suppliers;
     private SupplierDaoImpl supplierDao;
@@ -75,24 +90,57 @@ public class SupplierController implements Initializable {
             e.printStackTrace();
         }
 
+        Helper.addTextLimiter(idTextField, 16);
+        Helper.addTextLimiter(nameTextField, 30);
+        Helper.addTextLimiterTextArea(addressTextArea, 15);
+        Helper.addTextLimiter(phoneTextField, 14);
+        Helper.addTextLimiter(bankAccountTextField, 30);
+        Helper.addTextLimiter(accountNumberTextField, 25);
+        genderComboBox.setItems(FXCollections.observableArrayList("Laki-laki", "Perempuan"));
         supplierTableView.setItems(suppliers);
         idTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
-        lastSuppliedDateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLastSuppliedDate()));
+        addressTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAddress()));
+        phoneTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPhone()));
+        bankAccountTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBankAccount()));
+        accountNumberTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAccountNumber()));
     }
 
     @FXML
     private void addButtonAction(ActionEvent actionEvent) {
-        if (idTextField.getText().trim().isEmpty() || nameTextField.getText().trim().isEmpty() || lastSuppliedDateDatePicker.getValue() == null) {
+        if (idTextField.getText().trim().isEmpty() ||
+                nameTextField.getText().trim().isEmpty() ||
+                addressTextArea.getText().trim().isEmpty() ||
+                genderComboBox.getValue().isEmpty() ||
+                phoneTextField.getText().trim().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Error");
-            alert.setContentText("Silakan isi id dan nama supplier!");
+            alert.setContentText("Silakan isi semua field yang wajib diisi!");
             alert.showAndWait();
         } else {
             Supplier supplier = new Supplier();
             supplier.setId(idTextField.getText().trim());
             supplier.setName(nameTextField.getText().trim());
-            supplier.setLastSuppliedDate(String.valueOf(lastSuppliedDateDatePicker.getValue()));
+            supplier.setAddress(addressTextArea.getText().trim());
+            supplier.setGender(genderComboBox.getValue());
+            supplier.setPhone(phoneTextField.getText().trim());
+            if (emailTextField.getText().trim().isEmpty()) {
+                supplier.setEmail("-");
+            } else {
+                supplier.setEmail(emailTextField.getText().trim());
+            }
+
+            if (bankAccountTextField.getText().trim().isEmpty()) {
+                supplier.setBankAccount("-");
+            } else {
+                supplier.setBankAccount(bankAccountTextField.getText().trim());
+            }
+
+            if (accountNumberTextField.getText().trim().isEmpty()) {
+                supplier.setAccountNumber("-");
+            } else {
+                supplier.setAccountNumber(accountNumberTextField.getText().trim());
+            }
 
             try {
                 if (supplierDao.addData(supplier) == 1) {
@@ -111,14 +159,36 @@ public class SupplierController implements Initializable {
 
     @FXML
     private void updateButtonAction(ActionEvent actionEvent) {
-        if (nameTextField.getText().trim().isEmpty() || lastSuppliedDateDatePicker.getValue() == null) {
+        if (nameTextField.getText().trim().isEmpty() ||
+                addressTextArea.getText().trim().isEmpty() ||
+                genderComboBox.getValue().isEmpty() ||
+                phoneTextField.getText().trim().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Error");
-            alert.setContentText("Silakan isi nama supplier!");
+            alert.setContentText("Silakan isi semua field yang wajib diisi!");
             alert.showAndWait();
         } else {
             selectedSupplier.setName(nameTextField.getText().trim());
-            selectedSupplier.setLastSuppliedDate(String.valueOf(lastSuppliedDateDatePicker.getValue()));
+            selectedSupplier.setAddress(addressTextArea.getText().trim());
+            selectedSupplier.setGender(genderComboBox.getValue());
+            selectedSupplier.setPhone(phoneTextField.getText().trim());
+            if (emailTextField.getText().trim().isEmpty()) {
+                selectedSupplier.setEmail("-");
+            } else {
+                selectedSupplier.setEmail(emailTextField.getText().trim());
+            }
+
+            if (bankAccountTextField.getText().trim().isEmpty()) {
+                selectedSupplier.setBankAccount("-");
+            } else {
+                selectedSupplier.setBankAccount(bankAccountTextField.getText().trim());
+            }
+
+            if (accountNumberTextField.getText().trim().isEmpty()) {
+                selectedSupplier.setAccountNumber("-");
+            } else {
+                selectedSupplier.setAccountNumber(accountNumberTextField.getText().trim());
+            }
 
             try {
                 if (supplierDao.updateData(selectedSupplier) == 1) {
@@ -169,7 +239,12 @@ public class SupplierController implements Initializable {
         if (selectedSupplier != null) {
             idTextField.setText(selectedSupplier.getId());
             nameTextField.setText(selectedSupplier.getName());
-            lastSuppliedDateDatePicker.setValue(LocalDate.parse(selectedSupplier.getLastSuppliedDate()));
+            addressTextArea.setText(selectedSupplier.getAddress());
+            genderComboBox.setValue(selectedSupplier.getGender());
+            phoneTextField.setText(selectedSupplier.getPhone());
+            emailTextField.setText(selectedSupplier.getEmail());
+            bankAccountTextField.setText(selectedSupplier.getBankAccount());
+            accountNumberTextField.setText(selectedSupplier.getAccountNumber());
             idTextField.setDisable(true);
             addButton.setDisable(true);
             updateButton.setDisable(false);
@@ -201,7 +276,12 @@ public class SupplierController implements Initializable {
     private void resetSupplier() {
         idTextField.clear();
         nameTextField.clear();
-        lastSuppliedDateDatePicker.setValue(null);
+        addressTextArea.clear();
+        genderComboBox.setValue(null);
+        phoneTextField.clear();
+        emailTextField.clear();
+        bankAccountTextField.clear();
+        accountNumberTextField.clear();
         selectedSupplier = null;
         supplierTableView.getSelectionModel().clearSelection();
         idTextField.setDisable(false);
