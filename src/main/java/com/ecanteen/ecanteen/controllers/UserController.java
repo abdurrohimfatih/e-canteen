@@ -304,4 +304,16 @@ public class UserController implements Initializable {
     private void supplierMenuButtonAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(supplierMenuButton, "Admin - Supplier", "supplier-view.fxml");
     }
+
+    @FXML
+    private void logoutButtonAction(ActionEvent actionEvent) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Konfirmasi");
+        alert.setContentText("Anda yakin ingin keluar?");
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.OK) {
+            Helper.changePage(logoutButton, "Login", "login-view.fxml");
+        }
+    }
 }

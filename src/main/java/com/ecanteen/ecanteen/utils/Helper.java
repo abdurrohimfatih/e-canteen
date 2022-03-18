@@ -18,7 +18,7 @@ public class Helper {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlFile));
         Parent root = fxmlLoader.load();
         stage.setTitle(title + " | e-Canteen");
-        stage.setScene(new Scene(root, 1366, 768));
+        stage.setScene(new Scene(root));
         stage.show();
     }
 

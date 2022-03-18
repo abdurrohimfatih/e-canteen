@@ -312,4 +312,16 @@ public class SupplierController implements Initializable {
     private void promotionMenuButtonAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(promotionMenuButton, "Admin - Promosi", "promotion-view.fxml");
     }
+
+    @FXML
+    private void logoutButtonAction(ActionEvent actionEvent) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Konfirmasi");
+        alert.setContentText("Anda yakin ingin keluar?");
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.OK) {
+            Helper.changePage(logoutButton, "Login", "login-view.fxml");
+        }
+    }
 }
