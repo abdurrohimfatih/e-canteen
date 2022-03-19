@@ -34,6 +34,8 @@ public class LoginController {
             String username = usernameTextField.getText().trim();
             String password = passwordPasswordField.getText();
 
+            password = Helper.hashPassword(password);
+
             LoginDao loginDao = new LoginDao();
             boolean flag = loginDao.validate(username, password);
             String status = loginDao.getStatus(username, password);

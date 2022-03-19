@@ -1,8 +1,6 @@
 package com.ecanteen.ecanteen.utils;
 
 import com.ecanteen.ecanteen.Main;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,6 +9,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class Helper {
     public static void changePage(Button button, String title, String fxmlFile) throws IOException {
@@ -39,4 +40,23 @@ public class Helper {
             }
         });
     }
+
+    public static String hashPassword(String password)
+    {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+            byte[] messageDigest = md.digest(password.getBytes());
+            BigInteger no = new BigInteger(1, messageDigest);
+            StringBuilder hashText = new StringBuilder(no.toString(16));
+
+            while (hashText.length() < 32) {
+                hashText.insert(0, "0");
+            }
+
+            return hashText.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

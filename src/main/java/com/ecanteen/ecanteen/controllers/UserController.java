@@ -125,7 +125,10 @@ public class UserController implements Initializable {
         } else {
             User user = new User();
             user.setUsername(usernameTextField.getText().trim());
-            user.setPassword(passwordTextField.getText());
+
+            String password = Helper.hashPassword(passwordTextField.getText());
+
+            user.setPassword(password);
             user.setName(nameTextField.getText().trim());
             user.setAddress(addressTextArea.getText().trim());
             user.setGender(genderComboBox.getValue());
@@ -169,7 +172,10 @@ public class UserController implements Initializable {
             alert.showAndWait();
         } else {
             selectedUser.setUsername(usernameTextField.getText().trim());
-            selectedUser.setPassword(passwordTextField.getText());
+
+            String password = Helper.hashPassword(passwordTextField.getText());
+
+            selectedUser.setPassword(password);
             selectedUser.setName(nameTextField.getText().trim());
             selectedUser.setAddress(addressTextArea.getText().trim());
             selectedUser.setGender(genderComboBox.getValue());
@@ -230,7 +236,6 @@ public class UserController implements Initializable {
         selectedUser = userTableView.getSelectionModel().getSelectedItem();
         if (selectedUser != null) {
             usernameTextField.setText(selectedUser.getUsername());
-            passwordTextField.setText(selectedUser.getPassword());
             nameTextField.setText(selectedUser.getName());
             addressTextArea.setText(selectedUser.getAddress());
             genderComboBox.setValue(selectedUser.getGender());
