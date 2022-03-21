@@ -120,7 +120,7 @@
             <Label text="Nama Produk" GridPane.rowIndex="1" />
             <TextField fx:id="nameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label layoutX="10.0" layoutY="67.0" text="Kategori" GridPane.rowIndex="2" />
-            <ComboBox fx:id="categoryComboBox" prefHeight="27.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ComboBox fx:id="categoryComboBox" prefHeight="27.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="-- Ketik dan pilih --" />
             <Label layoutX="10.0" layoutY="117.0" text="Harga Beli" GridPane.rowIndex="3" />
             <TextField fx:id="purchasePriceTextField" layoutX="110.0" layoutY="112.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label text="Harga Jual" GridPane.rowIndex="4" />
@@ -128,11 +128,11 @@
             <Label layoutX="10.0" layoutY="167.0" text="Jumlah Stok" GridPane.rowIndex="5" />
             <TextField fx:id="stockAmountTextField" layoutX="110.0" layoutY="162.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label layoutX="10.0" layoutY="217.0" text="Supplier" GridPane.rowIndex="6" />
-            <ComboBox fx:id="supplierComboBox" layoutX="110.0" layoutY="112.0" prefHeight="27.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <ComboBox fx:id="supplierComboBox" layoutX="110.0" layoutY="112.0" prefHeight="27.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="6" promptText="-- Ketik dan pilih --" />
             <Label layoutX="10.0" layoutY="317.0" text="Kedaluwarsa" GridPane.rowIndex="7" />
             <DatePicker fx:id="expiredDateDatePicker" layoutX="110.0" layoutY="312.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Label layoutX="10.0" layoutY="267.0" text="Promo" GridPane.rowIndex="8" />
-            <ComboBox fx:id="promotionComboBox" layoutX="110.0" layoutY="262.0" prefHeight="27.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <ComboBox fx:id="promotionComboBox" layoutX="110.0" layoutY="262.0" prefHeight="27.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="8" promptText="-- Ketik dan pilih --" />
          </GridPane>
          <HBox alignment="CENTER" layoutX="20.0" layoutY="583.0" spacing="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
             <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonAction" style="-fx-background-color: #009688;" text="TAMBAH" textAlignment="CENTER" textFill="WHITE">

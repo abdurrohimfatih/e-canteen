@@ -8,6 +8,7 @@ import com.ecanteen.ecanteen.entities.Category;
 import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Promotion;
 import com.ecanteen.ecanteen.entities.Supplier;
+import com.ecanteen.ecanteen.utils.ComboBoxAutoComplete;
 import com.ecanteen.ecanteen.utils.Helper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -115,8 +116,11 @@ public class ProductController implements Initializable {
         }
 
         categoryComboBox.setItems(categories);
+        new ComboBoxAutoComplete<>(categoryComboBox);
         supplierComboBox.setItems(suppliers);
+        new ComboBoxAutoComplete<>(supplierComboBox);
         promotionComboBox.setItems(promotions);
+        new ComboBoxAutoComplete<>(promotionComboBox);
         productTableView.setItems(products);
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
