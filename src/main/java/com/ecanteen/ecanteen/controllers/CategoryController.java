@@ -147,23 +147,30 @@ public class CategoryController implements Initializable {
 
     @FXML
     private void deleteButtonAction(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Konfirmasi");
-        alert.setContentText("Anda yakin ingin menghapus?");
-        alert.showAndWait();
+        if (selectedCategory.getProductAmount() > 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Error");
+            alert.setContentText("Kategori ini memiliki produk, tidak dapat dihapus!");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("Konfirmasi");
+            alert.setContentText("Anda yakin ingin menghapus?");
+            alert.showAndWait();
 
-        if (alert.getResult() == ButtonType.OK) {
-            try {
-                if (categoryDao.deleteData(selectedCategory) == 1) {
-                    categories.clear();
-                    categories.addAll(categoryDao.fetchAll());
-                    resetCategory();
-                    categoryTableView.requestFocus();
-                    infoLabel.setText("Data berhasil dihapus!");
-                    infoLabel.setStyle("-fx-text-fill: green");
+            if (alert.getResult() == ButtonType.OK) {
+                try {
+                    if (categoryDao.deleteData(selectedCategory) == 1) {
+                        categories.clear();
+                        categories.addAll(categoryDao.fetchAll());
+                        resetCategory();
+                        categoryTableView.requestFocus();
+                        infoLabel.setText("Data berhasil dihapus!");
+                        infoLabel.setStyle("-fx-text-fill: green");
+                    }
+                } catch (SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -199,7 +206,7 @@ public class CategoryController implements Initializable {
             nameTextField.setText(selectedCategory.getName());
             addButton.setDisable(true);
             updateButton.setDisable(false);
-            deleteButton.setDisable(selectedCategory.getProductAmount() > 0);
+            deleteButton.setDisable(false);
             resetButton.setDisable(false);
 
             if (mouseEvent.getClickCount() > 1) {
@@ -266,18 +273,6 @@ public class CategoryController implements Initializable {
 
         if (alert.getResult() == ButtonType.OK) {
             Helper.changePage(logoutButton, "Login", "login-view.fxml");
-        }
-    }
-
-    @FXML
-    private void categoryTableViewReleased(KeyEvent keyEvent) throws IOException {
-        if (keyEvent.getCode().isWhitespaceKey() && selectedCategory != null) {
-            Stage stage = new Stage();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("detail-category-view.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-            stage.setTitle("Detail Kategori");
-            stage.setScene(scene);
-            stage.show();
         }
     }
 }
