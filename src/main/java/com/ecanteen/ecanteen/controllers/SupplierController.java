@@ -1,8 +1,11 @@
 package com.ecanteen.ecanteen.controllers;
 
+import com.ecanteen.ecanteen.Main;
 import com.ecanteen.ecanteen.dao.SupplierDaoImpl;
+import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Supplier;
 import com.ecanteen.ecanteen.utils.Helper;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,14 +13,21 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class SupplierController implements Initializable {
     @FXML
@@ -73,11 +83,13 @@ public class SupplierController implements Initializable {
     @FXML
     private TableColumn<Supplier, String> phoneTableColumn;
     @FXML
+    private TableColumn<Supplier, Integer> productAmountTableColumn;
+    @FXML
     private TableColumn<Supplier, String> statusTableColumn;
 
     private ObservableList<Supplier> suppliers;
     private SupplierDaoImpl supplierDao;
-    private Supplier selectedSupplier;
+    static Supplier selectedSupplier;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -103,6 +115,7 @@ public class SupplierController implements Initializable {
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         addressTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAddress()));
         phoneTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPhone()));
+        productAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getProductAmount()).asObject());
         statusTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStatus()));
     }
 
@@ -265,6 +278,26 @@ public class SupplierController implements Initializable {
             updateButton.setDisable(false);
             deleteButton.setDisable(false);
             resetButton.setDisable(false);
+
+            if (mouseEvent.getClickCount() > 1) {
+                Stage stage = new Stage();
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("detail-supplier-view.fxml"));
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                stage.setTitle("Detail Supplier");
+                stage.setScene(scene);
+                stage.centerOnScreen();
+                stage.show();
+
+                Stage supplierStage = (Stage) supplierMenuButton.getScene().getWindow();
+                supplierStage.setOnCloseRequest(event -> {
+                    stage.close();
+                });
+            }
         }
     }
 

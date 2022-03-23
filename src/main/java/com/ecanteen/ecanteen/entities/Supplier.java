@@ -2,6 +2,7 @@ package com.ecanteen.ecanteen.entities;
 
 public class Supplier {
     private String id, name, address, gender, phone, email, bankAccount, accountNumber, status;
+    private int productAmount;
 
     public String getId() {
         return id;
@@ -65,6 +66,14 @@ public class Supplier {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public int getProductAmount() {
+        return productAmount;
+    }
+
+    public void setProductAmount(int productAmount) {
+        this.productAmount = productAmount;
     }
 
     public String getStatus() {

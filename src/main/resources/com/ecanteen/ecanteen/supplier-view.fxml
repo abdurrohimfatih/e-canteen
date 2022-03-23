@@ -199,6 +199,7 @@
                <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="Nama Supplier" />
                <TableColumn fx:id="addressTableColumn" prefWidth="75.0" text="Alamat" />
                <TableColumn fx:id="phoneTableColumn" prefWidth="75.0" text="No Telp" />
+               <TableColumn fx:id="productAmountTableColumn" prefWidth="75.0" text="Jumlah Jenis Produk" />
                <TableColumn fx:id="statusTableColumn" prefWidth="75.0" text="Status" />
             </columns>
             <columnResizePolicy>

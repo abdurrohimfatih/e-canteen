@@ -25,6 +25,7 @@ public class SupplierDaoImpl implements DaoService<Supplier> {
                         supplier.setEmail(rs.getString("email"));
                         supplier.setBankAccount(rs.getString("bank_account"));
                         supplier.setAccountNumber(rs.getString("account_number"));
+                        supplier.setProductAmount(ProductDaoImpl.getProductAmountSupplier(supplier));
                         if (rs.getString("status").equals("1")) {
                             supplier.setStatus("Aktif");
                         } else {

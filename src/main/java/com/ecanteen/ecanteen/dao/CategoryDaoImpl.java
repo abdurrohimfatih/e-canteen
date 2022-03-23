@@ -23,7 +23,7 @@ public class CategoryDaoImpl implements DaoService<Category> {
                         Category category = new Category();
                         category.setId(rs.getInt("id"));
                         category.setName(rs.getString("name"));
-                        category.setProductAmount(ProductDaoImpl.getProductAmount(category));
+                        category.setProductAmount(ProductDaoImpl.getProductAmountCategory(category));
                         category.setDateCreated(rs.getString("date_created"));
                         categories.add(category);
                     }

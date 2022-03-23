@@ -133,12 +133,30 @@ public class ProductDaoImpl implements DaoService<Product> {
         return result;
     }
 
-    public static int getProductAmount(Category object) throws SQLException, ClassNotFoundException {
+    public static int getProductAmountCategory(Category object) throws SQLException, ClassNotFoundException {
         int productAmount = 0;
         try (Connection connection = MySQLConnection.createConnection()) {
             String query = "SELECT COUNT(*) AS amount FROM product WHERE category_id = ? GROUP BY category_id";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setInt(1, object.getId());
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        productAmount = rs.getInt("amount");
+                    }
+                }
+            }
+        }
+
+        return productAmount;
+    }
+
+    public static int getProductAmountSupplier(Supplier object) throws SQLException, ClassNotFoundException {
+        int productAmount = 0;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT COUNT(*) AS amount FROM product WHERE supplier_id = ? GROUP BY supplier_id";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, object.getId());
 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
@@ -172,6 +190,36 @@ public class ProductDaoImpl implements DaoService<Product> {
                         product.setSellingPrice(rs.getInt("selling_price"));
                         product.setStockAmount(rs.getInt("stock_amount"));
                         product.setSupplier(supplier);
+                        products.add(product);
+                    }
+                }
+            }
+        }
+
+        return products;
+    }
+
+    public List<Product> detailSupplier(Supplier object) throws SQLException, ClassNotFoundException {
+        List<Product> products = new ArrayList<>();
+        try (Connection connection = MySQLConnection.createConnection()){
+            String query =
+                    "SELECT p.barcode, p.name, p.category_id, p.purchase_price, p.selling_price, p.stock_amount, p.supplier_id, c.name AS category_name FROM product p JOIN category c ON p.category_id = c.id WHERE p.supplier_id = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, object.getId());
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Category category = new Category();
+                        category.setId(rs.getInt("category_id"));
+                        category.setName(rs.getString("category_name"));
+
+                        Product product = new Product();
+                        product.setBarcode(rs.getString("barcode"));
+                        product.setName(rs.getString("name"));
+                        product.setPurchasePrice(rs.getInt("purchase_price"));
+                        product.setSellingPrice(rs.getInt("selling_price"));
+                        product.setStockAmount(rs.getInt("stock_amount"));
+                        product.setCategory(category);
                         products.add(product);
                     }
                 }

@@ -172,7 +172,7 @@
             <columns>
                <TableColumn fx:id="noTableColumn" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" sortable="false" text="No" />
                <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="Nama Kategori" />
-               <TableColumn fx:id="productAmountTableColumn" prefWidth="75.0" text="Jumlah Jenis Barang" />
+               <TableColumn fx:id="productAmountTableColumn" prefWidth="75.0" text="Jumlah Jenis Produk" />
                <TableColumn fx:id="dateCreatedTableColumn" prefWidth="75.0" text="Tanggal Dibuat" />
             </columns>
             <columnResizePolicy>
