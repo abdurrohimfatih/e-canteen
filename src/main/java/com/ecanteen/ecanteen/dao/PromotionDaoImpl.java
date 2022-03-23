@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,11 @@ public class PromotionDaoImpl implements DaoService<Promotion> {
                         promotion.setPercentage(rs.getInt("percentage"));
                         promotion.setDateAdded(rs.getString("date_added"));
                         promotion.setExpiredDate(rs.getString("expired_date"));
+                        if (LocalDate.now().isBefore(LocalDate.parse(rs.getString("expired_date"))) || LocalDate.now().isEqual(LocalDate.parse(rs.getString("expired_date")))) {
+                            promotion.setStatus("Aktif");
+                        } else {
+                            promotion.setStatus("Kedaluwarsa");
+                        }
                         promotions.add(promotion);
                     }
                 }

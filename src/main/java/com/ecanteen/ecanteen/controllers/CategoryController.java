@@ -86,7 +86,6 @@ public class CategoryController implements Initializable {
         Helper.addTextLimiter(nameTextField, 30);
         categoryTableView.setItems(categories);
         noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(categoryTableView.getItems().indexOf(data.getValue()) + 1));
-        noTableColumn.setSortable(false);
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         productAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getProductAmount()).asObject());
         dateCreatedTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDateCreated()));

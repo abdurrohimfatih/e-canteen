@@ -56,7 +56,6 @@ public class DetailCategoryController implements Initializable {
         detailCategoryTableView.setItems(products);
         categoryNameLabel.setText(selectedCategory.getName());
         noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(detailCategoryTableView.getItems().indexOf(data.getValue()) + 1));
-        noTableColumn.setSortable(false);
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         purchasePriceTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getPurchasePrice()).asObject());

@@ -66,6 +66,8 @@ public class PromotionController implements Initializable {
     private TableColumn<Promotion, String> dateAddedTableColumn;
     @FXML
     private TableColumn<Promotion, String> expiredDateTableColumn;
+    @FXML
+    private TableColumn<Promotion, String> statusTableColumn;
 
     private ObservableList<Promotion> promotions;
     private PromotionDaoImpl promotionDao;
@@ -91,6 +93,7 @@ public class PromotionController implements Initializable {
         percentageTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getPercentage()).asObject());
         dateAddedTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDateAdded()));
         expiredDateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getExpiredDate()));
+        statusTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStatus()));
     }
 
     @FXML
@@ -116,6 +119,7 @@ public class PromotionController implements Initializable {
                     promotions.clear();
                     promotions.addAll(promotionDao.fetchAll());
                     resetPromotion();
+                    idTextField.requestFocus();
                     infoLabel.setText("Data berhasil ditambahkan!");
                     infoLabel.setStyle("-fx-text-fill: green");
                 }
@@ -144,6 +148,7 @@ public class PromotionController implements Initializable {
                     promotions.clear();
                     promotions.addAll(promotionDao.fetchAll());
                     resetPromotion();
+                    promotionTableView.requestFocus();
                     infoLabel.setText("Data berhasil diubah!");
                     infoLabel.setStyle("-fx-text-fill: green");
                 }
