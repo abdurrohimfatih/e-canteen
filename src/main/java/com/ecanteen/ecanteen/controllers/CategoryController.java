@@ -1,8 +1,11 @@
 package com.ecanteen.ecanteen.controllers;
 
+import com.ecanteen.ecanteen.Main;
 import com.ecanteen.ecanteen.dao.CategoryDaoImpl;
 import com.ecanteen.ecanteen.entities.Category;
 import com.ecanteen.ecanteen.utils.Helper;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,10 +13,14 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -53,15 +60,17 @@ public class CategoryController implements Initializable {
     @FXML
     private TableView<Category> categoryTableView;
     @FXML
-    private TableColumn<Category, String> idTableColumn;
+    private TableColumn<Category, Integer> noTableColumn;
     @FXML
     private TableColumn<Category, String> nameTableColumn;
+    @FXML
+    private TableColumn<Category, Integer> productAmountTableColumn;
     @FXML
     private TableColumn<Category, String> dateCreatedTableColumn;
 
     private ObservableList<Category> categories;
     private CategoryDaoImpl categoryDao;
-    private Category selectedCategory;
+    static Category selectedCategory;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -74,25 +83,24 @@ public class CategoryController implements Initializable {
             e.printStackTrace();
         }
 
-        Helper.addTextLimiter(idTextField, 5);
         Helper.addTextLimiter(nameTextField, 30);
         categoryTableView.setItems(categories);
-        idTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId()));
+        noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(categoryTableView.getItems().indexOf(data.getValue()) + 1));
+        noTableColumn.setSortable(false);
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
+        productAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getProductAmount()).asObject());
         dateCreatedTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDateCreated()));
     }
 
     @FXML
     private void addButtonAction(ActionEvent actionEvent) {
-        if (idTextField.getText().trim().isEmpty() ||
-                nameTextField.getText().trim().isEmpty()) {
+        if (nameTextField.getText().trim().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Error");
             alert.setContentText("Silakan isi semua field yang wajib diisi!");
             alert.showAndWait();
         } else {
             Category category = new Category();
-            category.setId(idTextField.getText().trim());
             category.setName(nameTextField.getText().trim());
             category.setDateCreated(String.valueOf(LocalDate.now()));
 
@@ -101,7 +109,7 @@ public class CategoryController implements Initializable {
                     categories.clear();
                     categories.addAll(categoryDao.fetchAll());
                     resetCategory();
-                    idTextField.requestFocus();
+                    nameTextField.requestFocus();
                     infoLabel.setText("Data berhasil ditambahkan!");
                     infoLabel.setStyle("-fx-text-fill: green");
 
@@ -176,9 +184,7 @@ public class CategoryController implements Initializable {
 
             String searchKeyword = newValue.toLowerCase().trim();
 
-            if (category.getId().toLowerCase().contains(searchKeyword)) {
-                return true;
-            } else return category.getName().toLowerCase().contains(searchKeyword);
+            return category.getName().toLowerCase().contains(searchKeyword);
         }));
 
         SortedList<Category> sortedList = new SortedList<>(filteredList);
@@ -190,13 +196,32 @@ public class CategoryController implements Initializable {
     private void categoryTableViewClicked(MouseEvent mouseEvent) {
         selectedCategory = categoryTableView.getSelectionModel().getSelectedItem();
         if (selectedCategory != null) {
-            idTextField.setText(selectedCategory.getId());
+            idTextField.setText(String.valueOf(selectedCategory.getId()));
             nameTextField.setText(selectedCategory.getName());
-            idTextField.setDisable(true);
             addButton.setDisable(true);
             updateButton.setDisable(false);
-            deleteButton.setDisable(false);
+            deleteButton.setDisable(selectedCategory.getProductAmount() > 0);
             resetButton.setDisable(false);
+
+            if (mouseEvent.getClickCount() > 1) {
+                Stage stage = new Stage();
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("detail-category-view.fxml"));
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                stage.setTitle("Detail Kategori");
+                stage.setScene(scene);
+                stage.centerOnScreen();
+                stage.show();
+
+                Stage categoryStage = (Stage) categoryMenuButton.getScene().getWindow();
+                categoryStage.setOnCloseRequest(event -> {
+                    stage.close();
+                });
+            }
         }
     }
 
@@ -205,12 +230,11 @@ public class CategoryController implements Initializable {
         nameTextField.clear();
         selectedCategory = null;
         categoryTableView.getSelectionModel().clearSelection();
-        idTextField.setDisable(false);
         addButton.setDisable(false);
         updateButton.setDisable(true);
         deleteButton.setDisable(true);
         resetButton.setDisable(true);
-        idTextField.requestFocus();
+        nameTextField.requestFocus();
         infoLabel.setText("");
     }
 
@@ -243,6 +267,18 @@ public class CategoryController implements Initializable {
 
         if (alert.getResult() == ButtonType.OK) {
             Helper.changePage(logoutButton, "Login", "login-view.fxml");
+        }
+    }
+
+    @FXML
+    private void categoryTableViewReleased(KeyEvent keyEvent) throws IOException {
+        if (keyEvent.getCode().isWhitespaceKey() && selectedCategory != null) {
+            Stage stage = new Stage();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("detail-category-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            stage.setTitle("Detail Kategori");
+            stage.setScene(scene);
+            stage.show();
         }
     }
 }

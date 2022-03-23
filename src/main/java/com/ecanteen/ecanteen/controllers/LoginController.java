@@ -43,14 +43,14 @@ public class LoginController {
 
             if (!flag) {
                 infoLabel.setText("Username atau password salah. Silakan coba lagi!");
-            } else if (status.equals("Tidak Aktif")) {
-                infoLabel.setText("Status user sedang tidak aktif. Silakan aktifkan di admin!");
-            } else {
+            } else if (status.equals("1")) {
                 if (level.equals("Admin")) {
                     Helper.changePage(loginButton, "Admin - User", "user-view.fxml");
                 } else {
                     Helper.changePage(loginButton, "Kasir - Produk", "product-view.fxml");
                 }
+            } else {
+                infoLabel.setText("Status user sedang tidak aktif. Silakan aktifkan di admin!");
             }
         }
     }

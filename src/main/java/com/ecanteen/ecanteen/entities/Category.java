@@ -1,13 +1,14 @@
 package com.ecanteen.ecanteen.entities;
 
 public class Category {
-    private String id, name, dateCreated;
+    private int id, productAmount;
+    private String name, dateCreated;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -17,6 +18,14 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getProductAmount() {
+        return productAmount;
+    }
+
+    public void setProductAmount(int productAmount) {
+        this.productAmount = productAmount;
     }
 
     public String getDateCreated() {

@@ -49,6 +49,8 @@ public class SupplierController implements Initializable {
     @FXML
     private TextField accountNumberTextField;
     @FXML
+    private ComboBox<String> statusComboBox;
+    @FXML
     private Button addButton;
     @FXML
     private Button updateButton;
@@ -71,9 +73,7 @@ public class SupplierController implements Initializable {
     @FXML
     private TableColumn<Supplier, String> phoneTableColumn;
     @FXML
-    private TableColumn<Supplier, String> bankAccountTableColumn;
-    @FXML
-    private TableColumn<Supplier, String> accountNumberTableColumn;
+    private TableColumn<Supplier, String> statusTableColumn;
 
     private ObservableList<Supplier> suppliers;
     private SupplierDaoImpl supplierDao;
@@ -97,13 +97,13 @@ public class SupplierController implements Initializable {
         Helper.addTextLimiter(bankAccountTextField, 30);
         Helper.addTextLimiter(accountNumberTextField, 25);
         genderComboBox.setItems(FXCollections.observableArrayList("Laki-laki", "Perempuan"));
+        statusComboBox.setItems(FXCollections.observableArrayList("Aktif", "Tidak Aktif"));
         supplierTableView.setItems(suppliers);
         idTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         addressTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAddress()));
         phoneTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPhone()));
-        bankAccountTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBankAccount()));
-        accountNumberTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAccountNumber()));
+        statusTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStatus()));
     }
 
     @FXML
@@ -112,7 +112,8 @@ public class SupplierController implements Initializable {
                 nameTextField.getText().trim().isEmpty() ||
                 addressTextArea.getText().trim().isEmpty() ||
                 genderComboBox.getValue().isEmpty() ||
-                phoneTextField.getText().trim().isEmpty()) {
+                phoneTextField.getText().trim().isEmpty() ||
+                statusComboBox.getValue().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Error");
             alert.setContentText("Silakan isi semua field yang wajib diisi!");
@@ -142,6 +143,12 @@ public class SupplierController implements Initializable {
                 supplier.setAccountNumber(accountNumberTextField.getText().trim());
             }
 
+            if (statusComboBox.getValue().equals("Aktif")) {
+                supplier.setStatus("1");
+            } else {
+                supplier.setStatus("0");
+            }
+
             try {
                 if (supplierDao.addData(supplier) == 1) {
                     suppliers.clear();
@@ -162,7 +169,8 @@ public class SupplierController implements Initializable {
         if (nameTextField.getText().trim().isEmpty() ||
                 addressTextArea.getText().trim().isEmpty() ||
                 genderComboBox.getValue().isEmpty() ||
-                phoneTextField.getText().trim().isEmpty()) {
+                phoneTextField.getText().trim().isEmpty() ||
+                statusComboBox.getValue().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Error");
             alert.setContentText("Silakan isi semua field yang wajib diisi!");
@@ -188,6 +196,12 @@ public class SupplierController implements Initializable {
                 selectedSupplier.setAccountNumber("-");
             } else {
                 selectedSupplier.setAccountNumber(accountNumberTextField.getText().trim());
+            }
+
+            if (statusComboBox.getValue().equals("Aktif")) {
+                selectedSupplier.setStatus("1");
+            } else {
+                selectedSupplier.setStatus("0");
             }
 
             try {
@@ -245,6 +259,7 @@ public class SupplierController implements Initializable {
             emailTextField.setText(selectedSupplier.getEmail());
             bankAccountTextField.setText(selectedSupplier.getBankAccount());
             accountNumberTextField.setText(selectedSupplier.getAccountNumber());
+            statusComboBox.setValue(selectedSupplier.getStatus());
             idTextField.setDisable(true);
             addButton.setDisable(true);
             updateButton.setDisable(false);
@@ -282,6 +297,7 @@ public class SupplierController implements Initializable {
         emailTextField.clear();
         bankAccountTextField.clear();
         accountNumberTextField.clear();
+        statusComboBox.setValue(null);
         selectedSupplier = null;
         supplierTableView.getSelectionModel().clearSelection();
         idTextField.setDisable(false);

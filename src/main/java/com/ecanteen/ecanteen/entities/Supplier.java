@@ -1,7 +1,7 @@
 package com.ecanteen.ecanteen.entities;
 
 public class Supplier {
-    private String id, name, address, gender, phone, email, bankAccount, accountNumber;
+    private String id, name, address, gender, phone, email, bankAccount, accountNumber, status;
 
     public String getId() {
         return id;
@@ -65,6 +65,14 @@ public class Supplier {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 public class ComboBoxAutoComplete<T> {
 
     private final ComboBox<T> cmb;
-    String filter;
+    String filter = "";
     private final ObservableList<T> originalItems;
 
     public ComboBoxAutoComplete(ComboBox<T> cmb) {

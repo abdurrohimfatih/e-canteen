@@ -20,6 +20,7 @@ public class Main extends Application {
 
         stage.setTitle("Login | e-Canteen");
         stage.setScene(scene);
+        stage.centerOnScreen();
         stage.show();
     }
 }

@@ -140,7 +140,11 @@ public class UserController implements Initializable {
             }
             user.setLevel(levelComboBox.getValue());
             user.setDateCreated(String.valueOf(LocalDate.now()));
-            user.setStatus(statusComboBox.getValue());
+            if (statusComboBox.getValue().equals("Aktif")) {
+                user.setStatus("1");
+            } else {
+                user.setStatus("0");
+            }
 
             try {
                 if (userDao.addData(user) == 1) {
@@ -186,7 +190,11 @@ public class UserController implements Initializable {
                 selectedUser.setEmail(emailTextField.getText().trim());
             }
             selectedUser.setLevel(levelComboBox.getValue());
-            selectedUser.setStatus(statusComboBox.getValue());
+            if (statusComboBox.getValue().equals("Aktif")) {
+                selectedUser.setStatus("1");
+            } else {
+                selectedUser.setStatus("0");
+            }
 
             try {
                 if (userDao.updateData(selectedUser) == 1) {

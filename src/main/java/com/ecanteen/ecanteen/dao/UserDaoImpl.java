@@ -14,7 +14,7 @@ public class UserDaoImpl implements DaoService<User> {
     public List<User> fetchAll() throws SQLException, ClassNotFoundException {
         List<User> users = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT username, password, name, address, gender, phone, email, level, date_created, status FROM user ORDER BY username";
+            String query = "SELECT username, password, name, address, gender, phone, email, level, date_created, status FROM user";
             try (PreparedStatement ps = connection.prepareStatement(query)){
                 try (ResultSet rs = ps.executeQuery()){
                     while (rs.next()) {
@@ -28,7 +28,11 @@ public class UserDaoImpl implements DaoService<User> {
                         user.setEmail(rs.getString("email"));
                         user.setLevel(rs.getString("level"));
                         user.setDateCreated(rs.getString("date_created"));
-                        user.setStatus(rs.getString("status"));
+                        if (rs.getString("status").equals("1")) {
+                            user.setStatus("Aktif");
+                        } else {
+                            user.setStatus("Tidak Aktif");
+                        }
                         users.add(user);
                     }
                 }

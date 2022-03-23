@@ -16,13 +16,14 @@ public class CategoryDaoImpl implements DaoService<Category> {
     public List<Category> fetchAll() throws SQLException, ClassNotFoundException {
         List<Category> categories = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT id, name, date_created FROM category ORDER BY id";
+            String query = "SELECT id, name, date_created FROM category";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         Category category = new Category();
-                        category.setId(rs.getString("id"));
+                        category.setId(rs.getInt("id"));
                         category.setName(rs.getString("name"));
+                        category.setProductAmount(ProductDaoImpl.getProductAmount(category));
                         category.setDateCreated(rs.getString("date_created"));
                         categories.add(category);
                     }
@@ -39,7 +40,7 @@ public class CategoryDaoImpl implements DaoService<Category> {
         try (Connection connection = MySQLConnection.createConnection()) {
             String query = "INSERT INTO category(id, name, date_created) VALUES(?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
-                ps.setString(1, object.getId());
+                ps.setInt(1, object.getId());
                 ps.setString(2, object.getName());
                 ps.setString(3, object.getDateCreated());
 
@@ -63,7 +64,7 @@ public class CategoryDaoImpl implements DaoService<Category> {
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setString(1, object.getName());
                 ps.setString(2, object.getDateCreated());
-                ps.setString(3, object.getId());
+                ps.setInt(3, object.getId());
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();
@@ -83,7 +84,7 @@ public class CategoryDaoImpl implements DaoService<Category> {
         try (Connection connection = MySQLConnection.createConnection()) {
             String query = "DELETE FROM category WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
-                ps.setString(1, object.getId());
+                ps.setInt(1, object.getId());
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();
