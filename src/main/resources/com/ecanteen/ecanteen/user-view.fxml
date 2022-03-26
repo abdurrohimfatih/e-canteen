@@ -125,15 +125,15 @@
             <Label layoutX="10.0" layoutY="117.0" text="Alamat" GridPane.rowIndex="3" />
             <TextArea fx:id="addressTextArea" prefHeight="50.0" prefWidth="200.0" promptText="maks. 15 karakter" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label layoutX="10.0" layoutY="167.0" text="Jenis Kelamin" GridPane.rowIndex="4" />
-            <ComboBox fx:id="genderComboBox" layoutX="110.0" layoutY="313.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ComboBox fx:id="genderComboBox" layoutX="110.0" layoutY="313.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="4" promptText="-- Pilih --" />
             <Label layoutX="10.0" layoutY="217.0" text="No Telepon" GridPane.rowIndex="5" />
             <TextField fx:id="phoneTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label layoutX="10.0" layoutY="217.0" text="Email" GridPane.rowIndex="6" />
             <TextField fx:id="emailTextField" layoutX="110.0" layoutY="213.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Label layoutX="10.0" layoutY="117.0" text="Level" GridPane.rowIndex="7" />
-            <ComboBox fx:id="levelComboBox" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <ComboBox fx:id="levelComboBox" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="7" promptText="-- Pilih --" />
             <Label layoutX="10.0" layoutY="367.0" text="Status" GridPane.rowIndex="8" />
-            <ComboBox fx:id="statusComboBox" layoutX="110.0" layoutY="313.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <ComboBox fx:id="statusComboBox" layoutX="110.0" layoutY="313.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="8" promptText="-- Pilih --" />
          </GridPane>
          <HBox alignment="CENTER" layoutX="20.0" layoutY="595.0" spacing="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
             <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonAction" style="-fx-background-color: #009688;" text="TAMBAH" textAlignment="CENTER" textFill="WHITE">

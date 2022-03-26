@@ -70,7 +70,11 @@ public class ProductDaoImpl implements DaoService<Product> {
                 ps.setString(7, object.getSupplier().getId());
                 ps.setString(8, object.getDateAdded());
                 ps.setString(9, object.getExpiredDate());
-                ps.setString(10, object.getPromotion().getId());
+                if (object.getPromotion() == null) {
+                    ps.setString(10, "-1");
+                } else {
+                    ps.setString(10, object.getPromotion().getId());
+                }
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();
@@ -98,7 +102,11 @@ public class ProductDaoImpl implements DaoService<Product> {
                 ps.setString(6, object.getSupplier().getId());
                 ps.setString(7, object.getDateAdded());
                 ps.setString(8, object.getExpiredDate());
-                ps.setString(9, object.getPromotion().getId());
+                if (object.getPromotion() == null) {
+                    ps.setString(9, "-1");
+                } else {
+                    ps.setString(9, object.getPromotion().getId());
+                }
                 ps.setString(10, object.getBarcode());
 
                 if (ps.executeUpdate() != 0) {

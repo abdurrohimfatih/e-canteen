@@ -16,7 +16,7 @@ public class PromotionDaoImpl implements DaoService<Promotion> {
     public List<Promotion> fetchAll() throws SQLException, ClassNotFoundException {
         List<Promotion> promotions = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT id, name, percentage, date_added, expired_date FROM promotion";
+            String query = "SELECT id, name, percentage, date_added, expired_date FROM promotion WHERE id != -1";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {

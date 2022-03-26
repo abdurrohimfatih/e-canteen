@@ -122,7 +122,7 @@
             <Label text="Alamat" GridPane.rowIndex="2" />
             <TextArea fx:id="addressTextArea" prefHeight="50.0" prefWidth="200.0" promptText="maks. 15 karakter" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label layoutX="10.0" layoutY="117.0" text="Jenis Kelamin" GridPane.rowIndex="3" />
-            <ComboBox fx:id="genderComboBox" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <ComboBox fx:id="genderComboBox" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="-- Pilih --" />
             <Label layoutX="10.0" layoutY="167.0" text="No Telepon" GridPane.rowIndex="4" />
             <TextField fx:id="phoneTextField" layoutX="110.0" layoutY="63.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label layoutX="10.0" layoutY="217.0" text="Email" GridPane.rowIndex="5" />
@@ -132,7 +132,7 @@
             <Label layoutX="10.0" layoutY="317.0" text="No Rekening" GridPane.rowIndex="7" />
             <TextField fx:id="accountNumberTextField" layoutX="110.0" layoutY="313.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Label layoutX="10.0" layoutY="387.0" text="Status" GridPane.rowIndex="8" />
-            <ComboBox fx:id="statusComboBox" layoutX="110.0" layoutY="183.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <ComboBox fx:id="statusComboBox" layoutX="110.0" layoutY="183.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="8" promptText="-- Pilih --" />
          </GridPane>
          <HBox alignment="CENTER" layoutX="20.0" layoutY="601.0" spacing="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
             <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonAction" style="-fx-background-color: #009688;" text="TAMBAH" textAlignment="CENTER" textFill="WHITE">

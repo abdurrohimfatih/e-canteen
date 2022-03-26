@@ -8,7 +8,6 @@ import com.ecanteen.ecanteen.entities.Category;
 import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Promotion;
 import com.ecanteen.ecanteen.entities.Supplier;
-import com.ecanteen.ecanteen.utils.ComboBoxAutoComplete;
 import com.ecanteen.ecanteen.utils.Helper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -23,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -116,11 +116,12 @@ public class ProductController implements Initializable {
         }
 
         categoryComboBox.setItems(categories);
-        new ComboBoxAutoComplete<>(categoryComboBox);
+//        new ComboBoxAutoComplete<>(categoryComboBox);
         supplierComboBox.setItems(suppliers);
-        new ComboBoxAutoComplete<>(supplierComboBox);
+//        new ComboBoxAutoComplete<>(supplierComboBox);
         promotionComboBox.setItems(promotions);
-        new ComboBoxAutoComplete<>(promotionComboBox);
+        promotionComboBox.getItems().add(0, null);
+//        new ComboBoxAutoComplete<>(promotionComboBox);
         productTableView.setItems(products);
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
@@ -141,8 +142,7 @@ public class ProductController implements Initializable {
                 sellingPriceTextField.getText().trim().isEmpty() ||
                 stockAmountTextField.getText().trim().isEmpty() ||
                 supplierComboBox.getValue() == null ||
-                expiredDateDatePicker.getValue() == null ||
-                promotionComboBox.getValue() == null) {
+                expiredDateDatePicker.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Silakan isi semua field yang wajib diisi!");
             alert.setHeaderText("Error");
@@ -182,9 +182,8 @@ public class ProductController implements Initializable {
                 purchasePriceTextField.getText().trim().isEmpty() ||
                 sellingPriceTableColumn.getText().trim().isEmpty() ||
                 stockAmountTextField.getText().trim().isEmpty() ||
-                supplierComboBox.getValue() ==  null ||
-                expiredDateDatePicker.getValue() == null ||
-                promotionComboBox.getValue() == null) {
+                supplierComboBox.getValue() == null ||
+                expiredDateDatePicker.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Silakan isi semua field yang wajib diisi!");
             alert.setHeaderText("Error");
@@ -254,7 +253,11 @@ public class ProductController implements Initializable {
             stockAmountTextField.setText(String.valueOf(selectedProduct.getStockAmount()));
             supplierComboBox.setValue(selectedProduct.getSupplier());
             expiredDateDatePicker.setValue(LocalDate.parse(selectedProduct.getExpiredDate()));
-            promotionComboBox.setValue(selectedProduct.getPromotion());
+            if (!selectedProduct.getPromotion().getId().equals("-1")) {
+                promotionComboBox.setValue(selectedProduct.getPromotion());
+            } else {
+                promotionComboBox.setValue(null);
+            }
             barcodeTextField.setDisable(true);
             addButton.setDisable(true);
             updateButton.setDisable(false);
