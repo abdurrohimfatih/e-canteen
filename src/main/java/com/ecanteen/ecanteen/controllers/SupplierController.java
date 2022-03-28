@@ -18,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
@@ -312,12 +313,9 @@ public class SupplierController implements Initializable {
                 stage.setTitle("Detail Supplier");
                 stage.setScene(scene);
                 stage.centerOnScreen();
+                stage.initOwner(supplierTableView.getScene().getWindow());
+                stage.initModality(Modality.APPLICATION_MODAL);
                 stage.show();
-
-                Stage supplierStage = (Stage) supplierTableView.getScene().getWindow();
-                supplierStage.setOnCloseRequest(event -> {
-                    stage.close();
-                });
             }
         }
     }

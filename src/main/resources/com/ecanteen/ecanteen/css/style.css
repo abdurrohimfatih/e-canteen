@@ -1,12 +1,9 @@
-/*.anchor-menu {*/
-/*    -fx-background-color: #f5bf42;*/
-/*}*/
-.table-view, .text-field:focused, .date-picker:focused, .text-area:focused, .combo-box:focused {
-    -fx-border-color: #0C80D4;
+.table-view, .table-view:focused, .text-field:focused, .date-picker:focused, .text-area:focused, .combo-box:focused {
+    -fx-border-color: #23BBCF;
 }
 
 .table-view .column-header-background {
-    -fx-background-color: #23bbcf;
+    -fx-background-color: #23BBCF;
 }
 
 .table-view .column-header, .table-view .filler {
@@ -18,21 +15,38 @@
     -fx-text-fill: white;
 }
 
-/*.text-field, .date-picker, .combo-box, .searchable-combo-box .combo-box {*/
-/*    -fx-background-color: white;*/
-/*    -fx-border-color: #424242;*/
-/*    -fx-border-width: 0 0 2 0;*/
-/*    -fx-background-insets: 0;*/
-/*}*/
+.button, .menu-button {
+    -fx-background-color: #23BBCF;
+    -fx-cursor: HAND;
+}
 
-/*.searchable-combo-box {*/
-/*    -fx-background-color: transparent;*/
-/*    -fx-border-width: 0 0 0 0;*/
-/*}*/
+.button:hover, .menu-button:hover {
+    -fx-background-color: #1b95a5;
+}
 
-/*.date-picker .text-field {*/
-/*    -fx-border-width: 0;*/
-/*}*/
+.active {
+    -fx-background-color: #0C80D4;
+}
+
+.active:hover {
+    -fx-background-color: #0966a9;
+}
+
+.text-field, .date-picker, .combo-box, .searchable-combo-box .combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #424242;
+    -fx-border-width: 0 0 2 0;
+    -fx-background-insets: 0;
+}
+
+.searchable-combo-box {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+
+.date-picker .text-field {
+    -fx-border-width: 0;
+}
 
 /*.background-gradient {*/
 /*    -fx-background-color: linear-gradient(to bottom, #5B76BA, #A1A9C5);*/

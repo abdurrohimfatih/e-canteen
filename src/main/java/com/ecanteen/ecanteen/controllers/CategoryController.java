@@ -19,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -245,12 +246,9 @@ public class CategoryController implements Initializable {
                 stage.setTitle("Detail Kategori");
                 stage.setScene(scene);
                 stage.centerOnScreen();
+                stage.initOwner(categoryTableView.getScene().getWindow());
+                stage.initModality(Modality.APPLICATION_MODAL);
                 stage.show();
-
-                Stage categoryStage = (Stage) categoryTableView.getScene().getWindow();
-                categoryStage.setOnCloseRequest(event -> {
-                    stage.close();
-                });
             }
         }
     }
