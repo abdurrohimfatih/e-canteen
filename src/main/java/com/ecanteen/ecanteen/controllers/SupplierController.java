@@ -2,7 +2,6 @@ package com.ecanteen.ecanteen.controllers;
 
 import com.ecanteen.ecanteen.Main;
 import com.ecanteen.ecanteen.dao.SupplierDaoImpl;
-import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Supplier;
 import com.ecanteen.ecanteen.utils.Helper;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -17,29 +16,47 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class SupplierController implements Initializable {
     @FXML
+    private MenuButton reportMenuButton;
+    @FXML
+    private MenuItem incomeMenuItem;
+    @FXML
+    private MenuItem soldProductMenuItem;
+    @FXML
+    private MenuItem favoriteProductMenuItem;
+    @FXML
+    private MenuItem supplierMenuItem;
+    @FXML
+    private MenuItem benefitMenuItem;
+    @FXML
+    private MenuButton stockMenuButton;
+    @FXML
+    private MenuItem productMenuItem;
+    @FXML
+    private MenuItem categoryMenuItem;
+    @FXML
+    private MenuItem promotionMenuItem;
+    @FXML
     private Button userMenuButton;
     @FXML
-    private Button productMenuButton;
-    @FXML
-    private Button categoryMenuButton;
+    private Button customerMenuButton;
     @FXML
     private Button supplierMenuButton;
     @FXML
-    private Button promotionMenuButton;
+    private Button historyMenuButton;
+    @FXML
+    private Button topUpMenuButton;
+    @FXML
+    private Button profileButton;
     @FXML
     private Button logoutButton;
     @FXML
@@ -47,7 +64,7 @@ public class SupplierController implements Initializable {
     @FXML
     private TextField nameTextField;
     @FXML
-    private TextArea addressTextArea;
+    private TextField addressTextField;
     @FXML
     private ComboBox<String> genderComboBox;
     @FXML
@@ -68,8 +85,6 @@ public class SupplierController implements Initializable {
     private Button deleteButton;
     @FXML
     private Button resetButton;
-    @FXML
-    private Label infoLabel;
     @FXML
     private TextField searchTextField;
     @FXML
@@ -104,7 +119,7 @@ public class SupplierController implements Initializable {
 
         Helper.addTextLimiter(idTextField, 16);
         Helper.addTextLimiter(nameTextField, 30);
-        Helper.addTextLimiterTextArea(addressTextArea, 15);
+        Helper.addTextLimiter(addressTextField, 15);
         Helper.addTextLimiter(phoneTextField, 14);
         Helper.addTextLimiter(bankAccountTextField, 30);
         Helper.addTextLimiter(accountNumberTextField, 25);
@@ -123,7 +138,7 @@ public class SupplierController implements Initializable {
     private void addButtonAction(ActionEvent actionEvent) {
         if (idTextField.getText().trim().isEmpty() ||
                 nameTextField.getText().trim().isEmpty() ||
-                addressTextArea.getText().trim().isEmpty() ||
+                addressTextField.getText().trim().isEmpty() ||
                 genderComboBox.getValue().isEmpty() ||
                 phoneTextField.getText().trim().isEmpty() ||
                 statusComboBox.getValue().isEmpty()) {
@@ -135,7 +150,7 @@ public class SupplierController implements Initializable {
             Supplier supplier = new Supplier();
             supplier.setId(idTextField.getText().trim());
             supplier.setName(nameTextField.getText().trim());
-            supplier.setAddress(addressTextArea.getText().trim());
+            supplier.setAddress(addressTextField.getText().trim());
             supplier.setGender(genderComboBox.getValue());
             supplier.setPhone(phoneTextField.getText().trim());
             if (emailTextField.getText().trim().isEmpty()) {
@@ -168,8 +183,10 @@ public class SupplierController implements Initializable {
                     suppliers.addAll(supplierDao.fetchAll());
                     resetSupplier();
                     idTextField.requestFocus();
-                    infoLabel.setText("Data berhasil ditambahkan!");
-                    infoLabel.setStyle("-fx-text-fill: green");
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText("Sukses");
+                    alert.setContentText("Data berhasil ditambahkan!");
+                    alert.showAndWait();
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -180,7 +197,7 @@ public class SupplierController implements Initializable {
     @FXML
     private void updateButtonAction(ActionEvent actionEvent) {
         if (nameTextField.getText().trim().isEmpty() ||
-                addressTextArea.getText().trim().isEmpty() ||
+                addressTextField.getText().trim().isEmpty() ||
                 genderComboBox.getValue().isEmpty() ||
                 phoneTextField.getText().trim().isEmpty() ||
                 statusComboBox.getValue().isEmpty()) {
@@ -190,7 +207,7 @@ public class SupplierController implements Initializable {
             alert.showAndWait();
         } else {
             selectedSupplier.setName(nameTextField.getText().trim());
-            selectedSupplier.setAddress(addressTextArea.getText().trim());
+            selectedSupplier.setAddress(addressTextField.getText().trim());
             selectedSupplier.setGender(genderComboBox.getValue());
             selectedSupplier.setPhone(phoneTextField.getText().trim());
             if (emailTextField.getText().trim().isEmpty()) {
@@ -223,8 +240,10 @@ public class SupplierController implements Initializable {
                     suppliers.addAll(supplierDao.fetchAll());
                     resetSupplier();
                     supplierTableView.requestFocus();
-                    infoLabel.setText("Data berhasil diubah!");
-                    infoLabel.setStyle("-fx-text-fill: green");
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText("Sukses");
+                    alert.setContentText("Data berhasil diubah!");
+                    alert.showAndWait();
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -246,8 +265,10 @@ public class SupplierController implements Initializable {
                     suppliers.addAll(supplierDao.fetchAll());
                     resetSupplier();
                     supplierTableView.requestFocus();
-                    infoLabel.setText("Data berhasil dihapus!");
-                    infoLabel.setStyle("-fx-text-fill: green");
+                    Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+                    alert2.setHeaderText("Sukses");
+                    alert2.setContentText("Data berhasil dihapus!");
+                    alert2.showAndWait();
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -266,7 +287,7 @@ public class SupplierController implements Initializable {
         if (selectedSupplier != null) {
             idTextField.setText(selectedSupplier.getId());
             nameTextField.setText(selectedSupplier.getName());
-            addressTextArea.setText(selectedSupplier.getAddress());
+            addressTextField.setText(selectedSupplier.getAddress());
             genderComboBox.setValue(selectedSupplier.getGender());
             phoneTextField.setText(selectedSupplier.getPhone());
             emailTextField.setText(selectedSupplier.getEmail());
@@ -293,7 +314,7 @@ public class SupplierController implements Initializable {
                 stage.centerOnScreen();
                 stage.show();
 
-                Stage supplierStage = (Stage) supplierMenuButton.getScene().getWindow();
+                Stage supplierStage = (Stage) supplierTableView.getScene().getWindow();
                 supplierStage.setOnCloseRequest(event -> {
                     stage.close();
                 });
@@ -324,7 +345,7 @@ public class SupplierController implements Initializable {
     private void resetSupplier() {
         idTextField.clear();
         nameTextField.clear();
-        addressTextArea.clear();
+        addressTextField.clear();
         genderComboBox.setValue(null);
         phoneTextField.clear();
         emailTextField.clear();
@@ -339,27 +360,26 @@ public class SupplierController implements Initializable {
         deleteButton.setDisable(true);
         resetButton.setDisable(true);
         idTextField.requestFocus();
-        infoLabel.setText("");
     }
 
     @FXML
-    private void userMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(userMenuButton, "Admin - User", "user-view.fxml");
+    private void productMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(stockMenuButton, "Admin - Produk", "product-view.fxml");
     }
 
     @FXML
-    private void productMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(productMenuButton, "Admin - Produk", "product-view.fxml");
+    private void categoryMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(stockMenuButton, "Admin - Kategori", "category-view.fxml");
     }
 
     @FXML
-    private void categoryMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(categoryMenuButton, "Admin - Kategori", "category-view.fxml");
+    private void promotionMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(stockMenuButton, "Admin - Promosi", "promotion-view.fxml");
     }
 
     @FXML
-    private void promotionMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(promotionMenuButton, "Admin - Promosi", "promotion-view.fxml");
+    private void userButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(supplierMenuButton, "Admin - User", "user-view.fxml");
     }
 
     @FXML

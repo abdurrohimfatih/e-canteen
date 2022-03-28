@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -17,13 +19,104 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" stylesheets="@css/style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/null" fx:controller="com.ecanteen.ecanteen.controllers.ProductController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.ProductController">
    <top>
-      <AnchorPane prefHeight="70.0" prefWidth="1366.0" styleClass="anchor-menu" BorderPane.alignment="CENTER">
-         <HBox layoutX="334.0" layoutY="15.0" spacing="20.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
-            <Button fx:id="userMenuButton" layoutX="350.0" layoutY="10.0" mnemonicParsing="false" onAction="#userMenuButtonAction" prefHeight="40.0" style="-fx-background-color: #424242;" text="USER" textAlignment="CENTER" textFill="WHITE">
+      <AnchorPane prefHeight="70.0" prefWidth="1366.0" style="-fx-background-color: #75dfff;" BorderPane.alignment="CENTER">
+         <HBox alignment="CENTER" layoutX="334.0" layoutY="15.0" spacing="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
+            <MenuButton fx:id="reportMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" style="-fx-background-color: #23bbcf;" text="LAPORAN" textAlignment="CENTER" textFill="WHITE">
+               <items>
+                  <MenuItem fx:id="incomeMenuItem" mnemonicParsing="false" text="Pendapatan" />
+                  <MenuItem fx:id="soldProductMenuItem" mnemonicParsing="false" text="Produk Terjual" />
+                  <MenuItem fx:id="favoriteProductMenuItem" mnemonicParsing="false" text="Produk Favorit" />
+                  <MenuItem fx:id="supplierMenuItem" mnemonicParsing="false" text="Supplier" />
+                  <MenuItem fx:id="benefitMenuItem" mnemonicParsing="false" text="Laba" />
+               </items>
                <font>
-                  <Font size="14.0" />
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </MenuButton>
+            <MenuButton fx:id="stockMenuButton" alignment="CENTER" contentDisplay="CENTER" minHeight="40.0" mnemonicParsing="false" style="-fx-background-color: #0C80D4;" text="DATA STOK" textAlignment="CENTER" textFill="WHITE">
+               <items>
+                  <MenuItem fx:id="productMenuItem" mnemonicParsing="false" text="Data Produk" />
+                  <MenuItem fx:id="categoryMenuItem" mnemonicParsing="false" onAction="#categoryMenuItemAction" text="Data Kategori" />
+                  <MenuItem fx:id="promotionMenuItem" mnemonicParsing="false" onAction="#promotionMenuItemAction" text="Data Promosi" />
+               </items>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </MenuButton>
+            <Button fx:id="userMenuButton" alignment="CENTER" contentDisplay="CENTER" layoutX="350.0" layoutY="10.0" mnemonicParsing="false" onAction="#userButtonAction" prefHeight="40.0" style="-fx-background-color: #23bbcf;" text="DATA USER" textAlignment="CENTER" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <padding>
+                  <Insets left="25.0" right="25.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="customerMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="40.0" style="-fx-background-color: #23bbcf;" text="DATA CUSTOMER" textAlignment="CENTER" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <padding>
+                  <Insets left="25.0" right="25.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="supplierMenuButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#supplierButtonAction" prefHeight="40.0" style="-fx-background-color: #23bbcf;" text="DATA SUPPLIER" textAlignment="CENTER" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <padding>
+                  <Insets left="25.0" right="25.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="historyMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="646.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" style="-fx-background-color: #23bbcf;" text="RIWAYAT" textAlignment="CENTER" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <padding>
+                  <Insets left="25.0" right="25.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="topUpMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="812.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" style="-fx-background-color: #23bbcf;" text="TOP UP" textAlignment="CENTER" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <padding>
+                  <Insets left="25.0" right="25.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+         </HBox>
+         <HBox alignment="CENTER" layoutX="1244.0" layoutY="15.0" spacing="10.0" AnchorPane.rightAnchor="15.0">
+            <Button fx:id="profileButton" disable="true" mnemonicParsing="false" prefHeight="40.0" style="-fx-background-color: #23bbcf;" text="PROFIL" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
                </font>
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -32,42 +125,9 @@
                   <Insets left="25.0" right="25.0" />
                </padding>
             </Button>
-            <Button fx:id="productMenuButton" mnemonicParsing="false" prefHeight="40.0" style="-fx-background-color: #757575;" text="PRODUK" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="logoutButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#logoutButtonAction" prefHeight="40.0" style="-fx-background-color: #23bbcf;" text="LOGOUT" textAlignment="CENTER" textFill="WHITE">
                <font>
-                  <Font size="14.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <padding>
-                  <Insets left="25.0" right="25.0" />
-               </padding>
-            </Button>
-            <Button fx:id="categoryMenuButton" mnemonicParsing="false" onAction="#categoryMenuButtonAction" prefHeight="40.0" style="-fx-background-color: #424242;" text="KATEGORI" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font size="14.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <padding>
-                  <Insets left="25.0" right="25.0" />
-               </padding>
-            </Button>
-            <Button fx:id="supplierMenuButton" mnemonicParsing="false" onAction="#supplierMenuButtonAction" prefHeight="40.0" style="-fx-background-color: #424242;" text="SUPPLIER" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font size="14.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <padding>
-                  <Insets left="25.0" right="25.0" />
-               </padding>
-            </Button>
-            <Button fx:id="promotionMenuButton" mnemonicParsing="false" onAction="#promotionMenuButtonAction" prefHeight="40.0" style="-fx-background-color: #424242;" text="PROMOSI" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font size="14.0" />
+                  <Font name="System Bold" size="14.0" />
                </font>
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -77,27 +137,20 @@
                </padding>
             </Button>
          </HBox>
-         <Button fx:id="logoutButton" layoutX="1193.0" layoutY="15.0" mnemonicParsing="false" onAction="#logoutButtonAction" prefHeight="40.0" style="-fx-background-color: #424242;" text="LOGOUT" textAlignment="CENTER" textFill="WHITE" AnchorPane.rightAnchor="15.0">
-            <font>
-               <Font size="14.0" />
-            </font>
-            <cursor>
-               <Cursor fx:constant="HAND" />
-            </cursor>
-            <padding>
-               <Insets left="25.0" right="25.0" />
-            </padding>
-         </Button>
       </AnchorPane>
    </top>
    <left>
-      <AnchorPane prefWidth="330.0" BorderPane.alignment="CENTER">
-         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="15.0" layoutY="72.0" text="MENU PRODUK" textAlignment="CENTER" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+      <AnchorPane prefWidth="330.0" style="-fx-background-color: #75dfff;" BorderPane.alignment="CENTER">
+         <TextField fx:id="searchTextField" layoutX="30.0" layoutY="17.0" onKeyPressed="#searchTextFieldKeyPressed" promptText="Cari" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="16.0">
+            <font>
+               <Font size="16.0" />
+            </font></TextField>
+         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="15.0" layoutY="76.0" text="MENU PRODUK" textAlignment="CENTER" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
             <font>
                <Font name="System Bold" size="18.0" />
             </font>
          </Label>
-         <GridPane layoutX="20.0" layoutY="124.0" vgap="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+         <GridPane layoutX="20.0" layoutY="128.0" vgap="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
             <columnConstraints>
                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="80.0" />
                <ColumnConstraints prefWidth="190.0" />
@@ -120,7 +173,7 @@
             <Label text="Nama Produk" GridPane.rowIndex="1" />
             <TextField fx:id="nameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label layoutX="10.0" layoutY="67.0" text="Kategori" GridPane.rowIndex="2" />
-            <SearchableComboBox fx:id="categoryComboBox" prefHeight="27.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="-- Pilih --" />
+            <SearchableComboBox fx:id="categoryComboBox" prefHeight="27.0" prefWidth="190.0" promptText="-- Pilih --" styleClass="searchable-combo-box" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label layoutX="10.0" layoutY="117.0" text="Harga Beli" GridPane.rowIndex="3" />
             <TextField fx:id="purchasePriceTextField" layoutX="110.0" layoutY="112.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label text="Harga Jual" GridPane.rowIndex="4" />
@@ -128,14 +181,14 @@
             <Label layoutX="10.0" layoutY="167.0" text="Jumlah Stok" GridPane.rowIndex="5" />
             <TextField fx:id="stockAmountTextField" layoutX="110.0" layoutY="162.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label layoutX="10.0" layoutY="217.0" text="Supplier" GridPane.rowIndex="6" />
-            <SearchableComboBox fx:id="supplierComboBox" layoutX="110.0" layoutY="112.0" prefHeight="27.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="6" promptText="-- Pilih --" />
+            <SearchableComboBox fx:id="supplierComboBox" layoutX="110.0" layoutY="112.0" prefHeight="27.0" prefWidth="190.0" promptText="-- Pilih --" styleClass="searchable-combo-box" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Label layoutX="10.0" layoutY="317.0" text="Kedaluwarsa" GridPane.rowIndex="7" />
             <DatePicker fx:id="expiredDateDatePicker" layoutX="110.0" layoutY="312.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Label layoutX="10.0" layoutY="267.0" text="Promo" GridPane.rowIndex="8" />
-            <SearchableComboBox fx:id="promotionComboBox" layoutX="110.0" layoutY="262.0" prefHeight="27.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="8" promptText="-- Pilih --" />
+            <SearchableComboBox fx:id="promotionComboBox" layoutX="110.0" layoutY="262.0" prefHeight="27.0" prefWidth="190.0" promptText="-- Pilih --" styleClass="searchable-combo-box" GridPane.columnIndex="1" GridPane.rowIndex="8" />
          </GridPane>
-         <HBox alignment="CENTER" layoutX="20.0" layoutY="583.0" spacing="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
-            <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonAction" style="-fx-background-color: #009688;" text="TAMBAH" textAlignment="CENTER" textFill="WHITE">
+         <HBox alignment="CENTER" layoutX="20.0" layoutY="590.0" spacing="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+            <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonAction" style="-fx-background-color: #0C80D4;" text="TAMBAH" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="13.0" />
                </font>
@@ -146,7 +199,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="updateButton" disable="true" mnemonicParsing="false" onAction="#updateButtonAction" style="-fx-background-color: #1976d2;" text="UBAH" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="updateButton" disable="true" mnemonicParsing="false" onAction="#updateButtonAction" style="-fx-background-color: #0C80D4;" text="UBAH" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="13.0" />
                </font>
@@ -157,7 +210,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#deleteButtonAction" style="-fx-background-color: #d32f2f;" text="HAPUS" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#deleteButtonAction" style="-fx-background-color: #0C80D4;" text="HAPUS" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="13.0" />
                </font>
@@ -168,7 +221,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="resetButton" disable="true" mnemonicParsing="false" onAction="#resetButtonAction" style="-fx-background-color: #424242;" text="RESET" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="resetButton" disable="true" mnemonicParsing="false" onAction="#resetButtonAction" style="-fx-background-color: #0C80D4;" text="RESET" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="13.0" />
                </font>
@@ -183,17 +236,8 @@
       </AnchorPane>
    </left>
    <center>
-      <AnchorPane BorderPane.alignment="CENTER">
-         <Label fx:id="infoLabel" layoutY="16.0" AnchorPane.leftAnchor="0.0">
-            <font>
-               <Font size="18.0" />
-            </font>
-         </Label>
-         <TextField fx:id="searchTextField" layoutX="722.0" layoutY="11.0" onKeyPressed="#searchTextFieldKeyPressed" prefWidth="300.0" promptText="Cari" AnchorPane.rightAnchor="15.0">
-            <font>
-               <Font size="16.0" />
-            </font></TextField>
-         <TableView fx:id="productTableView" layoutX="34.0" layoutY="57.0" onMouseClicked="#productTableViewClicked" prefWidth="439.0" AnchorPane.bottomAnchor="57.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="57.0">
+      <AnchorPane style="-fx-background-color: #75dfff;" BorderPane.alignment="CENTER">
+         <TableView fx:id="productTableView" layoutX="34.0" layoutY="57.0" onMouseClicked="#productTableViewClicked" prefWidth="439.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
             <columns>
                <TableColumn fx:id="barcodeTableColumn" maxWidth="200.0" minWidth="130.0" prefWidth="-1.0" text="Barcode" />
                <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="Nama Produk" />

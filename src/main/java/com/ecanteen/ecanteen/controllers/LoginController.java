@@ -45,7 +45,7 @@ public class LoginController {
                 infoLabel.setText("Username atau password salah. Silakan coba lagi!");
             } else if (status.equals("1")) {
                 if (level.equals("Admin")) {
-                    Helper.changePage(loginButton, "Admin - User", "user-view.fxml");
+                    Helper.changePage(loginButton, "Admin - Produk", "product-view.fxml");
                 } else {
                     Helper.changePage(loginButton, "Kasir - Produk", "product-view.fxml");
                 }

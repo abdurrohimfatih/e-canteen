@@ -22,15 +22,37 @@ import java.util.ResourceBundle;
 
 public class UserController implements Initializable {
     @FXML
+    private MenuButton reportMenuButton;
+    @FXML
+    private MenuItem incomeMenuItem;
+    @FXML
+    private MenuItem soldProductMenuItem;
+    @FXML
+    private MenuItem favoriteProductMenuItem;
+    @FXML
+    private MenuItem supplierMenuItem;
+    @FXML
+    private MenuItem benefitMenuItem;
+    @FXML
+    private MenuButton stockMenuButton;
+    @FXML
+    private MenuItem productMenuItem;
+    @FXML
+    private MenuItem categoryMenuItem;
+    @FXML
+    private MenuItem promotionMenuItem;
+    @FXML
     private Button userMenuButton;
     @FXML
-    private Button productMenuButton;
-    @FXML
-    private Button categoryMenuButton;
+    private Button customerMenuButton;
     @FXML
     private Button supplierMenuButton;
     @FXML
-    private Button promotionMenuButton;
+    private Button historyMenuButton;
+    @FXML
+    private Button topUpMenuButton;
+    @FXML
+    private Button profileButton;
     @FXML
     private Button logoutButton;
     @FXML
@@ -40,7 +62,7 @@ public class UserController implements Initializable {
     @FXML
     private TextField nameTextField;
     @FXML
-    private TextArea addressTextArea;
+    private TextField addressTextField;
     @FXML
     private ComboBox<String> genderComboBox;
     @FXML
@@ -59,8 +81,6 @@ public class UserController implements Initializable {
     private Button deleteButton;
     @FXML
     private Button resetButton;
-    @FXML
-    private Label infoLabel;
     @FXML
     private TextField searchTextField;
     @FXML
@@ -95,7 +115,7 @@ public class UserController implements Initializable {
 
         Helper.addTextLimiter(usernameTextField, 20);
         Helper.addTextLimiter(nameTextField, 30);
-        Helper.addTextLimiterTextArea(addressTextArea, 15);
+        Helper.addTextLimiter(addressTextField, 15);
         Helper.addTextLimiter(phoneTextField, 14);
         genderComboBox.setItems(FXCollections.observableArrayList("Laki-laki", "Perempuan"));
         levelComboBox.setItems(FXCollections.observableArrayList("Admin", "Kasir"));
@@ -114,7 +134,7 @@ public class UserController implements Initializable {
         if (usernameTextField.getText().trim().isEmpty() ||
                 passwordTextField.getText().isEmpty() ||
                 nameTextField.getText().trim().isEmpty() ||
-                addressTextArea.getText().trim().isEmpty() ||
+                addressTextField.getText().trim().isEmpty() ||
                 genderComboBox.getValue().isEmpty() ||
                 levelComboBox.getValue().isEmpty() ||
                 statusComboBox.getValue().isEmpty()) {
@@ -130,7 +150,7 @@ public class UserController implements Initializable {
 
             user.setPassword(password);
             user.setName(nameTextField.getText().trim());
-            user.setAddress(addressTextArea.getText().trim());
+            user.setAddress(addressTextField.getText().trim());
             user.setGender(genderComboBox.getValue());
             user.setPhone(phoneTextField.getText().trim());
             if (emailTextField.getText().trim().isEmpty()) {
@@ -152,8 +172,10 @@ public class UserController implements Initializable {
                     users.addAll(userDao.fetchAll());
                     resetUser();
                     usernameTextField.requestFocus();
-                    infoLabel.setText("Data berhasil ditambahkan!");
-                    infoLabel.setStyle("-fx-text-fill: green");
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText("Sukses");
+                    alert.setContentText("Data berhasil ditambahkan!");
+                    alert.showAndWait();
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -166,7 +188,7 @@ public class UserController implements Initializable {
         if (usernameTextField.getText().trim().isEmpty() ||
                 passwordTextField.getText().isEmpty() ||
                 nameTextField.getText().trim().isEmpty() ||
-                addressTextArea.getText().trim().isEmpty() ||
+                addressTextField.getText().trim().isEmpty() ||
                 genderComboBox.getValue().isEmpty() ||
                 levelComboBox.getValue().isEmpty() ||
                 statusComboBox.getValue().isEmpty()) {
@@ -181,7 +203,7 @@ public class UserController implements Initializable {
 
             selectedUser.setPassword(password);
             selectedUser.setName(nameTextField.getText().trim());
-            selectedUser.setAddress(addressTextArea.getText().trim());
+            selectedUser.setAddress(addressTextField.getText().trim());
             selectedUser.setGender(genderComboBox.getValue());
             selectedUser.setPhone(phoneTextField.getText().trim());
             if (emailTextField.getText().trim().isEmpty()) {
@@ -202,8 +224,10 @@ public class UserController implements Initializable {
                     users.addAll(userDao.fetchAll());
                     resetUser();
                     userTableView.requestFocus();
-                    infoLabel.setText("Data berhasil diubah!");
-                    infoLabel.setStyle("-fx-text-fill: green");
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText("Sukses");
+                    alert.setContentText("Data berhasil diubah!");
+                    alert.showAndWait();
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -225,8 +249,10 @@ public class UserController implements Initializable {
                     users.addAll(userDao.fetchAll());
                     resetUser();
                     userTableView.requestFocus();
-                    infoLabel.setText("Data berhasil dihapus!");
-                    infoLabel.setStyle("-fx-text-fill: green");
+                    Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+                    alert2.setHeaderText("Sukses");
+                    alert2.setContentText("Data berhasil dihapus!");
+                    alert2.showAndWait();
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -245,7 +271,7 @@ public class UserController implements Initializable {
         if (selectedUser != null) {
             usernameTextField.setText(selectedUser.getUsername());
             nameTextField.setText(selectedUser.getName());
-            addressTextArea.setText(selectedUser.getAddress());
+            addressTextField.setText(selectedUser.getAddress());
             genderComboBox.setValue(selectedUser.getGender());
             phoneTextField.setText(selectedUser.getPhone());
             emailTextField.setText(selectedUser.getEmail());
@@ -282,7 +308,7 @@ public class UserController implements Initializable {
         usernameTextField.clear();
         passwordTextField.clear();
         nameTextField.clear();
-        addressTextArea.clear();
+        addressTextField.clear();
         genderComboBox.setValue(null);
         phoneTextField.clear();
         emailTextField.clear();
@@ -295,26 +321,25 @@ public class UserController implements Initializable {
         deleteButton.setDisable(true);
         resetButton.setDisable(true);
         usernameTextField.requestFocus();
-        infoLabel.setText("");
     }
 
     @FXML
-    private void productMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(productMenuButton, "Admin - Produk", "product-view.fxml");
+    private void productMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(stockMenuButton, "Admin - Produk", "product-view.fxml");
     }
 
     @FXML
-    private void categoryMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(categoryMenuButton, "Admin - Kategori", "category-view.fxml");
+    private void categoryMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(stockMenuButton, "Admin - Kategori", "category-view.fxml");
     }
 
     @FXML
-    private void promotionMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(promotionMenuButton, "Admin - Promosi", "promotion-view.fxml");
+    private void promotionMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(stockMenuButton, "Admin - Promosi", "promotion-view.fxml");
     }
 
     @FXML
-    private void supplierMenuButtonAction(ActionEvent actionEvent) throws IOException {
+    private void supplierButtonAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(supplierMenuButton, "Admin - Supplier", "supplier-view.fxml");
     }
 

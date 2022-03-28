@@ -23,15 +23,37 @@ import java.util.ResourceBundle;
 
 public class PromotionController implements Initializable {
     @FXML
+    private MenuButton reportMenuButton;
+    @FXML
+    private MenuItem incomeMenuItem;
+    @FXML
+    private MenuItem soldProductMenuItem;
+    @FXML
+    private MenuItem favoriteProductMenuItem;
+    @FXML
+    private MenuItem supplierMenuItem;
+    @FXML
+    private MenuItem benefitMenuItem;
+    @FXML
+    private MenuButton stockMenuButton;
+    @FXML
+    private MenuItem productMenuItem;
+    @FXML
+    private MenuItem categoryMenuItem;
+    @FXML
+    private MenuItem promotionMenuItem;
+    @FXML
     private Button userMenuButton;
     @FXML
-    private Button productMenuButton;
-    @FXML
-    private Button categoryMenuButton;
+    private Button customerMenuButton;
     @FXML
     private Button supplierMenuButton;
     @FXML
-    private Button promotionMenuButton;
+    private Button historyMenuButton;
+    @FXML
+    private Button topUpMenuButton;
+    @FXML
+    private Button profileButton;
     @FXML
     private Button logoutButton;
     @FXML
@@ -50,8 +72,6 @@ public class PromotionController implements Initializable {
     private Button deleteButton;
     @FXML
     private Button resetButton;
-    @FXML
-    private Label infoLabel;
     @FXML
     private TextField searchTextField;
     @FXML
@@ -120,8 +140,10 @@ public class PromotionController implements Initializable {
                     promotions.addAll(promotionDao.fetchAll());
                     resetPromotion();
                     idTextField.requestFocus();
-                    infoLabel.setText("Data berhasil ditambahkan!");
-                    infoLabel.setStyle("-fx-text-fill: green");
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText("Sukses");
+                    alert.setContentText("Data berhasil ditambahkan!");
+                    alert.showAndWait();
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -149,8 +171,10 @@ public class PromotionController implements Initializable {
                     promotions.addAll(promotionDao.fetchAll());
                     resetPromotion();
                     promotionTableView.requestFocus();
-                    infoLabel.setText("Data berhasil diubah!");
-                    infoLabel.setStyle("-fx-text-fill: green");
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText("Sukses");
+                    alert.setContentText("Data berhasil diubah!");
+                    alert.showAndWait();
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -172,8 +196,10 @@ public class PromotionController implements Initializable {
                     promotions.addAll(promotionDao.fetchAll());
                     resetPromotion();
                     promotionTableView.requestFocus();
-                    infoLabel.setText("Data berhasil dihapus!");
-                    infoLabel.setStyle("-fx-text-fill: green");
+                    Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+                    alert2.setHeaderText("Sukses");
+                    alert2.setContentText("Data berhasil dihapus!");
+                    alert2.showAndWait();
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -233,26 +259,25 @@ public class PromotionController implements Initializable {
         deleteButton.setDisable(true);
         resetButton.setDisable(true);
         idTextField.requestFocus();
-        infoLabel.setText("");
     }
 
     @FXML
-    private void userMenuButtonAction(ActionEvent actionEvent) throws IOException {
+    private void productMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(stockMenuButton, "Admin - Produk", "product-view.fxml");
+    }
+
+    @FXML
+    private void categoryMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(stockMenuButton, "Admin - Kategori", "category-view.fxml");
+    }
+
+    @FXML
+    private void userButtonAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(userMenuButton, "Admin - User", "user-view.fxml");
     }
 
     @FXML
-    private void productMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(productMenuButton, "Admin - Produk", "product-view.fxml");
-    }
-
-    @FXML
-    private void categoryMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(categoryMenuButton, "Admin - Kategori", "category-view.fxml");
-    }
-
-    @FXML
-    private void supplierMenuButtonAction(ActionEvent actionEvent) throws IOException {
+    private void supplierButtonAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(supplierMenuButton, "Admin - Supplier", "supplier-view.fxml");
     }
 
