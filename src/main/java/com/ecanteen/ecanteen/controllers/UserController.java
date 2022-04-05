@@ -2,18 +2,18 @@ package com.ecanteen.ecanteen.controllers;
 
 import com.ecanteen.ecanteen.dao.UserDaoImpl;
 import com.ecanteen.ecanteen.entities.User;
+import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -113,6 +113,7 @@ public class UserController implements Initializable {
             e.printStackTrace();
         }
 
+        profileButton.setText(Common.user.getName());
         Helper.addTextLimiter(usernameTextField, 20);
         Helper.addTextLimiter(nameTextField, 30);
         Helper.addTextLimiter(addressTextField, 15);
@@ -286,22 +287,29 @@ public class UserController implements Initializable {
 
     @FXML
     private void searchTextFieldKeyPressed(KeyEvent keyEvent) {
-        FilteredList<User> filteredList = new FilteredList<>(users, b -> true);
-        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> filteredList.setPredicate(user -> {
-            if (newValue.isEmpty()) {
-                return true;
+        searchTextField.textProperty().addListener(observable -> {
+            if (searchTextField.textProperty().get().isEmpty()) {
+                userTableView.setItems(users);
+                return;
             }
 
-            String searchKeyword = newValue.toLowerCase().trim();
+            ObservableList<User> tableItems = FXCollections.observableArrayList();
+            ObservableList<TableColumn<User, ?>> columns = userTableView.getColumns();
 
-            if (user.getUsername().toLowerCase().contains(searchKeyword)) {
-                return true;
-            } else return user.getName().toLowerCase().contains(searchKeyword);
-        }));
+            for (User value : users) {
+                for (int j = 0; j < 2; j++) {
+                    TableColumn<User, ?> col = columns.get(j);
+                    String cellValue = String.valueOf(col.getCellData(value)).toLowerCase();
 
-        SortedList<User> sortedList = new SortedList<>(filteredList);
-        sortedList.comparatorProperty().bind(userTableView.comparatorProperty());
-        userTableView.setItems(sortedList);
+                    if (cellValue.contains(searchTextField.getText().toLowerCase().trim())) {
+                        tableItems.add(value);
+                        break;
+                    }
+                }
+            }
+
+            userTableView.setItems(tableItems);
+        });
     }
 
     private void resetUser() {

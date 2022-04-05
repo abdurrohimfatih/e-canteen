@@ -3,13 +3,12 @@ package com.ecanteen.ecanteen.controllers;
 import com.ecanteen.ecanteen.Main;
 import com.ecanteen.ecanteen.dao.SupplierDaoImpl;
 import com.ecanteen.ecanteen.entities.Supplier;
+import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +19,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -118,6 +118,7 @@ public class SupplierController implements Initializable {
             e.printStackTrace();
         }
 
+        profileButton.setText(Common.user.getName());
         Helper.addTextLimiter(idTextField, 16);
         Helper.addTextLimiter(nameTextField, 30);
         Helper.addTextLimiter(addressTextField, 15);
@@ -322,22 +323,29 @@ public class SupplierController implements Initializable {
 
     @FXML
     private void searchTextFieldKeyPressed(KeyEvent keyEvent) {
-        FilteredList<Supplier> filteredList = new FilteredList<>(suppliers, b -> true);
-        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> filteredList.setPredicate(supplier -> {
-            if (newValue.isEmpty()) {
-                return true;
+        searchTextField.textProperty().addListener(observable -> {
+            if (searchTextField.textProperty().get().isEmpty()) {
+                supplierTableView.setItems(suppliers);
+                return;
             }
 
-            String searchKeyword = newValue.toLowerCase().trim();
+            ObservableList<Supplier> tableItems = FXCollections.observableArrayList();
+            ObservableList<TableColumn<Supplier, ?>> columns = supplierTableView.getColumns();
 
-            if (supplier.getId().toLowerCase().contains(searchKeyword)) {
-                return true;
-            } else return supplier.getName().toLowerCase().contains(searchKeyword);
-        }));
+            for (Supplier value : suppliers) {
+                for (int j = 0; j < 2; j++) {
+                    TableColumn<Supplier, ?> col = columns.get(j);
+                    String cellValue = String.valueOf(col.getCellData(value)).toLowerCase();
 
-        SortedList<Supplier> sortedList = new SortedList<>(filteredList);
-        sortedList.comparatorProperty().bind(supplierTableView.comparatorProperty());
-        supplierTableView.setItems(sortedList);
+                    if (cellValue.contains(searchTextField.getText().toLowerCase().trim())) {
+                        tableItems.add(value);
+                        break;
+                    }
+                }
+            }
+
+            supplierTableView.setItems(tableItems);
+        });
     }
 
     private void resetSupplier() {

@@ -48,6 +48,12 @@
     -fx-border-width: 0;
 }
 
-/*.background-gradient {*/
-/*    -fx-background-color: linear-gradient(to bottom, #5B76BA, #A1A9C5);*/
-/*}*/
+.link {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+.link:hover {
+    -fx-background-color: transparent;
+    -fx-underline: true;
+}

@@ -1,6 +1,5 @@
 package com.ecanteen.ecanteen.controllers;
 
-import com.ecanteen.ecanteen.Main;
 import com.ecanteen.ecanteen.dao.CategoryDaoImpl;
 import com.ecanteen.ecanteen.dao.ProductDaoImpl;
 import com.ecanteen.ecanteen.dao.PromotionDaoImpl;
@@ -9,24 +8,19 @@ import com.ecanteen.ecanteen.entities.Category;
 import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Promotion;
 import com.ecanteen.ecanteen.entities.Supplier;
+import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -119,7 +113,6 @@ public class ProductController implements Initializable {
     private ObservableList<Product> products;
     private ProductDaoImpl productDao;
     private Product selectedProduct;
-    static String button;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -141,6 +134,7 @@ public class ProductController implements Initializable {
             e.printStackTrace();
         }
 
+        profileButton.setText(Common.user.getName());
         categoryComboBox.setItems(categories);
         supplierComboBox.setItems(suppliers);
         promotionComboBox.setItems(promotions);
@@ -297,22 +291,29 @@ public class ProductController implements Initializable {
 
     @FXML
     private void searchTextFieldKeyPressed(KeyEvent keyEvent) {
-        FilteredList<Product> filteredList = new FilteredList<>(products, b -> true);
-        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> filteredList.setPredicate(product -> {
-            if (newValue.isEmpty()) {
-                return true;
+        searchTextField.textProperty().addListener(observable -> {
+            if (searchTextField.textProperty().get().isEmpty()) {
+                productTableView.setItems(products);
+                return;
             }
 
-            String searchKeyword = newValue.toLowerCase().trim();
+            ObservableList<Product> tableItems = FXCollections.observableArrayList();
+            ObservableList<TableColumn<Product, ?>> columns = productTableView.getColumns();
 
-            if (product.getBarcode().toLowerCase().contains(searchKeyword)) {
-                return true;
-            } else return product.getName().toLowerCase().contains(searchKeyword);
-        }));
+            for (Product value : products) {
+                for (int j = 0; j < 2; j++) {
+                    TableColumn<Product, ?> col = columns.get(j);
+                    String cellValue = String.valueOf(col.getCellData(value)).toLowerCase();
 
-        SortedList<Product> sortedList = new SortedList<>(filteredList);
-        sortedList.comparatorProperty().bind(productTableView.comparatorProperty());
-        productTableView.setItems(sortedList);
+                    if (cellValue.contains(searchTextField.getText().toLowerCase().trim())) {
+                        tableItems.add(value);
+                        break;
+                    }
+                }
+            }
+
+            productTableView.setItems(tableItems);
+        });
     }
 
     private void resetProduct() {

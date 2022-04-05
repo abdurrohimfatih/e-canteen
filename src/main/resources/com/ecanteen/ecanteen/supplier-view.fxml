@@ -49,7 +49,7 @@
                   <Insets left="20.0" right="20.0" />
                </padding>
             </MenuButton>
-            <Button fx:id="userMenuButton" alignment="CENTER" contentDisplay="CENTER" layoutX="350.0" layoutY="10.0" mnemonicParsing="false" onAction="#userButtonAction" prefHeight="40.0" styleClass="active" text="DATA USER" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="userMenuButton" alignment="CENTER" contentDisplay="CENTER" layoutX="350.0" layoutY="10.0" mnemonicParsing="false" onAction="#userButtonAction" prefHeight="40.0" text="DATA USER" textAlignment="CENTER" textFill="WHITE">
                <padding>
                   <Insets left="25.0" right="25.0" />
                </padding>
@@ -65,7 +65,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="supplierMenuButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" text="DATA SUPPLIER" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="supplierMenuButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="active" prefHeight="40.0" text="DATA SUPPLIER" textAlignment="CENTER" textFill="WHITE">
                <padding>
                   <Insets left="25.0" right="25.0" />
                </padding>
@@ -91,12 +91,12 @@
             </Button>
          </HBox>
          <HBox alignment="CENTER" layoutX="1244.0" layoutY="15.0" spacing="10.0" AnchorPane.rightAnchor="15.0">
-            <Button fx:id="profileButton" disable="true" mnemonicParsing="false" prefHeight="40.0" text="PROFIL" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="profileButton" mnemonicParsing="false" prefHeight="40.0" styleClass="link">
                <font>
-                  <Font name="System Bold" size="14.0" />
+                  <Font name="System Bold" size="14.0"/>
                </font>
                <padding>
-                  <Insets left="25.0" right="25.0" />
+                  <Insets left="25.0"/>
                </padding>
             </Button>
             <Button fx:id="logoutButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#logoutButtonAction" prefHeight="40.0" text="LOGOUT" textAlignment="CENTER" textFill="WHITE">

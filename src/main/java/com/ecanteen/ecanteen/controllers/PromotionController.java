@@ -2,19 +2,19 @@ package com.ecanteen.ecanteen.controllers;
 
 import com.ecanteen.ecanteen.dao.PromotionDaoImpl;
 import com.ecanteen.ecanteen.entities.Promotion;
+import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -105,6 +105,7 @@ public class PromotionController implements Initializable {
             e.printStackTrace();
         }
 
+        profileButton.setText(Common.user.getName());
         Helper.addTextLimiter(idTextField, 10);
         Helper.addTextLimiter(percentageTextField, 3);
         promotionTableView.setItems(promotions);
@@ -230,20 +231,29 @@ public class PromotionController implements Initializable {
 
     @FXML
     private void searchTextFieldKeyPressed(KeyEvent keyEvent) {
-        FilteredList<Promotion> filteredList = new FilteredList<>(promotions, b -> true);
-        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> filteredList.setPredicate(promotion -> {
-            if (newValue.isEmpty()) {
-                return true;
+        searchTextField.textProperty().addListener(observable -> {
+            if (searchTextField.textProperty().get().isEmpty()) {
+                promotionTableView.setItems(promotions);
+                return;
             }
 
-            String searchKeyword = newValue.toLowerCase().trim();
+            ObservableList<Promotion> tableItems = FXCollections.observableArrayList();
+            ObservableList<TableColumn<Promotion, ?>> columns = promotionTableView.getColumns();
 
-            return promotion.getName().toLowerCase().contains(searchKeyword);
-        }));
+            for (Promotion value : promotions) {
+                for (int j = 1; j < 2; j++) {
+                    TableColumn<Promotion, ?> col = columns.get(j);
+                    String cellValue = String.valueOf(col.getCellData(value)).toLowerCase();
 
-        SortedList<Promotion> sortedList = new SortedList<>(filteredList);
-        sortedList.comparatorProperty().bind(promotionTableView.comparatorProperty());
-        promotionTableView.setItems(sortedList);
+                    if (cellValue.contains(searchTextField.getText().toLowerCase().trim())) {
+                        tableItems.add(value);
+                        break;
+                    }
+                }
+            }
+
+            promotionTableView.setItems(tableItems);
+        });
     }
 
     private void resetPromotion() {

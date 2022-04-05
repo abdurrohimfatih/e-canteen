@@ -236,4 +236,75 @@ public class ProductDaoImpl implements DaoService<Product> {
 
         return products;
     }
+
+    public Product fetchProduct(String barcode) throws SQLException, ClassNotFoundException {
+        Product product = null;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT barcode, name, selling_price FROM product WHERE barcode = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, barcode);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        product = new Product();
+                        product.setBarcode(rs.getString("barcode"));
+                        product.setName(rs.getString("name"));
+                        product.setSellingPrice(rs.getInt("selling_price"));
+                    }
+                }
+            }
+        }
+
+        return product;
+    }
+
+    public int getDiscount(String barcode) throws SQLException, ClassNotFoundException {
+        int discount = 0;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT promotion.percentage FROM product JOIN promotion ON product.promotion_id = promotion.id WHERE barcode = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, barcode);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        discount = rs.getInt("percentage");
+                    }
+                }
+            }
+        }
+
+        return discount;
+    }
+
+    public int getStockAmount(String barcode) throws SQLException, ClassNotFoundException {
+        int stock = 0;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT stock_amount FROM product WHERE barcode = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, barcode);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        stock = rs.getInt("stock_amount");
+                    }
+                }
+            }
+        }
+
+        return stock;
+    }
+
+    public void updateStock(int stock, String barcode) throws SQLException, ClassNotFoundException {
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "UPDATE product SET stock_amount = ? WHERE barcode =?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setInt(1, stock);
+                ps.setString(2, barcode);
+
+                if (ps.executeUpdate() != 0) {
+                    connection.commit();
+                } else {
+                    connection.rollback();
+                }
+            }
+        }
+    }
 }

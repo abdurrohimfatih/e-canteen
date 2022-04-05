@@ -3,6 +3,8 @@ module com.ecanteen.ecanteen {
     requires javafx.fxml;
     requires java.sql;
     requires mysql.connector.java;
+    requires log4j;
+    requires jasperreports;
 
     opens com.ecanteen.ecanteen to javafx.fxml;
     exports com.ecanteen.ecanteen;

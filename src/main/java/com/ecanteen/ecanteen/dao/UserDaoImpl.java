@@ -2,6 +2,7 @@ package com.ecanteen.ecanteen.dao;
 
 import com.ecanteen.ecanteen.entities.User;
 import com.ecanteen.ecanteen.utils.DaoService;
+import com.ecanteen.ecanteen.utils.LoginService;
 import com.ecanteen.ecanteen.utils.MySQLConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +11,32 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoImpl implements DaoService<User> {
+public class UserDaoImpl implements LoginService, DaoService<User> {
+    @Override
+    public User login(String username, String password) throws SQLException, ClassNotFoundException {
+        User user = null;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT username, password, name, level, status FROM user WHERE username = ? AND password = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, username);
+                ps.setString(2, password);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        user = new User();
+                        user.setUsername(rs.getString("username"));
+                        user.setPassword(rs.getString("password"));
+                        user.setName(rs.getString("name"));
+                        user.setLevel(rs.getString("level"));
+                        user.setStatus(rs.getString("status"));
+                    }
+                }
+            }
+        }
+
+        return user;
+    }
+
     public List<User> fetchAll() throws SQLException, ClassNotFoundException {
         List<User> users = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()) {

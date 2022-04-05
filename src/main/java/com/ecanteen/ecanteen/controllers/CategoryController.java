@@ -3,14 +3,13 @@ package com.ecanteen.ecanteen.controllers;
 import com.ecanteen.ecanteen.Main;
 import com.ecanteen.ecanteen.dao.CategoryDaoImpl;
 import com.ecanteen.ecanteen.entities.Category;
+import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -103,6 +102,7 @@ public class CategoryController implements Initializable {
             e.printStackTrace();
         }
 
+        profileButton.setText(Common.user.getName());
         Helper.addTextLimiter(nameTextField, 30);
         categoryTableView.setItems(categories);
         noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(categoryTableView.getItems().indexOf(data.getValue()) + 1));
@@ -207,20 +207,29 @@ public class CategoryController implements Initializable {
 
     @FXML
     private void searchTextFieldKeyPressed(KeyEvent keyEvent) {
-        FilteredList<Category> filteredList = new FilteredList<>(categories, b -> true);
-        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> filteredList.setPredicate(category -> {
-            if (newValue.isEmpty()) {
-                return true;
+        searchTextField.textProperty().addListener(observable -> {
+            if (searchTextField.textProperty().get().isEmpty()) {
+                categoryTableView.setItems(categories);
+                return;
             }
 
-            String searchKeyword = newValue.toLowerCase().trim();
+            ObservableList<Category> tableItems = FXCollections.observableArrayList();
+            ObservableList<TableColumn<Category, ?>> columns = categoryTableView.getColumns();
 
-            return category.getName().toLowerCase().contains(searchKeyword);
-        }));
+            for (Category value : categories) {
+                for (int j = 1; j < 2; j++) {
+                    TableColumn<Category, ?> col = columns.get(j);
+                    String cellValue = String.valueOf(col.getCellData(value)).toLowerCase();
 
-        SortedList<Category> sortedList = new SortedList<>(filteredList);
-        sortedList.comparatorProperty().bind(categoryTableView.comparatorProperty());
-        categoryTableView.setItems(sortedList);
+                    if (cellValue.contains(searchTextField.getText().toLowerCase().trim())) {
+                        tableItems.add(value);
+                        break;
+                    }
+                }
+            }
+
+            categoryTableView.setItems(tableItems);
+        });
     }
 
     @FXML
