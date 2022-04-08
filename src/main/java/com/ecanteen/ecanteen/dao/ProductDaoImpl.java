@@ -141,6 +141,24 @@ public class ProductDaoImpl implements DaoService<Product> {
         return result;
     }
 
+    public int getBarcode(String barcode) throws SQLException, ClassNotFoundException {
+        int result = 0;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT barcode FROM product WHERE barcode = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, barcode);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        result = 1;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
     public static int getProductAmountCategory(Category object) throws SQLException, ClassNotFoundException {
         int productAmount = 0;
         try (Connection connection = MySQLConnection.createConnection()) {

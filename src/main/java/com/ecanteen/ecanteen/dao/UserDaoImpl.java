@@ -145,4 +145,22 @@ public class UserDaoImpl implements LoginService, DaoService<User> {
 
         return result;
     }
+
+    public int getUsername(String username) throws SQLException, ClassNotFoundException {
+        int result = 0;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT username FROM user WHERE username = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, username);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        result = 1;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
 }

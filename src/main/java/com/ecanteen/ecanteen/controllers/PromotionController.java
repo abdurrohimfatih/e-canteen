@@ -106,8 +106,10 @@ public class PromotionController implements Initializable {
         }
 
         profileButton.setText(Common.user.getName());
+        Helper.toNumberField(percentageTextField);
         Helper.addTextLimiter(idTextField, 10);
         Helper.addTextLimiter(percentageTextField, 3);
+        Helper.formatDatePicker(expiredDateDatePicker);
         promotionTableView.setItems(promotions);
         idTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
@@ -118,7 +120,7 @@ public class PromotionController implements Initializable {
     }
 
     @FXML
-    private void addButtonAction(ActionEvent actionEvent) {
+    private void addButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         if (idTextField.getText().trim().isEmpty() ||
                 nameTextField.getText().trim().isEmpty() ||
                 percentageTextField.getText().trim().isEmpty() ||
@@ -128,26 +130,33 @@ public class PromotionController implements Initializable {
             alert.setHeaderText("Error");
             alert.showAndWait();
         } else {
-            Promotion promotion = new Promotion();
-            promotion.setId(idTextField.getText().trim());
-            promotion.setName(nameTextField.getText().trim());
-            promotion.setPercentage(Integer.parseInt(percentageTextField.getText().trim()));
-            promotion.setDateAdded(String.valueOf(LocalDate.now()));
-            promotion.setExpiredDate(String.valueOf(expiredDateDatePicker.getValue()));
+            if (promotionDao.getId(idTextField.getText()) == 1) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Error");
+                alert.setContentText("ID promosi tersebut sudah digunakan!");
+                alert.showAndWait();
+            } else {
+                Promotion promotion = new Promotion();
+                promotion.setId(idTextField.getText().trim());
+                promotion.setName(nameTextField.getText().trim());
+                promotion.setPercentage(Integer.parseInt(percentageTextField.getText().trim()));
+                promotion.setDateAdded(String.valueOf(LocalDate.now()));
+                promotion.setExpiredDate(String.valueOf(expiredDateDatePicker.getValue()));
 
-            try {
-                if (promotionDao.addData(promotion) == 1) {
-                    promotions.clear();
-                    promotions.addAll(promotionDao.fetchAll());
-                    resetPromotion();
-                    idTextField.requestFocus();
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText("Sukses");
-                    alert.setContentText("Data berhasil ditambahkan!");
-                    alert.showAndWait();
+                try {
+                    if (promotionDao.addData(promotion) == 1) {
+                        promotions.clear();
+                        promotions.addAll(promotionDao.fetchAll());
+                        resetPromotion();
+                        idTextField.requestFocus();
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText("Sukses");
+                        alert.setContentText("Data berhasil ditambahkan!");
+                        alert.showAndWait();
+                    }
+                } catch (SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
             }
         }
     }

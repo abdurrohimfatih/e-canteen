@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import org.apache.commons.validator.routines.EmailValidator;
 
 import java.io.IOException;
 import java.net.URL;
@@ -74,6 +75,8 @@ public class UserController implements Initializable {
     @FXML
     private ComboBox<String> statusComboBox;
     @FXML
+    private Label warningLabel;
+    @FXML
     private Button addButton;
     @FXML
     private Button updateButton;
@@ -114,6 +117,7 @@ public class UserController implements Initializable {
         }
 
         profileButton.setText(Common.user.getName());
+        Helper.toNumberField(phoneTextField);
         Helper.addTextLimiter(usernameTextField, 20);
         Helper.addTextLimiter(nameTextField, 30);
         Helper.addTextLimiter(addressTextField, 15);
@@ -131,7 +135,7 @@ public class UserController implements Initializable {
     }
 
     @FXML
-    private void addButtonAction(ActionEvent actionEvent) {
+    private void addButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         if (usernameTextField.getText().trim().isEmpty() ||
                 passwordTextField.getText().isEmpty() ||
                 nameTextField.getText().trim().isEmpty() ||
@@ -144,42 +148,54 @@ public class UserController implements Initializable {
             alert.setContentText("Silakan isi semua field yang wajib diisi!");
             alert.showAndWait();
         } else {
-            User user = new User();
-            user.setUsername(usernameTextField.getText().trim());
-
-            String password = Helper.hashPassword(passwordTextField.getText());
-
-            user.setPassword(password);
-            user.setName(nameTextField.getText().trim());
-            user.setAddress(addressTextField.getText().trim());
-            user.setGender(genderComboBox.getValue());
-            user.setPhone(phoneTextField.getText().trim());
-            if (emailTextField.getText().trim().isEmpty()) {
-                user.setEmail("-");
+            if (!EmailValidator.getInstance().isValid(emailTextField.getText())) {
+                warningLabel.setText("Email tidak valid");
             } else {
-                user.setEmail(emailTextField.getText().trim());
-            }
-            user.setLevel(levelComboBox.getValue());
-            user.setDateCreated(String.valueOf(LocalDate.now()));
-            if (statusComboBox.getValue().equals("Aktif")) {
-                user.setStatus("1");
-            } else {
-                user.setStatus("0");
-            }
-
-            try {
-                if (userDao.addData(user) == 1) {
-                    users.clear();
-                    users.addAll(userDao.fetchAll());
-                    resetUser();
-                    usernameTextField.requestFocus();
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText("Sukses");
-                    alert.setContentText("Data berhasil ditambahkan!");
+                if (userDao.getUsername(usernameTextField.getText()) == 1) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setHeaderText("Error");
+                    alert.setContentText("username tersebut sudah digunakan!");
                     alert.showAndWait();
+                } else {
+                    warningLabel.setText("");
+                    User user = new User();
+                    user.setUsername(usernameTextField.getText().trim());
+
+                    String password = Helper.hashPassword(passwordTextField.getText());
+
+                    user.setPassword(password);
+                    user.setName(nameTextField.getText().trim());
+                    user.setAddress(addressTextField.getText().trim());
+                    user.setGender(genderComboBox.getValue());
+                    user.setPhone(phoneTextField.getText().trim());
+                    if (emailTextField.getText().trim().isEmpty()) {
+                        user.setEmail("-");
+                    } else {
+                        user.setEmail(emailTextField.getText().trim());
+                    }
+                    user.setLevel(levelComboBox.getValue());
+                    user.setDateCreated(String.valueOf(LocalDate.now()));
+                    if (statusComboBox.getValue().equals("Aktif")) {
+                        user.setStatus("1");
+                    } else {
+                        user.setStatus("0");
+                    }
+
+                    try {
+                        if (userDao.addData(user) == 1) {
+                            users.clear();
+                            users.addAll(userDao.fetchAll());
+                            resetUser();
+                            usernameTextField.requestFocus();
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setHeaderText("Sukses");
+                            alert.setContentText("Data berhasil ditambahkan!");
+                            alert.showAndWait();
+                        }
+                    } catch (SQLException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -198,40 +214,45 @@ public class UserController implements Initializable {
             alert.setContentText("Silakan isi semua field yang wajib diisi!");
             alert.showAndWait();
         } else {
-            selectedUser.setUsername(usernameTextField.getText().trim());
-
-            String password = Helper.hashPassword(passwordTextField.getText());
-
-            selectedUser.setPassword(password);
-            selectedUser.setName(nameTextField.getText().trim());
-            selectedUser.setAddress(addressTextField.getText().trim());
-            selectedUser.setGender(genderComboBox.getValue());
-            selectedUser.setPhone(phoneTextField.getText().trim());
-            if (emailTextField.getText().trim().isEmpty()) {
-                selectedUser.setEmail("-");
+            if (!EmailValidator.getInstance().isValid(emailTextField.getText())) {
+                warningLabel.setText("Email tidak valid");
             } else {
-                selectedUser.setEmail(emailTextField.getText().trim());
-            }
-            selectedUser.setLevel(levelComboBox.getValue());
-            if (statusComboBox.getValue().equals("Aktif")) {
-                selectedUser.setStatus("1");
-            } else {
-                selectedUser.setStatus("0");
-            }
+                warningLabel.setText("");
+                selectedUser.setUsername(usernameTextField.getText().trim());
 
-            try {
-                if (userDao.updateData(selectedUser) == 1) {
-                    users.clear();
-                    users.addAll(userDao.fetchAll());
-                    resetUser();
-                    userTableView.requestFocus();
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText("Sukses");
-                    alert.setContentText("Data berhasil diubah!");
-                    alert.showAndWait();
+                String password = Helper.hashPassword(passwordTextField.getText());
+
+                selectedUser.setPassword(password);
+                selectedUser.setName(nameTextField.getText().trim());
+                selectedUser.setAddress(addressTextField.getText().trim());
+                selectedUser.setGender(genderComboBox.getValue());
+                selectedUser.setPhone(phoneTextField.getText().trim());
+                if (emailTextField.getText().trim().isEmpty()) {
+                    selectedUser.setEmail("-");
+                } else {
+                    selectedUser.setEmail(emailTextField.getText().trim());
                 }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
+                selectedUser.setLevel(levelComboBox.getValue());
+                if (statusComboBox.getValue().equals("Aktif")) {
+                    selectedUser.setStatus("1");
+                } else {
+                    selectedUser.setStatus("0");
+                }
+
+                try {
+                    if (userDao.updateData(selectedUser) == 1) {
+                        users.clear();
+                        users.addAll(userDao.fetchAll());
+                        resetUser();
+                        userTableView.requestFocus();
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText("Sukses");
+                        alert.setContentText("Data berhasil diubah!");
+                        alert.showAndWait();
+                    }
+                } catch (SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -278,6 +299,7 @@ public class UserController implements Initializable {
             emailTextField.setText(selectedUser.getEmail());
             levelComboBox.setValue(selectedUser.getLevel());
             statusComboBox.setValue(selectedUser.getStatus());
+            warningLabel.setText("");
             addButton.setDisable(true);
             updateButton.setDisable(false);
             deleteButton.setDisable(false);

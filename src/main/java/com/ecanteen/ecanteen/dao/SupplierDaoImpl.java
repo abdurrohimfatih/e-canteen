@@ -115,4 +115,22 @@ public class SupplierDaoImpl implements DaoService<Supplier> {
 
         return result;
     }
+
+    public int getId(String id) throws SQLException, ClassNotFoundException {
+        int result = 0;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT id FROM supplier WHERE id = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, id);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        result = 1;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
 }

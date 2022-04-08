@@ -1,15 +1,15 @@
 package com.ecanteen.ecanteen.controllers;
 
 import com.ecanteen.ecanteen.dao.ProductDaoImpl;
-import com.ecanteen.ecanteen.dao.SaleDao;
+import com.ecanteen.ecanteen.dao.TransactionDaoImpl;
 import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Sale;
+import com.ecanteen.ecanteen.entities.Transaction;
 import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.EditingCell;
 import com.ecanteen.ecanteen.utils.Helper;
 import com.ecanteen.ecanteen.utils.ReportGenerator;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -21,10 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 import org.apache.log4j.BasicConfigurator;
@@ -33,15 +30,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Transaction2Controller implements Initializable {
+public class TransactionController implements Initializable {
     @FXML
     private Button profileButton;
     @FXML
@@ -65,7 +60,7 @@ public class Transaction2Controller implements Initializable {
     @FXML
     private TableColumn<Sale, Integer> discountSaleTableColumn;
     @FXML
-    private TableColumn<Sale, Double> subtotalSaleTableColumn;
+    private TableColumn<Sale, Integer> subtotalSaleTableColumn;
     @FXML
     private TextField totalAmountTextField;
     @FXML
@@ -74,13 +69,13 @@ public class Transaction2Controller implements Initializable {
     private Button resetSaleButton;
 
     private ProductDaoImpl productDao;
-    private SaleDao saleDao;
+    private TransactionDaoImpl transactionDao;
     private ObservableList<Sale> saleData;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         productDao = new ProductDaoImpl();
-        saleDao = new SaleDao();
+        transactionDao = new TransactionDaoImpl();
         profileButton.setText(Common.user.getName());
         saleData = FXCollections.observableArrayList();
 
@@ -89,19 +84,19 @@ public class Transaction2Controller implements Initializable {
         sellingPriceSaleTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getSellingPrice()).asObject());
         quantitySaleTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getQuantity()).asObject());
         discountSaleTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getDiscount()).asObject());
-        subtotalSaleTableColumn.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getSubtotal()).asObject());
+        subtotalSaleTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getSubtotal()).asObject());
 
         Callback<TableColumn<Sale, Integer>, TableCell<Sale, Integer>> cellFactory = p -> new EditingCell();
         quantitySaleTableColumn.setCellFactory(cellFactory);
         quantitySaleTableColumn.setOnEditCommit(t -> {
             t.getTableView().getItems().get(t.getTablePosition().getRow()).setQuantity(t.getNewValue());
-            double qty = t.getTableView().getItems().get(t.getTablePosition().getRow()).getQuantity();
-            double discountPercent = t.getTableView().getItems().get(t.getTablePosition().getRow()).getDiscount();
-            double sellingPrice = t.getRowValue().getSellingPrice();
-            double subtotalStart = sellingPrice * qty;
-            double subtotal;
+            int qty = t.getTableView().getItems().get(t.getTablePosition().getRow()).getQuantity();
+            int discountPercent = t.getTableView().getItems().get(t.getTablePosition().getRow()).getDiscount();
+            int sellingPrice = t.getRowValue().getSellingPrice();
+            int subtotalStart = sellingPrice * qty;
+            int subtotal;
             if (discountPercent != 0) {
-                double discountAmount = subtotalStart * discountPercent / 100;
+                int discountAmount = subtotalStart * discountPercent / 100;
                 subtotal = subtotalStart - discountAmount;
                 t.getRowValue().setSubtotal(subtotal);
                 saleTableView.refresh();
@@ -189,62 +184,55 @@ public class Transaction2Controller implements Initializable {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Jumlah uang");
         dialog.setHeaderText("Jumlah uang yang dibayarkan");
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent() || !dialog.getResult().equals("0") || !dialog.getResult().trim().isEmpty()) {
-            StringBuilder barcodes = new StringBuilder();
-            StringBuilder qts = new StringBuilder();
-            for (Sale saleDatum : saleData) {
-                barcodes.append(saleDatum.getBarcode());
-                barcodes.append(",");
-                qts.append(saleDatum.getQuantity());
-                qts.append(",");
-            }
+        Optional<String> result;
 
-            String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
-            String currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        StringBuilder barcodes = new StringBuilder();
+        StringBuilder qts = new StringBuilder();
+        for (Sale item : saleData) {
+            barcodes.append(item.getBarcode());
+            barcodes.append(",");
+            qts.append(item.getQuantity());
+            qts.append(",");
+        }
 
-            try {
-                Common.saleId = String.valueOf(saleDao.getNowSaleId());
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            Common.date = currentDate;
-            Common.time = currentTime;
-            Common.totalAmount = Double.parseDouble(totalAmountTextField.getText());
-            Common.payAmount = Double.parseDouble(result.get());
-            Common.change = Common.payAmount - Common.totalAmount;
+        String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+        String currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
-            Sale sale = new Sale();
-            sale.setId(Common.saleId);
-            sale.setUsername(Common.user.getName());
-            sale.setDate(Common.date);
-            sale.setTime(Common.time);
-            sale.setBarcodes(String.valueOf(barcodes));
-            sale.setQts(String.valueOf(qts));
-            sale.setTotalAmount(Common.totalAmount);
+        Transaction transaction = new Transaction();
+        try {
+            transaction.setId(String.valueOf(transactionDao.getNowSaleId()));
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
-            try {
-                if (saleDao.addSale(sale) == 1) {
-                    String[] soldBarcode = barcodes.toString().split(",");
-                    String[] soldQty = qts.toString().split(",");
+        transaction.setUsername(Common.user.getName());
+        transaction.setDate(currentDate);
+        transaction.setTime(currentTime);
+        transaction.setBarcodes(String.valueOf(barcodes));
+        transaction.setQts(String.valueOf(qts));
+        transaction.setTotalAmount(Integer.parseInt(totalAmountTextField.getText()));
 
-                    for (int i = 0; i < soldBarcode.length; i++) {
-                        int oldStock = productDao.getStockAmount(soldBarcode[i]);
-                        int newStock = oldStock - Integer.parseInt(soldQty[i]);
-                        productDao.updateStock(newStock, soldBarcode[i]);
-                    }
+        do {
+            result = dialog.showAndWait();
+            transaction.setPayAmount(Integer.parseInt(result.get()));
+            transaction.setChange(transaction.getPayAmount() - transaction.getTotalAmount());
+        } while (transaction.getTotalAmount() > transaction.getPayAmount() || result.get().trim().isEmpty());
 
-                    try {
-                        new ReportGenerator().generateInvoice(saleData);
-                    } catch (JRException e) {
-                        e.printStackTrace();
-                    }
+        try {
+            if (transactionDao.addData(transaction) == 1) {
+                String[] soldBarcode = barcodes.toString().split(",");
+                String[] soldQty = qts.toString().split(",");
 
-                    barcodeTextField.requestFocus();
+                for (int i = 0; i < soldBarcode.length; i++) {
+                    int oldStock = productDao.getStockAmount(soldBarcode[i]);
+                    int newStock = oldStock - Integer.parseInt(soldQty[i]);
+                    productDao.updateStock(newStock, soldBarcode[i]);
                 }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
+
+                new ReportGenerator().generateInvoice(saleData, transaction);
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

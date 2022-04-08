@@ -18,7 +18,7 @@
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0"
             prefWidth="1366.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.ecanteen.ecanteen.controllers.Transaction2Controller">
+            fx:controller="com.ecanteen.ecanteen.controllers.TransactionController">
     <top>
         <AnchorPane prefHeight="70.0" prefWidth="1366.0" style="-fx-background-color: #0c80d4;"
                     BorderPane.alignment="CENTER">

@@ -21,11 +21,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class ProductController implements Initializable {
@@ -134,6 +136,10 @@ public class ProductController implements Initializable {
             e.printStackTrace();
         }
 
+        Helper.toNumberField(purchasePriceTextField);
+        Helper.toNumberField(sellingPriceTextField);
+        Helper.toNumberField(stockAmountTextField);
+        Helper.formatDatePicker(expiredDateDatePicker);
         profileButton.setText(Common.user.getName());
         categoryComboBox.setItems(categories);
         supplierComboBox.setItems(suppliers);
@@ -151,7 +157,7 @@ public class ProductController implements Initializable {
     }
 
     @FXML
-    private void addButtonAction(ActionEvent actionEvent) {
+    private void addButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         if (barcodeTextField.getText().trim().isEmpty() ||
                 nameTextField.getText().isEmpty() ||
                 categoryComboBox.getValue() == null ||
@@ -161,42 +167,48 @@ public class ProductController implements Initializable {
                 supplierComboBox.getValue() == null ||
                 expiredDateDatePicker.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Silakan isi semua field yang wajib diisi!");
             alert.setHeaderText("Error");
+            alert.setContentText("Silakan isi semua field yang wajib diisi!");
             alert.showAndWait();
         } else {
-            Product product = new Product();
-            product.setBarcode(barcodeTextField.getText().trim());
-            product.setName(nameTextField.getText().trim());
-            product.setCategory(categoryComboBox.getValue());
-            product.setPurchasePrice(Integer.parseInt(purchasePriceTextField.getText()));
-            product.setSellingPrice(Integer.parseInt(sellingPriceTextField.getText()));
-            product.setStockAmount(Integer.parseInt(stockAmountTextField.getText().trim()));
-            product.setSupplier(supplierComboBox.getValue());
-            product.setDateAdded(String.valueOf(LocalDate.now()));
-            product.setExpiredDate(String.valueOf(expiredDateDatePicker.getValue()));
-            product.setPromotion(promotionComboBox.getValue());
+            if (productDao.getBarcode(barcodeTextField.getText()) == 1) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Error");
+                alert.setContentText("Produk dengan barcode tersebut sudah ada!");
+                alert.showAndWait();
+            } else {
+                Product product = new Product();
+                product.setBarcode(barcodeTextField.getText().trim());
+                product.setName(nameTextField.getText().trim());
+                product.setCategory(categoryComboBox.getValue());
+                product.setPurchasePrice(Integer.parseInt(purchasePriceTextField.getText()));
+                product.setSellingPrice(Integer.parseInt(sellingPriceTextField.getText()));
+                product.setStockAmount(Integer.parseInt(stockAmountTextField.getText().trim()));
+                product.setSupplier(supplierComboBox.getValue());
+                product.setDateAdded(String.valueOf(LocalDate.now()));
+                product.setExpiredDate(String.valueOf(expiredDateDatePicker.getValue()));
+                product.setPromotion(promotionComboBox.getValue());
 
-            try {
-                if (productDao.addData(product) == 1) {
-                    products.clear();
-                    products.addAll(productDao.fetchAll());
-                    resetProduct();
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText("Sukses");
-                    alert.setContentText("Data berhasil ditambahkan!");
-                    alert.showAndWait();
+                try {
+                    if (productDao.addData(product) == 1) {
+                        products.clear();
+                        products.addAll(productDao.fetchAll());
+                        resetProduct();
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText("Sukses");
+                        alert.setContentText("Data berhasil ditambahkan!");
+                        alert.showAndWait();
+                    }
+                } catch (SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
             }
         }
     }
 
     @FXML
     private void updateButtonAction(ActionEvent actionEvent) {
-        if (barcodeTextField.getText().trim().isEmpty() ||
-                nameTextField.getText().isEmpty() ||
+        if (nameTextField.getText().isEmpty() ||
                 categoryComboBox.getValue() == null ||
                 purchasePriceTextField.getText().trim().isEmpty() ||
                 sellingPriceTableColumn.getText().trim().isEmpty() ||

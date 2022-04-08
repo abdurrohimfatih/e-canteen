@@ -60,6 +60,7 @@ public class EditingCell extends TableCell<Sale, Integer> {
                 commitEdit(Integer.parseInt(textField.getText()));
             }
         });
+        Helper.toNumberField(textField);
     }
 
     private String getString() {

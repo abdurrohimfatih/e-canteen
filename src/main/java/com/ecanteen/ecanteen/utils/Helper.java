@@ -1,17 +1,26 @@
 package com.ecanteen.ecanteen.utils;
 
 import com.ecanteen.ecanteen.Main;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Control;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Helper {
     public static void changePage(Control control, String title, String fxmlFile) throws IOException {
@@ -28,6 +37,36 @@ public class Helper {
             if (tf.getText().length() > maxLength) {
                 String s = tf.getText().substring(0, maxLength);
                 tf.setText(s);
+            }
+        });
+    }
+
+    public static void toNumberField(final TextField tf) {
+        tf.textProperty().addListener((observableValue, s, t1) -> {
+            if (!t1.matches("\\d*")) {
+                tf.setText(t1.replaceAll("[^\\d]", ""));
+            }
+        });
+    }
+
+    public static void formatDatePicker(DatePicker datePicker) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        datePicker.setConverter(new StringConverter<LocalDate>() {
+            @Override
+            public String toString(LocalDate localDate) {
+                if (localDate == null) {
+                    return "";
+                }
+                return dateTimeFormatter.format(localDate);
+            }
+
+            @Override
+            public LocalDate fromString(String s) {
+                if (s == null || s.trim().isEmpty()) {
+                    return null;
+                }
+                return LocalDate.parse(s, dateTimeFormatter);
             }
         });
     }
