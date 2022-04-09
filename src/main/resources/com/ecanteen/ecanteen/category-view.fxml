@@ -48,17 +48,17 @@
                   <Insets left="20.0" right="20.0" />
                </padding>
             </MenuButton>
-            <Button fx:id="userMenuButton" alignment="CENTER" contentDisplay="CENTER" layoutX="350.0" layoutY="10.0" mnemonicParsing="false" onAction="#userButtonAction" prefHeight="40.0" text="DATA USER" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="userMenuButton" alignment="CENTER" contentDisplay="CENTER" layoutX="350.0" layoutY="10.0" mnemonicParsing="false" onAction="#userButtonAction" prefHeight="40.0" text="DATA PENGGUNA" textAlignment="CENTER" textFill="WHITE">
                <padding>
-                  <Insets left="25.0" right="25.0" />
+                  <Insets left="20.0" right="20.0" />
                </padding>
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="customerMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="40.0" text="DATA CUSTOMER" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="customerMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="40.0" text="DATA PELANGGAN" textAlignment="CENTER" textFill="WHITE">
                <padding>
-                  <Insets left="25.0" right="25.0" />
+                  <Insets left="20.0" right="20.0" />
                </padding>
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -66,7 +66,7 @@
             </Button>
             <Button fx:id="supplierMenuButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#supplierButtonAction" prefHeight="40.0" text="DATA SUPPLIER" textAlignment="CENTER" textFill="WHITE">
                <padding>
-                  <Insets left="25.0" right="25.0" />
+                  <Insets left="20.0" right="20.0" />
                </padding>
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -74,7 +74,7 @@
             </Button>
             <Button fx:id="historyMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="646.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" text="RIWAYAT" textAlignment="CENTER" textFill="WHITE">
                <padding>
-                  <Insets left="25.0" right="25.0" />
+                  <Insets left="20.0" right="20.0" />
                </padding>
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -82,7 +82,7 @@
             </Button>
             <Button fx:id="topUpMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="812.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" text="TOP UP" textAlignment="CENTER" textFill="WHITE">
                <padding>
-                  <Insets left="25.0" right="25.0" />
+                  <Insets left="20.0" right="20.0" />
                </padding>
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -92,10 +92,10 @@
          <HBox alignment="CENTER" layoutX="1244.0" layoutY="15.0" spacing="10.0" AnchorPane.rightAnchor="15.0">
             <Button fx:id="profileButton" mnemonicParsing="false" prefHeight="40.0" styleClass="link">
                <font>
-                  <Font name="System Bold" size="14.0"/>
+                  <Font name="System Bold" size="14.0" />
                </font>
                <padding>
-                  <Insets left="25.0"/>
+                  <Insets left="25.0" />
                </padding>
             </Button>
             <Button fx:id="logoutButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#logoutButtonAction" prefHeight="40.0" text="LOGOUT" textAlignment="CENTER" textFill="WHITE">
@@ -103,7 +103,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
                <padding>
-                  <Insets left="25.0" right="25.0" />
+                  <Insets left="20.0" right="20.0" />
                </padding>
             </Button>
          </HBox>
@@ -136,7 +136,7 @@
             <TextField fx:id="nameTextField" GridPane.columnIndex="1" />
          </GridPane>
          <HBox alignment="CENTER" layoutX="20.0" layoutY="340.0" spacing="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
-            <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonAction" styleClass="active" text="TAMBAH" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonAction" styleClass="add" text="TAMBAH" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="13.0" />
                </font>
@@ -144,7 +144,7 @@
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </padding>
             </Button>
-            <Button fx:id="updateButton" disable="true" mnemonicParsing="false" onAction="#updateButtonAction" styleClass="active" text="UBAH" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="updateButton" disable="true" mnemonicParsing="false" onAction="#updateButtonAction" styleClass="change" text="UBAH" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="13.0" />
                </font>
@@ -152,7 +152,7 @@
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </padding>
             </Button>
-            <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#deleteButtonAction" styleClass="active" text="HAPUS" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#deleteButtonAction" styleClass="delete" text="HAPUS" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="13.0" />
                </font>
@@ -160,7 +160,7 @@
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </padding>
             </Button>
-            <Button fx:id="resetButton" disable="true" mnemonicParsing="false" onAction="#resetButtonAction" styleClass="active" text="RESET" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="resetButton" disable="true" mnemonicParsing="false" onAction="#resetButtonAction" styleClass="reset" text="RESET" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="13.0" />
                </font>

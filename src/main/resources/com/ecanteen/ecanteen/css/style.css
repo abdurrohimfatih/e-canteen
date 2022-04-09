@@ -17,19 +17,48 @@
 
 .button, .menu-button {
     -fx-background-color: #23BBCF;
+    -fx-text-fill: white;
     -fx-cursor: HAND;
+}
+
+.menu-button .label {
+    -fx-text-fill: white;
+}
+
+.button:disabled, .menu-button:disabled {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+.menu-button:disabled .label {
+    -fx-text-fill: black;
 }
 
 .button:hover, .menu-button:hover {
     -fx-background-color: #1b95a5;
 }
 
-.active {
+.menu-item .label {
+    -fx-text-fill: black;
+    /*-fx-pref-height: 40px;*/
+    -fx-font-size: 14px;
+}
+
+.menu-item {
+    -fx-padding: 10 15 10 15;
+}
+
+.menu-item:focused {
     -fx-background-color: #0C80D4;
 }
 
-.active:hover {
-    -fx-background-color: #0966a9;
+.menu-item:focused .label {
+    -fx-text-fill: white;
+}
+
+.context-menu {
+    -fx-pref-width: 156px;
+    -fx-background-radius: 6;
 }
 
 .text-field, .date-picker, .combo-box, .searchable-combo-box .combo-box {
@@ -56,4 +85,37 @@
 .link:hover {
     -fx-background-color: transparent;
     -fx-underline: true;
+}
+
+.active, .change {
+    -fx-background-color: #0C80D4;
+    -fx-text-fill: white;
+}
+
+.active:hover, .change:hover {
+    -fx-background-color: #0966a9;
+}
+
+.add {
+    -fx-background-color: #00897b;
+}
+
+.add:hover {
+    -fx-background-color: #00695c;
+}
+
+.delete {
+    -fx-background-color: #e53935;
+}
+
+.delete:hover {
+    -fx-background-color: #ab000d;
+}
+
+.reset {
+    -fx-background-color: #424242;
+}
+
+.reset:hover {
+    -fx-background-color: #1b1b1b;
 }

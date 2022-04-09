@@ -24,7 +24,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class CategoryController implements Initializable {
@@ -121,7 +120,7 @@ public class CategoryController implements Initializable {
         } else {
             Category category = new Category();
             category.setName(nameTextField.getText().trim());
-            category.setDateCreated(String.valueOf(LocalDate.now()));
+            category.setDateCreated(Helper.formattedDateNow());
 
             try {
                 if (categoryDao.addData(category) == 1) {
@@ -149,7 +148,7 @@ public class CategoryController implements Initializable {
             alert.showAndWait();
         } else {
             selectedCategory.setName(nameTextField.getText().trim());
-            selectedCategory.setDateCreated(String.valueOf(LocalDate.now()));
+            selectedCategory.setDateCreated(Helper.formattedDateNow());
 
             try {
                 if (categoryDao.updateData(selectedCategory) == 1) {

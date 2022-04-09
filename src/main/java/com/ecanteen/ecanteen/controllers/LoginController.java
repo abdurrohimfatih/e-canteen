@@ -31,6 +31,8 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         userDao = new UserDaoImpl();
+
+        Helper.addTextLimiter(usernameTextField, 20);
     }
 
     @FXML
@@ -52,7 +54,7 @@ public class LoginController implements Initializable {
                 if (user.getLevel().equals("Admin")) {
                     Helper.changePage(loginButton, "Admin - Produk", "product-view.fxml");
                 } else {
-                    Helper.changePage(loginButton, "Kasir - Transaksi", "transaction2-view.fxml");
+                    Helper.changePage(loginButton, "Kasir - Transaksi", "transaction-view.fxml");
                 }
             } else {
                 infoLabel.setText("Status user sedang tidak aktif. Silakan aktifkan di admin!");

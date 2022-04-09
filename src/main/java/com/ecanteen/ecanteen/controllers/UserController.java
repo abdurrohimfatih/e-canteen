@@ -18,7 +18,6 @@ import org.apache.commons.validator.routines.EmailValidator;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class UserController implements Initializable {
@@ -122,6 +121,7 @@ public class UserController implements Initializable {
         Helper.addTextLimiter(nameTextField, 30);
         Helper.addTextLimiter(addressTextField, 15);
         Helper.addTextLimiter(phoneTextField, 14);
+        Helper.addTextLimiter(emailTextField, 50);
         genderComboBox.setItems(FXCollections.observableArrayList("Laki-laki", "Perempuan"));
         levelComboBox.setItems(FXCollections.observableArrayList("Admin", "Kasir"));
         statusComboBox.setItems(FXCollections.observableArrayList("Aktif", "Tidak Aktif"));
@@ -174,7 +174,7 @@ public class UserController implements Initializable {
                         user.setEmail(emailTextField.getText().trim());
                     }
                     user.setLevel(levelComboBox.getValue());
-                    user.setDateCreated(String.valueOf(LocalDate.now()));
+                    user.setDateCreated(Helper.formattedDateNow());
                     if (statusComboBox.getValue().equals("Aktif")) {
                         user.setStatus("1");
                     } else {

@@ -18,7 +18,7 @@ public class Main extends Application {
             stage.setMaximized(true);
         }
 
-        stage.setTitle("Login | e-Canteen");
+        stage.setTitle("Login | IDC");
         stage.setScene(scene);
         stage.centerOnScreen();
         stage.show();

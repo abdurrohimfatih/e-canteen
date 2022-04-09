@@ -14,27 +14,18 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.view.JasperViewer;
-import org.apache.log4j.BasicConfigurator;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class TransactionController implements Initializable {
     @FXML
@@ -195,9 +186,6 @@ public class TransactionController implements Initializable {
             qts.append(",");
         }
 
-        String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
-        String currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-
         Transaction transaction = new Transaction();
         try {
             transaction.setId(String.valueOf(transactionDao.getNowSaleId()));
@@ -206,8 +194,8 @@ public class TransactionController implements Initializable {
         }
 
         transaction.setUsername(Common.user.getName());
-        transaction.setDate(currentDate);
-        transaction.setTime(currentTime);
+        transaction.setDate(Helper.formattedDateNow());
+        transaction.setTime(Helper.formattedTimeNow());
         transaction.setBarcodes(String.valueOf(barcodes));
         transaction.setQts(String.valueOf(qts));
         transaction.setTotalAmount(Integer.parseInt(totalAmountTextField.getText()));

@@ -18,7 +18,7 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class PromotionController implements Initializable {
@@ -108,6 +108,7 @@ public class PromotionController implements Initializable {
         profileButton.setText(Common.user.getName());
         Helper.toNumberField(percentageTextField);
         Helper.addTextLimiter(idTextField, 10);
+        Helper.addTextLimiter(nameTextField, 100);
         Helper.addTextLimiter(percentageTextField, 3);
         Helper.formatDatePicker(expiredDateDatePicker);
         promotionTableView.setItems(promotions);
@@ -140,8 +141,8 @@ public class PromotionController implements Initializable {
                 promotion.setId(idTextField.getText().trim());
                 promotion.setName(nameTextField.getText().trim());
                 promotion.setPercentage(Integer.parseInt(percentageTextField.getText().trim()));
-                promotion.setDateAdded(String.valueOf(LocalDate.now()));
-                promotion.setExpiredDate(String.valueOf(expiredDateDatePicker.getValue()));
+                promotion.setDateAdded(Helper.formattedDateNow());
+                promotion.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
                 try {
                     if (promotionDao.addData(promotion) == 1) {
@@ -173,7 +174,7 @@ public class PromotionController implements Initializable {
         } else {
             selectedPromotion.setName(nameTextField.getText().trim());
             selectedPromotion.setPercentage(Integer.parseInt(percentageTextField.getText().trim()));
-            selectedPromotion.setExpiredDate(String.valueOf(expiredDateDatePicker.getValue()));
+            selectedPromotion.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
             try {
                 if (promotionDao.updateData(selectedPromotion) == 1) {
@@ -229,7 +230,7 @@ public class PromotionController implements Initializable {
             idTextField.setText(selectedPromotion.getId());
             nameTextField.setText(selectedPromotion.getName());
             percentageTextField.setText(String.valueOf(selectedPromotion.getPercentage()));
-            expiredDateDatePicker.setValue(LocalDate.parse(selectedPromotion.getExpiredDate()));
+            expiredDateDatePicker.setValue(Helper.formatter(selectedPromotion.getExpiredDate()));
             idTextField.setDisable(true);
             addButton.setDisable(true);
             updateButton.setDisable(false);

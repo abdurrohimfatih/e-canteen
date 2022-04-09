@@ -2,12 +2,15 @@ package com.ecanteen.ecanteen.dao;
 
 import com.ecanteen.ecanteen.entities.Promotion;
 import com.ecanteen.ecanteen.utils.DaoService;
+import com.ecanteen.ecanteen.utils.Helper;
 import com.ecanteen.ecanteen.utils.MySQLConnection;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,18 +18,24 @@ public class PromotionDaoImpl implements DaoService<Promotion> {
     @Override
     public List<Promotion> fetchAll() throws SQLException, ClassNotFoundException {
         List<Promotion> promotions = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate now = Helper.formatter(LocalDate.now().format(formatter));
+
         try (Connection connection = MySQLConnection.createConnection()) {
             String query = "SELECT id, name, percentage, date_added, expired_date FROM promotion WHERE id != -1";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
+                        String expiredDate = rs.getString("expired_date");
+
                         Promotion promotion = new Promotion();
                         promotion.setId(rs.getString("id"));
                         promotion.setName(rs.getString("name"));
                         promotion.setPercentage(rs.getInt("percentage"));
                         promotion.setDateAdded(rs.getString("date_added"));
                         promotion.setExpiredDate(rs.getString("expired_date"));
-                        if (LocalDate.now().isBefore(LocalDate.parse(rs.getString("expired_date"))) || LocalDate.now().isEqual(LocalDate.parse(rs.getString("expired_date")))) {
+                        if (now.isBefore(Helper.formatter(expiredDate))
+                                || now.isEqual(Helper.formatter(expiredDate))) {
                             promotion.setStatus("Aktif");
                         } else {
                             promotion.setStatus("Kedaluwarsa");

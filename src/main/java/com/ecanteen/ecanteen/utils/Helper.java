@@ -1,10 +1,7 @@
 package com.ecanteen.ecanteen.utils;
 
 import com.ecanteen.ecanteen.Main;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Control;
@@ -18,16 +15,15 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Helper {
     public static void changePage(Control control, String title, String fxmlFile) throws IOException {
         Stage stage = (Stage) control.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlFile));
         Parent root = fxmlLoader.load();
-        stage.setTitle(title + " | e-Canteen");
+        stage.setTitle(title + " | IDC");
         stage.setScene(new Scene(root));
         stage.show();
     }
@@ -50,9 +46,9 @@ public class Helper {
     }
 
     public static void formatDatePicker(DatePicker datePicker) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-        datePicker.setConverter(new StringConverter<LocalDate>() {
+        datePicker.setConverter(new StringConverter<>() {
             @Override
             public String toString(LocalDate localDate) {
                 if (localDate == null) {
@@ -69,6 +65,20 @@ public class Helper {
                 return LocalDate.parse(s, dateTimeFormatter);
             }
         });
+    }
+
+    public static String formattedDateNow() {
+        LocalDate now = LocalDate.now();
+        return now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+    }
+
+    public static String formattedTimeNow() {
+        LocalTime now = LocalTime.now();
+        return now.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
+
+    public static LocalDate formatter(String text) {
+        return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
     public static String hashPassword(String password)

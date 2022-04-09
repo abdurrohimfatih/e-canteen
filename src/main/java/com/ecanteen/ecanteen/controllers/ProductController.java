@@ -21,12 +21,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
@@ -136,11 +134,17 @@ public class ProductController implements Initializable {
             e.printStackTrace();
         }
 
+        profileButton.setText(Common.user.getName());
+        Helper.toNumberField(barcodeTextField);
         Helper.toNumberField(purchasePriceTextField);
         Helper.toNumberField(sellingPriceTextField);
         Helper.toNumberField(stockAmountTextField);
+        Helper.addTextLimiter(barcodeTextField, 20);
+        Helper.addTextLimiter(nameTextField, 100);
+        Helper.addTextLimiter(purchasePriceTextField, 7);
+        Helper.addTextLimiter(sellingPriceTextField, 7);
+        Helper.addTextLimiter(stockAmountTextField, 11);
         Helper.formatDatePicker(expiredDateDatePicker);
-        profileButton.setText(Common.user.getName());
         categoryComboBox.setItems(categories);
         supplierComboBox.setItems(suppliers);
         promotionComboBox.setItems(promotions);
@@ -185,8 +189,8 @@ public class ProductController implements Initializable {
                 product.setSellingPrice(Integer.parseInt(sellingPriceTextField.getText()));
                 product.setStockAmount(Integer.parseInt(stockAmountTextField.getText().trim()));
                 product.setSupplier(supplierComboBox.getValue());
-                product.setDateAdded(String.valueOf(LocalDate.now()));
-                product.setExpiredDate(String.valueOf(expiredDateDatePicker.getValue()));
+                product.setDateAdded(Helper.formattedDateNow());
+                product.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
                 product.setPromotion(promotionComboBox.getValue());
 
                 try {
@@ -226,8 +230,8 @@ public class ProductController implements Initializable {
             selectedProduct.setSellingPrice(Integer.parseInt(sellingPriceTextField.getText().trim()));
             selectedProduct.setStockAmount(Integer.parseInt(stockAmountTextField.getText().trim()));
             selectedProduct.setSupplier(supplierComboBox.getValue());
-            selectedProduct.setDateAdded(String.valueOf(LocalDate.now()));
-            selectedProduct.setExpiredDate(String.valueOf(expiredDateDatePicker.getValue()));
+            selectedProduct.setDateAdded(Helper.formattedDateNow());
+            selectedProduct.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             selectedProduct.setPromotion(promotionComboBox.getValue());
 
             try {
@@ -287,7 +291,7 @@ public class ProductController implements Initializable {
             sellingPriceTextField.setText(String.valueOf(selectedProduct.getSellingPrice()));
             stockAmountTextField.setText(String.valueOf(selectedProduct.getStockAmount()));
             supplierComboBox.setValue(selectedProduct.getSupplier());
-            expiredDateDatePicker.setValue(LocalDate.parse(selectedProduct.getExpiredDate()));
+            expiredDateDatePicker.setValue(Helper.formatter(selectedProduct.getExpiredDate()));
             if (!selectedProduct.getPromotion().getId().equals("-1")) {
                 promotionComboBox.setValue(selectedProduct.getPromotion());
             } else {
