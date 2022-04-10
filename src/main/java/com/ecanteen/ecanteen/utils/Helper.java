@@ -2,7 +2,6 @@ package com.ecanteen.ecanteen.utils;
 
 import com.ecanteen.ecanteen.Main;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
@@ -22,9 +21,9 @@ public class Helper {
     public static void changePage(Control control, String title, String fxmlFile) throws IOException {
         Stage stage = (Stage) control.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlFile));
-        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle(title + " | IDC");
-        stage.setScene(new Scene(root));
+        stage.setScene(scene);
         stage.show();
     }
 

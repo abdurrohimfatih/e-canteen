@@ -40,7 +40,6 @@
 
 .menu-item .label {
     -fx-text-fill: black;
-    /*-fx-pref-height: 40px;*/
     -fx-font-size: 14px;
 }
 
@@ -97,11 +96,11 @@
 }
 
 .add {
-    -fx-background-color: #00897b;
+    -fx-background-color: #009688;
 }
 
 .add:hover {
-    -fx-background-color: #00695c;
+    -fx-background-color: #006158;
 }
 
 .delete {

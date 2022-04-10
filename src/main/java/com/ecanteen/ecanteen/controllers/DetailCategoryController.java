@@ -1,5 +1,6 @@
 package com.ecanteen.ecanteen.controllers;
 
+import com.ecanteen.ecanteen.Main;
 import com.ecanteen.ecanteen.dao.ProductDaoImpl;
 import com.ecanteen.ecanteen.entities.Category;
 import com.ecanteen.ecanteen.entities.Product;
@@ -10,12 +11,18 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -24,6 +31,10 @@ public class DetailCategoryController implements Initializable {
 
     @FXML
     private Label categoryNameLabel;
+    @FXML
+    private Button addButton;
+    @FXML
+    private Button backButton;
     @FXML
     private TableView<Product> detailCategoryTableView;
     @FXML
@@ -62,5 +73,24 @@ public class DetailCategoryController implements Initializable {
         sellingPriceTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getSellingPrice()).asObject());
         stockAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStockAmount()).asObject());
         supplierTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getSupplier()));
+    }
+
+    @FXML
+    private void addProductAction(ActionEvent actionEvent) throws IOException {
+        Stage stage = (Stage) addButton.getScene().getWindow();
+        stage.close();
+        Stage mainStage = (Stage) stage.getOwner();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("product-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        mainStage.setTitle("Produk | IDC");
+        mainStage.setScene(scene);
+        mainStage.show();
+    }
+
+    @FXML
+    private void backAction(ActionEvent actionEvent) {
+        Stage stage = (Stage) backButton.getScene().getWindow();
+        stage.close();
     }
 }
