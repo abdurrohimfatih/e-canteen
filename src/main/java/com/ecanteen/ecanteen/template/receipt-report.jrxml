@@ -166,7 +166,7 @@
 				<text><![CDATA[Senin-Jumat (07:00-15:00)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="114" y="20" width="12" height="10" uuid="c16d2b50-d965-4b3b-a12f-6912d1dbd865">
+				<reportElement x="114" y="20" width="9" height="10" uuid="c16d2b50-d965-4b3b-a12f-6912d1dbd865">
 					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -185,7 +185,7 @@
 				<text><![CDATA[Wkt:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="126" y="20" width="25" height="10" uuid="4aea988e-70a9-49e7-b443-00ef33d469bc">
+				<reportElement x="123" y="20" width="28" height="10" uuid="4aea988e-70a9-49e7-b443-00ef33d469bc">
 					<property name="com.jaspersoft.studio.unit.height" value="cm"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
