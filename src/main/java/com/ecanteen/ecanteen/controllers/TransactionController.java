@@ -62,6 +62,7 @@ public class TransactionController implements Initializable {
     private ProductDaoImpl productDao;
     private TransactionDaoImpl transactionDao;
     private ObservableList<Sale> saleData;
+    private String content;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -122,12 +123,9 @@ public class TransactionController implements Initializable {
 
     @FXML
     private void logoutButtonAction(ActionEvent actionEvent) throws IOException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Konfirmasi");
-        alert.setContentText("Anda yakin ingin keluar?");
-        alert.showAndWait();
+        content = "Anda yakin ingin keluar?";
 
-        if (alert.getResult() == ButtonType.OK) {
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
             Helper.changePage(logoutButton, "Login", "login-view.fxml");
         }
     }
@@ -136,10 +134,8 @@ public class TransactionController implements Initializable {
     private void addProductButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         Product product = productDao.fetchProduct(barcodeTextField.getText().trim());
         if (product == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Tidak ditemukan");
-            alert.setContentText("Produk dengan barcode tersebut tidak ditemukan");
-            alert.showAndWait();
+            content = "Produk dengan barcode tersebut tidak ditemukan!";
+            Helper.alert(Alert.AlertType.ERROR, content);
         } else {
             Sale sale = new Sale();
             sale.setBarcode(product.getBarcode());
@@ -226,12 +222,8 @@ public class TransactionController implements Initializable {
 
     @FXML
     private void resetSaleButtonAction(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Konfirmasi");
-        alert.setContentText("Anda yakin ingin reset?");
-        alert.showAndWait();
-
-        if (alert.getResult() == ButtonType.OK) {
+        content = "Anda yakin ingin reset?";
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
             resetSale();
         }
     }

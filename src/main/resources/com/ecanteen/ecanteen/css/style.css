@@ -118,3 +118,19 @@
 .reset:hover {
     -fx-background-color: #1b1b1b;
 }
+
+.myDialog .button {
+    -fx-font-size: 13px;
+}
+
+.myDialog .button:default {
+    -fx-background-color: #0C80D4;
+}
+
+.myDialog .button:default:hover {
+    -fx-background-color: #0966a9;
+}
+
+.myDialog .label {
+    -fx-font-size: 16px;
+}

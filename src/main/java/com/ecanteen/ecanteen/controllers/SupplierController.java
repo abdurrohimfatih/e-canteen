@@ -109,6 +109,7 @@ public class SupplierController implements Initializable {
     private ObservableList<Supplier> suppliers;
     private SupplierDaoImpl supplierDao;
     static Supplier selectedSupplier;
+    private String content;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -149,19 +150,15 @@ public class SupplierController implements Initializable {
                 genderComboBox.getValue().isEmpty() ||
                 phoneTextField.getText().trim().isEmpty() ||
                 statusComboBox.getValue().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Error");
-            alert.setContentText("Silakan isi semua field yang wajib diisi!");
-            alert.showAndWait();
+            content = "Silakan isi semua field yang wajib diisi!";
+            Helper.alert(Alert.AlertType.ERROR, content);
         } else {
             if (!EmailValidator.getInstance().isValid(emailTextField.getText())) {
                 warningLabel.setText("Email tidak valid");
             } else {
                 if (supplierDao.getId(idTextField.getText()) == 1) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setHeaderText("Error");
-                    alert.setContentText("ID supplier tersebut sudah digunakan!");
-                    alert.showAndWait();
+                    content = "ID supplier tersebut sudah digunakan!";
+                    Helper.alert(Alert.AlertType.ERROR, content);
                 } else {
                     Supplier supplier = new Supplier();
                     supplier.setId(idTextField.getText().trim());
@@ -199,10 +196,8 @@ public class SupplierController implements Initializable {
                             suppliers.addAll(supplierDao.fetchAll());
                             resetSupplier();
                             idTextField.requestFocus();
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setHeaderText("Sukses");
-                            alert.setContentText("Data berhasil ditambahkan!");
-                            alert.showAndWait();
+                            content = "Data berhasil ditambahkan!";
+                            Helper.alert(Alert.AlertType.INFORMATION, content);
                         }
                     } catch (SQLException | ClassNotFoundException e) {
                         e.printStackTrace();
@@ -219,10 +214,8 @@ public class SupplierController implements Initializable {
                 genderComboBox.getValue().isEmpty() ||
                 phoneTextField.getText().trim().isEmpty() ||
                 statusComboBox.getValue().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Error");
-            alert.setContentText("Silakan isi semua field yang wajib diisi!");
-            alert.showAndWait();
+            content = "Silakan isi semua field yang wajib diisi!";
+            Helper.alert(Alert.AlertType.ERROR, content);
         } else {
             if (!EmailValidator.getInstance().isValid(emailTextField.getText())) {
                 warningLabel.setText("Email tidak valid");
@@ -261,10 +254,8 @@ public class SupplierController implements Initializable {
                         suppliers.addAll(supplierDao.fetchAll());
                         resetSupplier();
                         supplierTableView.requestFocus();
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setHeaderText("Sukses");
-                        alert.setContentText("Data berhasil diubah!");
-                        alert.showAndWait();
+                        content = "Data berhasil diubah!";
+                        Helper.alert(Alert.AlertType.INFORMATION, content);
                     }
                 } catch (SQLException | ClassNotFoundException e) {
                     e.printStackTrace();
@@ -275,22 +266,16 @@ public class SupplierController implements Initializable {
 
     @FXML
     private void deleteButtonAction(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Konfirmasi");
-        alert.setContentText("Anda yakin ingin menghapus?");
-        alert.showAndWait();
-
-        if (alert.getResult() == ButtonType.OK) {
+        content = "Anda yakin ingin menghapus?";
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
             try {
                 if (supplierDao.deleteData(selectedSupplier) == 1) {
                     suppliers.clear();
                     suppliers.addAll(supplierDao.fetchAll());
                     resetSupplier();
                     supplierTableView.requestFocus();
-                    Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-                    alert2.setHeaderText("Sukses");
-                    alert2.setContentText("Data berhasil dihapus!");
-                    alert2.showAndWait();
+                    content = "Data berhasil dihapus!";
+                    Helper.alert(Alert.AlertType.INFORMATION, content);
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -411,12 +396,8 @@ public class SupplierController implements Initializable {
 
     @FXML
     private void logoutButtonAction(ActionEvent actionEvent) throws IOException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Konfirmasi");
-        alert.setContentText("Anda yakin ingin keluar?");
-        alert.showAndWait();
-
-        if (alert.getResult() == ButtonType.OK) {
+        content = "Anda yakin ingin keluar?";
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
             Helper.changePage(logoutButton, "Login", "login-view.fxml");
         }
     }

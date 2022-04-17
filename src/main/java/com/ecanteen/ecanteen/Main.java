@@ -3,6 +3,7 @@ package com.ecanteen.ecanteen;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class Main extends Application {
             stage.setMaximized(true);
         }
 
+        stage.getIcons().add(new Image(String.valueOf(Main.class.getResource("image/logo.png"))));
         stage.setTitle("Login | IDC");
         stage.setScene(scene);
         stage.centerOnScreen();

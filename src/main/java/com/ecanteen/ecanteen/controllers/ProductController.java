@@ -1,5 +1,6 @@
 package com.ecanteen.ecanteen.controllers;
 
+import com.ecanteen.ecanteen.Main;
 import com.ecanteen.ecanteen.dao.CategoryDaoImpl;
 import com.ecanteen.ecanteen.dao.ProductDaoImpl;
 import com.ecanteen.ecanteen.dao.PromotionDaoImpl;
@@ -19,6 +20,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
@@ -113,6 +115,7 @@ public class ProductController implements Initializable {
     private ObservableList<Product> products;
     private ProductDaoImpl productDao;
     private Product selectedProduct;
+    private String content;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -170,16 +173,12 @@ public class ProductController implements Initializable {
                 stockAmountTextField.getText().trim().isEmpty() ||
                 supplierComboBox.getValue() == null ||
                 expiredDateDatePicker.getValue() == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Error");
-            alert.setContentText("Silakan isi semua field yang wajib diisi!");
-            alert.showAndWait();
+            content = "Silakan isi semua field yang wajib diisi!";
+            Helper.alert(Alert.AlertType.ERROR, content);
         } else {
             if (productDao.getBarcode(barcodeTextField.getText()) == 1) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText("Error");
-                alert.setContentText("Produk dengan barcode tersebut sudah ada!");
-                alert.showAndWait();
+                content = "Produk dengan barcode tersebut sudah ada!";
+                Helper.alert(Alert.AlertType.ERROR, content);
             } else {
                 Product product = new Product();
                 product.setBarcode(barcodeTextField.getText().trim());
@@ -198,10 +197,8 @@ public class ProductController implements Initializable {
                         products.clear();
                         products.addAll(productDao.fetchAll());
                         resetProduct();
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setHeaderText("Sukses");
-                        alert.setContentText("Data berhasil ditambahkan!");
-                        alert.showAndWait();
+                        content = "Data berhasil ditambahkan!";
+                        Helper.alert(Alert.AlertType.INFORMATION, content);
                     }
                 } catch (SQLException | ClassNotFoundException e) {
                     e.printStackTrace();
@@ -219,10 +216,8 @@ public class ProductController implements Initializable {
                 stockAmountTextField.getText().trim().isEmpty() ||
                 supplierComboBox.getValue() == null ||
                 expiredDateDatePicker.getValue() == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Silakan isi semua field yang wajib diisi!");
-            alert.setHeaderText("Error");
-            alert.showAndWait();
+            content = "Silakan isi semua field yang wajib diisi!";
+            Helper.alert(Alert.AlertType.ERROR, content);
         } else {
             selectedProduct.setName(nameTextField.getText().trim());
             selectedProduct.setCategory(categoryComboBox.getValue());
@@ -239,10 +234,8 @@ public class ProductController implements Initializable {
                     products.clear();
                     products.addAll(productDao.fetchAll());
                     resetProduct();
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText("Sukses");
-                    alert.setContentText("Data berhasil diubah!");
-                    alert.showAndWait();
+                    content = "Data berhasil diubah!";
+                    Helper.alert(Alert.AlertType.INFORMATION, content);
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -252,22 +245,17 @@ public class ProductController implements Initializable {
 
     @FXML
     private void deleteButtonAction(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Konfirmasi");
-        alert.setContentText("Anda yakin ingin menghapus?");
-        alert.showAndWait();
+        content = "Anda yakin ingin menghapus?";
 
-        if (alert.getResult() == ButtonType.OK) {
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
             try {
                 if (productDao.deleteData(selectedProduct) == 1) {
                     products.clear();
                     products.addAll(productDao.fetchAll());
                     resetProduct();
                     productTableView.requestFocus();
-                    Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-                    alert2.setHeaderText("Sukses");
-                    alert2.setContentText("Data berhasil dihapus!");
-                    alert2.showAndWait();
+                    content = "Data berhasil dihapus!";
+                    Helper.alert(Alert.AlertType.INFORMATION, content);
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -374,12 +362,9 @@ public class ProductController implements Initializable {
 
     @FXML
     private void logoutButtonAction(ActionEvent actionEvent) throws IOException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Konfirmasi");
-        alert.setContentText("Anda yakin ingin keluar?");
-        alert.showAndWait();
+        content = "Anda yakin ingin keluar?";
 
-        if (alert.getResult() == ButtonType.OK) {
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
             Helper.changePage(logoutButton, "Login", "login-view.fxml");
         }
     }

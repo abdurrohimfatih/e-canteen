@@ -92,7 +92,7 @@ public class PromotionController implements Initializable {
     private ObservableList<Promotion> promotions;
     private PromotionDaoImpl promotionDao;
     private Promotion selectedPromotion;
-
+    private String content;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -126,16 +126,12 @@ public class PromotionController implements Initializable {
                 nameTextField.getText().trim().isEmpty() ||
                 percentageTextField.getText().trim().isEmpty() ||
                 expiredDateDatePicker.getValue() == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Silakan isi semua field yang wajib diisi!");
-            alert.setHeaderText("Error");
-            alert.showAndWait();
+            content = "Silakan isi semua field yang wajib diisi!";
+            Helper.alert(Alert.AlertType.ERROR, content);
         } else {
             if (promotionDao.getId(idTextField.getText()) == 1) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText("Error");
-                alert.setContentText("ID promosi tersebut sudah digunakan!");
-                alert.showAndWait();
+                content = "ID promosi tersebut sudah digunakan!";
+                Helper.alert(Alert.AlertType.ERROR, content);
             } else {
                 Promotion promotion = new Promotion();
                 promotion.setId(idTextField.getText().trim());
@@ -150,10 +146,8 @@ public class PromotionController implements Initializable {
                         promotions.addAll(promotionDao.fetchAll());
                         resetPromotion();
                         idTextField.requestFocus();
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setHeaderText("Sukses");
-                        alert.setContentText("Data berhasil ditambahkan!");
-                        alert.showAndWait();
+                        content = "Data berhasil ditambahkan!";
+                        Helper.alert(Alert.AlertType.INFORMATION, content);
                     }
                 } catch (SQLException | ClassNotFoundException e) {
                     e.printStackTrace();
@@ -167,10 +161,8 @@ public class PromotionController implements Initializable {
         if (nameTextField.getText().trim().isEmpty() ||
                 percentageTextField.getText().trim().isEmpty() ||
                 expiredDateDatePicker.getValue() == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Silakan isi semua field yang wajib diisi!");
-            alert.setHeaderText("Error");
-            alert.showAndWait();
+            content = "Silakan isi semua field yang wajib diisi!";
+            Helper.alert(Alert.AlertType.ERROR, content);
         } else {
             selectedPromotion.setName(nameTextField.getText().trim());
             selectedPromotion.setPercentage(Integer.parseInt(percentageTextField.getText().trim()));
@@ -186,6 +178,8 @@ public class PromotionController implements Initializable {
                     alert.setHeaderText("Sukses");
                     alert.setContentText("Data berhasil diubah!");
                     alert.showAndWait();
+                    content = "Data berhasil diubah!";
+                    Helper.alert(Alert.AlertType.INFORMATION, content);
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -195,22 +189,17 @@ public class PromotionController implements Initializable {
 
     @FXML
     private void deleteButtonAction(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Konfirmasi");
-        alert.setContentText("Anda yakin ingin menghapus?");
-        alert.showAndWait();
+        content = "Anda yakin ingin menghapus?";
 
-        if (alert.getResult() == ButtonType.OK) {
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
             try {
                 if (promotionDao.deleteData(selectedPromotion) == 1) {
                     promotions.clear();
                     promotions.addAll(promotionDao.fetchAll());
                     resetPromotion();
                     promotionTableView.requestFocus();
-                    Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-                    alert2.setHeaderText("Sukses");
-                    alert2.setContentText("Data berhasil dihapus!");
-                    alert2.showAndWait();
+                    content = "Data berhasil dihapus!";
+                    Helper.alert(Alert.AlertType.INFORMATION, content);
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -303,12 +292,9 @@ public class PromotionController implements Initializable {
 
     @FXML
     private void logoutButtonAction(ActionEvent actionEvent) throws IOException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Konfirmasi");
-        alert.setContentText("Anda yakin ingin keluar?");
-        alert.showAndWait();
+        content = "Anda yakin ingin keluar?";
 
-        if (alert.getResult() == ButtonType.OK) {
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
             Helper.changePage(logoutButton, "Login", "login-view.fxml");
         }
     }

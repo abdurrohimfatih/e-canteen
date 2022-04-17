@@ -33,14 +33,12 @@
             <padding>
                 <Insets left="50.0" right="50.0" />
             </padding>
-         <ImageView fitHeight="251.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-               <Image url="@../../../image/logo.png" />
-            </image>
-            <VBox.margin>
-               <Insets />
-            </VBox.margin>
-         </ImageView>
+            <ImageView fitHeight="160.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+                <VBox.margin>
+                    <Insets />
+                </VBox.margin>
+                <Image url="@image/logo.png" />
+            </ImageView>
          <Label alignment="CENTER" contentDisplay="CENTER" layoutX="60.0" layoutY="403.0" prefWidth="424.0" text="Please Login" textAlignment="CENTER" textFill="#23bbcf">
             <font>
                <Font name="System Bold" size="28.0" />

@@ -89,6 +89,7 @@ public class CategoryController implements Initializable {
     private ObservableList<Category> categories;
     private CategoryDaoImpl categoryDao;
     static Category selectedCategory;
+    private String content;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -113,10 +114,8 @@ public class CategoryController implements Initializable {
     @FXML
     private void addButtonAction(ActionEvent actionEvent) {
         if (nameTextField.getText().trim().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Error");
-            alert.setContentText("Silakan isi semua field yang wajib diisi!");
-            alert.showAndWait();
+            content = "Silakan isi semua field yang wajib diisi!";
+            Helper.alert(Alert.AlertType.ERROR, content);
         } else {
             Category category = new Category();
             category.setName(nameTextField.getText().trim());
@@ -128,10 +127,8 @@ public class CategoryController implements Initializable {
                     categories.addAll(categoryDao.fetchAll());
                     resetCategory();
                     nameTextField.requestFocus();
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText("Sukses");
-                    alert.setContentText("Data berhasil ditambahkan!");
-                    alert.showAndWait();
+                    content = "Data berhasil ditambahkan!";
+                    Helper.alert(Alert.AlertType.INFORMATION, content);
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -142,10 +139,8 @@ public class CategoryController implements Initializable {
     @FXML
     private void updateButtonAction(ActionEvent actionEvent) {
         if (nameTextField.getText().trim().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Error");
-            alert.setContentText("Silakan isi semua field yang wajib diisi!");
-            alert.showAndWait();
+            content = "Silakan isi semua field yang wajib diisi!";
+            Helper.alert(Alert.AlertType.ERROR, content);
         } else {
             selectedCategory.setName(nameTextField.getText().trim());
             selectedCategory.setDateCreated(Helper.formattedDateNow());
@@ -156,10 +151,8 @@ public class CategoryController implements Initializable {
                     categories.addAll(categoryDao.fetchAll());
                     resetCategory();
                     categoryTableView.requestFocus();
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText("Sukses");
-                    alert.setContentText("Data berhasil diubah!");
-                    alert.showAndWait();
+                    content = "Data berhasil diubah!";
+                    Helper.alert(Alert.AlertType.INFORMATION, content);
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -168,29 +161,22 @@ public class CategoryController implements Initializable {
     }
 
     @FXML
-    private void deleteButtonAction(ActionEvent actionEvent) {
+    private void deleteButtonAction(ActionEvent actionEvent) throws IOException {
         if (selectedCategory.getProductAmount() > 0) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Error");
-            alert.setContentText("Kategori ini memiliki produk, tidak dapat dihapus!");
-            alert.showAndWait();
+            content = "Kategori ini memiliki produk, tidak dapat dihapus!";
+            Helper.alert(Alert.AlertType.ERROR, content);
         } else {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setHeaderText("Konfirmasi");
-            alert.setContentText("Anda yakin ingin menghapus?");
-            alert.showAndWait();
+            content = "Anda yakin ingin menghapus?";
 
-            if (alert.getResult() == ButtonType.OK) {
+            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
                 try {
                     if (categoryDao.deleteData(selectedCategory) == 1) {
                         categories.clear();
                         categories.addAll(categoryDao.fetchAll());
                         resetCategory();
                         categoryTableView.requestFocus();
-                        Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-                        alert2.setHeaderText("Sukses");
-                        alert2.setContentText("Data berhasil dihapus!");
-                        alert2.showAndWait();
+                        content = "Data berhasil dihapus!";
+                        Helper.alert(Alert.AlertType.INFORMATION, content);
                     }
                 } catch (SQLException | ClassNotFoundException e) {
                     e.printStackTrace();
@@ -295,12 +281,9 @@ public class CategoryController implements Initializable {
 
     @FXML
     private void logoutButtonAction(ActionEvent actionEvent) throws IOException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Konfirmasi");
-        alert.setContentText("Anda yakin ingin keluar?");
-        alert.showAndWait();
+        content = "Anda yakin ingin keluar?";
 
-        if (alert.getResult() == ButtonType.OK) {
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
             Helper.changePage(logoutButton, "Login", "login-view.fxml");
         }
     }

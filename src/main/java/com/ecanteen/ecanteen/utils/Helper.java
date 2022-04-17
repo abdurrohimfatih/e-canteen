@@ -3,9 +3,8 @@ package com.ecanteen.ecanteen.utils;
 import com.ecanteen.ecanteen.Main;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Control;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -98,4 +97,35 @@ public class Helper {
         }
     }
 
+    public static ButtonType alert(Alert.AlertType alertType, String content) {
+        Image image;
+        String title;
+        if (alertType == Alert.AlertType.CONFIRMATION) {
+            image = new Image(String.valueOf(Main.class.getResource("image/confirm.png")));
+            title = "Konfirmasi";
+        } else if (alertType == Alert.AlertType.ERROR) {
+            image = new Image(String.valueOf(Main.class.getResource("image/warning.png")));
+            title = "Error";
+        } else {
+            image = new Image(String.valueOf(Main.class.getResource("image/success.png")));
+            title = "Sukses";
+        }
+
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setGraphic(null);
+        alert.setContentText(content);
+
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(image);
+
+        DialogPane pane = alert.getDialogPane();
+        pane.getStylesheets().add(String.valueOf(Main.class.getResource("css/style.css")));
+        pane.getStyleClass().add("myDialog");
+
+        alert.showAndWait();
+
+        return alert.getResult();
+    }
 }
