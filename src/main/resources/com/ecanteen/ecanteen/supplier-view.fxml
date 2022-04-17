@@ -91,12 +91,12 @@
             </Button>
          </HBox>
          <HBox alignment="CENTER" layoutX="1244.0" layoutY="15.0" spacing="10.0" AnchorPane.rightAnchor="15.0">
-            <Button fx:id="profileButton" mnemonicParsing="false" prefHeight="40.0" styleClass="link">
+            <Button fx:id="profileButton" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="40.0" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
                <padding>
-                  <Insets left="25.0" />
+                  <Insets left="20.0" right="20.0" />
                </padding>
             </Button>
             <Button fx:id="logoutButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#logoutButtonAction" prefHeight="40.0" text="LOGOUT" textAlignment="CENTER" textFill="WHITE">

@@ -29,6 +29,26 @@ import java.util.ResourceBundle;
 
 public class TransactionController implements Initializable {
     @FXML
+    private Button transactionMenuButton;
+    @FXML
+    private MenuButton reportMenuButton;
+    @FXML
+    private MenuItem incomeMenuItem;
+    @FXML
+    private MenuItem soldProductMenuItem;
+    @FXML
+    private MenuItem favoriteProductMenuItem;
+    @FXML
+    private MenuButton stockMenuButton;
+    @FXML
+    private MenuItem productMenuItem;
+    @FXML
+    private MenuItem promotionMenuItem;
+    @FXML
+    private Button historyMenuButton;
+    @FXML
+    private Button topUpMenuButton;
+    @FXML
     private Button profileButton;
     @FXML
     private Button logoutButton;
@@ -232,5 +252,15 @@ public class TransactionController implements Initializable {
         barcodeTextField.clear();
         saleTableView.getItems().clear();
         totalAmountTextField.setText("");
+    }
+
+    @FXML
+    private void productMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(stockMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
+    }
+
+    @FXML
+    private void promotionMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(stockMenuButton, "Kasir - Promosi", "promotion-cashier-view.fxml");
     }
 }

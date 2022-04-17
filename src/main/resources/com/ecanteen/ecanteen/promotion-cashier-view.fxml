@@ -19,15 +19,29 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.PromotionController">
    <top>
-      <AnchorPane prefHeight="70.0" prefWidth="1366.0" style="-fx-background-color: #75dfff;" BorderPane.alignment="CENTER">
-         <HBox alignment="CENTER" layoutX="334.0" layoutY="15.0" spacing="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
-            <MenuButton fx:id="reportMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" text="LAPORAN" textAlignment="CENTER" textFill="WHITE">
+      <AnchorPane prefHeight="70.0" prefWidth="1366.0" style="-fx-background-color: #0c80d4;" BorderPane.alignment="CENTER">
+         <HBox alignment="CENTER" layoutX="334.0" layoutY="15.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="15.0">
+            <Label alignment="CENTER" prefWidth="400.0" text="INTEGRATED DIGITAL CANTEEN" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="-10.0" />
+               </HBox.margin>
+            </Label>
+            <Button fx:id="transactionMenuButton" focusTraversable="false" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#transactionCashierButtonAction" prefHeight="40.0" text="TRANSAKSI" textAlignment="CENTER" styleClass="cashier-button">
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <MenuButton fx:id="reportMenuButton" focusTraversable="false" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" text="LAPORAN" textAlignment="CENTER">
                <items>
                   <MenuItem fx:id="incomeMenuItem" mnemonicParsing="false" text="Pendapatan" />
                   <MenuItem fx:id="soldProductMenuItem" mnemonicParsing="false" text="Produk Terjual" />
                   <MenuItem fx:id="favoriteProductMenuItem" mnemonicParsing="false" text="Produk Favorit" />
-                  <MenuItem fx:id="supplierMenuItem" mnemonicParsing="false" text="Supplier" />
-                  <MenuItem fx:id="benefitMenuItem" mnemonicParsing="false" text="Laba" />
                </items>
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -36,10 +50,9 @@
                   <Insets left="20.0" right="20.0" />
                </padding>
             </MenuButton>
-            <MenuButton fx:id="stockMenuButton" alignment="CENTER" contentDisplay="CENTER" minHeight="40.0" mnemonicParsing="false" styleClass="active" text="DATA STOK" textAlignment="CENTER" textFill="WHITE">
+            <MenuButton fx:id="stockMenuButton"  focusTraversable="false" alignment="CENTER" contentDisplay="CENTER" minHeight="40.0" mnemonicParsing="false" styleClass="cashier-button-active" text="DATA STOK" textAlignment="CENTER">
                <items>
-                  <MenuItem fx:id="productMenuItem" mnemonicParsing="false" onAction="#productMenuItemAction" text="Data Produk" />
-                  <MenuItem fx:id="categoryMenuItem" mnemonicParsing="false" onAction="#categoryMenuItemAction" text="Data Kategori" />
+                  <MenuItem fx:id="productMenuItem" mnemonicParsing="false" onAction="#productCashierMenuItemAction" text="Data Produk" />
                   <MenuItem fx:id="promotionMenuItem" mnemonicParsing="false" text="Data Promosi" />
                </items>
                <font>
@@ -49,7 +62,7 @@
                   <Insets left="20.0" right="20.0" />
                </padding>
             </MenuButton>
-            <Button fx:id="userMenuButton" alignment="CENTER" contentDisplay="CENTER" layoutX="350.0" layoutY="10.0" mnemonicParsing="false" onAction="#userButtonAction" prefHeight="40.0" text="DATA PENGGUNA" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="historyMenuButton" focusTraversable="false" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="646.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" text="RIWAYAT" textAlignment="CENTER">
                <padding>
                   <Insets left="20.0" right="20.0" />
                </padding>
@@ -57,31 +70,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="customerMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="40.0" text="DATA PELANGGAN" textAlignment="CENTER" textFill="WHITE">
-               <padding>
-                  <Insets left="20.0" right="20.0" />
-               </padding>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="supplierMenuButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#supplierButtonAction" prefHeight="40.0" text="DATA SUPPLIER" textAlignment="CENTER" textFill="WHITE">
-               <padding>
-                  <Insets left="20.0" right="20.0" />
-               </padding>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="historyMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="646.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" text="RIWAYAT" textAlignment="CENTER" textFill="WHITE">
-               <padding>
-                  <Insets left="20.0" right="20.0" />
-               </padding>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="topUpMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="812.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" text="TOP UP" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="topUpMenuButton" focusTraversable="false" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="812.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" text="TOP UP" textAlignment="CENTER">
                <padding>
                   <Insets left="20.0" right="20.0" />
                </padding>
@@ -90,8 +79,8 @@
                </font>
             </Button>
          </HBox>
-         <HBox alignment="CENTER" layoutX="1244.0" layoutY="15.0" spacing="10.0" AnchorPane.rightAnchor="15.0">
-            <Button fx:id="profileButton" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="40.0" textAlignment="CENTER">
+         <HBox alignment="CENTER" layoutX="1244.0" layoutY="15.0" spacing="20.0" AnchorPane.rightAnchor="15.0">
+            <Button fx:id="profileButton" alignment="CENTER" contentDisplay="CENTER" disable="true" focusTraversable="false" mnemonicParsing="false" prefHeight="40.0" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -99,12 +88,12 @@
                   <Insets left="20.0" right="20.0" />
                </padding>
             </Button>
-            <Button fx:id="logoutButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#logoutButtonAction" prefHeight="40.0" text="LOGOUT" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="logoutButton" focusTraversable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#logoutButtonAction" prefHeight="40.0" styleClass="cashier-button" text="LOGOUT" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
                <padding>
-                  <Insets left="20.0" right="20.0" />
+                  <Insets left="25.0" right="25.0" />
                </padding>
             </Button>
          </HBox>
@@ -112,7 +101,7 @@
    </top>
    <left>
       <AnchorPane prefWidth="330.0" style="-fx-background-color: #75dfff;" BorderPane.alignment="CENTER">
-         <TextField fx:id="searchTextField" layoutX="26.0" layoutY="12.0" onKeyPressed="#searchTextFieldKeyPressed" promptText="Cari" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="16.0">
+         <TextField fx:id="searchTextField" focusTraversable="false" layoutX="26.0" layoutY="12.0" onKeyPressed="#searchTextFieldKeyPressed" promptText="Cari" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="16.0">
             <font>
                <Font size="16.0" />
             </font></TextField>

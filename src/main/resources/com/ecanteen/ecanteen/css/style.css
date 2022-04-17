@@ -134,3 +134,15 @@
 .myDialog .label {
     -fx-font-size: 16px;
 }
+
+.cashier-button:hover {
+    -fx-background-color: #47cedf;
+}
+
+.cashier-button-active {
+    -fx-background-color: #42a5f5;
+}
+
+.cashier-button-active:hover {
+    -fx-background-color: #7abff8;
+}

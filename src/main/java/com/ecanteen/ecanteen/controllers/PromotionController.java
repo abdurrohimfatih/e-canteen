@@ -93,6 +93,8 @@ public class PromotionController implements Initializable {
     private PromotionDaoImpl promotionDao;
     private Promotion selectedPromotion;
     private String content;
+    @FXML
+    private Button transactionMenuButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -297,5 +299,15 @@ public class PromotionController implements Initializable {
         if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
             Helper.changePage(logoutButton, "Login", "login-view.fxml");
         }
+    }
+
+    @FXML
+    private void transactionCashierButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(transactionMenuButton, "Kasir - Transaksi", "transaction-view.fxml");
+    }
+
+    @FXML
+    private void productCashierMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(stockMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
     }
 }
