@@ -1,8 +1,7 @@
 package com.ecanteen.ecanteen.entities;
 
 public class Transaction {
-    private String id, username, date, time, barcodes, qts;
-    private int totalAmount, payAmount, change;
+    private String id, username, date, time, barcodes, qts, totalAmount, payAmount, change;
 
     public String getId() {
         return id;
@@ -52,27 +51,27 @@ public class Transaction {
         this.qts = qts;
     }
 
-    public int getTotalAmount() {
+    public String getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(int totalAmount) {
+    public void setTotalAmount(String totalAmount) {
         this.totalAmount = totalAmount;
     }
 
-    public int getPayAmount() {
+    public String getPayAmount() {
         return payAmount;
     }
 
-    public void setPayAmount(int payAmount) {
+    public void setPayAmount(String payAmount) {
         this.payAmount = payAmount;
     }
 
-    public int getChange() {
+    public String getChange() {
         return change;
     }
 
-    public void setChange(int change) {
+    public void setChange(String change) {
         this.change = change;
     }
 }

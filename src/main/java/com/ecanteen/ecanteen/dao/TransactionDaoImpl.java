@@ -39,7 +39,7 @@ public class TransactionDaoImpl implements DaoService<Transaction> {
                 ps.setString(4, object.getTime());
                 ps.setString(5, object.getBarcodes());
                 ps.setString(6, object.getQts());
-                ps.setDouble(7, object.getTotalAmount());
+                ps.setString(7, object.getTotalAmount());
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();

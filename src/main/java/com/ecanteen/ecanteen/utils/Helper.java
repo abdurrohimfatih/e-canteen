@@ -27,7 +27,7 @@ public class Helper {
         stage.show();
     }
 
-    public static void addTextLimiter(final TextField tf, final int maxLength) {
+    public static void addTextLimiter(final TextInputControl tf, final int maxLength) {
         tf.textProperty().addListener((ov, oldValue, newValue) -> {
             if (tf.getText().length() > maxLength) {
                 String s = tf.getText().substring(0, maxLength);
@@ -44,7 +44,7 @@ public class Helper {
         });
     }
 
-    public static void addThousandSeparator(final TextField textField) {
+    public static void addThousandSeparator(final TextInputControl textField) {
         final char separator = '.';
         final Pattern p = Pattern.compile("[0-9" + separator + "]*");
         textField.setTextFormatter(new TextFormatter<>(c -> {

@@ -73,13 +73,13 @@
 		<field name="name" class="java.lang.String">
 			<fieldDescription><![CDATA[name]]></fieldDescription>
 		</field>
-		<field name="sellingPrice" class="java.lang.Integer">
+		<field name="sellingPrice" class="java.lang.String">
 			<fieldDescription><![CDATA[sellingPrice]]></fieldDescription>
 		</field>
 		<field name="quantity" class="java.lang.Integer">
 			<fieldDescription><![CDATA[quantity]]></fieldDescription>
 		</field>
-		<field name="subtotal" class="java.lang.Integer">
+		<field name="subtotal" class="java.lang.String">
 			<fieldDescription><![CDATA[subtotal]]></fieldDescription>
 		</field>
 	</subDataset>
@@ -88,9 +88,9 @@
 	<parameter name="sale_id" class="java.lang.String"/>
 	<parameter name="date" class="java.lang.String"/>
 	<parameter name="time" class="java.lang.String"/>
-	<parameter name="total" class="java.lang.Integer"/>
-	<parameter name="pay" class="java.lang.Integer"/>
-	<parameter name="change" class="java.lang.Integer"/>
+	<parameter name="total" class="java.lang.String"/>
+	<parameter name="pay" class="java.lang.String"/>
+	<parameter name="change" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>

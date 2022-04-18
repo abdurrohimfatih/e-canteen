@@ -227,6 +227,8 @@ public class TransactionController implements Initializable {
         dialog.setTitle("Jumlah uang");
         dialog.setHeaderText("Jumlah uang yang dibayarkan");
         Optional<String> result;
+        TextInputControl control = dialog.getEditor();
+        Helper.addThousandSeparator(control);
 
         StringBuilder barcodes = new StringBuilder();
         StringBuilder qts = new StringBuilder();
@@ -249,13 +251,41 @@ public class TransactionController implements Initializable {
         transaction.setTime(Helper.formattedTimeNow());
         transaction.setBarcodes(String.valueOf(barcodes));
         transaction.setQts(String.valueOf(qts));
-        transaction.setTotalAmount(Integer.parseInt(totalAmountTextField.getText()));
+        transaction.setTotalAmount(totalAmountTextField.getText());
+
+        String[] totalArray = transaction.getTotalAmount().split("\\.");
+        StringBuilder total = new StringBuilder();
+        for (String t : totalArray) {
+            total.append(t);
+        }
+        int totalAmountInt = Integer.parseInt(String.valueOf(total));
+        int payAmountInt;
 
         do {
             result = dialog.showAndWait();
-            transaction.setPayAmount(Integer.parseInt(result.get()));
-            transaction.setChange(transaction.getPayAmount() - transaction.getTotalAmount());
-        } while (transaction.getTotalAmount() > transaction.getPayAmount() || result.get().trim().isEmpty());
+            transaction.setPayAmount(result.get());
+
+            String[] payArray = transaction.getPayAmount().split("\\.");
+            StringBuilder pay = new StringBuilder();
+            for (String p : payArray) {
+                pay.append(p);
+            }
+            payAmountInt = Integer.parseInt(String.valueOf(pay));
+
+            DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+            DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+            symbols.setGroupingSeparator('.');
+            formatter.setDecimalFormatSymbols(symbols);
+            int changeInt = payAmountInt - totalAmountInt;
+            String changeString = formatter.format(changeInt);
+
+            System.out.println(payAmountInt);
+            System.out.println(totalAmountInt);
+            System.out.println(changeInt);
+            System.out.println(changeString);
+
+            transaction.setChange(changeString);
+        } while (totalAmountInt > payAmountInt || result.get().trim().isEmpty());
 
         try {
             if (transactionDao.addData(transaction) == 1) {

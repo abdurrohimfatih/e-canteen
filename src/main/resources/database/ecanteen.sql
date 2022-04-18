@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 11, 2022 at 09:58 AM
+-- Generation Time: Apr 18, 2022 at 06:12 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -38,10 +38,8 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `name`, `date_created`) VALUES
-(1, 'Minuman Panas', '28-03-2022'),
-(2, 'Makanan Ringan', '28-03-2022'),
-(6, 'Makanan Berat', '28-03-2022'),
-(8, 'Pembersih Lantai', '09-04-2022');
+(1, 'Minuman Panas', '17-04-2022'),
+(2, 'Makanan Ringan', '17-04-2022');
 
 -- --------------------------------------------------------
 
@@ -53,8 +51,8 @@ CREATE TABLE `product` (
   `barcode` varchar(20) NOT NULL,
   `name` varchar(100) NOT NULL,
   `category_id` int(11) NOT NULL,
-  `purchase_price` int(7) NOT NULL,
-  `selling_price` int(7) NOT NULL,
+  `purchase_price` varchar(9) NOT NULL,
+  `selling_price` varchar(9) NOT NULL,
   `stock_amount` int(11) NOT NULL,
   `supplier_id` varchar(16) NOT NULL,
   `date_added` varchar(10) NOT NULL,
@@ -67,9 +65,9 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`barcode`, `name`, `category_id`, `purchase_price`, `selling_price`, `stock_amount`, `supplier_id`, `date_added`, `expired_date`, `promotion_id`) VALUES
-('23456789234567', 'Oreo Manis', 2, 1000, 500, 200, '16', '09-04-2022', '24-03-2023', '123'),
-('4970129727514', 'Spidol', 2, 3000, 5000, 97, '10', '09-04-2022', '09-04-2022', 'DSC8762'),
-('CT652', 'Barcode Scanner', 2, 50000, 60000, -512, '4', '09-04-2022', '09-04-2022', '123');
+('23456789234567', 'Oreo Manis', 2, '1.000', '500', 200, '16', '17-04-2022', '24-03-2023', '-1'),
+('4970129727514', 'Spidol', 2, '3.000', '5.000', 97, '10', '17-04-2022', '09-04-2022', '-1'),
+('CT652', 'Barcode Scanner', 2, '50.000', '60.000', 513, '4', '17-04-2022', '09-04-2022', '-1');
 
 -- --------------------------------------------------------
 
@@ -91,11 +89,7 @@ CREATE TABLE `promotion` (
 
 INSERT INTO `promotion` (`id`, `name`, `percentage`, `date_added`, `expired_date`) VALUES
 ('-1', '', 0, '09-04-2022', '09-04-2022'),
-('123', 'Diskon Akhir Pekan', 30, '09-04-2022', '09-04-2022'),
-('4567898765', 'Diskon Idul Fitri', 70, '09-04-2022', '09-04-2022'),
-('8923', 'Diskon Akhir Tahun', 20, '09-04-2022', '09-04-2022'),
-('asdkasd', 'aasda', 10, '09-04-2022', '27-04-2022'),
-('DSC8762', 'Diskon Lebaran', 50, '09-04-2022', '09-04-2022');
+('4567898765', 'Diskon Idul Fitri', 70, '09-04-2022', '09-04-2022');
 
 -- --------------------------------------------------------
 
@@ -121,7 +115,6 @@ CREATE TABLE `supplier` (
 
 INSERT INTO `supplier` (`id`, `name`, `address`, `gender`, `phone`, `email`, `bank_account`, `account_number`, `status`) VALUES
 ('10', 'Andi', 'Cirebon', 'Laki-laki', '08222222222222', '-', '-', '-', '1'),
-('12', 'asd', 'Desa Karangmekar, Kec. Karangsembung, Kab. Cirebon', 'Perempuan', '0970', 'a@mail.com', 'BNI', '09798', '0'),
 ('14', 'Budi', 'Kuningan', 'Laki-laki', '08333333333333', '-', '-', '-', '1'),
 ('16', 'Coki', 'Majalengka', 'Laki-laki', '08444444444444', '-', '-', '-', '0'),
 ('17', 'Dani', 'Indramayu', 'Laki-laki', '08555555555555', '-', '-', '-', '1'),
@@ -142,7 +135,7 @@ CREATE TABLE `transaction` (
   `time` varchar(8) NOT NULL,
   `barcode` varchar(700) NOT NULL,
   `quantity` varchar(300) NOT NULL,
-  `total_amount` varchar(10) NOT NULL
+  `total_amount` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -426,7 +419,8 @@ INSERT INTO `transaction` (`id`, `username`, `date`, `time`, `barcode`, `quantit
 ('1384', 'Kasir', '08/04/2022', '17:15:58', 'CT652,CT652,CT652,CT652,CT652,CT652,CT652,CT652,CT652,CT652,', '1,1,1,1,1,1,1,1,1,1,', '420000.0'),
 ('1385', 'Kasir', '08/04/2022', '17:17:25', 'CT652,CT652,CT652,CT652,CT652,CT652,CT652,CT652,CT652,CT652,CT652,CT652,', '1,1,1,1,1,1,1,1,1,1,1,1,', '504000.0'),
 ('1386', 'Kasir', '08/04/2022', '17:19:00', 'CT652,', '1,', '42000.0'),
-('1387', 'Kasir', '09/04/2022', '14:34:11', 'CT652,', '1,', '42000.0');
+('1387', 'Kasir', '09/04/2022', '14:34:11', 'CT652,', '1,', '42000.0'),
+('1388', 'Kasir', '11-04-2022', '15:25:12', 'CT652,', '1,', '42000.0');
 
 -- --------------------------------------------------------
 
@@ -470,7 +464,10 @@ ALTER TABLE `category`
 -- Indexes for table `product`
 --
 ALTER TABLE `product`
-  ADD PRIMARY KEY (`barcode`);
+  ADD PRIMARY KEY (`barcode`),
+  ADD KEY `category_id` (`category_id`),
+  ADD KEY `supplier_id` (`supplier_id`),
+  ADD KEY `product_ibfk_1` (`promotion_id`);
 
 --
 -- Indexes for table `promotion`
@@ -504,7 +501,18 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `product`
+--
+ALTER TABLE `product`
+  ADD CONSTRAINT `product_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `product_ibfk_3` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
