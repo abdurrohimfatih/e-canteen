@@ -1,5 +1,6 @@
 package com.ecanteen.ecanteen.controllers;
 
+import com.ecanteen.ecanteen.Main;
 import com.ecanteen.ecanteen.dao.ProductDaoImpl;
 import com.ecanteen.ecanteen.dao.TransactionDaoImpl;
 import com.ecanteen.ecanteen.entities.Product;
@@ -18,7 +19,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -224,10 +227,19 @@ public class TransactionController implements Initializable {
     private void printSaleButtonAction(ActionEvent actionEvent) {
         saleData = saleTableView.getItems();
         TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Jumlah uang");
-        dialog.setHeaderText("Jumlah uang yang dibayarkan");
+        dialog.setTitle("Tunai");
+        dialog.setContentText("Jumlah bayar");
+        dialog.setHeaderText(null);
+        dialog.setGraphic(null);
+        DialogPane pane = dialog.getDialogPane();
+        pane.getStylesheets().add(String.valueOf(Main.class.getResource("css/style.css")));
+        pane.getStyleClass().add("myDialog");
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(String.valueOf(Main.class.getResource("image/logo.png"))));
         Optional<String> result;
         TextInputControl control = dialog.getEditor();
+        control.setPrefWidth(200);
+        control.setStyle("-fx-font-size: 16px");
         Helper.addThousandSeparator(control);
 
         StringBuilder barcodes = new StringBuilder();
@@ -263,29 +275,28 @@ public class TransactionController implements Initializable {
 
         do {
             result = dialog.showAndWait();
-            transaction.setPayAmount(result.get());
+            if (result.isPresent()) {
+                transaction.setPayAmount(dialog.getResult());
 
-            String[] payArray = transaction.getPayAmount().split("\\.");
-            StringBuilder pay = new StringBuilder();
-            for (String p : payArray) {
-                pay.append(p);
+                String[] payArray = transaction.getPayAmount().split("\\.");
+                StringBuilder pay = new StringBuilder();
+                for (String p : payArray) {
+                    pay.append(p);
+                }
+                payAmountInt = Integer.parseInt(String.valueOf(pay));
+
+                DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+                DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+                symbols.setGroupingSeparator('.');
+                formatter.setDecimalFormatSymbols(symbols);
+                int changeInt = payAmountInt - totalAmountInt;
+                String changeString = formatter.format(changeInt);
+
+                transaction.setChange(changeString);
+            } else {
+                return;
             }
-            payAmountInt = Integer.parseInt(String.valueOf(pay));
-
-            DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-            DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-            symbols.setGroupingSeparator('.');
-            formatter.setDecimalFormatSymbols(symbols);
-            int changeInt = payAmountInt - totalAmountInt;
-            String changeString = formatter.format(changeInt);
-
-            System.out.println(payAmountInt);
-            System.out.println(totalAmountInt);
-            System.out.println(changeInt);
-            System.out.println(changeString);
-
-            transaction.setChange(changeString);
-        } while (totalAmountInt > payAmountInt || result.get().trim().isEmpty());
+        } while (totalAmountInt > payAmountInt);
 
         try {
             if (transactionDao.addData(transaction) == 1) {
