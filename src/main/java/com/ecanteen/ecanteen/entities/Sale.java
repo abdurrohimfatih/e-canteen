@@ -1,8 +1,13 @@
 package com.ecanteen.ecanteen.entities;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class Sale {
-    private String barcode, name;
-    private int quantity, sellingPrice, discount, subtotal;
+    private String barcode, name, sellingPrice, subtotal;
+    private int quantity, discount;
 
     public String getBarcode() {
         return barcode;
@@ -28,11 +33,11 @@ public class Sale {
         this.quantity = quantity;
     }
 
-    public int getSellingPrice() {
+    public String getSellingPrice() {
         return sellingPrice;
     }
 
-    public void setSellingPrice(int sellingPrice) {
+    public void setSellingPrice(String sellingPrice) {
         this.sellingPrice = sellingPrice;
     }
 
@@ -44,11 +49,31 @@ public class Sale {
         this.discount = discount;
     }
 
-    public int getSubtotal() {
+    public String getSubtotal() {
+        String[] selling = getSellingPrice().split("\\.");
+        StringBuilder price = new StringBuilder();
+        for (String s : selling) {
+            price.append(s);
+        }
+        int sellingInt = Integer.parseInt(String.valueOf(price));
+        int subtotalStart = sellingInt * getQuantity();
+        int subtotalInt = subtotalStart;
+        if (getDiscount() != 0) {
+            int discountAmount = subtotalStart * getDiscount() / 100;
+            subtotalInt = subtotalStart - discountAmount;
+        }
+
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        formatter.setDecimalFormatSymbols(symbols);
+
+        subtotal = formatter.format(subtotalInt);
+
         return subtotal;
     }
 
-    public void setSubtotal(int subtotal) {
+    public void setSubtotal(String subtotal) {
         this.subtotal = subtotal;
     }
 }

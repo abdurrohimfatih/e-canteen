@@ -44,9 +44,9 @@ public class DetailCategoryController implements Initializable {
     @FXML
     private TableColumn<Product, String> nameTableColumn;
     @FXML
-    private TableColumn<Product, Integer> purchasePriceTableColumn;
+    private TableColumn<Product, String> purchasePriceTableColumn;
     @FXML
-    private TableColumn<Product, Integer> sellingPriceTableColumn;
+    private TableColumn<Product, String> sellingPriceTableColumn;
     @FXML
     private TableColumn<Product, Integer> stockAmountTableColumn;
     @FXML
@@ -69,8 +69,8 @@ public class DetailCategoryController implements Initializable {
         noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(detailCategoryTableView.getItems().indexOf(data.getValue()) + 1));
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
-        purchasePriceTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getPurchasePrice()).asObject());
-        sellingPriceTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getSellingPrice()).asObject());
+        purchasePriceTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPurchasePrice()));
+        sellingPriceTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSellingPrice()));
         stockAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStockAmount()).asObject());
         supplierTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getSupplier()));
     }

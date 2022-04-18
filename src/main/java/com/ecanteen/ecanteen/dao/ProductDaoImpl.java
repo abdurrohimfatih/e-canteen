@@ -39,8 +39,8 @@ public class ProductDaoImpl implements DaoService<Product> {
                         product.setBarcode(rs.getString("barcode"));
                         product.setName(rs.getString("name"));
                         product.setCategory(category);
-                        product.setPurchasePrice(rs.getInt("purchase_price"));
-                        product.setSellingPrice(rs.getInt("selling_price"));
+                        product.setPurchasePrice(rs.getString("purchase_price"));
+                        product.setSellingPrice(rs.getString("selling_price"));
                         product.setStockAmount(rs.getInt("stock_amount"));
                         product.setSupplier(supplier);
                         product.setDateAdded(rs.getString("date_added"));
@@ -64,8 +64,8 @@ public class ProductDaoImpl implements DaoService<Product> {
                 ps.setString(1, object.getBarcode());
                 ps.setString(2, object.getName());
                 ps.setInt(3, object.getCategory().getId());
-                ps.setInt(4, object.getPurchasePrice());
-                ps.setInt(5, object.getSellingPrice());
+                ps.setString(4, object.getPurchasePrice());
+                ps.setString(5, object.getSellingPrice());
                 ps.setInt(6, object.getStockAmount());
                 ps.setString(7, object.getSupplier().getId());
                 ps.setString(8, object.getDateAdded());
@@ -96,8 +96,8 @@ public class ProductDaoImpl implements DaoService<Product> {
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setString(1, object.getName());
                 ps.setInt(2, object.getCategory().getId());
-                ps.setInt(3, object.getPurchasePrice());
-                ps.setInt(4, object.getSellingPrice());
+                ps.setString(3, object.getPurchasePrice());
+                ps.setString(4, object.getSellingPrice());
                 ps.setInt(5, object.getStockAmount());
                 ps.setString(6, object.getSupplier().getId());
                 ps.setString(7, object.getDateAdded());
@@ -212,8 +212,8 @@ public class ProductDaoImpl implements DaoService<Product> {
                         Product product = new Product();
                         product.setBarcode(rs.getString("barcode"));
                         product.setName(rs.getString("name"));
-                        product.setPurchasePrice(rs.getInt("purchase_price"));
-                        product.setSellingPrice(rs.getInt("selling_price"));
+                        product.setPurchasePrice(rs.getString("purchase_price"));
+                        product.setSellingPrice(rs.getString("selling_price"));
                         product.setStockAmount(rs.getInt("stock_amount"));
                         product.setSupplier(supplier);
                         products.add(product);
@@ -242,8 +242,8 @@ public class ProductDaoImpl implements DaoService<Product> {
                         Product product = new Product();
                         product.setBarcode(rs.getString("barcode"));
                         product.setName(rs.getString("name"));
-                        product.setPurchasePrice(rs.getInt("purchase_price"));
-                        product.setSellingPrice(rs.getInt("selling_price"));
+                        product.setPurchasePrice(rs.getString("purchase_price"));
+                        product.setSellingPrice(rs.getString("selling_price"));
                         product.setStockAmount(rs.getInt("stock_amount"));
                         product.setCategory(category);
                         products.add(product);
@@ -267,7 +267,7 @@ public class ProductDaoImpl implements DaoService<Product> {
                         product = new Product();
                         product.setBarcode(rs.getString("barcode"));
                         product.setName(rs.getString("name"));
-                        product.setSellingPrice(rs.getInt("selling_price"));
+                        product.setSellingPrice(rs.getString("selling_price"));
                     }
                 }
             }
@@ -316,6 +316,21 @@ public class ProductDaoImpl implements DaoService<Product> {
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setInt(1, stock);
                 ps.setString(2, barcode);
+
+                if (ps.executeUpdate() != 0) {
+                    connection.commit();
+                } else {
+                    connection.rollback();
+                }
+            }
+        }
+    }
+
+    public static void updatePromotionIdProduct(String promotion_id) throws SQLException, ClassNotFoundException {
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "UPDATE product SET promotion_id = '-1' WHERE promotion_id = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, promotion_id);
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();

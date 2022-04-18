@@ -167,7 +167,6 @@ public class CategoryController implements Initializable {
             Helper.alert(Alert.AlertType.ERROR, content);
         } else {
             content = "Anda yakin ingin menghapus?";
-
             if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
                 try {
                     if (categoryDao.deleteData(selectedCategory) == 1) {

@@ -100,9 +100,9 @@ public class ProductController implements Initializable {
     @FXML
     private TableColumn<Product, String> nameTableColumn;
     @FXML
-    private TableColumn<Product, Integer> purchasePriceTableColumn;
+    private TableColumn<Product, String> purchasePriceTableColumn;
     @FXML
-    private TableColumn<Product, Integer> sellingPriceTableColumn;
+    private TableColumn<Product, String> sellingPriceTableColumn;
     @FXML
     private TableColumn<Product, Integer> stockAmountTableColumn;
     @FXML
@@ -141,13 +141,14 @@ public class ProductController implements Initializable {
 
         profileButton.setText(Common.user.getName());
         Helper.toNumberField(barcodeTextField);
-        Helper.toNumberField(purchasePriceTextField);
         Helper.toNumberField(sellingPriceTextField);
         Helper.toNumberField(stockAmountTextField);
+        Helper.addThousandSeparator(purchasePriceTextField);
+        Helper.addThousandSeparator(sellingPriceTextField);
         Helper.addTextLimiter(barcodeTextField, 20);
         Helper.addTextLimiter(nameTextField, 100);
-        Helper.addTextLimiter(purchasePriceTextField, 7);
-        Helper.addTextLimiter(sellingPriceTextField, 7);
+        Helper.addTextLimiter(purchasePriceTextField, 9);
+        Helper.addTextLimiter(sellingPriceTextField, 9);
         Helper.addTextLimiter(stockAmountTextField, 11);
         Helper.formatDatePicker(expiredDateDatePicker);
         categoryComboBox.setItems(categories);
@@ -157,8 +158,8 @@ public class ProductController implements Initializable {
         productTableView.setItems(products);
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
-        purchasePriceTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getPurchasePrice()).asObject());
-        sellingPriceTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getSellingPrice()).asObject());
+        purchasePriceTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPurchasePrice()));
+        sellingPriceTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSellingPrice()));
         stockAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStockAmount()).asObject());
         supplierTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getSupplier()));
         expiredDateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getExpiredDate()));
@@ -186,8 +187,8 @@ public class ProductController implements Initializable {
                 product.setBarcode(barcodeTextField.getText().trim());
                 product.setName(nameTextField.getText().trim());
                 product.setCategory(categoryComboBox.getValue());
-                product.setPurchasePrice(Integer.parseInt(purchasePriceTextField.getText()));
-                product.setSellingPrice(Integer.parseInt(sellingPriceTextField.getText()));
+                product.setPurchasePrice(purchasePriceTextField.getText());
+                product.setSellingPrice(sellingPriceTextField.getText());
                 product.setStockAmount(Integer.parseInt(stockAmountTextField.getText().trim()));
                 product.setSupplier(supplierComboBox.getValue());
                 product.setDateAdded(Helper.formattedDateNow());
@@ -223,8 +224,8 @@ public class ProductController implements Initializable {
         } else {
             selectedProduct.setName(nameTextField.getText().trim());
             selectedProduct.setCategory(categoryComboBox.getValue());
-            selectedProduct.setPurchasePrice(Integer.parseInt(purchasePriceTextField.getText().trim()));
-            selectedProduct.setSellingPrice(Integer.parseInt(sellingPriceTextField.getText().trim()));
+            selectedProduct.setPurchasePrice(purchasePriceTextField.getText().trim());
+            selectedProduct.setSellingPrice(sellingPriceTextField.getText().trim());
             selectedProduct.setStockAmount(Integer.parseInt(stockAmountTextField.getText().trim()));
             selectedProduct.setSupplier(supplierComboBox.getValue());
             selectedProduct.setDateAdded(Helper.formattedDateNow());

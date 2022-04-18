@@ -266,19 +266,24 @@ public class SupplierController implements Initializable {
 
     @FXML
     private void deleteButtonAction(ActionEvent actionEvent) {
-        content = "Anda yakin ingin menghapus?";
-        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-            try {
-                if (supplierDao.deleteData(selectedSupplier) == 1) {
-                    suppliers.clear();
-                    suppliers.addAll(supplierDao.fetchAll());
-                    resetSupplier();
-                    supplierTableView.requestFocus();
-                    content = "Data berhasil dihapus!";
-                    Helper.alert(Alert.AlertType.INFORMATION, content);
+        if (selectedSupplier.getProductAmount() > 0) {
+            content = "Supplier ini memiliki produk, tidak dapat dihapus!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+        } else {
+            content = "Anda yakin ingin menghapus?";
+            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
+                try {
+                    if (supplierDao.deleteData(selectedSupplier) == 1) {
+                        suppliers.clear();
+                        suppliers.addAll(supplierDao.fetchAll());
+                        resetSupplier();
+                        supplierTableView.requestFocus();
+                        content = "Data berhasil dihapus!";
+                        Helper.alert(Alert.AlertType.INFORMATION, content);
+                    }
+                } catch (SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
             }
         }
     }

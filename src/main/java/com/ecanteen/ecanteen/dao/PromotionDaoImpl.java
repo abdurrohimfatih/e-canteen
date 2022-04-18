@@ -108,6 +108,7 @@ public class PromotionDaoImpl implements DaoService<Promotion> {
                 if (ps.executeUpdate() != 0) {
                     connection.commit();
                     result = 1;
+                    ProductDaoImpl.updatePromotionIdProduct(object.getId());
                 } else {
                     connection.rollback();
                 }

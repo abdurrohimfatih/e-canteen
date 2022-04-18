@@ -1,8 +1,8 @@
 package com.ecanteen.ecanteen.entities;
 
 public class Product {
-    private String barcode, name, dateAdded, expiredDate;
-    private int purchasePrice, sellingPrice, stockAmount, discount;
+    private String barcode, name, dateAdded, expiredDate, purchasePrice, sellingPrice;
+    private int stockAmount, discount;
     private Category category;
     private Supplier supplier;
     private Promotion promotion;
@@ -39,19 +39,19 @@ public class Product {
         this.expiredDate = expiredDate;
     }
 
-    public int getPurchasePrice() {
+    public String getPurchasePrice() {
         return purchasePrice;
     }
 
-    public void setPurchasePrice(int purchasePrice) {
+    public void setPurchasePrice(String purchasePrice) {
         this.purchasePrice = purchasePrice;
     }
 
-    public int getSellingPrice() {
+    public String getSellingPrice() {
         return sellingPrice;
     }
 
-    public void setSellingPrice(int sellingPrice) {
+    public void setSellingPrice(String sellingPrice) {
         this.sellingPrice = sellingPrice;
     }
 

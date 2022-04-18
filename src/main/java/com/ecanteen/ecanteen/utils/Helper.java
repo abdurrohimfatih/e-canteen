@@ -15,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.regex.Pattern;
 
 public class Helper {
     public static void changePage(Control control, String title, String fxmlFile) throws IOException {
@@ -41,6 +42,55 @@ public class Helper {
                 tf.setText(t1.replaceAll("[^\\d]", ""));
             }
         });
+    }
+
+    public static void addThousandSeparator(final TextField textField) {
+        final char separator = '.';
+        final Pattern p = Pattern.compile("[0-9" + separator + "]*");
+        textField.setTextFormatter(new TextFormatter<>(c -> {
+            if (!c.isContentChange()) {
+                return c;
+            }
+            String newText = c.getControlNewText();
+            if (newText.isEmpty()) {
+                return c;
+            }
+            if (!p.matcher(newText).matches()) {
+                return null;
+            }
+
+            int suffixCount = c.getControlText().length() - c.getRangeEnd();
+            int digits = suffixCount - suffixCount / 4;
+            StringBuilder sb = new StringBuilder();
+
+            if (digits % 3 == 0 && digits > 0 && suffixCount % 4 != 0) {
+                sb.append(separator);
+            }
+
+            for (int i = c.getRangeStart() + c.getText().length() - 1; i >= 0; i--) {
+                char letter = newText.charAt(i);
+                if (Character.isDigit(letter)) {
+                    sb.append(letter);
+                    digits++;
+                    if (digits % 3 == 0) {
+                        sb.append(separator);
+                    }
+                }
+            }
+
+            if (digits % 3 == 0) {
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            sb.reverse();
+            int length = sb.length();
+
+            c.setRange(0, c.getRangeEnd());
+            c.setText(sb.toString());
+            c.setCaretPosition(length);
+            c.setAnchor(length);
+
+            return c;
+        }));
     }
 
     public static void formatDatePicker(DatePicker datePicker) {
