@@ -300,14 +300,4 @@ public class PromotionController implements Initializable {
             Helper.changePage(logoutButton, "Login", "login-view.fxml");
         }
     }
-
-    @FXML
-    private void transactionCashierButtonAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(transactionMenuButton, "Kasir - Transaksi", "transaction-view.fxml");
-    }
-
-    @FXML
-    private void productCashierMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(stockMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
-    }
 }
