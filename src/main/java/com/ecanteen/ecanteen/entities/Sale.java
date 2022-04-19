@@ -1,12 +1,7 @@
 package com.ecanteen.ecanteen.entities;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.Locale;
-
 public class Sale {
-    private String barcode, name, sellingPrice, subtotal;
+    private String barcode, name, sellingPrice, discountAmount, subtotal;
     private int quantity, discount;
 
     public String getBarcode() {
@@ -49,27 +44,15 @@ public class Sale {
         this.discount = discount;
     }
 
+    public String getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(String discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
     public String getSubtotal() {
-        String[] selling = getSellingPrice().split("\\.");
-        StringBuilder price = new StringBuilder();
-        for (String s : selling) {
-            price.append(s);
-        }
-        int sellingInt = Integer.parseInt(String.valueOf(price));
-        int subtotalStart = sellingInt * getQuantity();
-        int subtotalInt = subtotalStart;
-        if (getDiscount() != 0) {
-            int discountAmount = subtotalStart * getDiscount() / 100;
-            subtotalInt = subtotalStart - discountAmount;
-        }
-
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator('.');
-        formatter.setDecimalFormatSymbols(symbols);
-
-        subtotal = formatter.format(subtotalInt);
-
         return subtotal;
     }
 
