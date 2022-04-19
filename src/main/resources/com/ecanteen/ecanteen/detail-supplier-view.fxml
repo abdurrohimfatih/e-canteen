@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="600.0" prefWidth="1100.0" style="-fx-background-color: #75dfff;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.DetailSupplierController">
-    <VBox alignment="CENTER" layoutY="15.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
-        <Label alignment="CENTER" contentDisplay="CENTER" text="PRODUK YANG DI-SUPPLY" textAlignment="CENTER">
-            <font>
-                <Font name="System Bold" size="18.0" />
-            </font>
-        </Label>
-        <Label fx:id="supplierNameLabel" alignment="CENTER" contentDisplay="CENTER" textAlignment="CENTER">
-            <font>
-                <Font name="System Bold" size="16.0" />
-            </font>
-        </Label>
-    </VBox>
+   <HBox alignment="CENTER" layoutY="10.0" AnchorPane.leftAnchor="193.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
+      <children>
+          <VBox alignment="CENTER" spacing="5.0" HBox.hgrow="ALWAYS">
+              <Label alignment="CENTER" contentDisplay="CENTER" text="PRODUK YANG DIKIRIM" textAlignment="CENTER">
+                  <font>
+                      <Font name="System Bold" size="18.0" />
+                  </font>
+              </Label>
+              <Label fx:id="supplierNameLabel" alignment="CENTER" contentDisplay="CENTER" text="Oleh : " textAlignment="CENTER">
+                  <font>
+                      <Font name="System Bold" size="16.0" />
+                  </font>
+              </Label>
+          </VBox>
+          <Button fx:id="backButton" defaultButton="true" mnemonicParsing="false" onAction="#backAction" prefHeight="40.0" styleClass="reset" text="KEMBALI" textAlignment="CENTER" textFill="WHITE">
+              <font>
+                  <Font name="System Bold" size="14.0" />
+              </font>
+              <padding>
+                  <Insets left="25.0" right="25.0" />
+              </padding>
+          </Button>
+      </children>
+   </HBox>
     <TableView fx:id="detailSupplierTableView" layoutX="300.0" layoutY="160.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="77.0">
       <columns>
           <TableColumn fx:id="noTableColumn" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" sortable="false" text="No" />

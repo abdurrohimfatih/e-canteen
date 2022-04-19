@@ -150,7 +150,7 @@
             <Label layoutX="10.0" layoutY="167.0" text="No Telepon" GridPane.rowIndex="4" />
             <TextField fx:id="phoneTextField" layoutX="110.0" layoutY="63.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label layoutX="10.0" layoutY="217.0" text="Email" GridPane.rowIndex="5" />
-            <TextField fx:id="emailTextField" layoutX="110.0" layoutY="213.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField fx:id="emailTextField" promptText="email@example.com" layoutX="110.0" layoutY="213.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label layoutX="10.0" layoutY="267.0" text="Nama Bank" GridPane.rowIndex="6" />
             <TextField fx:id="bankAccountTextField" layoutX="110.0" layoutY="263.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Label layoutX="10.0" layoutY="317.0" text="No Rekening" GridPane.rowIndex="7" />

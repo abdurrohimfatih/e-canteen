@@ -232,17 +232,20 @@ public class UserController implements Initializable {
                     selectedUser.setStatus("0");
                 }
 
-                try {
-                    if (userDao.updateData(selectedUser) == 1) {
-                        users.clear();
-                        users.addAll(userDao.fetchAll());
-                        resetUser();
-                        userTableView.requestFocus();
-                        content = "Data berhasil diubah!";
-                        Helper.alert(Alert.AlertType.INFORMATION, content);
+                content = "Anda yakin ingin mengubah?";
+                if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
+                    try {
+                        if (userDao.updateData(selectedUser) == 1) {
+                            users.clear();
+                            users.addAll(userDao.fetchAll());
+                            resetUser();
+                            userTableView.requestFocus();
+                            content = "Data berhasil diubah!";
+                            Helper.alert(Alert.AlertType.INFORMATION, content);
+                        }
+                    } catch (SQLException | ClassNotFoundException e) {
+                        e.printStackTrace();
                     }
-                } catch (SQLException | ClassNotFoundException e) {
-                    e.printStackTrace();
                 }
             }
         }

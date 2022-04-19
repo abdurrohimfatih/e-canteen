@@ -248,17 +248,20 @@ public class SupplierController implements Initializable {
                     selectedSupplier.setStatus("0");
                 }
 
-                try {
-                    if (supplierDao.updateData(selectedSupplier) == 1) {
-                        suppliers.clear();
-                        suppliers.addAll(supplierDao.fetchAll());
-                        resetSupplier();
-                        supplierTableView.requestFocus();
-                        content = "Data berhasil diubah!";
-                        Helper.alert(Alert.AlertType.INFORMATION, content);
+                content = "Anda yakin ingin mengubah?";
+                if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
+                    try {
+                        if (supplierDao.updateData(selectedSupplier) == 1) {
+                            suppliers.clear();
+                            suppliers.addAll(supplierDao.fetchAll());
+                            resetSupplier();
+                            supplierTableView.requestFocus();
+                            content = "Data berhasil diubah!";
+                            Helper.alert(Alert.AlertType.INFORMATION, content);
+                        }
+                    } catch (SQLException | ClassNotFoundException e) {
+                        e.printStackTrace();
                     }
-                } catch (SQLException | ClassNotFoundException e) {
-                    e.printStackTrace();
                 }
             }
         }
@@ -266,8 +269,8 @@ public class SupplierController implements Initializable {
 
     @FXML
     private void deleteButtonAction(ActionEvent actionEvent) {
-        if (selectedSupplier.getProductAmount() > 0) {
-            content = "Supplier ini memiliki produk, tidak dapat dihapus!";
+        if (selectedSupplier.getProductAmount() > 0 && selectedSupplier.getStatus().equals("Aktif")) {
+            content = "Supplier ini memiliki produk dan berstatus aktif, tidak dapat dihapus!";
             Helper.alert(Alert.AlertType.ERROR, content);
         } else {
             content = "Anda yakin ingin menghapus?";

@@ -10,11 +10,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -23,6 +26,8 @@ import java.util.ResourceBundle;
 public class DetailSupplierController implements Initializable {
     @FXML
     private Label supplierNameLabel;
+    @FXML
+    private Button backButton;
     @FXML
     private TableView<Product> detailSupplierTableView;
     @FXML
@@ -53,7 +58,7 @@ public class DetailSupplierController implements Initializable {
         }
 
         detailSupplierTableView.setItems(products);
-        supplierNameLabel.setText(selectedSupplier.getName());
+        supplierNameLabel.setText(supplierNameLabel.getText() + selectedSupplier.getName());
         noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(detailSupplierTableView.getItems().indexOf(data.getValue()) + 1));
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
@@ -61,5 +66,11 @@ public class DetailSupplierController implements Initializable {
         sellingPriceTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSellingPrice()));
         stockAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStockAmount()).asObject());
         categoryTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getCategory()));
+    }
+
+    @FXML
+    private void backAction(ActionEvent actionEvent) {
+        Stage stage = (Stage) backButton.getScene().getWindow();
+        stage.close();
     }
 }

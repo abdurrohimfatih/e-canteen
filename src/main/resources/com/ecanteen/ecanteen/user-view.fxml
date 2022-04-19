@@ -153,7 +153,7 @@
             <Label layoutX="10.0" layoutY="217.0" text="No Telepon" GridPane.rowIndex="5" />
             <TextField fx:id="phoneTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label layoutX="10.0" layoutY="217.0" text="Email" GridPane.rowIndex="6" />
-            <TextField fx:id="emailTextField" layoutX="110.0" layoutY="213.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <TextField fx:id="emailTextField" promptText="email@example.com" layoutX="110.0" layoutY="213.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Label layoutX="10.0" layoutY="117.0" text="Level" GridPane.rowIndex="7" />
             <ComboBox fx:id="levelComboBox" prefWidth="190.0" promptText="-- Pilih --" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Label layoutX="10.0" layoutY="367.0" text="Status" GridPane.rowIndex="8" />
