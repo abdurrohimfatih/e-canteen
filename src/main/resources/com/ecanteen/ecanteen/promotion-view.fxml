@@ -183,12 +183,13 @@
       <AnchorPane style="-fx-background-color: #75dfff;" BorderPane.alignment="CENTER">
          <TableView fx:id="promotionTableView" layoutX="34.0" layoutY="57.0" onMouseClicked="#promotionTableViewClicked" prefWidth="439.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
             <columns>
-               <TableColumn fx:id="idTableColumn" prefWidth="75.0" text="ID Promosi" />
+               <TableColumn fx:id="idTableColumn" maxWidth="140.0" minWidth="140.0" prefWidth="140.0" text="ID Promosi" />
                <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="Nama Promosi" />
-               <TableColumn fx:id="percentageTableColumn" maxWidth="4000.0" prefWidth="100.0" text="Persentase" />
-               <TableColumn fx:id="dateAddedTableColumn" prefWidth="75.0" text="Tanggal Dibuat" />
-               <TableColumn fx:id="expiredDateTableColumn" prefWidth="75.0" text="Tanggal Berakhir" />
-               <TableColumn fx:id="statusTableColumn" prefWidth="75.0" text="Status" />
+               <TableColumn fx:id="percentageTableColumn" maxWidth="110.0" minWidth="110.0" prefWidth="110.0" text="Persentase" />
+               <TableColumn fx:id="productAmountTableColumn" maxWidth="140.0" minWidth="140.0" prefWidth="140.0" text="Jumlah Jenis Produk" />
+               <TableColumn fx:id="dateAddedTableColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Tanggal Dibuat" />
+               <TableColumn fx:id="expiredDateTableColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Tanggal Berakhir" />
+               <TableColumn fx:id="statusTableColumn" maxWidth="140.0" minWidth="140.0" prefWidth="140.0" text="Status" />
             </columns>
             <columnResizePolicy>
                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

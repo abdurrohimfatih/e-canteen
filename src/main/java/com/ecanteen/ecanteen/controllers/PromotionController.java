@@ -1,6 +1,8 @@
 package com.ecanteen.ecanteen.controllers;
 
+import com.ecanteen.ecanteen.Main;
 import com.ecanteen.ecanteen.dao.PromotionDaoImpl;
+import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Promotion;
 import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
@@ -10,10 +12,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -83,6 +89,8 @@ public class PromotionController implements Initializable {
     @FXML
     private TableColumn<Promotion, Integer> percentageTableColumn;
     @FXML
+    private TableColumn<Promotion, Integer> productAmountTableColumn;
+    @FXML
     private TableColumn<Promotion, String> dateAddedTableColumn;
     @FXML
     private TableColumn<Promotion, String> expiredDateTableColumn;
@@ -91,10 +99,8 @@ public class PromotionController implements Initializable {
 
     private ObservableList<Promotion> promotions;
     private PromotionDaoImpl promotionDao;
-    private Promotion selectedPromotion;
+    static Promotion selectedPromotion;
     private String content;
-    @FXML
-    private Button transactionMenuButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -117,6 +123,7 @@ public class PromotionController implements Initializable {
         idTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         percentageTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getPercentage()).asObject());
+        productAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getProductAmount()).asObject());
         dateAddedTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDateAdded()));
         expiredDateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getExpiredDate()));
         statusTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStatus()));
@@ -227,6 +234,23 @@ public class PromotionController implements Initializable {
             updateButton.setDisable(false);
             deleteButton.setDisable(false);
             resetButton.setDisable(false);
+
+            if (mouseEvent.getClickCount() > 1) {
+                Stage stage = new Stage();
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("detail-promotion-view.fxml"));
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                stage.setTitle("Detail Promosi");
+                stage.setScene(scene);
+                stage.centerOnScreen();
+                stage.initOwner(promotionTableView.getScene().getWindow());
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.show();
+            }
         }
     }
 

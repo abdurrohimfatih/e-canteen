@@ -195,6 +195,24 @@ public class ProductDaoImpl implements DaoService<Product> {
         return productAmount;
     }
 
+    public static int getProductAmountPromotion(Promotion object) throws SQLException, ClassNotFoundException {
+        int productAmount = 0;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT COUNT(*) AS amount FROM product WHERE promotion_id = ? GROUP BY promotion_id";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, object.getId());
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        productAmount = rs.getInt("amount");
+                    }
+                }
+            }
+        }
+
+        return productAmount;
+    }
+
     public List<Product> detailCategory(Category object) throws SQLException, ClassNotFoundException {
         List<Product> products = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()){
@@ -246,6 +264,36 @@ public class ProductDaoImpl implements DaoService<Product> {
                         product.setSellingPrice(rs.getString("selling_price"));
                         product.setStockAmount(rs.getInt("stock_amount"));
                         product.setCategory(category);
+                        products.add(product);
+                    }
+                }
+            }
+        }
+
+        return products;
+    }
+
+    public List<Product> detailPromotion(Promotion object) throws SQLException, ClassNotFoundException {
+        List<Product> products = new ArrayList<>();
+        try (Connection connection = MySQLConnection.createConnection()){
+            String query =
+                    "SELECT p.barcode, p.name, p.purchase_price, p.selling_price, p.stock_amount, p.supplier_id, p.promotion_id, s.name AS supplier_name FROM product p JOIN supplier s ON p.supplier_id = s.id WHERE p.promotion_id = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, object.getId());
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Supplier supplier = new Supplier();
+                        supplier.setId(rs.getString("supplier_id"));
+                        supplier.setName(rs.getString("supplier_name"));
+
+                        Product product = new Product();
+                        product.setBarcode(rs.getString("barcode"));
+                        product.setName(rs.getString("name"));
+                        product.setPurchasePrice(rs.getString("purchase_price"));
+                        product.setSellingPrice(rs.getString("selling_price"));
+                        product.setStockAmount(rs.getInt("stock_amount"));
+                        product.setSupplier(supplier);
                         products.add(product);
                     }
                 }

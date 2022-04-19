@@ -2,7 +2,7 @@ package com.ecanteen.ecanteen.entities;
 
 public class Promotion {
     private String id, name, dateAdded, expiredDate, status;
-    private int percentage;
+    private int percentage, productAmount;
 
     public String getId() {
         return id;
@@ -42,6 +42,14 @@ public class Promotion {
 
     public void setPercentage(int percentage) {
         this.percentage = percentage;
+    }
+
+    public int getProductAmount() {
+        return productAmount;
+    }
+
+    public void setProductAmount(int productAmount) {
+        this.productAmount = productAmount;
     }
 
     public String getStatus() {
