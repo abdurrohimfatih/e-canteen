@@ -177,21 +177,20 @@ public class PromotionController implements Initializable {
             selectedPromotion.setPercentage(Integer.parseInt(percentageTextField.getText().trim()));
             selectedPromotion.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
-            try {
-                if (promotionDao.updateData(selectedPromotion) == 1) {
-                    promotions.clear();
-                    promotions.addAll(promotionDao.fetchAll());
-                    resetPromotion();
-                    promotionTableView.requestFocus();
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText("Sukses");
-                    alert.setContentText("Data berhasil diubah!");
-                    alert.showAndWait();
-                    content = "Data berhasil diubah!";
-                    Helper.alert(Alert.AlertType.INFORMATION, content);
+            content = "Anda yakin ingin mengubah?";
+            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
+                try {
+                    if (promotionDao.updateData(selectedPromotion) == 1) {
+                        promotions.clear();
+                        promotions.addAll(promotionDao.fetchAll());
+                        resetPromotion();
+                        promotionTableView.requestFocus();
+                        content = "Data berhasil diubah!";
+                        Helper.alert(Alert.AlertType.INFORMATION, content);
+                    }
+                } catch (SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
             }
         }
     }

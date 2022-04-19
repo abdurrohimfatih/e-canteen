@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="1100.0" style="-fx-background-color: #75dfff;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.DetailPromotionController">
     <VBox alignment="CENTER" layoutY="15.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
-        <Label alignment="CENTER" contentDisplay="CENTER" text="PRODUK YANG BERPROMOSI" textAlignment="CENTER">
+        <Label alignment="CENTER" contentDisplay="CENTER" text="PRODUK DALAM DAFTAR PROMO" textAlignment="CENTER">
             <font>
                 <Font name="System Bold" size="18.0" />
             </font>

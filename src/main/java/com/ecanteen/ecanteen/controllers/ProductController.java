@@ -226,16 +226,19 @@ public class ProductController implements Initializable {
             selectedProduct.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             selectedProduct.setPromotion(promotionComboBox.getValue());
 
-            try {
-                if (productDao.updateData(selectedProduct) == 1) {
-                    products.clear();
-                    products.addAll(productDao.fetchAll());
-                    resetProduct();
-                    content = "Data berhasil diubah!";
-                    Helper.alert(Alert.AlertType.INFORMATION, content);
+            content = "Anda yakin ingin mengubah?";
+            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
+                try {
+                    if (productDao.updateData(selectedProduct) == 1) {
+                        products.clear();
+                        products.addAll(productDao.fetchAll());
+                        resetProduct();
+                        content = "Data berhasil diubah!";
+                        Helper.alert(Alert.AlertType.INFORMATION, content);
+                    }
+                } catch (SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
             }
         }
     }

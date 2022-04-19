@@ -145,17 +145,20 @@ public class CategoryController implements Initializable {
             selectedCategory.setName(nameTextField.getText().trim());
             selectedCategory.setDateCreated(Helper.formattedDateNow());
 
-            try {
-                if (categoryDao.updateData(selectedCategory) == 1) {
-                    categories.clear();
-                    categories.addAll(categoryDao.fetchAll());
-                    resetCategory();
-                    categoryTableView.requestFocus();
-                    content = "Data berhasil diubah!";
-                    Helper.alert(Alert.AlertType.INFORMATION, content);
+            content = "Anda yakin ingin mengubah?";
+            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
+                try {
+                    if (categoryDao.updateData(selectedCategory) == 1) {
+                        categories.clear();
+                        categories.addAll(categoryDao.fetchAll());
+                        resetCategory();
+                        categoryTableView.requestFocus();
+                        content = "Data berhasil diubah!";
+                        Helper.alert(Alert.AlertType.INFORMATION, content);
+                    }
+                } catch (SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
             }
         }
     }
