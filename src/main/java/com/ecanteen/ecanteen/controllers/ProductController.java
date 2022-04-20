@@ -172,6 +172,16 @@ public class ProductController implements Initializable {
                 expiredDateDatePicker.getValue() == null) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
+
+            if (barcodeTextField.getText().trim().isEmpty()) barcodeTextField.setStyle("-fx-border-color: RED");
+            if (nameTextField.getText().trim().isEmpty()) nameTextField.setStyle("-fx-border-color: RED");
+            if (categoryComboBox.getValue() == null) categoryComboBox.setStyle("-fx-border-color: RED");
+            if (purchasePriceTextField.getText().trim().isEmpty()) purchasePriceTextField.setStyle("-fx-border-color: RED");
+            if (sellingPriceTextField.getText().trim().isEmpty()) sellingPriceTextField.setStyle("-fx-border-color: RED");
+            if (stockAmountTextField.getText().trim().isEmpty()) stockAmountTextField.setStyle("-fx-border-color: RED");
+            if (supplierComboBox.getValue() == null) supplierComboBox.setStyle("-fx-border-color: RED");
+            if (expiredDateDatePicker.getValue() == null) expiredDateDatePicker.setStyle("-fx-border-color: RED");
+
         } else {
             if (productDao.getBarcode(barcodeTextField.getText()) == 1) {
                 content = "Produk dengan barcode tersebut sudah ada!";
@@ -215,6 +225,15 @@ public class ProductController implements Initializable {
                 expiredDateDatePicker.getValue() == null) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
+
+            if (nameTextField.getText().trim().isEmpty()) nameTextField.setStyle("-fx-border-color: RED");
+            if (categoryComboBox.getValue() == null) categoryComboBox.setStyle("-fx-border-color: RED");
+            if (purchasePriceTextField.getText().trim().isEmpty()) purchasePriceTextField.setStyle("-fx-border-color: RED");
+            if (sellingPriceTextField.getText().trim().isEmpty()) sellingPriceTextField.setStyle("-fx-border-color: RED");
+            if (stockAmountTextField.getText().trim().isEmpty()) stockAmountTextField.setStyle("-fx-border-color: RED");
+            if (supplierComboBox.getValue() == null) supplierComboBox.setStyle("-fx-border-color: RED");
+            if (expiredDateDatePicker.getValue() == null) expiredDateDatePicker.setStyle("-fx-border-color: RED");
+
         } else {
             selectedProduct.setName(nameTextField.getText().trim());
             selectedProduct.setCategory(categoryComboBox.getValue());

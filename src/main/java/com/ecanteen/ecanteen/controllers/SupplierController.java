@@ -152,6 +152,14 @@ public class SupplierController implements Initializable {
                 statusComboBox.getValue().isEmpty()) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
+
+            if (idTextField.getText().trim().isEmpty()) idTextField.setStyle("-fx-border-color: RED");
+            if (nameTextField.getText().trim().isEmpty()) nameTextField.setStyle("-fx-border-color: RED");
+            if (addressTextField.getText().trim().isEmpty()) addressTextField.setStyle("-fx-border-color: RED");
+            if (genderComboBox.getValue().isEmpty()) genderComboBox.setStyle("-fx-border-color: RED");
+            if (phoneTextField.getText().trim().isEmpty()) phoneTextField.setStyle("-fx-border-color: RED");
+            if (statusComboBox.getValue().isEmpty()) statusComboBox.setStyle("-fx-border-color: RED");
+
         } else if (!Helper.validateNumberPhone(phoneTextField)) {
             warningLabel.setText("No telp tidak valid");
             phoneTextField.setStyle("-fx-border-color: RED");
@@ -227,6 +235,13 @@ public class SupplierController implements Initializable {
                 statusComboBox.getValue().isEmpty()) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
+
+            if (nameTextField.getText().trim().isEmpty()) nameTextField.setStyle("-fx-border-color: RED");
+            if (addressTextField.getText().trim().isEmpty()) addressTextField.setStyle("-fx-border-color: RED");
+            if (genderComboBox.getValue().isEmpty()) genderComboBox.setStyle("-fx-border-color: RED");
+            if (phoneTextField.getText().trim().isEmpty()) phoneTextField.setStyle("-fx-border-color: RED");
+            if (statusComboBox.getValue().isEmpty()) statusComboBox.setStyle("-fx-border-color: RED");
+
         } else if (!Helper.validateNumberPhone(phoneTextField)) {
             warningLabel.setText("No telp tidak valid");
             phoneTextField.setStyle("-fx-border-color: RED");

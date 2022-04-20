@@ -116,6 +116,7 @@ public class CategoryController implements Initializable {
         if (nameTextField.getText().trim().isEmpty()) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
+            nameTextField.setStyle("-fx-border-color: RED");
         } else {
             Category category = new Category();
             category.setName(nameTextField.getText().trim());
@@ -141,6 +142,7 @@ public class CategoryController implements Initializable {
         if (nameTextField.getText().trim().isEmpty()) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
+            nameTextField.setStyle("-fx-border-color: RED");
         } else {
             selectedCategory.setName(nameTextField.getText().trim());
             selectedCategory.setDateCreated(Helper.formattedDateNow());

@@ -137,6 +137,12 @@ public class PromotionController implements Initializable {
                 expiredDateDatePicker.getValue() == null) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
+
+            if (idTextField.getText().trim().isEmpty()) idTextField.setStyle("-fx-border-color: RED");
+            if (nameTextField.getText().trim().isEmpty()) nameTextField.setStyle("-fx-border-color: RED");
+            if (percentageTextField.getText().trim().isEmpty()) percentageTextField.setStyle("-fx-border-color: RED");
+            if (expiredDateDatePicker.getValue() == null) expiredDateDatePicker.setStyle("-fx-border-color: RED");
+
         } else {
             if (promotionDao.getId(idTextField.getText()) == 1) {
                 content = "ID promosi tersebut sudah digunakan!";
@@ -172,6 +178,11 @@ public class PromotionController implements Initializable {
                 expiredDateDatePicker.getValue() == null) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
+
+            if (nameTextField.getText().trim().isEmpty()) nameTextField.setStyle("-fx-border-color: RED");
+            if (percentageTextField.getText().trim().isEmpty()) percentageTextField.setStyle("-fx-border-color: RED");
+            if (expiredDateDatePicker.getValue() == null) expiredDateDatePicker.setStyle("-fx-border-color: RED");
+
         } else {
             selectedPromotion.setName(nameTextField.getText().trim());
             selectedPromotion.setPercentage(Integer.parseInt(percentageTextField.getText().trim()));
