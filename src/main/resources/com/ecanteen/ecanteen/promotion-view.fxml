@@ -134,13 +134,13 @@
                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
-            <Label layoutX="10.0" layoutY="67.0" text="ID Promosi" />
+            <Label layoutX="10.0" layoutY="67.0" text="ID Promosi *" />
             <TextField fx:id="idTextField" layoutX="110.0" layoutY="62.0" promptText="maks. 10 karakter" GridPane.columnIndex="1" />
-            <Label text="Nama Promosi" GridPane.rowIndex="1" />
+            <Label text="Nama Promosi *" GridPane.rowIndex="1" />
             <TextField fx:id="nameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label layoutX="10.0" layoutY="117.0" text="Persentase" GridPane.rowIndex="2" />
+            <Label layoutX="10.0" layoutY="117.0" text="Persentase *" GridPane.rowIndex="2" />
             <TextField fx:id="percentageTextField" layoutX="110.0" layoutY="62.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label layoutX="10.0" layoutY="167.0" text="Tanggal Berakhir" GridPane.rowIndex="3" />
+            <Label layoutX="10.0" layoutY="167.0" text="Tanggal Berakhir *" GridPane.rowIndex="3" />
             <DatePicker fx:id="expiredDateDatePicker" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </GridPane>
          <HBox alignment="CENTER" layoutX="20.0" layoutY="455.0" spacing="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
@@ -177,6 +177,7 @@
                </padding>
             </Button>
          </HBox>
+         <Label alignment="CENTER" layoutY="504.0" text="* Wajib diisi" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
       </AnchorPane>
    </left>
    <center>

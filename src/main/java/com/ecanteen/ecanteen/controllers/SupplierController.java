@@ -152,56 +152,67 @@ public class SupplierController implements Initializable {
                 statusComboBox.getValue().isEmpty()) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
+        } else if (!Helper.validateNumberPhone(phoneTextField)) {
+            warningLabel.setText("No telp tidak valid");
+            phoneTextField.setStyle("-fx-border-color: RED");
+            phoneTextField.requestFocus();
+        } else if (!emailTextField.getText().trim().equals("") &&
+                !EmailValidator.getInstance().isValid(emailTextField.getText())) {
+            phoneTextField.setStyle("-fx-border-color: #424242");
+            warningLabel.setText("Email tidak valid");
+            emailTextField.setStyle("-fx-border-color: RED");
+            emailTextField.requestFocus();
         } else {
-            if (!EmailValidator.getInstance().isValid(emailTextField.getText())) {
-                warningLabel.setText("Email tidak valid");
+            warningLabel.setText("");
+            phoneTextField.setStyle("-fx-border-color: #424242");
+            emailTextField.setStyle("-fx-border-color: #424242");
+
+            if (supplierDao.getId(idTextField.getText()) == 1) {
+                content = "ID supplier tersebut sudah digunakan!";
+                Helper.alert(Alert.AlertType.ERROR, content);
             } else {
-                if (supplierDao.getId(idTextField.getText()) == 1) {
-                    content = "ID supplier tersebut sudah digunakan!";
-                    Helper.alert(Alert.AlertType.ERROR, content);
+                Supplier supplier = new Supplier();
+                supplier.setId(idTextField.getText().trim());
+                supplier.setName(nameTextField.getText().trim());
+                supplier.setAddress(addressTextField.getText().trim());
+                supplier.setGender(genderComboBox.getValue());
+                supplier.setPhone(phoneTextField.getText().trim());
+
+                if (emailTextField.getText().trim().isEmpty()) {
+                    supplier.setEmail("-");
                 } else {
-                    Supplier supplier = new Supplier();
-                    supplier.setId(idTextField.getText().trim());
-                    supplier.setName(nameTextField.getText().trim());
-                    supplier.setAddress(addressTextField.getText().trim());
-                    supplier.setGender(genderComboBox.getValue());
-                    supplier.setPhone(phoneTextField.getText().trim());
-                    if (emailTextField.getText().trim().isEmpty()) {
-                        supplier.setEmail("-");
-                    } else {
-                        supplier.setEmail(emailTextField.getText().trim());
-                    }
+                    supplier.setEmail(emailTextField.getText().trim());
+                }
 
-                    if (bankAccountTextField.getText().trim().isEmpty()) {
-                        supplier.setBankAccount("-");
-                    } else {
-                        supplier.setBankAccount(bankAccountTextField.getText().trim());
-                    }
+                if (bankAccountTextField.getText().trim().isEmpty()) {
+                    supplier.setBankAccount("-");
+                } else {
+                    supplier.setBankAccount(bankAccountTextField.getText().trim());
+                }
 
-                    if (accountNumberTextField.getText().trim().isEmpty()) {
-                        supplier.setAccountNumber("-");
-                    } else {
-                        supplier.setAccountNumber(accountNumberTextField.getText().trim());
-                    }
+                if (accountNumberTextField.getText().trim().isEmpty()) {
+                    supplier.setAccountNumber("-");
+                } else {
+                    supplier.setAccountNumber(accountNumberTextField.getText().trim());
+                }
 
-                    if (statusComboBox.getValue().equals("Aktif")) {
-                        supplier.setStatus("1");
-                    } else {
-                        supplier.setStatus("0");
-                    }
+                if (statusComboBox.getValue().equals("Aktif")) {
+                    supplier.setStatus("1");
+                } else {
+                    supplier.setStatus("0");
+                }
 
-                    try {
-                        if (supplierDao.addData(supplier) == 1) {
-                            suppliers.clear();
-                            suppliers.addAll(supplierDao.fetchAll());
-                            resetSupplier();
-                            idTextField.requestFocus();
-                            content = "Data berhasil ditambahkan!";
-                            Helper.alert(Alert.AlertType.INFORMATION, content);
-                        }
-                    } catch (SQLException | ClassNotFoundException e) {
-                        e.printStackTrace();
+                try {
+                    if (supplierDao.addData(supplier) == 1) {
+                        suppliers.clear();
+                        suppliers.addAll(supplierDao.fetchAll());
+                        resetSupplier();
+                        idTextField.requestFocus();
+                        content = "Data berhasil ditambahkan!";
+                        Helper.alert(Alert.AlertType.INFORMATION, content);
                     }
+                } catch (SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -216,52 +227,63 @@ public class SupplierController implements Initializable {
                 statusComboBox.getValue().isEmpty()) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
+        } else if (!Helper.validateNumberPhone(phoneTextField)) {
+            warningLabel.setText("No telp tidak valid");
+            phoneTextField.setStyle("-fx-border-color: RED");
+            phoneTextField.requestFocus();
+        } else if (!emailTextField.getText().trim().equals("") &&
+                !EmailValidator.getInstance().isValid(emailTextField.getText())) {
+            phoneTextField.setStyle("-fx-border-color: #424242");
+            warningLabel.setText("Email tidak valid");
+            emailTextField.setStyle("-fx-border-color: RED");
+            emailTextField.requestFocus();
         } else {
-            if (!EmailValidator.getInstance().isValid(emailTextField.getText())) {
-                warningLabel.setText("Email tidak valid");
+            warningLabel.setText("");
+            phoneTextField.setStyle("-fx-border-color: #424242");
+            emailTextField.setStyle("-fx-border-color: #424242");
+
+            selectedSupplier.setName(nameTextField.getText().trim());
+            selectedSupplier.setAddress(addressTextField.getText().trim());
+            selectedSupplier.setGender(genderComboBox.getValue());
+            selectedSupplier.setPhone(phoneTextField.getText().trim());
+
+            if (emailTextField.getText().trim().isEmpty()) {
+                selectedSupplier.setEmail("-");
             } else {
-                selectedSupplier.setName(nameTextField.getText().trim());
-                selectedSupplier.setAddress(addressTextField.getText().trim());
-                selectedSupplier.setGender(genderComboBox.getValue());
-                selectedSupplier.setPhone(phoneTextField.getText().trim());
-                if (emailTextField.getText().trim().isEmpty()) {
-                    selectedSupplier.setEmail("-");
-                } else {
-                    selectedSupplier.setEmail(emailTextField.getText().trim());
-                }
+                selectedSupplier.setEmail(emailTextField.getText().trim());
+            }
 
-                if (bankAccountTextField.getText().trim().isEmpty()) {
-                    selectedSupplier.setBankAccount("-");
-                } else {
-                    selectedSupplier.setBankAccount(bankAccountTextField.getText().trim());
-                }
+            if (bankAccountTextField.getText().trim().isEmpty()) {
+                selectedSupplier.setBankAccount("-");
+            } else {
+                selectedSupplier.setBankAccount(bankAccountTextField.getText().trim());
+            }
 
-                if (accountNumberTextField.getText().trim().isEmpty()) {
-                    selectedSupplier.setAccountNumber("-");
-                } else {
-                    selectedSupplier.setAccountNumber(accountNumberTextField.getText().trim());
-                }
+            if (accountNumberTextField.getText().trim().isEmpty()) {
+                selectedSupplier.setAccountNumber("-");
+            } else {
+                selectedSupplier.setAccountNumber(accountNumberTextField.getText().trim());
+            }
 
-                if (statusComboBox.getValue().equals("Aktif")) {
-                    selectedSupplier.setStatus("1");
-                } else {
-                    selectedSupplier.setStatus("0");
-                }
+            if (statusComboBox.getValue().equals("Aktif")) {
+                selectedSupplier.setStatus("1");
+            } else {
+                selectedSupplier.setStatus("0");
+            }
 
-                content = "Anda yakin ingin mengubah?";
-                if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-                    try {
-                        if (supplierDao.updateData(selectedSupplier) == 1) {
-                            suppliers.clear();
-                            suppliers.addAll(supplierDao.fetchAll());
-                            resetSupplier();
-                            supplierTableView.requestFocus();
-                            content = "Data berhasil diubah!";
-                            Helper.alert(Alert.AlertType.INFORMATION, content);
-                        }
-                    } catch (SQLException | ClassNotFoundException e) {
-                        e.printStackTrace();
+            content = "Anda yakin ingin mengubah?";
+            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
+                try {
+                    if (supplierDao.updateData(selectedSupplier) == 1) {
+                        suppliers.clear();
+                        suppliers.addAll(supplierDao.fetchAll());
+                        resetSupplier();
+                        supplierTableView.requestFocus();
+                        content = "Data berhasil diubah!";
+                        Helper.alert(Alert.AlertType.INFORMATION, content);
                     }
+                } catch (SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -374,6 +396,9 @@ public class SupplierController implements Initializable {
         statusComboBox.setValue(null);
         selectedSupplier = null;
         supplierTableView.getSelectionModel().clearSelection();
+        warningLabel.setText("");
+        phoneTextField.setStyle("-fx-border-color: #424242");
+        emailTextField.setStyle("-fx-border-color: #424242");
         idTextField.setDisable(false);
         addButton.setDisable(false);
         updateButton.setDisable(true);

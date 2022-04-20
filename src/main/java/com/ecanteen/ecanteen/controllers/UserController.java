@@ -146,50 +146,62 @@ public class UserController implements Initializable {
                 statusComboBox.getValue().isEmpty()) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
+        } else if (!Helper.validateNumberPhone(phoneTextField)) {
+            warningLabel.setText("No telp tidak valid");
+            phoneTextField.setStyle("-fx-border-color: RED");
+            phoneTextField.requestFocus();
+        } else if (!emailTextField.getText().trim().equals("") &&
+                !EmailValidator.getInstance().isValid(emailTextField.getText())) {
+            phoneTextField.setStyle("-fx-border-color: #424242");
+            warningLabel.setText("Email tidak valid");
+            emailTextField.setStyle("-fx-border-color: RED");
+            emailTextField.requestFocus();
         } else {
-            if (!EmailValidator.getInstance().isValid(emailTextField.getText())) {
-                warningLabel.setText("Email tidak valid");
+            warningLabel.setText("");
+            phoneTextField.setStyle("-fx-border-color: #424242");
+            emailTextField.setStyle("-fx-border-color: #424242");
+
+            if (userDao.getUsername(usernameTextField.getText()) == 1) {
+                content = "Username tersebut sudah digunakan!";
+                Helper.alert(Alert.AlertType.ERROR, content);
             } else {
-                if (userDao.getUsername(usernameTextField.getText()) == 1) {
-                    content = "Username tersebut sudah digunakan!";
-                    Helper.alert(Alert.AlertType.ERROR, content);
+                User user = new User();
+                user.setUsername(usernameTextField.getText().trim());
+
+                String password = Helper.hashPassword(passwordTextField.getText());
+
+                user.setPassword(password);
+                user.setName(nameTextField.getText().trim());
+                user.setAddress(addressTextField.getText().trim());
+                user.setGender(genderComboBox.getValue());
+                user.setPhone(phoneTextField.getText().trim());
+
+                if (emailTextField.getText().trim().isEmpty()) {
+                    user.setEmail("-");
                 } else {
-                    warningLabel.setText("");
-                    User user = new User();
-                    user.setUsername(usernameTextField.getText().trim());
+                    user.setEmail(emailTextField.getText().trim());
+                }
 
-                    String password = Helper.hashPassword(passwordTextField.getText());
+                user.setLevel(levelComboBox.getValue());
+                user.setDateCreated(Helper.formattedDateNow());
 
-                    user.setPassword(password);
-                    user.setName(nameTextField.getText().trim());
-                    user.setAddress(addressTextField.getText().trim());
-                    user.setGender(genderComboBox.getValue());
-                    user.setPhone(phoneTextField.getText().trim());
-                    if (emailTextField.getText().trim().isEmpty()) {
-                        user.setEmail("-");
-                    } else {
-                        user.setEmail(emailTextField.getText().trim());
-                    }
-                    user.setLevel(levelComboBox.getValue());
-                    user.setDateCreated(Helper.formattedDateNow());
-                    if (statusComboBox.getValue().equals("Aktif")) {
-                        user.setStatus("1");
-                    } else {
-                        user.setStatus("0");
-                    }
+                if (statusComboBox.getValue().equals("Aktif")) {
+                    user.setStatus("1");
+                } else {
+                    user.setStatus("0");
+                }
 
-                    try {
-                        if (userDao.addData(user) == 1) {
-                            users.clear();
-                            users.addAll(userDao.fetchAll());
-                            resetUser();
-                            usernameTextField.requestFocus();
-                            content = "Data berhasil ditambahkan!";
-                            Helper.alert(Alert.AlertType.INFORMATION, content);
-                        }
-                    } catch (SQLException | ClassNotFoundException e) {
-                        e.printStackTrace();
+                try {
+                    if (userDao.addData(user) == 1) {
+                        users.clear();
+                        users.addAll(userDao.fetchAll());
+                        resetUser();
+                        usernameTextField.requestFocus();
+                        content = "Data berhasil ditambahkan!";
+                        Helper.alert(Alert.AlertType.INFORMATION, content);
                     }
+                } catch (SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -202,50 +214,63 @@ public class UserController implements Initializable {
                 nameTextField.getText().trim().isEmpty() ||
                 addressTextField.getText().trim().isEmpty() ||
                 genderComboBox.getValue().isEmpty() ||
+                phoneTextField.getText().trim().isEmpty() ||
                 levelComboBox.getValue().isEmpty() ||
                 statusComboBox.getValue().isEmpty()) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
+        } else if (!Helper.validateNumberPhone(phoneTextField)) {
+            warningLabel.setText("No telp tidak valid");
+            phoneTextField.setStyle("-fx-border-color: RED");
+            phoneTextField.requestFocus();
+        } else if (!emailTextField.getText().trim().equals("") &&
+                !EmailValidator.getInstance().isValid(emailTextField.getText())) {
+            phoneTextField.setStyle("-fx-border-color: #424242");
+            warningLabel.setText("Email tidak valid");
+            emailTextField.setStyle("-fx-border-color: RED");
+            emailTextField.requestFocus();
         } else {
-            if (!EmailValidator.getInstance().isValid(emailTextField.getText())) {
-                warningLabel.setText("Email tidak valid");
+            warningLabel.setText("");
+            phoneTextField.setStyle("-fx-border-color: #424242");
+            emailTextField.setStyle("-fx-border-color: #424242");
+
+            selectedUser.setUsername(usernameTextField.getText().trim());
+
+            String password = Helper.hashPassword(passwordTextField.getText());
+            selectedUser.setPassword(password);
+
+            selectedUser.setName(nameTextField.getText().trim());
+            selectedUser.setAddress(addressTextField.getText().trim());
+            selectedUser.setGender(genderComboBox.getValue());
+            selectedUser.setPhone(phoneTextField.getText().trim());
+
+            if (emailTextField.getText().trim().isEmpty()) {
+                selectedUser.setEmail("-");
             } else {
-                warningLabel.setText("");
-                selectedUser.setUsername(usernameTextField.getText().trim());
+                selectedUser.setEmail(emailTextField.getText().trim());
+            }
 
-                String password = Helper.hashPassword(passwordTextField.getText());
+            selectedUser.setLevel(levelComboBox.getValue());
 
-                selectedUser.setPassword(password);
-                selectedUser.setName(nameTextField.getText().trim());
-                selectedUser.setAddress(addressTextField.getText().trim());
-                selectedUser.setGender(genderComboBox.getValue());
-                selectedUser.setPhone(phoneTextField.getText().trim());
-                if (emailTextField.getText().trim().isEmpty()) {
-                    selectedUser.setEmail("-");
-                } else {
-                    selectedUser.setEmail(emailTextField.getText().trim());
-                }
-                selectedUser.setLevel(levelComboBox.getValue());
-                if (statusComboBox.getValue().equals("Aktif")) {
-                    selectedUser.setStatus("1");
-                } else {
-                    selectedUser.setStatus("0");
-                }
+            if (statusComboBox.getValue().equals("Aktif")) {
+                selectedUser.setStatus("1");
+            } else {
+                selectedUser.setStatus("0");
+            }
 
-                content = "Anda yakin ingin mengubah?";
-                if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-                    try {
-                        if (userDao.updateData(selectedUser) == 1) {
-                            users.clear();
-                            users.addAll(userDao.fetchAll());
-                            resetUser();
-                            userTableView.requestFocus();
-                            content = "Data berhasil diubah!";
-                            Helper.alert(Alert.AlertType.INFORMATION, content);
-                        }
-                    } catch (SQLException | ClassNotFoundException e) {
-                        e.printStackTrace();
+            content = "Anda yakin ingin mengubah?";
+            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
+                try {
+                    if (userDao.updateData(selectedUser) == 1) {
+                        users.clear();
+                        users.addAll(userDao.fetchAll());
+                        resetUser();
+                        userTableView.requestFocus();
+                        content = "Data berhasil diubah!";
+                        Helper.alert(Alert.AlertType.INFORMATION, content);
                     }
+                } catch (SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -334,6 +359,9 @@ public class UserController implements Initializable {
         statusComboBox.setValue(null);
         selectedUser = null;
         userTableView.getSelectionModel().clearSelection();
+        warningLabel.setText("");
+        phoneTextField.setStyle("-fx-border-color: #424242");
+        emailTextField.setStyle("-fx-border-color: #424242");
         addButton.setDisable(false);
         updateButton.setDisable(true);
         deleteButton.setDisable(true);

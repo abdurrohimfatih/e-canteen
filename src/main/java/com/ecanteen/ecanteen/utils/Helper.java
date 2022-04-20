@@ -44,6 +44,13 @@ public class Helper {
         });
     }
 
+    public static boolean validateNumberPhone(final TextField textField) {
+        if (textField.getText().matches("\\d{10}")) return true;
+        else if (textField.getText().matches("\\d{11}")) return true;
+        else if (textField.getText().matches("\\d{12}")) return true;
+        else return textField.getText().matches("\\d{13}");
+    }
+
     public static void addThousandSeparator(final TextInputControl textField) {
         final char separator = '.';
         final Pattern p = Pattern.compile("[0-9" + separator + "]*");

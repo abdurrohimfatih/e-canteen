@@ -140,25 +140,26 @@
                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
-            <Label layoutX="10.0" layoutY="67.0" text="Username" />
+            <Label layoutX="10.0" layoutY="67.0" text="Username *" />
             <TextField fx:id="usernameTextField" layoutX="110.0" layoutY="62.0" promptText="maks. 20 karakter" GridPane.columnIndex="1" />
-            <Label text="Password" GridPane.rowIndex="1" />
+            <Label text="Password *" GridPane.rowIndex="1" />
             <PasswordField fx:id="passwordTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="Nama" GridPane.rowIndex="2" />
+            <Label text="Nama *" GridPane.rowIndex="2" />
             <TextField fx:id="nameTextField" layoutX="110.0" layoutY="13.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label layoutX="10.0" layoutY="117.0" text="Alamat" GridPane.rowIndex="3" />
+            <Label layoutX="10.0" layoutY="117.0" text="Alamat *" GridPane.rowIndex="3" />
             <TextField fx:id="addressTextField" promptText="maks. 15 karakter" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label layoutX="10.0" layoutY="167.0" text="Jenis Kelamin" GridPane.rowIndex="4" />
+            <Label layoutX="10.0" layoutY="167.0" text="Jenis Kelamin *" GridPane.rowIndex="4" />
             <ComboBox fx:id="genderComboBox" layoutX="110.0" layoutY="313.0" prefWidth="190.0" promptText="-- Pilih --" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label layoutX="10.0" layoutY="217.0" text="No Telepon" GridPane.rowIndex="5" />
+            <Label layoutX="10.0" layoutY="217.0" text="No Telepon *" GridPane.rowIndex="5" />
             <TextField fx:id="phoneTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label layoutX="10.0" layoutY="217.0" text="Email" GridPane.rowIndex="6" />
-            <TextField fx:id="emailTextField" promptText="email@example.com" layoutX="110.0" layoutY="213.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Label layoutX="10.0" layoutY="117.0" text="Level" GridPane.rowIndex="7" />
+            <TextField fx:id="emailTextField" layoutX="110.0" layoutY="213.0" promptText="email@example.com" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Label layoutX="10.0" layoutY="117.0" text="Level *" GridPane.rowIndex="7" />
             <ComboBox fx:id="levelComboBox" prefWidth="190.0" promptText="-- Pilih --" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <Label layoutX="10.0" layoutY="367.0" text="Status" GridPane.rowIndex="8" />
+            <Label layoutX="10.0" layoutY="367.0" text="Status *" GridPane.rowIndex="8" />
             <ComboBox fx:id="statusComboBox" layoutX="110.0" layoutY="313.0" prefWidth="190.0" promptText="-- Pilih --" GridPane.columnIndex="1" GridPane.rowIndex="8" />
          </GridPane>
+         <Label fx:id="warningLabel" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="122.0" layoutY="564.0" textAlignment="CENTER" textFill="RED" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
          <HBox alignment="CENTER" layoutX="20.0" layoutY="590.0" spacing="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
             <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonAction" styleClass="add" text="TAMBAH" textAlignment="CENTER" textFill="WHITE">
                <font>
@@ -193,7 +194,7 @@
                </padding>
             </Button>
          </HBox>
-         <Label fx:id="warningLabel" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="122.0" layoutY="564.0" textAlignment="CENTER" textFill="RED" />
+         <Label alignment="CENTER" layoutY="640.0" text="* Wajib diisi" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
       </AnchorPane>
    </left>
    <center>
