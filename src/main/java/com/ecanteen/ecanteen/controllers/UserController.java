@@ -141,36 +141,37 @@ public class UserController implements Initializable {
                 passwordTextField.getText().isEmpty() ||
                 nameTextField.getText().trim().isEmpty() ||
                 addressTextField.getText().trim().isEmpty() ||
-                genderComboBox.getValue().isEmpty() ||
+                genderComboBox.getValue() == null ||
                 phoneTextField.getText().trim().isEmpty() ||
-                levelComboBox.getValue().isEmpty() ||
-                statusComboBox.getValue().isEmpty()) {
+                levelComboBox.getValue() == null ||
+                statusComboBox.getValue() == null) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
+
+            resetError();
 
             if (usernameTextField.getText().trim().isEmpty()) usernameTextField.setStyle("-fx-border-color: RED");
             if (passwordTextField.getText().isEmpty()) passwordTextField.setStyle("-fx-border-color: RED");
             if (nameTextField.getText().trim().isEmpty()) nameTextField.setStyle("-fx-border-color: RED");
             if (addressTextField.getText().trim().isEmpty()) addressTextField.setStyle("-fx-border-color: RED");
-            if (genderComboBox.getValue().isEmpty()) genderComboBox.setStyle("-fx-border-color: RED");
+            if (genderComboBox.getValue() == null) genderComboBox.setStyle("-fx-border-color: RED");
             if (phoneTextField.getText().trim().isEmpty()) phoneTextField.setStyle("-fx-border-color: RED");
-            if (levelComboBox.getValue().isEmpty()) levelComboBox.setStyle("-fx-border-color: RED");
-            if (statusComboBox.getValue().isEmpty()) statusComboBox.setStyle("-fx-border-color: RED");
+            if (levelComboBox.getValue() == null) levelComboBox.setStyle("-fx-border-color: RED");
+            if (statusComboBox.getValue() == null) statusComboBox.setStyle("-fx-border-color: RED");
 
         } else if (!Helper.validateNumberPhone(phoneTextField)) {
+            resetError();
             warningLabel.setText("No telp tidak valid");
             phoneTextField.setStyle("-fx-border-color: RED");
             phoneTextField.requestFocus();
         } else if (!emailTextField.getText().trim().equals("") &&
                 !EmailValidator.getInstance().isValid(emailTextField.getText())) {
-            phoneTextField.setStyle("-fx-border-color: #424242");
+            resetError();
             warningLabel.setText("Email tidak valid");
             emailTextField.setStyle("-fx-border-color: RED");
             emailTextField.requestFocus();
         } else {
-            warningLabel.setText("");
-            phoneTextField.setStyle("-fx-border-color: #424242");
-            emailTextField.setStyle("-fx-border-color: #424242");
+            resetError();
 
             if (userDao.getUsername(usernameTextField.getText()) == 1) {
                 content = "Username tersebut sudah digunakan!";
@@ -224,35 +225,36 @@ public class UserController implements Initializable {
                 passwordTextField.getText().isEmpty() ||
                 nameTextField.getText().trim().isEmpty() ||
                 addressTextField.getText().trim().isEmpty() ||
-                genderComboBox.getValue().isEmpty() ||
+                genderComboBox.getValue() == null ||
                 phoneTextField.getText().trim().isEmpty() ||
-                levelComboBox.getValue().isEmpty() ||
-                statusComboBox.getValue().isEmpty()) {
+                levelComboBox.getValue() == null ||
+                statusComboBox.getValue() == null) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
+
+            resetError();
 
             if (passwordTextField.getText().isEmpty()) passwordTextField.setStyle("-fx-border-color: RED");
             if (nameTextField.getText().trim().isEmpty()) nameTextField.setStyle("-fx-border-color: RED");
             if (addressTextField.getText().trim().isEmpty()) addressTextField.setStyle("-fx-border-color: RED");
-            if (genderComboBox.getValue().isEmpty()) genderComboBox.setStyle("-fx-border-color: RED");
+            if (genderComboBox.getValue() == null) genderComboBox.setStyle("-fx-border-color: RED");
             if (phoneTextField.getText().trim().isEmpty()) phoneTextField.setStyle("-fx-border-color: RED");
-            if (levelComboBox.getValue().isEmpty()) levelComboBox.setStyle("-fx-border-color: RED");
-            if (statusComboBox.getValue().isEmpty()) statusComboBox.setStyle("-fx-border-color: RED");
+            if (levelComboBox.getValue() == null) levelComboBox.setStyle("-fx-border-color: RED");
+            if (statusComboBox.getValue() == null) statusComboBox.setStyle("-fx-border-color: RED");
 
         } else if (!Helper.validateNumberPhone(phoneTextField)) {
+            resetError();
             warningLabel.setText("No telp tidak valid");
             phoneTextField.setStyle("-fx-border-color: RED");
             phoneTextField.requestFocus();
         } else if (!emailTextField.getText().trim().equals("") &&
                 !EmailValidator.getInstance().isValid(emailTextField.getText())) {
-            phoneTextField.setStyle("-fx-border-color: #424242");
+            resetError();
             warningLabel.setText("Email tidak valid");
             emailTextField.setStyle("-fx-border-color: RED");
             emailTextField.requestFocus();
         } else {
-            warningLabel.setText("");
-            phoneTextField.setStyle("-fx-border-color: #424242");
-            emailTextField.setStyle("-fx-border-color: #424242");
+            resetError();
 
             selectedUser.setUsername(usernameTextField.getText().trim());
 
@@ -379,14 +381,23 @@ public class UserController implements Initializable {
         statusComboBox.setValue(null);
         selectedUser = null;
         userTableView.getSelectionModel().clearSelection();
-        warningLabel.setText("");
-        phoneTextField.setStyle("-fx-border-color: #424242");
-        emailTextField.setStyle("-fx-border-color: #424242");
+        resetError();
         addButton.setDisable(false);
         updateButton.setDisable(true);
         deleteButton.setDisable(true);
         resetButton.setDisable(true);
         usernameTextField.requestFocus();
+    }
+
+    private void resetError() {
+        warningLabel.setText("");
+        usernameTextField.setStyle("-fx-border-color: #424242");
+        passwordTextField.setStyle("-fx-border-color: #424242");
+        nameTextField.setStyle("-fx-border-color: #424242");
+        addressTextField.setStyle("-fx-border-color: #424242");
+        phoneTextField.setStyle("-fx-border-color: #424242");
+        emailTextField.setStyle("-fx-border-color: #424242");
+        levelComboBox.setStyle("-fx-border-color: #424242");
     }
 
     @FXML

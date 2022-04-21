@@ -118,6 +118,7 @@ public class CategoryController implements Initializable {
             Helper.alert(Alert.AlertType.ERROR, content);
             nameTextField.setStyle("-fx-border-color: RED");
         } else {
+            nameTextField.setStyle("-fx-border-color: #424242");
             Category category = new Category();
             category.setName(nameTextField.getText().trim());
             category.setDateCreated(Helper.formattedDateNow());
@@ -144,6 +145,7 @@ public class CategoryController implements Initializable {
             Helper.alert(Alert.AlertType.ERROR, content);
             nameTextField.setStyle("-fx-border-color: RED");
         } else {
+            nameTextField.setStyle("-fx-border-color: #424242");
             selectedCategory.setName(nameTextField.getText().trim());
             selectedCategory.setDateCreated(Helper.formattedDateNow());
 

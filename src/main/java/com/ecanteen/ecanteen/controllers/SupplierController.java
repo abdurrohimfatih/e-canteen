@@ -147,33 +147,34 @@ public class SupplierController implements Initializable {
         if (idTextField.getText().trim().isEmpty() ||
                 nameTextField.getText().trim().isEmpty() ||
                 addressTextField.getText().trim().isEmpty() ||
-                genderComboBox.getValue().isEmpty() ||
+                genderComboBox.getValue() == null ||
                 phoneTextField.getText().trim().isEmpty() ||
-                statusComboBox.getValue().isEmpty()) {
+                statusComboBox.getValue() == null) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
+
+            resetError();
 
             if (idTextField.getText().trim().isEmpty()) idTextField.setStyle("-fx-border-color: RED");
             if (nameTextField.getText().trim().isEmpty()) nameTextField.setStyle("-fx-border-color: RED");
             if (addressTextField.getText().trim().isEmpty()) addressTextField.setStyle("-fx-border-color: RED");
-            if (genderComboBox.getValue().isEmpty()) genderComboBox.setStyle("-fx-border-color: RED");
+            if (genderComboBox.getValue() == null) genderComboBox.setStyle("-fx-border-color: RED");
             if (phoneTextField.getText().trim().isEmpty()) phoneTextField.setStyle("-fx-border-color: RED");
-            if (statusComboBox.getValue().isEmpty()) statusComboBox.setStyle("-fx-border-color: RED");
+            if (statusComboBox.getValue() == null) statusComboBox.setStyle("-fx-border-color: RED");
 
         } else if (!Helper.validateNumberPhone(phoneTextField)) {
+            resetError();
             warningLabel.setText("No telp tidak valid");
             phoneTextField.setStyle("-fx-border-color: RED");
             phoneTextField.requestFocus();
         } else if (!emailTextField.getText().trim().equals("") &&
                 !EmailValidator.getInstance().isValid(emailTextField.getText())) {
-            phoneTextField.setStyle("-fx-border-color: #424242");
+            resetError();
             warningLabel.setText("Email tidak valid");
             emailTextField.setStyle("-fx-border-color: RED");
             emailTextField.requestFocus();
         } else {
-            warningLabel.setText("");
-            phoneTextField.setStyle("-fx-border-color: #424242");
-            emailTextField.setStyle("-fx-border-color: #424242");
+            resetError();
 
             if (supplierDao.getId(idTextField.getText()) == 1) {
                 content = "ID supplier tersebut sudah digunakan!";
@@ -230,32 +231,33 @@ public class SupplierController implements Initializable {
     private void updateButtonAction(ActionEvent actionEvent) {
         if (nameTextField.getText().trim().isEmpty() ||
                 addressTextField.getText().trim().isEmpty() ||
-                genderComboBox.getValue().isEmpty() ||
+                genderComboBox.getValue() == null ||
                 phoneTextField.getText().trim().isEmpty() ||
-                statusComboBox.getValue().isEmpty()) {
+                statusComboBox.getValue() == null) {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
 
+            resetError();
+
             if (nameTextField.getText().trim().isEmpty()) nameTextField.setStyle("-fx-border-color: RED");
             if (addressTextField.getText().trim().isEmpty()) addressTextField.setStyle("-fx-border-color: RED");
-            if (genderComboBox.getValue().isEmpty()) genderComboBox.setStyle("-fx-border-color: RED");
+            if (genderComboBox.getValue() == null) genderComboBox.setStyle("-fx-border-color: RED");
             if (phoneTextField.getText().trim().isEmpty()) phoneTextField.setStyle("-fx-border-color: RED");
-            if (statusComboBox.getValue().isEmpty()) statusComboBox.setStyle("-fx-border-color: RED");
+            if (statusComboBox.getValue() == null) statusComboBox.setStyle("-fx-border-color: RED");
 
         } else if (!Helper.validateNumberPhone(phoneTextField)) {
+            resetError();
             warningLabel.setText("No telp tidak valid");
             phoneTextField.setStyle("-fx-border-color: RED");
             phoneTextField.requestFocus();
         } else if (!emailTextField.getText().trim().equals("") &&
                 !EmailValidator.getInstance().isValid(emailTextField.getText())) {
-            phoneTextField.setStyle("-fx-border-color: #424242");
+            resetError();
             warningLabel.setText("Email tidak valid");
             emailTextField.setStyle("-fx-border-color: RED");
             emailTextField.requestFocus();
         } else {
-            warningLabel.setText("");
-            phoneTextField.setStyle("-fx-border-color: #424242");
-            emailTextField.setStyle("-fx-border-color: #424242");
+            resetError();
 
             selectedSupplier.setName(nameTextField.getText().trim());
             selectedSupplier.setAddress(addressTextField.getText().trim());
@@ -411,15 +413,24 @@ public class SupplierController implements Initializable {
         statusComboBox.setValue(null);
         selectedSupplier = null;
         supplierTableView.getSelectionModel().clearSelection();
-        warningLabel.setText("");
-        phoneTextField.setStyle("-fx-border-color: #424242");
-        emailTextField.setStyle("-fx-border-color: #424242");
+        resetError();
         idTextField.setDisable(false);
         addButton.setDisable(false);
         updateButton.setDisable(true);
         deleteButton.setDisable(true);
         resetButton.setDisable(true);
         idTextField.requestFocus();
+    }
+
+    private void resetError() {
+        warningLabel.setText("");
+        idTextField.setStyle("-fx-border-color: #424242");
+        nameTextField.setStyle("-fx-border-color: #424242");
+        addressTextField.setStyle("-fx-border-color: #424242");
+        genderComboBox.setStyle("-fx-border-color: #424242");
+        phoneTextField.setStyle("-fx-border-color: #424242");
+        emailTextField.setStyle("-fx-border-color: #424242");
+        statusComboBox.setStyle("-fx-border-color: #424242");
     }
 
     @FXML

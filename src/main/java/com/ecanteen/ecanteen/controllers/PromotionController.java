@@ -138,12 +138,16 @@ public class PromotionController implements Initializable {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
 
+            resetError();
+
             if (idTextField.getText().trim().isEmpty()) idTextField.setStyle("-fx-border-color: RED");
             if (nameTextField.getText().trim().isEmpty()) nameTextField.setStyle("-fx-border-color: RED");
             if (percentageTextField.getText().trim().isEmpty()) percentageTextField.setStyle("-fx-border-color: RED");
             if (expiredDateDatePicker.getValue() == null) expiredDateDatePicker.setStyle("-fx-border-color: RED");
 
         } else {
+            resetError();
+
             if (promotionDao.getId(idTextField.getText()) == 1) {
                 content = "ID promosi tersebut sudah digunakan!";
                 Helper.alert(Alert.AlertType.ERROR, content);
@@ -179,11 +183,15 @@ public class PromotionController implements Initializable {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
 
+            resetError();
+
             if (nameTextField.getText().trim().isEmpty()) nameTextField.setStyle("-fx-border-color: RED");
             if (percentageTextField.getText().trim().isEmpty()) percentageTextField.setStyle("-fx-border-color: RED");
             if (expiredDateDatePicker.getValue() == null) expiredDateDatePicker.setStyle("-fx-border-color: RED");
 
         } else {
+            resetError();
+
             selectedPromotion.setName(nameTextField.getText().trim());
             selectedPromotion.setPercentage(Integer.parseInt(percentageTextField.getText().trim()));
             selectedPromotion.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
@@ -298,12 +306,20 @@ public class PromotionController implements Initializable {
         expiredDateDatePicker.setValue(null);
         selectedPromotion = null;
         promotionTableView.getSelectionModel().clearSelection();
+        resetError();
         idTextField.setDisable(false);
         addButton.setDisable(false);
         updateButton.setDisable(true);
         deleteButton.setDisable(true);
         resetButton.setDisable(true);
         idTextField.requestFocus();
+    }
+
+    private void resetError() {
+        idTextField.setStyle("-fx-border-color: #424242");
+        nameTextField.setStyle("-fx-border-color: #424242");
+        percentageTextField.setStyle("-fx-border-color: #424242");
+        expiredDateDatePicker.setStyle("-fx-border-color: #424242");
     }
 
     @FXML
