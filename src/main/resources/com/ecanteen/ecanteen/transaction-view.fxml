@@ -10,10 +10,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
@@ -50,7 +47,7 @@
                         <Insets left="20.0" right="20.0" />
                     </padding>
                 </MenuButton>
-                <Button fx:id="productMenuButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="410.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" styleClass="cashier-button" text="DATA PRODUK" textAlignment="CENTER">
+                <Button fx:id="productMenuButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="410.0" layoutY="10.0" mnemonicParsing="false" onAction="#productMenuButtonAction" prefHeight="40.0" styleClass="cashier-button" text="DATA PRODUK" textAlignment="CENTER">
                     <padding>
                         <Insets left="20.0" right="20.0" />
                     </padding>
@@ -141,7 +138,7 @@
                     <Font name="System Bold" size="20.0" />
                 </font>
             </Label>
-            <TableView fx:id="saleTableView" editable="true" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="70.0">
+            <TableView fx:id="saleTableView" editable="true" AnchorPane.bottomAnchor="170.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="70.0">
                 <columns>
                     <TableColumn fx:id="barcodeSaleTableColumn" prefWidth="75.0" text="Barcode" />
                     <TableColumn fx:id="nameSaleTableColumn" prefWidth="75.0" text="Nama Produk" />
@@ -153,37 +150,30 @@
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                 </columnResizePolicy>
             </TableView>
-            <HBox alignment="CENTER" layoutY="557.0" spacing="170.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0">
-                <Button fx:id="resetSaleButton" mnemonicParsing="false" onAction="#resetSaleButtonAction" prefHeight="40.0" prefWidth="90.0" styleClass="delete" text="RESET" textAlignment="CENTER" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="14.0" />
-                    </font>
-                </Button>
-                <GridPane alignment="CENTER" vgap="5.0" HBox.hgrow="ALWAYS">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                    <Label layoutX="10.0" layoutY="51.0" text="Total Belanja">
+         <HBox alignment="CENTER" layoutX="611.0" layoutY="498.0" spacing="20.0" AnchorPane.bottomAnchor="100.0" AnchorPane.rightAnchor="15.0">
+            <children>
+                    <Label text="TOTAL">
                         <font>
-                            <Font name="System Bold" size="14.0" />
+                            <Font name="System Bold" size="20.0" />
                         </font>
                     </Label>
-                    <TextField fx:id="totalAmountTextField" editable="false" focusTraversable="false" layoutX="96.0" layoutY="40.0" GridPane.columnIndex="1">
+                    <TextField fx:id="totalAmountTextField" editable="false" focusTraversable="false">
                         <font>
-                            <Font size="18.0" />
+                            <Font size="24.0" />
                         </font>
                     </TextField>
-                </GridPane>
-                <Button fx:id="printSaleButton" mnemonicParsing="false" onAction="#printSaleButtonAction" prefHeight="40.0" prefWidth="90.0" styleClass="add" text="CETAK" textAlignment="CENTER" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="14.0" />
-                    </font>
-                </Button>
-            </HBox>
+            </children>
+         </HBox>
+             <Button fx:id="resetSaleButton" layoutX="386.0" layoutY="618.0" mnemonicParsing="false" onAction="#resetSaleButtonAction" prefHeight="40.0" prefWidth="90.0" styleClass="delete" text="RESET" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0">
+                 <font>
+                     <Font name="System Bold" size="14.0" />
+                 </font>
+             </Button>
+             <Button fx:id="printSaleButton" layoutX="861.0" layoutY="618.0" mnemonicParsing="false" onAction="#printSaleButtonAction" prefHeight="40.0" prefWidth="90.0" styleClass="add" text="CETAK" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="15.0">
+                 <font>
+                     <Font name="System Bold" size="14.0" />
+                 </font>
+             </Button>
         </AnchorPane>
     </center>
 </BorderPane>

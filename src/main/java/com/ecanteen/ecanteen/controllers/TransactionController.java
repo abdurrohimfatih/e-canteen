@@ -434,6 +434,11 @@ public class TransactionController implements Initializable {
         totalAmountTextField.setText("");
     }
 
+    @FXML
+    private void productMenuButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(productMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
+    }
+
 //    @FXML
 //    private void productMenuItemAction(ActionEvent actionEvent) throws IOException {
 //        Helper.changePage(stockMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
