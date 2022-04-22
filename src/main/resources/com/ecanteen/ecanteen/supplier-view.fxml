@@ -40,7 +40,6 @@
                <items>
                   <MenuItem fx:id="productMenuItem" mnemonicParsing="false" onAction="#productMenuItemAction" text="Data Produk" />
                   <MenuItem fx:id="categoryMenuItem" mnemonicParsing="false" onAction="#categoryMenuItemAction" text="Data Kategori" />
-                  <MenuItem fx:id="promotionMenuItem" mnemonicParsing="false" onAction="#promotionMenuItemAction" text="Data Promosi" />
                </items>
                <font>
                   <Font name="System Bold" size="14.0" />

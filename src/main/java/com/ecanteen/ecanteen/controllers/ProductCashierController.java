@@ -2,11 +2,9 @@ package com.ecanteen.ecanteen.controllers;
 
 import com.ecanteen.ecanteen.dao.CategoryDaoImpl;
 import com.ecanteen.ecanteen.dao.ProductDaoImpl;
-import com.ecanteen.ecanteen.dao.PromotionDaoImpl;
 import com.ecanteen.ecanteen.dao.SupplierDaoImpl;
 import com.ecanteen.ecanteen.entities.Category;
 import com.ecanteen.ecanteen.entities.Product;
-import com.ecanteen.ecanteen.entities.Promotion;
 import com.ecanteen.ecanteen.entities.Supplier;
 import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
@@ -37,12 +35,14 @@ public class ProductCashierController implements Initializable {
     private MenuItem soldProductMenuItem;
     @FXML
     private MenuItem favoriteProductMenuItem;
+//    @FXML
+//    private MenuButton stockMenuButton;
+//    @FXML
+//    private MenuItem productMenuItem;
+//    @FXML
+//    private MenuItem promotionMenuItem;
     @FXML
-    private MenuButton stockMenuButton;
-    @FXML
-    private MenuItem productMenuItem;
-    @FXML
-    private MenuItem promotionMenuItem;
+    private Button productMenuButton;
     @FXML
     private Button historyMenuButton;
     @FXML
@@ -67,30 +67,28 @@ public class ProductCashierController implements Initializable {
     private TableColumn<Product, Supplier> supplierTableColumn;
     @FXML
     private TableColumn<Product, String> expiredDateTableColumn;
-    @FXML
-    private TableColumn<Product, Promotion> promotionTableColumn;
+//    @FXML
+//    private TableColumn<Product, Promotion> promotionTableColumn;
     @FXML
     private TextField searchTextField;
-
     private ObservableList<Product> products;
-    private ProductDaoImpl productDao;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        productDao = new ProductDaoImpl();
+        ProductDaoImpl productDao = new ProductDaoImpl();
         CategoryDaoImpl categoryDao = new CategoryDaoImpl();
         SupplierDaoImpl supplierDao = new SupplierDaoImpl();
-        PromotionDaoImpl promotionDao = new PromotionDaoImpl();
+//        PromotionDaoImpl promotionDao = new PromotionDaoImpl();
         products = FXCollections.observableArrayList();
         ObservableList<Category> categories = FXCollections.observableArrayList();
         ObservableList<Supplier> suppliers = FXCollections.observableArrayList();
-        ObservableList<Promotion> promotions = FXCollections.observableArrayList();
+//        ObservableList<Promotion> promotions = FXCollections.observableArrayList();
 
         try {
             products.addAll(productDao.fetchAll());
             categories.addAll(categoryDao.fetchAll());
             suppliers.addAll(supplierDao.fetchAll());
-            promotions.addAll(promotionDao.fetchAll());
+//            promotions.addAll(promotionDao.fetchAll());
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -104,7 +102,7 @@ public class ProductCashierController implements Initializable {
         stockAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStockAmount()).asObject());
         supplierTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getSupplier()));
         expiredDateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getExpiredDate()));
-        promotionTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getPromotion()));
+//        promotionTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getPromotion()));
     }
 
     @FXML
@@ -112,10 +110,10 @@ public class ProductCashierController implements Initializable {
         Helper.changePage(transactionMenuButton, "Kasir - Transaksi", "transaction-view.fxml");
     }
 
-    @FXML
-    private void promotionCashierMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(stockMenuButton, "Kasir - Promosi", "promotion-cashier-view.fxml");
-    }
+//    @FXML
+//    private void promotionCashierMenuItemAction(ActionEvent actionEvent) throws IOException {
+//        Helper.changePage(stockMenuButton, "Kasir - Promosi", "promotion-cashier-view.fxml");
+//    }
 
     @FXML
     private void logoutButtonAction(ActionEvent actionEvent) throws IOException {

@@ -7,8 +7,8 @@ public class Transaction {
     private String time;
     private String barcodes;
     private String qts;
-    private String totalAll;
-    private String totalDiscount;
+//    private String totalAll;
+//    private String totalDiscount;
     private String totalAmount;
     private String payAmount;
     private String change;
@@ -61,21 +61,21 @@ public class Transaction {
         this.qts = qts;
     }
 
-    public String getTotalAll() {
-        return totalAll;
-    }
-
-    public void setTotalAll(String totalAll) {
-        this.totalAll = totalAll;
-    }
-
-    public String getTotalDiscount() {
-        return totalDiscount;
-    }
-
-    public void setTotalDiscount(String totalDiscount) {
-        this.totalDiscount = totalDiscount;
-    }
+//    public String getTotalAll() {
+//        return totalAll;
+//    }
+//
+//    public void setTotalAll(String totalAll) {
+//        this.totalAll = totalAll;
+//    }
+//
+//    public String getTotalDiscount() {
+//        return totalDiscount;
+//    }
+//
+//    public void setTotalDiscount(String totalDiscount) {
+//        this.totalDiscount = totalDiscount;
+//    }
 
     public String getTotalAmount() {
         return totalAmount;

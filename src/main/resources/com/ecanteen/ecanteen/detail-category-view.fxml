@@ -12,34 +12,32 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="1100.0" style="-fx-background-color: #75dfff;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.DetailCategoryController">
     <HBox alignment="CENTER" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
-        <Button fx:id="addButton" defaultButton="true" mnemonicParsing="false" onAction="#addProductAction" prefHeight="40.0"
-                styleClass="add" text="TAMBAH PRODUK" textAlignment="CENTER" textFill="WHITE">
+        <Button fx:id="addButton" defaultButton="true" mnemonicParsing="false" onAction="#addProductAction" prefHeight="40.0" styleClass="add" text="TAMBAH PRODUK" textAlignment="CENTER" textFill="WHITE">
             <font>
-                <Font name="System Bold" size="14.0"/>
+                <Font name="System Bold" size="14.0" />
             </font>
             <padding>
-                <Insets left="25.0" right="25.0"/>
+                <Insets left="25.0" right="25.0" />
             </padding>
         </Button>
         <VBox alignment="CENTER" spacing="5.0" HBox.hgrow="ALWAYS">
             <Label alignment="CENTER" contentDisplay="CENTER" text="PRODUK DALAM KATEGORI" textAlignment="CENTER">
                 <font>
-                    <Font name="System Bold" size="18.0"/>
+                    <Font name="System Bold" size="18.0" />
                 </font>
             </Label>
             <Label fx:id="categoryNameLabel" alignment="CENTER" contentDisplay="CENTER" textAlignment="CENTER">
                 <font>
-                    <Font name="System Bold" size="16.0"/>
+                    <Font name="System Bold" size="16.0" />
                 </font>
             </Label>
         </VBox>
-        <Button fx:id="backButton" defaultButton="true" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#backAction"
-                prefHeight="40.0" styleClass="reset" text="KEMBALI" textAlignment="CENTER" textFill="WHITE">
+        <Button fx:id="backButton" defaultButton="true" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#backAction" prefHeight="40.0" styleClass="reset" text="KEMBALI" textAlignment="CENTER" textFill="WHITE">
            <font>
-               <Font name="System Bold" size="14.0"/>
+               <Font name="System Bold" size="14.0" />
            </font>
            <padding>
-               <Insets left="25.0" right="25.0"/>
+               <Insets left="25.0" right="25.0" />
            </padding>
         </Button>
     </HBox>
@@ -48,9 +46,9 @@
             <TableColumn fx:id="noTableColumn" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" sortable="false" text="No" />
             <TableColumn fx:id="barcodeTableColumn" prefWidth="75.0" text="Barcode" />
             <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="Nama Barang" />
-            <TableColumn fx:id="purchasePriceTableColumn" maxWidth="100.0" minWidth="100.0" prefWidth="-1.0" text="Harga Beli" />
-            <TableColumn fx:id="sellingPriceTableColumn" maxWidth="100.0" minWidth="100.0" prefWidth="-1.0" text="Harga Jual" />
-            <TableColumn fx:id="stockAmountTableColumn" maxWidth="100.0" minWidth="100.0" prefWidth="-1.0" text="Jumlah Stok" />
+            <TableColumn fx:id="purchasePriceTableColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Harga Beli" />
+            <TableColumn fx:id="sellingPriceTableColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Harga Jual" />
+            <TableColumn fx:id="stockAmountTableColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Jumlah Stok" />
             <TableColumn fx:id="supplierTableColumn" prefWidth="75.0" text="Supplier" />
         </columns>
         <columnResizePolicy>

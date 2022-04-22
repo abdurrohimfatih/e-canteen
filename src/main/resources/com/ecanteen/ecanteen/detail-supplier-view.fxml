@@ -40,9 +40,9 @@
           <TableColumn fx:id="noTableColumn" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" sortable="false" text="No" />
           <TableColumn fx:id="barcodeTableColumn" prefWidth="75.0" text="Barcode" />
           <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="Nama Barang" />
-          <TableColumn fx:id="purchasePriceTableColumn" maxWidth="100.0" minWidth="100.0" prefWidth="-1.0" text="Harga Beli" />
-          <TableColumn fx:id="sellingPriceTableColumn" maxWidth="100.0" minWidth="100.0" prefWidth="-1.0" text="Harga Jual" />
-          <TableColumn fx:id="stockAmountTableColumn" maxWidth="100.0" minWidth="100.0" prefWidth="-1.0" text="Jumlah Stok" />
+          <TableColumn fx:id="purchasePriceTableColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Harga Beli" />
+          <TableColumn fx:id="sellingPriceTableColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Harga Jual" />
+          <TableColumn fx:id="stockAmountTableColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Jumlah Stok" />
           <TableColumn fx:id="categoryTableColumn" prefWidth="75.0" text="Kategori" />
       </columns>
         <columnResizePolicy>

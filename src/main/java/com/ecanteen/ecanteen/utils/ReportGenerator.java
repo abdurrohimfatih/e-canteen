@@ -41,8 +41,8 @@ public class ReportGenerator {
                 param.put("sale_id", transaction.getId());
                 param.put("date", transaction.getDate());
                 param.put("time", transaction.getTime());
-                param.put("totalAll", transaction.getTotalAll());
-                param.put("discount", transaction.getTotalDiscount());
+//                param.put("totalAll", transaction.getTotalAll());
+//                param.put("discount", transaction.getTotalDiscount());
                 param.put("totalAmount", transaction.getTotalAmount());
                 param.put("pay", transaction.getPayAmount());
                 param.put("change", transaction.getChange());

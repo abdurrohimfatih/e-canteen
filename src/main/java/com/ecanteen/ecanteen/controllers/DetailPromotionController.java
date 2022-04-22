@@ -51,11 +51,11 @@ public class DetailPromotionController implements Initializable {
         ProductDaoImpl productDao = new ProductDaoImpl();
         ObservableList<Product> products = FXCollections.observableArrayList();
 
-        try {
-            products.addAll(productDao.detailPromotion(selectedPromotion));
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            products.addAll(productDao.detailPromotion(selectedPromotion));
+//        } catch (SQLException | ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
 
         detailPromotionTableView.setItems(products);
         promotionNameLabel.setText(selectedPromotion.getName());

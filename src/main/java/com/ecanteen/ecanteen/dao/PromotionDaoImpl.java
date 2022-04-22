@@ -32,7 +32,7 @@ public class PromotionDaoImpl implements DaoService<Promotion> {
                         promotion.setId(rs.getString("id"));
                         promotion.setName(rs.getString("name"));
                         promotion.setPercentage(rs.getInt("percentage"));
-                        promotion.setProductAmount(ProductDaoImpl.getProductAmountPromotion(promotion));
+//                        promotion.setProductAmount(ProductDaoImpl.getProductAmountPromotion(promotion));
                         promotion.setDateAdded(rs.getString("date_added"));
                         promotion.setExpiredDate(rs.getString("expired_date"));
                         if (now.isBefore(Helper.formatter(expiredDate))
@@ -109,7 +109,7 @@ public class PromotionDaoImpl implements DaoService<Promotion> {
                 if (ps.executeUpdate() != 0) {
                     connection.commit();
                     result = 1;
-                    ProductDaoImpl.updatePromotionIdProduct(object.getId());
+//                    ProductDaoImpl.updatePromotionIdProduct(object.getId());
                 } else {
                     connection.rollback();
                 }

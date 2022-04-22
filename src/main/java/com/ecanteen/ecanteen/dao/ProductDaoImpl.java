@@ -2,10 +2,10 @@ package com.ecanteen.ecanteen.dao;
 
 import com.ecanteen.ecanteen.entities.Category;
 import com.ecanteen.ecanteen.entities.Product;
-import com.ecanteen.ecanteen.entities.Promotion;
 import com.ecanteen.ecanteen.entities.Supplier;
 import com.ecanteen.ecanteen.utils.DaoService;
 import com.ecanteen.ecanteen.utils.MySQLConnection;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +19,7 @@ public class ProductDaoImpl implements DaoService<Product> {
         List<Product> products = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()){
             String query =
-                    "SELECT p.barcode, p.name, p.category_id, p.purchase_price, p.selling_price, p.stock_amount, p.supplier_id, p.date_added, p.expired_date, p.promotion_id, c.name AS category_name, s.name AS supplier_name, s.status AS supplier_status, pm.name AS promotion_name FROM product p JOIN category c ON p.category_id = c.id JOIN supplier s ON p.supplier_id = s.id JOIN promotion pm ON p.promotion_id = pm.id WHERE s.status = 1";
+                    "SELECT p.barcode, p.name, p.category_id, p.purchase_price, p.selling_price, p.stock_amount, p.supplier_id, p.date_added, p.expired_date, c.name AS category_name, s.name AS supplier_name, s.status AS supplier_status FROM product p JOIN category c ON p.category_id = c.id JOIN supplier s ON p.supplier_id = s.id WHERE s.status = 1";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
@@ -31,9 +31,9 @@ public class ProductDaoImpl implements DaoService<Product> {
                         supplier.setId(rs.getString("supplier_id"));
                         supplier.setName(rs.getString("supplier_name"));
 
-                        Promotion promotion = new Promotion();
-                        promotion.setId(rs.getString("promotion_id"));
-                        promotion.setName(rs.getString("promotion_name"));
+//                        Promotion promotion = new Promotion();
+//                        promotion.setId(rs.getString("promotion_id"));
+//                        promotion.setName(rs.getString("promotion_name"));
 
                         Product product = new Product();
                         product.setBarcode(rs.getString("barcode"));
@@ -45,7 +45,7 @@ public class ProductDaoImpl implements DaoService<Product> {
                         product.setSupplier(supplier);
                         product.setDateAdded(rs.getString("date_added"));
                         product.setExpiredDate(rs.getString("expired_date"));
-                        product.setPromotion(promotion);
+//                        product.setPromotion(promotion);
                         products.add(product);
                     }
                 }
@@ -59,7 +59,7 @@ public class ProductDaoImpl implements DaoService<Product> {
     public int addData(Product object) throws SQLException, ClassNotFoundException {
         int result = 0;
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "INSERT INTO product(barcode, name, category_id, purchase_price, selling_price, stock_amount, supplier_id, date_added, expired_date, promotion_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO product(barcode, name, category_id, purchase_price, selling_price, stock_amount, supplier_id, date_added, expired_date) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setString(1, object.getBarcode());
                 ps.setString(2, object.getName());
@@ -70,11 +70,11 @@ public class ProductDaoImpl implements DaoService<Product> {
                 ps.setString(7, object.getSupplier().getId());
                 ps.setString(8, object.getDateAdded());
                 ps.setString(9, object.getExpiredDate());
-                if (object.getPromotion() == null) {
-                    ps.setString(10, "-1");
-                } else {
-                    ps.setString(10, object.getPromotion().getId());
-                }
+//                if (object.getPromotion() == null) {
+//                    ps.setString(10, "-1");
+//                } else {
+//                    ps.setString(10, object.getPromotion().getId());
+//                }
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();
@@ -92,7 +92,7 @@ public class ProductDaoImpl implements DaoService<Product> {
     public int updateData(Product object) throws SQLException, ClassNotFoundException {
         int result = 0;
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "UPDATE product SET name = ?, category_id = ?, purchase_price = ?, selling_price = ?, stock_amount = ?, supplier_id = ?, date_added = ?, expired_date = ?, promotion_id = ? WHERE barcode = ?";
+            String query = "UPDATE product SET name = ?, category_id = ?, purchase_price = ?, selling_price = ?, stock_amount = ?, supplier_id = ?, date_added = ?, expired_date = ? WHERE barcode = ?";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setString(1, object.getName());
                 ps.setInt(2, object.getCategory().getId());
@@ -102,11 +102,11 @@ public class ProductDaoImpl implements DaoService<Product> {
                 ps.setString(6, object.getSupplier().getId());
                 ps.setString(7, object.getDateAdded());
                 ps.setString(8, object.getExpiredDate());
-                if (object.getPromotion() == null) {
-                    ps.setString(9, "-1");
-                } else {
-                    ps.setString(9, object.getPromotion().getId());
-                }
+//                if (object.getPromotion() == null) {
+//                    ps.setString(9, "-1");
+//                } else {
+//                    ps.setString(9, object.getPromotion().getId());
+//                }
                 ps.setString(10, object.getBarcode());
 
                 if (ps.executeUpdate() != 0) {
@@ -195,23 +195,23 @@ public class ProductDaoImpl implements DaoService<Product> {
         return productAmount;
     }
 
-    public static int getProductAmountPromotion(Promotion object) throws SQLException, ClassNotFoundException {
-        int productAmount = 0;
-        try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT COUNT(*) AS amount FROM product WHERE promotion_id = ? GROUP BY promotion_id";
-            try (PreparedStatement ps = connection.prepareStatement(query)) {
-                ps.setString(1, object.getId());
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        productAmount = rs.getInt("amount");
-                    }
-                }
-            }
-        }
-
-        return productAmount;
-    }
+//    public static int getProductAmountPromotion(Promotion object) throws SQLException, ClassNotFoundException {
+//        int productAmount = 0;
+//        try (Connection connection = MySQLConnection.createConnection()) {
+//            String query = "SELECT COUNT(*) AS amount FROM product WHERE promotion_id = ? GROUP BY promotion_id";
+//            try (PreparedStatement ps = connection.prepareStatement(query)) {
+//                ps.setString(1, object.getId());
+//
+//                try (ResultSet rs = ps.executeQuery()) {
+//                    while (rs.next()) {
+//                        productAmount = rs.getInt("amount");
+//                    }
+//                }
+//            }
+//        }
+//
+//        return productAmount;
+//    }
 
     public List<Product> detailCategory(Category object) throws SQLException, ClassNotFoundException {
         List<Product> products = new ArrayList<>();
@@ -273,35 +273,35 @@ public class ProductDaoImpl implements DaoService<Product> {
         return products;
     }
 
-    public List<Product> detailPromotion(Promotion object) throws SQLException, ClassNotFoundException {
-        List<Product> products = new ArrayList<>();
-        try (Connection connection = MySQLConnection.createConnection()){
-            String query =
-                    "SELECT p.barcode, p.name, p.purchase_price, p.selling_price, p.stock_amount, p.supplier_id, p.promotion_id, s.name AS supplier_name FROM product p JOIN supplier s ON p.supplier_id = s.id WHERE p.promotion_id = ?";
-            try (PreparedStatement ps = connection.prepareStatement(query)) {
-                ps.setString(1, object.getId());
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        Supplier supplier = new Supplier();
-                        supplier.setId(rs.getString("supplier_id"));
-                        supplier.setName(rs.getString("supplier_name"));
-
-                        Product product = new Product();
-                        product.setBarcode(rs.getString("barcode"));
-                        product.setName(rs.getString("name"));
-                        product.setPurchasePrice(rs.getString("purchase_price"));
-                        product.setSellingPrice(rs.getString("selling_price"));
-                        product.setStockAmount(rs.getInt("stock_amount"));
-                        product.setSupplier(supplier);
-                        products.add(product);
-                    }
-                }
-            }
-        }
-
-        return products;
-    }
+//    public List<Product> detailPromotion(Promotion object) throws SQLException, ClassNotFoundException {
+//        List<Product> products = new ArrayList<>();
+//        try (Connection connection = MySQLConnection.createConnection()){
+//            String query =
+//                    "SELECT p.barcode, p.name, p.purchase_price, p.selling_price, p.stock_amount, p.supplier_id, p.promotion_id, s.name AS supplier_name FROM product p JOIN supplier s ON p.supplier_id = s.id WHERE p.promotion_id = ?";
+//            try (PreparedStatement ps = connection.prepareStatement(query)) {
+//                ps.setString(1, object.getId());
+//
+//                try (ResultSet rs = ps.executeQuery()) {
+//                    while (rs.next()) {
+//                        Supplier supplier = new Supplier();
+//                        supplier.setId(rs.getString("supplier_id"));
+//                        supplier.setName(rs.getString("supplier_name"));
+//
+//                        Product product = new Product();
+//                        product.setBarcode(rs.getString("barcode"));
+//                        product.setName(rs.getString("name"));
+//                        product.setPurchasePrice(rs.getString("purchase_price"));
+//                        product.setSellingPrice(rs.getString("selling_price"));
+//                        product.setStockAmount(rs.getInt("stock_amount"));
+//                        product.setSupplier(supplier);
+//                        products.add(product);
+//                    }
+//                }
+//            }
+//        }
+//
+//        return products;
+//    }
 
     public Product fetchProduct(String barcode) throws SQLException, ClassNotFoundException {
         Product product = null;
@@ -324,22 +324,22 @@ public class ProductDaoImpl implements DaoService<Product> {
         return product;
     }
 
-    public int getDiscount(String barcode) throws SQLException, ClassNotFoundException {
-        int discount = 0;
-        try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT promotion.percentage FROM product JOIN promotion ON product.promotion_id = promotion.id WHERE barcode = ?";
-            try (PreparedStatement ps = connection.prepareStatement(query)) {
-                ps.setString(1, barcode);
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        discount = rs.getInt("percentage");
-                    }
-                }
-            }
-        }
-
-        return discount;
-    }
+//    public int getDiscount(String barcode) throws SQLException, ClassNotFoundException {
+//        int discount = 0;
+//        try (Connection connection = MySQLConnection.createConnection()) {
+//            String query = "SELECT promotion.percentage FROM product JOIN promotion ON product.promotion_id = promotion.id WHERE barcode = ?";
+//            try (PreparedStatement ps = connection.prepareStatement(query)) {
+//                ps.setString(1, barcode);
+//                try (ResultSet rs = ps.executeQuery()) {
+//                    while (rs.next()) {
+//                        discount = rs.getInt("percentage");
+//                    }
+//                }
+//            }
+//        }
+//
+//        return discount;
+//    }
 
     public int getStockAmount(String barcode) throws SQLException, ClassNotFoundException {
         int stock = 0;
@@ -374,18 +374,18 @@ public class ProductDaoImpl implements DaoService<Product> {
         }
     }
 
-    public static void updatePromotionIdProduct(String promotion_id) throws SQLException, ClassNotFoundException {
-        try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "UPDATE product SET promotion_id = '-1' WHERE promotion_id = ?";
-            try (PreparedStatement ps = connection.prepareStatement(query)) {
-                ps.setString(1, promotion_id);
-
-                if (ps.executeUpdate() != 0) {
-                    connection.commit();
-                } else {
-                    connection.rollback();
-                }
-            }
-        }
-    }
+//    public static void updatePromotionIdProduct(String promotion_id) throws SQLException, ClassNotFoundException {
+//        try (Connection connection = MySQLConnection.createConnection()) {
+//            String query = "UPDATE product SET promotion_id = '-1' WHERE promotion_id = ?";
+//            try (PreparedStatement ps = connection.prepareStatement(query)) {
+//                ps.setString(1, promotion_id);
+//
+//                if (ps.executeUpdate() != 0) {
+//                    connection.commit();
+//                } else {
+//                    connection.rollback();
+//                }
+//            }
+//        }
+//    }
 }

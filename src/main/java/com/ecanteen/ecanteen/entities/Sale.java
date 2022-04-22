@@ -1,8 +1,14 @@
 package com.ecanteen.ecanteen.entities;
 
 public class Sale {
-    private String barcode, name, sellingPrice, discountAmount, subtotal;
-    private int quantity, discount;
+    private String barcode;
+    private String name;
+    private String sellingPrice;
+    private String subtotal;
+    private int quantity;
+
+    public Sale() {
+    }
 
     public String getBarcode() {
         return barcode;
@@ -36,21 +42,21 @@ public class Sale {
         this.sellingPrice = sellingPrice;
     }
 
-    public int getDiscount() {
-        return discount;
-    }
+//    public int getDiscount() {
+//        return discount;
+//    }
+//
+//    public void setDiscount(int discount) {
+//        this.discount = discount;
+//    }
 
-    public void setDiscount(int discount) {
-        this.discount = discount;
-    }
-
-    public String getDiscountAmount() {
-        return discountAmount;
-    }
-
-    public void setDiscountAmount(String discountAmount) {
-        this.discountAmount = discountAmount;
-    }
+//    public String getDiscountAmount() {
+//        return discountAmount;
+//    }
+//
+//    public void setDiscountAmount(String discountAmount) {
+//        this.discountAmount = discountAmount;
+//    }
 
     public String getSubtotal() {
         return subtotal;

@@ -45,8 +45,8 @@ public class SupplierController implements Initializable {
     private MenuItem productMenuItem;
     @FXML
     private MenuItem categoryMenuItem;
-    @FXML
-    private MenuItem promotionMenuItem;
+//    @FXML
+//    private MenuItem promotionMenuItem;
     @FXML
     private Button userMenuButton;
     @FXML
@@ -443,10 +443,10 @@ public class SupplierController implements Initializable {
         Helper.changePage(stockMenuButton, "Admin - Kategori", "category-view.fxml");
     }
 
-    @FXML
-    private void promotionMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(stockMenuButton, "Admin - Promosi", "promotion-view.fxml");
-    }
+//    @FXML
+//    private void promotionMenuItemAction(ActionEvent actionEvent) throws IOException {
+//        Helper.changePage(stockMenuButton, "Admin - Promosi", "promotion-view.fxml");
+//    }
 
     @FXML
     private void userButtonAction(ActionEvent actionEvent) throws IOException {

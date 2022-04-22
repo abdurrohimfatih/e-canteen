@@ -2,10 +2,10 @@ package com.ecanteen.ecanteen.entities;
 
 public class Product {
     private String barcode, name, dateAdded, expiredDate, purchasePrice, sellingPrice;
-    private int stockAmount, discount;
+    private int stockAmount;
     private Category category;
     private Supplier supplier;
-    private Promotion promotion;
+//    private Promotion promotion;
 
     public String getBarcode() {
         return barcode;
@@ -79,19 +79,19 @@ public class Product {
         this.supplier = supplier;
     }
 
-    public Promotion getPromotion() {
-        return promotion;
-    }
+//    public Promotion getPromotion() {
+//        return promotion;
+//    }
+//
+//    public void setPromotion(Promotion promotion) {
+//        this.promotion = promotion;
+//    }
 
-    public void setPromotion(Promotion promotion) {
-        this.promotion = promotion;
-    }
-
-    public int getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(int discount) {
-        this.discount = discount;
-    }
+//    public int getDiscount() {
+//        return discount;
+//    }
+//
+//    public void setDiscount(int discount) {
+//        this.discount = discount;
+//    }
 }
