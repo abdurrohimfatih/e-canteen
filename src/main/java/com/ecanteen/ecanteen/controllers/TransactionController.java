@@ -29,6 +29,8 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -44,7 +46,7 @@ public class TransactionController implements Initializable {
     private MenuItem soldProductMenuItem;
     @FXML
     private MenuItem favoriteProductMenuItem;
-//    @FXML
+    //    @FXML
 //    private MenuButton stockMenuButton;
 //    @FXML
 //    private MenuItem productMenuItem;
@@ -76,11 +78,11 @@ public class TransactionController implements Initializable {
     private TableColumn<Sale, String> sellingPriceSaleTableColumn;
     @FXML
     private TableColumn<Sale, Integer> quantitySaleTableColumn;
-//    @FXML
+    //    @FXML
 //    private TableColumn<Sale, String> discountSaleTableColumn;
     @FXML
     private TableColumn<Sale, String> subtotalSaleTableColumn;
-//    @FXML
+    //    @FXML
 //    private TextField totalAllTextField;
 //    @FXML
 //    private TextField totalDiscountTextField;
@@ -244,10 +246,28 @@ public class TransactionController implements Initializable {
     @FXML
     private void addProductButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         Product product = productDao.fetchProduct(barcodeTextField.getText().trim());
+
         if (product == null) {
             content = "Produk dengan barcode tersebut tidak ditemukan!";
             Helper.alert(Alert.AlertType.ERROR, content);
+        } else if (productDao.getStockAmount(barcodeTextField.getText().trim()) <= 0) {
+            content = "Produk tersebut stoknya habis!";
+            Helper.alert(Alert.AlertType.ERROR, content);
         } else {
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate now = Helper.formatter(LocalDate.now().format(dateTimeFormatter));
+            LocalDate nowPlus1 = now.plusDays(1);
+            String expiredDate = productDao.getExpiredDate(barcodeTextField.getText().trim());
+
+            if (now.isEqual(Helper.formatter(expiredDate)) ||
+                    now.isAfter(Helper.formatter(expiredDate))) {
+                content = "Produk tersebut sudah kedaluwarsa!";
+                Helper.alert(Alert.AlertType.ERROR, content);
+            } else if (nowPlus1.isEqual(Helper.formatter(expiredDate))) {
+                content = "Produk tersebut kedaluwarsa besok!";
+                Helper.alert(Alert.AlertType.ERROR, content);
+            }
+
             Sale sale = new Sale();
             sale.setBarcode(product.getBarcode());
             sale.setName(product.getName());
@@ -397,6 +417,8 @@ public class TransactionController implements Initializable {
                 String changeString = formatter.format(changeInt);
 
                 transaction.setChange(changeString);
+
+                dialog.setHeaderText("Jumlah bayar kurang dari total!");
             } else {
                 return;
             }

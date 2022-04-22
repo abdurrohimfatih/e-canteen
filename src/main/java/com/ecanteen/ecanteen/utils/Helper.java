@@ -162,7 +162,7 @@ public class Helper {
             title = "Konfirmasi";
         } else if (alertType == Alert.AlertType.ERROR) {
             image = new Image(String.valueOf(Main.class.getResource("image/warning.png")));
-            title = "Error";
+            title = "Warning";
         } else {
             image = new Image(String.valueOf(Main.class.getResource("image/success.png")));
             title = "Sukses";

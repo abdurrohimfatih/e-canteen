@@ -146,3 +146,20 @@
 .cashier-button-active:hover {
     -fx-background-color: #7abff8;
 }
+
+.table-transaction .table-column {
+    -fx-padding: 0 5px 0 5px;
+    -fx-font-size: 16px;
+}
+
+.column-right {
+    -fx-alignment: CENTER-RIGHT;
+}
+
+.column-center {
+    -fx-alignment: CENTER;
+}
+
+.column-left {
+    -fx-alignment: CENTER-LEFT;
+}

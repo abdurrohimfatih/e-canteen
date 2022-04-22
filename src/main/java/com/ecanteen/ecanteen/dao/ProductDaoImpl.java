@@ -324,6 +324,23 @@ public class ProductDaoImpl implements DaoService<Product> {
         return product;
     }
 
+    public String getExpiredDate(String barcode) throws SQLException, ClassNotFoundException {
+        String expiredDate = "";
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT expired_date FROM product WHERE barcode = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, barcode);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        expiredDate = rs.getString("expired_date");
+                    }
+                }
+            }
+        }
+
+        return expiredDate;
+    }
+
 //    public int getDiscount(String barcode) throws SQLException, ClassNotFoundException {
 //        int discount = 0;
 //        try (Connection connection = MySQLConnection.createConnection()) {
