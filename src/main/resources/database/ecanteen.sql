@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 18, 2022 at 06:12 AM
+-- Generation Time: Apr 23, 2022 at 07:07 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -38,7 +38,7 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `name`, `date_created`) VALUES
-(1, 'Minuman Panas', '17-04-2022'),
+(1, 'Minuman', '19-04-2022'),
 (2, 'Makanan Ringan', '17-04-2022');
 
 -- --------------------------------------------------------
@@ -56,18 +56,17 @@ CREATE TABLE `product` (
   `stock_amount` int(11) NOT NULL,
   `supplier_id` varchar(16) NOT NULL,
   `date_added` varchar(10) NOT NULL,
-  `expired_date` varchar(10) NOT NULL,
-  `promotion_id` varchar(10) DEFAULT NULL
+  `expired_date` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`barcode`, `name`, `category_id`, `purchase_price`, `selling_price`, `stock_amount`, `supplier_id`, `date_added`, `expired_date`, `promotion_id`) VALUES
-('23456789234567', 'Oreo Manis', 2, '1.000', '500', 200, '16', '17-04-2022', '24-03-2023', '-1'),
-('4970129727514', 'Spidol', 2, '3.000', '5.000', 97, '10', '17-04-2022', '09-04-2022', '-1'),
-('CT652', 'Barcode Scanner', 2, '50.000', '60.000', 513, '4', '17-04-2022', '09-04-2022', '-1');
+INSERT INTO `product` (`barcode`, `name`, `category_id`, `purchase_price`, `selling_price`, `stock_amount`, `supplier_id`, `date_added`, `expired_date`) VALUES
+('123', 'a', 1, '1.000', '1.000', 117, '10', '20-04-2022', '30-04-2022'),
+('4970129727514', 'Spidol', 2, '3.000', '5.000', 97, '10', '17-04-2022', '09-04-2022'),
+('CT652', 'Barcode Scanner', 2, '50.000', '60.000', 24, '4', '19-04-2022', '22-04-2022');
 
 -- --------------------------------------------------------
 
@@ -89,7 +88,7 @@ CREATE TABLE `promotion` (
 
 INSERT INTO `promotion` (`id`, `name`, `percentage`, `date_added`, `expired_date`) VALUES
 ('-1', '', 0, '09-04-2022', '09-04-2022'),
-('4567898765', 'Diskon Idul Fitri', 70, '09-04-2022', '09-04-2022');
+('4567898765', 'Diskon Idul Fitri', 10, '09-04-2022', '09-04-2022');
 
 -- --------------------------------------------------------
 
@@ -116,9 +115,8 @@ CREATE TABLE `supplier` (
 INSERT INTO `supplier` (`id`, `name`, `address`, `gender`, `phone`, `email`, `bank_account`, `account_number`, `status`) VALUES
 ('10', 'Andi', 'Cirebon', 'Laki-laki', '08222222222222', '-', '-', '-', '1'),
 ('14', 'Budi', 'Kuningan', 'Laki-laki', '08333333333333', '-', '-', '-', '1'),
-('16', 'Coki', 'Majalengka', 'Laki-laki', '08444444444444', '-', '-', '-', '0'),
 ('17', 'Dani', 'Indramayu', 'Laki-laki', '08555555555555', '-', '-', '-', '1'),
-('4', 'Eki', 'Kab. Cirebon', 'Laki-laki', '08111111111111', '-', '-', '-', '1'),
+('4', 'Eki', 'Kab. Cirebon', 'Laki-laki', '081111111111', '-', '-', '-', '0'),
 ('SP123', 'Feri', 'Bandung', 'Laki-laki', '08777777777777', '-', '-', '-', '1'),
 ('WGS123', 'Gani', 'Jakarta', 'Laki-laki', '08666666666666', '-', '-', '-', '0');
 
@@ -420,7 +418,47 @@ INSERT INTO `transaction` (`id`, `username`, `date`, `time`, `barcode`, `quantit
 ('1385', 'Kasir', '08/04/2022', '17:17:25', 'CT652,CT652,CT652,CT652,CT652,CT652,CT652,CT652,CT652,CT652,CT652,CT652,', '1,1,1,1,1,1,1,1,1,1,1,1,', '504000.0'),
 ('1386', 'Kasir', '08/04/2022', '17:19:00', 'CT652,', '1,', '42000.0'),
 ('1387', 'Kasir', '09/04/2022', '14:34:11', 'CT652,', '1,', '42000.0'),
-('1388', 'Kasir', '11-04-2022', '15:25:12', 'CT652,', '1,', '42000.0');
+('1388', 'Kasir', '11-04-2022', '15:25:12', 'CT652,', '1,', '42000.0'),
+('1389', 'Kasir', '18-04-2022', '11:20:25', 'CT652,CT652,', '5,1,', '360.000'),
+('1390', 'Kasir', '18-04-2022', '11:28:14', 'CT652,CT652,', '2,1,', '180.000'),
+('1391', 'Kasir', '18-04-2022', '11:32:52', 'CT652,CT652,', '1,10,', '660.000'),
+('1392', 'Kasir', '18-04-2022', '11:56:40', 'CT652,CT652,', '1,2,', '180.000'),
+('1393', 'Kasir', '18-04-2022', '11:59:05', 'CT652,CT652,', '1,2,', '180.000'),
+('1394', 'Kasir', '18-04-2022', '12:00:53', 'CT652,CT652,', '1,1,', '120.000'),
+('1395', 'Kasir', '18-04-2022', '12:02:29', 'CT652,', '1,', '60.000'),
+('1396', 'Kasir', '18-04-2022', '12:04:08', 'CT652,CT652,', '1,2,', '180.000'),
+('1397', 'Kasir', '18-04-2022', '12:12:39', 'CT652,', '1,', '60.000'),
+('1398', 'Kasir', '18-04-2022', '12:16:04', 'CT652,', '1,', '60.000'),
+('1399', 'Kasir', '18-04-2022', '20:30:06', 'CT652,', '1,', '60.000'),
+('1400', 'Kasir', '18-04-2022', '20:38:09', 'CT652,', '1,', '60.000'),
+('1401', 'Kasir', '18-04-2022', '20:40:02', 'CT652,', '1,', '60.000'),
+('1402', 'Kasir', '18-04-2022', '20:47:35', 'CT652,', '1,', '60.000'),
+('1403', 'Kasir', '18-04-2022', '20:51:45', 'CT652,', '1,', '60.000'),
+('1404', 'Kasir', '18-04-2022', '20:53:32', 'CT652,', '1,', '60.000'),
+('1405', 'Kasir', '19-04-2022', '19:10:24', 'CT652,CT652,', '1,1,', '36.000'),
+('1406', 'Kasir', '19-04-2022', '19:14:25', 'CT652,CT652,', '5,1,', '108.000'),
+('1407', 'Kasir', '19-04-2022', '21:41:55', 'CT652,', '1,', '54.000'),
+('1408', 'Kasir', '19-04-2022', '21:46:55', 'CT652,', '3,', '162.000'),
+('1409', 'Kasir', '19-04-2022', '21:48:37', 'CT652,', '2,', '108.000'),
+('1410', 'Kasir', '19-04-2022', '22:04:27', 'CT652,', '1,', '54.000'),
+('1411', 'Kasir', '19-04-2022', '22:05:50', 'CT652,CT652,', '1,1,', '108.000'),
+('1412', 'Kasir', '19-04-2022', '22:22:27', 'CT652,CT652,', '2,1,', '162.000'),
+('1413', 'Kasir', '19-04-2022', '23:28:58', 'CT652,CT652,', '2,1,', '162.000'),
+('1414', 'Kasir', '19-04-2022', '23:35:37', 'CT652,', '2,', '108.000'),
+('1415', 'Kasir', '19-04-2022', '23:37:53', 'CT652,', '2,', '108.000'),
+('1416', 'Kasir', '19-04-2022', '23:39:07', 'CT652,', '1,', '54.000'),
+('1417', 'Kasir', '20-04-2022', '00:08:43', 'CT652,', '1,', '60.000'),
+('1418', 'Kasir', '20-04-2022', '00:46:11', 'CT652,CT652,', '1,2,', '162.000'),
+('1419', 'Kasir', '20-04-2022', '00:48:45', 'CT652,', '2,', '108.000'),
+('1420', 'Kasir', '20-04-2022', '00:50:16', 'CT652,CT652,', '2,1,', '162.000'),
+('1421', 'Kasir', '20-04-2022', '00:55:18', '123,123,', '2,1,', '3.000'),
+('1422', 'Kasir', '22-04-2022', '17:01:28', 'CT652,CT652,', '2,2,', '240.000'),
+('1423', 'Kasir', '22-04-2022', '17:10:48', 'CT652,', '1,', '60.000'),
+('1424', 'Kasir', '22-04-2022', '17:11:42', 'CT652,', '200,', '12.000.000'),
+('1425', 'Kasir', '22-04-2022', '17:15:21', 'CT652,', '200,', '12.000.000'),
+('1426', 'Kasir', '22-04-2022', '17:17:15', 'CT652,', '5,', '300.000'),
+('1427', 'Kasir', '22-04-2022', '21:19:46', 'CT652,', '1,', '60.000'),
+('1428', 'Kasir', '22-04-2022', '21:45:21', 'CT652,', '1,', '60.000');
 
 -- --------------------------------------------------------
 
@@ -466,8 +504,7 @@ ALTER TABLE `category`
 ALTER TABLE `product`
   ADD PRIMARY KEY (`barcode`),
   ADD KEY `category_id` (`category_id`),
-  ADD KEY `supplier_id` (`supplier_id`),
-  ADD KEY `product_ibfk_1` (`promotion_id`);
+  ADD KEY `product_ibfk_3` (`supplier_id`);
 
 --
 -- Indexes for table `promotion`
@@ -512,7 +549,7 @@ ALTER TABLE `category`
 --
 ALTER TABLE `product`
   ADD CONSTRAINT `product_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `product_ibfk_3` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `product_ibfk_3` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
