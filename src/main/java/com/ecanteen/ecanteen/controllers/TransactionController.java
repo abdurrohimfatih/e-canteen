@@ -475,7 +475,7 @@ public class TransactionController implements Initializable {
     @FXML
     private void productMenuButtonAction(ActionEvent actionEvent) throws IOException {
         if (!saleData.isEmpty()) {
-            content = "Data akan hilang. Selesaikan transaksi / tekan tombol reset!";
+            content = "Data transaksi akan di-reset.\nAnda yakin ingin pindah halaman?";
             ButtonType result = Helper.alert(Alert.AlertType.CONFIRMATION, content);
             if (result == ButtonType.OK) {
                 Helper.changePage(productMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
