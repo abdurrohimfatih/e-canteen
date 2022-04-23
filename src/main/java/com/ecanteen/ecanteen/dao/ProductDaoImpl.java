@@ -107,7 +107,7 @@ public class ProductDaoImpl implements DaoService<Product> {
 //                } else {
 //                    ps.setString(9, object.getPromotion().getId());
 //                }
-                ps.setString(10, object.getBarcode());
+                ps.setString(9, object.getBarcode());
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();

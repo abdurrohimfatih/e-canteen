@@ -52,6 +52,8 @@ public class ProductCashierController implements Initializable {
     @FXML
     private Button logoutButton;
     @FXML
+    private TextField searchTextField;
+    @FXML
     private TableView<Product> productTableView;
     @FXML
     private TableColumn<Product, String> barcodeTableColumn;
@@ -69,8 +71,6 @@ public class ProductCashierController implements Initializable {
     private TableColumn<Product, String> expiredDateTableColumn;
 //    @FXML
 //    private TableColumn<Product, Promotion> promotionTableColumn;
-    @FXML
-    private TextField searchTextField;
     private ObservableList<Product> products;
 
     @Override

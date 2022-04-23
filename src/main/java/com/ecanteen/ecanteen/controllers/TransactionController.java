@@ -5,6 +5,7 @@ import com.ecanteen.ecanteen.dao.ProductDaoImpl;
 import com.ecanteen.ecanteen.dao.TransactionDaoImpl;
 import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Sale;
+import com.ecanteen.ecanteen.entities.Supplier;
 import com.ecanteen.ecanteen.entities.Transaction;
 import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.EditingCell;
@@ -12,6 +13,7 @@ import com.ecanteen.ecanteen.utils.Helper;
 import com.ecanteen.ecanteen.utils.ReportGenerator;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +22,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -63,6 +68,20 @@ public class TransactionController implements Initializable {
     @FXML
     private Button logoutButton;
     @FXML
+    private TextField searchTextField;
+    @FXML
+    private TableView<Product> productTableView;
+    @FXML
+    private TableColumn<Product, String> barcodeTableColumn;
+    @FXML
+    private TableColumn<Product, String> nameTableColumn;
+    @FXML
+    private TableColumn<Product, String> sellingPriceTableColumn;
+    @FXML
+    private TableColumn<Product, Integer> stockAmountTableColumn;
+    @FXML
+    private TableColumn<Product, String> expiredDateTableColumn;
+    @FXML
     private TextField barcodeTextField;
     @FXML
     private Button addProductButton;
@@ -97,13 +116,28 @@ public class TransactionController implements Initializable {
     private TransactionDaoImpl transactionDao;
     private ObservableList<Sale> saleData = FXCollections.observableArrayList();
     private String content;
+    private ObservableList<Product> products;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         productDao = new ProductDaoImpl();
         transactionDao = new TransactionDaoImpl();
-        profileButton.setText(Common.user.getName());
         saleData = saleTableView.getItems();
+        products = FXCollections.observableArrayList();
+
+        try {
+            products.addAll(productDao.fetchAll());
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        profileButton.setText(Common.user.getName());
+        productTableView.setItems(products);
+        barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
+        nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
+        sellingPriceTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSellingPrice()));
+        stockAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStockAmount()).asObject());
+        expiredDateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getExpiredDate()));
 
         barcodeSaleTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameSaleTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
@@ -127,7 +161,7 @@ public class TransactionController implements Initializable {
             String subtotalString;
             String[] selling = sellingPrice.split("\\.");
             StringBuilder price = new StringBuilder();
-            for (String s : selling) {
+            for (String s: selling) {
                 price.append(s);
             }
             int sellingInt = Integer.parseInt(String.valueOf(price));
@@ -155,10 +189,10 @@ public class TransactionController implements Initializable {
 //            int totalDiscountAmount = 0;
             int totalAmount = 0;
 
-            for (Sale i : saleTableView.getItems()) {
+            for (Sale i: saleTableView.getItems()) {
                 String[] subtotalArray = i.getSubtotal().split("\\.");
                 StringBuilder sub = new StringBuilder();
-                for (String s : subtotalArray) {
+                for (String s: subtotalArray) {
                     sub.append(s);
                 }
                 subtotalInt = Integer.parseInt(String.valueOf(sub));
@@ -196,10 +230,10 @@ public class TransactionController implements Initializable {
 //                int totalDiscountAmount = 0;
                 int totalAmount = 0;
 
-                for (Sale i : saleTableView.getItems()) {
+                for (Sale i: saleTableView.getItems()) {
                     String[] subtotalArray = i.getSubtotal().split("\\.");
                     StringBuilder sub = new StringBuilder();
-                    for (String s : subtotalArray) {
+                    for (String s: subtotalArray) {
                         sub.append(s);
                     }
                     int subtotalInt = Integer.parseInt(String.valueOf(sub));
@@ -291,7 +325,7 @@ public class TransactionController implements Initializable {
 
             String[] selling = sale.getSellingPrice().split("\\.");
             StringBuilder price = new StringBuilder();
-            for (String s : selling) {
+            for (String s: selling) {
                 price.append(s);
             }
             int sellingInt = Integer.parseInt(String.valueOf(price));
@@ -319,10 +353,10 @@ public class TransactionController implements Initializable {
 //            int totalDiscountAmount = 0;
             int totalAmount = 0;
 
-            for (Sale i : saleTableView.getItems()) {
+            for (Sale i: saleTableView.getItems()) {
                 String[] subtotalArray = i.getSubtotal().split("\\.");
                 StringBuilder sub = new StringBuilder();
-                for (String s : subtotalArray) {
+                for (String s: subtotalArray) {
                     sub.append(s);
                 }
                 subtotalInt = Integer.parseInt(String.valueOf(sub));
@@ -345,12 +379,14 @@ public class TransactionController implements Initializable {
 //            totalAllTextField.setText(totalAllString);
 //            totalDiscountTextField.setText(totalDiscountString);
             totalAmountTextField.setText(totalAmountString);
-            barcodeTextField.clear();
         }
+
+        resetProductButtonAction(actionEvent);
     }
 
     @FXML
     private void resetProductButtonAction(ActionEvent actionEvent) {
+        productTableView.getSelectionModel().clearSelection();
         barcodeTextField.clear();
     }
 
@@ -378,7 +414,7 @@ public class TransactionController implements Initializable {
 
             StringBuilder barcodes = new StringBuilder();
             StringBuilder qts = new StringBuilder();
-            for (Sale item : saleData) {
+            for (Sale item: saleData) {
                 barcodes.append(item.getBarcode());
                 barcodes.append(",");
                 qts.append(item.getQuantity());
@@ -403,7 +439,7 @@ public class TransactionController implements Initializable {
 
             String[] totalArray = transaction.getTotalAmount().split("\\.");
             StringBuilder total = new StringBuilder();
-            for (String t : totalArray) {
+            for (String t: totalArray) {
                 total.append(t);
             }
             int totalAmountInt = Integer.parseInt(String.valueOf(total));
@@ -416,7 +452,7 @@ public class TransactionController implements Initializable {
 
                     String[] payArray = transaction.getPayAmount().split("\\.");
                     StringBuilder pay = new StringBuilder();
-                    for (String p : payArray) {
+                    for (String p: payArray) {
                         pay.append(p);
                     }
                     payAmountInt = Integer.parseInt(String.valueOf(pay));
@@ -455,12 +491,14 @@ public class TransactionController implements Initializable {
         }
 
         barcodeTextField.requestFocus();
+        productTableView.refresh();
     }
 
     @FXML
     private void resetSaleButtonAction(ActionEvent actionEvent) {
         content = "Anda yakin ingin reset?";
         if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
+            resetProductButtonAction(actionEvent);
             resetSale();
         }
     }
@@ -485,13 +523,120 @@ public class TransactionController implements Initializable {
         }
     }
 
-//    @FXML
-//    private void productMenuItemAction(ActionEvent actionEvent) throws IOException {
-//        Helper.changePage(stockMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
-//    }
-//
-//    @FXML
-//    private void promotionMenuItemAction(ActionEvent actionEvent) throws IOException {
-//        Helper.changePage(stockMenuButton, "Kasir - Promosi", "promotion-cashier-view.fxml");
-//    }
+    @FXML
+    private void searchTextFieldKeyPressed(KeyEvent keyEvent) {
+        searchTextField.textProperty().addListener(observable -> {
+            if (searchTextField.textProperty().get().isEmpty()) {
+                productTableView.setItems(products);
+                return;
+            }
+
+            ObservableList<Product> tableItems = FXCollections.observableArrayList();
+            ObservableList<TableColumn<Product, ?>> columns = productTableView.getColumns();
+
+            for (Product value: products) {
+                for (int j = 0; j < 2; j++) {
+                    TableColumn<Product, ?> col = columns.get(j);
+                    String cellValue = String.valueOf(col.getCellData(value)).toLowerCase();
+
+                    if (cellValue.contains(searchTextField.getText().toLowerCase().trim())) {
+                        tableItems.add(value);
+                        break;
+                    }
+                }
+            }
+
+            productTableView.setItems(tableItems);
+        });
+    }
+
+    @FXML
+    private void productTableViewClicked(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
+        Product selectedProduct = productTableView.getSelectionModel().getSelectedItem();
+
+        if (mouseEvent.getClickCount() > 1) {
+            if (productDao.getStockAmount(selectedProduct.getBarcode()) <= 0) {
+                content = "Produk tersebut stoknya habis!";
+                Helper.alert(Alert.AlertType.ERROR, content);
+            } else {
+                addProduct(selectedProduct);
+            }
+        }
+
+        productTableView.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER || mouseEvent.getClickCount() > 1) {
+                try {
+                    if (productDao.getStockAmount(selectedProduct.getBarcode()) <= 0) {
+                        content = "Produk tersebut stoknya habis!";
+                        Helper.alert(Alert.AlertType.ERROR, content);
+                    } else {
+                        addProduct(selectedProduct);
+                    }
+                } catch (SQLException | ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+
+    private void addProduct(Product selectedProduct) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate now = Helper.formatter(LocalDate.now().format(dateTimeFormatter));
+        LocalDate nowPlus1 = now.plusDays(1);
+        String expiredDate = selectedProduct.getExpiredDate();
+
+        if (now.isEqual(Helper.formatter(expiredDate)) ||
+                now.isAfter(Helper.formatter(expiredDate))) {
+            content = "Produk tersebut sudah kedaluwarsa!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+        } else if (nowPlus1.isEqual(Helper.formatter(expiredDate))) {
+            content = "Produk tersebut kedaluwarsa besok!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+        }
+
+        Sale sale = new Sale();
+        sale.setBarcode(selectedProduct.getBarcode());
+        sale.setName(selectedProduct.getName());
+        sale.setSellingPrice(selectedProduct.getSellingPrice());
+        sale.setQuantity(1);
+
+        String subtotalString;
+        String[] selling = sale.getSellingPrice().split("\\.");
+        StringBuilder price = new StringBuilder();
+        for (String s: selling) {
+            price.append(s);
+        }
+
+        int sellingInt = Integer.parseInt(String.valueOf(price));
+        int subtotalStart = sellingInt * sale.getQuantity();
+
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        formatter.setDecimalFormatSymbols(symbols);
+        subtotalString = formatter.format(subtotalStart);
+
+        sale.setSubtotal(subtotalString);
+
+        saleTableView.getItems().add(sale);
+
+        int subtotalInt;
+        int totalAmount = 0;
+
+        for (Sale i: saleTableView.getItems()) {
+            String[] subtotalArray = i.getSubtotal().split("\\.");
+            StringBuilder sub = new StringBuilder();
+            for (String s: subtotalArray) {
+                sub.append(s);
+            }
+            subtotalInt = Integer.parseInt(String.valueOf(sub));
+            totalAmount += subtotalInt;
+        }
+
+        String totalAmountString = formatter.format(totalAmount);
+        totalAmountTextField.setText(totalAmountString);
+
+        productTableView.getSelectionModel().clearSelection();
+        barcodeTextField.requestFocus();
+    }
 }
