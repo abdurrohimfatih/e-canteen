@@ -388,6 +388,7 @@ public class TransactionController implements Initializable {
     private void resetProductButtonAction(ActionEvent actionEvent) {
         productTableView.getSelectionModel().clearSelection();
         barcodeTextField.clear();
+        barcodeTextField.requestFocus();
     }
 
     @FXML
@@ -484,6 +485,9 @@ public class TransactionController implements Initializable {
                     }
 
                     new ReportGenerator().generateInvoice(saleData, transaction);
+
+                    resetProductButtonAction(actionEvent);
+                    resetSale();
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
