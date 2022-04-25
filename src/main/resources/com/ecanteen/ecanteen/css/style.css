@@ -147,7 +147,7 @@
     -fx-background-color: #7abff8;
 }
 
-.table-transaction .table-column {
+.table-income .table-column {
     -fx-padding: 0 5px 0 5px;
     -fx-font-size: 16px;
 }

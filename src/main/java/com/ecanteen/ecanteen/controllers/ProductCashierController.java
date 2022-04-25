@@ -106,8 +106,13 @@ public class ProductCashierController implements Initializable {
     }
 
     @FXML
-    private void transactionCashierButtonAction(ActionEvent actionEvent) throws IOException {
+    private void transactionMenuButtonAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(transactionMenuButton, "Kasir - Transaksi", "transaction-view.fxml");
+    }
+
+    @FXML
+    private void historyMenuButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(transactionMenuButton, "Kasir - Riwayat", "income-cashier-view.fxml");
     }
 
 //    @FXML

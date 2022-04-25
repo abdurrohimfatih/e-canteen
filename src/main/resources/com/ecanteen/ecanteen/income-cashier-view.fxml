@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.ProductCashierController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.IncomeController">
    <top>
       <AnchorPane prefHeight="70.0" prefWidth="1366.0" style="-fx-background-color: #0c80d4;" BorderPane.alignment="CENTER">
          <HBox alignment="CENTER" layoutX="334.0" layoutY="15.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="15.0">
@@ -46,7 +46,7 @@
                   <Insets left="20.0" right="20.0" />
                </padding>
             </MenuButton>
-            <Button fx:id="productMenuButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="410.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" styleClass="cashier-button-active" text="DATA PRODUK" textAlignment="CENTER">
+            <Button fx:id="productMenuButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="410.0" layoutY="10.0" mnemonicParsing="false" onAction="#productMenuButtonAction" prefHeight="40.0" styleClass="cashier-button" text="DATA PRODUK" textAlignment="CENTER">
                <padding>
                   <Insets left="20.0" right="20.0" />
                </padding>
@@ -54,7 +54,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="historyMenuButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="646.0" layoutY="10.0" mnemonicParsing="false" onAction="#historyMenuButtonAction" prefHeight="40.0" styleClass="cashier-button" text="RIWAYAT" textAlignment="CENTER">
+            <Button fx:id="historyMenuButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="646.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" styleClass="cashier-button-active" text="RIWAYAT" textAlignment="CENTER">
                <padding>
                   <Insets left="20.0" right="20.0" />
                </padding>
@@ -93,7 +93,7 @@
    </top>
    <center>
       <AnchorPane style="-fx-background-color: #75dfff;" BorderPane.alignment="CENTER">
-         <Label layoutX="704.0" layoutY="20.0" text="DAFTAR PRODUK" AnchorPane.leftAnchor="20.0">
+         <Label layoutX="704.0" layoutY="20.0" fx:id="cashierNameLabel" text="PENDAPATAN HARIAN OLEH : " AnchorPane.leftAnchor="20.0">
             <font>
                <Font name="System Bold" size="18.0" />
             </font>
@@ -102,15 +102,10 @@
             <font>
                <Font size="16.0" />
             </font></TextField>
-         <TableView fx:id="productTableView" layoutX="34.0" layoutY="57.0" prefWidth="439.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="65.0">
+         <TableView fx:id="incomeTableView" layoutX="34.0" layoutY="57.0" prefWidth="439.0" styleClass="table-income" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="65.0">
             <columns>
-               <TableColumn fx:id="barcodeTableColumn" prefWidth="75.0" text="Barcode" />
-               <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="Nama Produk" />
-               <TableColumn fx:id="purchasePriceTableColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Harga Beli" />
-               <TableColumn fx:id="sellingPriceTableColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Harga Jual" />
-               <TableColumn fx:id="stockAmountTableColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Jumlah Stok" />
-               <TableColumn fx:id="supplierTableColumn" prefWidth="75.0" text="Supplier" />
-               <TableColumn fx:id="expiredDateTableColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Kedaluwarsa" />
+               <TableColumn fx:id="dateTableColumn" prefWidth="75.0" text="Tanggal" />
+               <TableColumn fx:id="incomeTableColumn" prefWidth="75.0" text="Pendapatan" />
             </columns>
             <columnResizePolicy>
                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

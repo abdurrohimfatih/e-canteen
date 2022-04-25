@@ -12,7 +12,7 @@ import java.util.List;
 
 public class TransactionDaoImpl implements DaoService<Transaction> {
     public int getNowSaleId() throws SQLException, ClassNotFoundException {
-        int nowSaleId = 1111;
+        int nowSaleId = 1;
         try (Connection connection = MySQLConnection.createConnection()) {
             String query = "SELECT id FROM transaction ORDER BY id DESC LIMIT 1";
             try (PreparedStatement ps = connection.prepareStatement(query)) {

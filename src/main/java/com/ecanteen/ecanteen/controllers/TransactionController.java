@@ -5,7 +5,6 @@ import com.ecanteen.ecanteen.dao.ProductDaoImpl;
 import com.ecanteen.ecanteen.dao.TransactionDaoImpl;
 import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Sale;
-import com.ecanteen.ecanteen.entities.Supplier;
 import com.ecanteen.ecanteen.entities.Transaction;
 import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.EditingCell;
@@ -13,7 +12,6 @@ import com.ecanteen.ecanteen.utils.Helper;
 import com.ecanteen.ecanteen.utils.ReportGenerator;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -276,14 +274,6 @@ public class TransactionController implements Initializable {
     }
 
     @FXML
-    private void logoutButtonAction(ActionEvent actionEvent) throws IOException {
-        content = "Anda yakin ingin keluar?";
-        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-            Helper.changePage(logoutButton, "Login", "login-view.fxml");
-        }
-    }
-
-    @FXML
     private void addProductButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         Product product = productDao.fetchProduct(barcodeTextField.getText().trim());
 
@@ -434,16 +424,17 @@ public class TransactionController implements Initializable {
             transaction.setTime(Helper.formattedTimeNow());
             transaction.setBarcodes(String.valueOf(barcodes));
             transaction.setQts(String.valueOf(qts));
-//        transaction.setTotalAll(totalAllTextField.getText());
-//        transaction.setTotalDiscount(totalDiscountTextField.getText());
-            transaction.setTotalAmount(totalAmountTextField.getText());
 
-            String[] totalArray = transaction.getTotalAmount().split("\\.");
+            String[] totalArray = totalAmountTextField.getText().split("\\.");
             StringBuilder total = new StringBuilder();
             for (String t: totalArray) {
                 total.append(t);
             }
+
             int totalAmountInt = Integer.parseInt(String.valueOf(total));
+
+            transaction.setTotalAmount(String.valueOf(totalAmountInt));
+
             int payAmountInt;
 
             do {
@@ -512,19 +503,6 @@ public class TransactionController implements Initializable {
         saleTableView.getItems().clear();
         totalAmountTextField.setText("");
         barcodeTextField.requestFocus();
-    }
-
-    @FXML
-    private void productMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        if (!saleData.isEmpty()) {
-            content = "Data transaksi akan di-reset.\nAnda yakin ingin pindah halaman?";
-            ButtonType result = Helper.alert(Alert.AlertType.CONFIRMATION, content);
-            if (result == ButtonType.OK) {
-                Helper.changePage(productMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
-            }
-        } else {
-            Helper.changePage(productMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
-        }
     }
 
     @FXML
@@ -642,5 +620,39 @@ public class TransactionController implements Initializable {
 
         productTableView.getSelectionModel().clearSelection();
         barcodeTextField.requestFocus();
+    }
+
+    @FXML
+    private void productMenuButtonAction(ActionEvent actionEvent) throws IOException {
+        if (!saleData.isEmpty()) {
+            content = "Data transaksi akan di-reset.\nAnda yakin ingin pindah halaman?";
+            ButtonType result = Helper.alert(Alert.AlertType.CONFIRMATION, content);
+            if (result == ButtonType.OK) {
+                Helper.changePage(productMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
+            }
+        } else {
+            Helper.changePage(productMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
+        }
+    }
+
+    @FXML
+    private void historyMenuButtonAction(ActionEvent actionEvent) throws IOException {
+        if (!saleData.isEmpty()) {
+            content = "Data transaksi akan di-reset.\nAnda yakin ingin pindah halaman?";
+            ButtonType result = Helper.alert(Alert.AlertType.CONFIRMATION, content);
+            if (result == ButtonType.OK) {
+                Helper.changePage(productMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
+            }
+        } else {
+            Helper.changePage(productMenuButton, "Kasir - Riwayat", "income-cashier-view.fxml");
+        }
+    }
+
+    @FXML
+    private void logoutButtonAction(ActionEvent actionEvent) throws IOException {
+        content = "Anda yakin ingin keluar?";
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
+            Helper.changePage(logoutButton, "Login", "login-view.fxml");
+        }
     }
 }

@@ -84,6 +84,8 @@ public class ProductController implements Initializable {
     @FXML
     private Button updateButton;
     @FXML
+    private Button deleteButton;
+    @FXML
     private Button resetButton;
     @FXML
     private TextField searchTextField;
@@ -316,6 +318,25 @@ public class ProductController implements Initializable {
     }
 
     @FXML
+    private void deleteButtonAction(ActionEvent actionEvent) {
+        content = "Anda yakin ingin menghapus?";
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
+            try {
+                if (productDao.deleteData(selectedProduct) == 1) {
+                    products.clear();
+                    products.addAll(productDao.fetchAll());
+                    resetProduct();
+                    productTableView.requestFocus();
+                    content = "Data berhasil dihapus!";
+                    Helper.alert(Alert.AlertType.INFORMATION, content);
+                }
+            } catch (SQLException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @FXML
     private void resetButtonAction(ActionEvent actionEvent) {
         resetProduct();
     }
@@ -340,6 +361,7 @@ public class ProductController implements Initializable {
             barcodeTextField.setDisable(true);
             addButton.setDisable(true);
             updateButton.setDisable(false);
+            deleteButton.setDisable(false);
             resetButton.setDisable(false);
         }
     }
@@ -387,6 +409,7 @@ public class ProductController implements Initializable {
         barcodeTextField.setDisable(false);
         addButton.setDisable(false);
         updateButton.setDisable(true);
+        deleteButton.setDisable(true);
         resetButton.setDisable(true);
         barcodeTextField.requestFocus();
     }
