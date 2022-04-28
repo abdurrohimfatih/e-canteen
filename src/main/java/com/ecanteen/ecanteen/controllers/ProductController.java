@@ -3,6 +3,7 @@ package com.ecanteen.ecanteen.controllers;
 import com.ecanteen.ecanteen.dao.CategoryDaoImpl;
 import com.ecanteen.ecanteen.dao.ProductDaoImpl;
 import com.ecanteen.ecanteen.dao.SupplierDaoImpl;
+import com.ecanteen.ecanteen.dao.TransactionDaoImpl;
 import com.ecanteen.ecanteen.entities.Category;
 import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Supplier;
@@ -131,7 +132,7 @@ public class ProductController implements Initializable {
         try {
             products.addAll(productDao.fetchAll());
             categories.addAll(categoryDao.fetchAll());
-            suppliers.addAll(supplierDao.fetchAll());
+            suppliers.addAll(supplierDao.fetchActiveSupplier());
 //            promotions.addAll(promotionDao.fetchAll());
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -322,20 +323,25 @@ public class ProductController implements Initializable {
     }
 
     @FXML
-    private void deleteButtonAction(ActionEvent actionEvent) {
-        content = "Anda yakin ingin menghapus?";
-        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-            try {
-                if (productDao.deleteData(selectedProduct) == 1) {
-                    products.clear();
-                    products.addAll(productDao.fetchAll());
-                    resetProduct();
-                    productTableView.requestFocus();
-                    content = "Data berhasil dihapus!";
-                    Helper.alert(Alert.AlertType.INFORMATION, content);
+    private void deleteButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        if (new TransactionDaoImpl().getProductInSale(selectedProduct.getBarcode())) {
+            content = "Produk ini tidak dapat dihapus karena pernah dijual!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+        } else {
+            content = "Anda yakin ingin menghapus?";
+            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
+                try {
+                    if (productDao.deleteData(selectedProduct) == 1) {
+                        products.clear();
+                        products.addAll(productDao.fetchAll());
+                        resetProduct();
+                        productTableView.requestFocus();
+                        content = "Data berhasil dihapus!";
+                        Helper.alert(Alert.AlertType.INFORMATION, content);
+                    }
+                } catch (SQLException | ClassNotFoundException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (SQLException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
             }
         }
     }

@@ -1,11 +1,9 @@
 package com.ecanteen.ecanteen.dao;
 
 import com.ecanteen.ecanteen.entities.Income;
-import com.ecanteen.ecanteen.entities.Sale;
 import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.DaoService;
 import com.ecanteen.ecanteen.utils.MySQLConnection;
-import javafx.collections.ObservableList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,7 +28,7 @@ public class IncomeDaoImpl implements DaoService<Income> {
         try (Connection connection = MySQLConnection.createConnection()) {
             String query = "SELECT date, username AS cashier, SUM(total_amount) AS income FROM transaction GROUP BY date, username";
 
-            String query2 = "SELECT s.quantity AS qty, p.purchase_price AS pp, p.selling_price AS sp FROM sale s JOIN product p ON s.barcode = p.barcode JOIn transaction t ON s.id_transaction = t.id WHERE t.date = ? && t.username = ?";
+            String query2 = "SELECT s.quantity AS qty, p.purchase_price AS pp, p.selling_price AS sp FROM sale s JOIN product p ON s.barcode = p.barcode JOIn transaction t ON s.transaction_id = t.id WHERE t.date = ? && t.username = ?";
 
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 try (ResultSet rs = ps.executeQuery()) {

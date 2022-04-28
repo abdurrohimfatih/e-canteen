@@ -410,7 +410,7 @@ public class TransactionController implements Initializable {
                 e.printStackTrace();
             }
 
-            transaction.setUsername(Common.user.getName());
+            transaction.setUsername(Common.user.getUsername());
             transaction.setDate(Helper.formattedDateNow());
             transaction.setTime(Helper.formattedTimeNow());
 

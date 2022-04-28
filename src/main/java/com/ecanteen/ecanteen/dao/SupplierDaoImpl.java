@@ -133,4 +133,23 @@ public class SupplierDaoImpl implements DaoService<Supplier> {
 
         return result;
     }
+
+    public List<Supplier> fetchActiveSupplier() throws SQLException, ClassNotFoundException {
+        List<Supplier> suppliers = new ArrayList<>();
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT id, name FROM supplier WHERE status = 1";
+            try (PreparedStatement ps = connection.prepareStatement(query)){
+                try (ResultSet rs = ps.executeQuery()){
+                    while (rs.next()) {
+                        Supplier supplier = new Supplier();
+                        supplier.setId(rs.getString("id"));
+                        supplier.setName(rs.getString("name"));
+                        suppliers.add(supplier);
+                    }
+                }
+            }
+        }
+
+        return suppliers;
+    }
 }

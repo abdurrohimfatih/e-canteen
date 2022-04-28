@@ -68,13 +68,13 @@ public class TransactionDaoImpl implements DaoService<Transaction> {
         return 0;
     }
 
-    public void addSale(ObservableList<Sale> sales, String idTransaction) throws SQLException, ClassNotFoundException {
+    public void addSale(ObservableList<Sale> sales, String transactionId) throws SQLException, ClassNotFoundException {
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "INSERT INTO sale (id_transaction, barcode, quantity, subtotal) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO sale (transaction_id, barcode, quantity, subtotal) VALUES (?, ?, ?, ?)";
 
             for (Sale item : sales) {
                 try (PreparedStatement ps = connection.prepareStatement(query)) {
-                    ps.setString(1, idTransaction);
+                    ps.setString(1, transactionId);
                     ps.setString(2, item.getBarcode());
                     ps.setInt(3, item.getQuantity());
                     ps.setString(4, item.getSubtotal());
@@ -87,5 +87,23 @@ public class TransactionDaoImpl implements DaoService<Transaction> {
                 }
             }
         }
+    }
+
+    public boolean getProductInSale(String barcode) throws SQLException, ClassNotFoundException {
+        boolean result = false;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT * FROM sale WHERE barcode = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, barcode);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        result = true;
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 }

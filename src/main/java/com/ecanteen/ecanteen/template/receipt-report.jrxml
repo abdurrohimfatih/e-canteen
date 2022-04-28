@@ -75,8 +75,8 @@
 		</field>
 	</subDataset>
 	<parameter name="DS" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
-	<parameter name="cashier_name" class="java.lang.String"/>
-	<parameter name="sale_id" class="java.lang.String"/>
+	<parameter name="transactionId" class="java.lang.String"/>
+	<parameter name="username" class="java.lang.String"/>
 	<parameter name="date" class="java.lang.String"/>
 	<parameter name="time" class="java.lang.String"/>
 	<parameter name="totalAmount" class="java.lang.String"/>
@@ -138,14 +138,14 @@
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{cashier_name}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{username}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="22" y="45" width="53" height="10" uuid="960c8bfe-99d9-4c83-8b3f-fb9ee8300ef8"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{sale_id}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{transactionId}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="30" width="136" height="10" uuid="d0d41f62-2ddf-4ab7-ba8b-7daf9582d1ae"/>

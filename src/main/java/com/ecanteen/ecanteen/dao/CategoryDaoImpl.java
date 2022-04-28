@@ -38,11 +38,10 @@ public class CategoryDaoImpl implements DaoService<Category> {
     public int addData(Category object) throws SQLException, ClassNotFoundException {
         int result = 0;
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "INSERT INTO category(id, name, date_created) VALUES(?, ?, ?)";
+            String query = "INSERT INTO category(name, date_created) VALUES(?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
-                ps.setInt(1, object.getId());
-                ps.setString(2, object.getName());
-                ps.setString(3, object.getDateCreated());
+                ps.setString(1, object.getName());
+                ps.setString(2, object.getDateCreated());
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();
