@@ -306,7 +306,7 @@ public class ProductDaoImpl implements DaoService<Product> {
     public Product fetchProduct(String barcode) throws SQLException, ClassNotFoundException {
         Product product = null;
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT barcode, name, selling_price FROM product WHERE barcode = ?";
+            String query = "SELECT p.barcode, p.name, p.selling_price FROM product p JOIN supplier s ON p.supplier_id = s.id WHERE p.barcode = ? && s.status = 1";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setString(1, barcode);
 
@@ -389,6 +389,25 @@ public class ProductDaoImpl implements DaoService<Product> {
                 }
             }
         }
+    }
+
+    public static Product getPurchaseSelling(String barcode) throws SQLException, ClassNotFoundException {
+        Product product = new Product();
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT purchase_price, selling_price FROM product WHERE barcode = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, barcode);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        product.setPurchasePrice(rs.getString("purchase_price"));
+                        product.setSellingPrice(rs.getString("selling_price"));
+                    }
+                }
+            }
+        }
+
+        return product;
     }
 
 //    public static void updatePromotionIdProduct(String promotion_id) throws SQLException, ClassNotFoundException {

@@ -1,6 +1,7 @@
 package com.ecanteen.ecanteen.controllers;
 
 import com.ecanteen.ecanteen.Main;
+import com.ecanteen.ecanteen.dao.IncomeDaoImpl;
 import com.ecanteen.ecanteen.dao.ProductDaoImpl;
 import com.ecanteen.ecanteen.dao.TransactionDaoImpl;
 import com.ecanteen.ecanteen.entities.Product;
@@ -180,7 +181,6 @@ public class TransactionController implements Initializable {
 
 //            t.getRowValue().setDiscountAmount(discountAmountString);
             t.getRowValue().setSubtotal(subtotalString);
-
             saleTableView.refresh();
 //            int totalAll = 0;
 //            int totalDiscountInt;
@@ -403,15 +403,6 @@ public class TransactionController implements Initializable {
             control.setStyle("-fx-font-size: 16px");
             Helper.addThousandSeparator(control);
 
-            StringBuilder barcodes = new StringBuilder();
-            StringBuilder qts = new StringBuilder();
-            for (Sale item: saleData) {
-                barcodes.append(item.getBarcode());
-                barcodes.append(",");
-                qts.append(item.getQuantity());
-                qts.append(",");
-            }
-
             Transaction transaction = new Transaction();
             try {
                 transaction.setId(String.valueOf(transactionDao.getNowSaleId()));
@@ -422,8 +413,6 @@ public class TransactionController implements Initializable {
             transaction.setUsername(Common.user.getName());
             transaction.setDate(Helper.formattedDateNow());
             transaction.setTime(Helper.formattedTimeNow());
-            transaction.setBarcodes(String.valueOf(barcodes));
-            transaction.setQts(String.valueOf(qts));
 
             String[] totalArray = totalAmountTextField.getText().split("\\.");
             StringBuilder total = new StringBuilder();
@@ -466,18 +455,19 @@ public class TransactionController implements Initializable {
 
             try {
                 if (transactionDao.addData(transaction) == 1) {
-                    String[] soldBarcode = barcodes.toString().split(",");
-                    String[] soldQty = qts.toString().split(",");
-
-                    for (int i = 0; i < soldBarcode.length; i++) {
-                        int oldStock = productDao.getStockAmount(soldBarcode[i]);
-                        int newStock = oldStock - Integer.parseInt(soldQty[i]);
-                        productDao.updateStock(newStock, soldBarcode[i]);
+                    for (Sale item : saleData) {
+                        int oldStock = productDao.getStockAmount(item.getBarcode());
+                        int newStock = oldStock - item.getQuantity();
+                        productDao.updateStock(newStock, item.getBarcode());
                     }
 
                     new ReportGenerator().generateInvoice(saleData, transaction);
 
+                    transactionDao.addSale(saleData, transaction.getId());
+
                     resetProductButtonAction(actionEvent);
+                    products.clear();
+                    products.addAll(productDao.fetchAll());
                     resetSale();
                 }
             } catch (SQLException | ClassNotFoundException e) {
@@ -486,7 +476,6 @@ public class TransactionController implements Initializable {
         }
 
         barcodeTextField.requestFocus();
-        productTableView.refresh();
     }
 
     @FXML

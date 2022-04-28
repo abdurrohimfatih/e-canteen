@@ -5,8 +5,6 @@ public class Transaction {
     private String username;
     private String date;
     private String time;
-    private String barcodes;
-    private String qts;
 //    private String totalAll;
 //    private String totalDiscount;
     private String totalAmount;
@@ -43,22 +41,6 @@ public class Transaction {
 
     public void setTime(String time) {
         this.time = time;
-    }
-
-    public String getBarcodes() {
-        return barcodes;
-    }
-
-    public void setBarcodes(String barcodes) {
-        this.barcodes = barcodes;
-    }
-
-    public String getQts() {
-        return qts;
-    }
-
-    public void setQts(String qts) {
-        this.qts = qts;
     }
 
 //    public String getTotalAll() {

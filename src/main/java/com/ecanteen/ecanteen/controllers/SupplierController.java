@@ -54,7 +54,11 @@ public class SupplierController implements Initializable {
     @FXML
     private Button supplierMenuButton;
     @FXML
-    private Button historyMenuButton;
+    private MenuButton historyMenuButton;
+    @FXML
+    private MenuItem incomeHistoryMenuItem;
+    @FXML
+    private MenuItem supplierHistoryMenuItem;
     @FXML
     private Button topUpMenuButton;
     @FXML
@@ -451,6 +455,16 @@ public class SupplierController implements Initializable {
     @FXML
     private void userButtonAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(supplierMenuButton, "Admin - User", "user-view.fxml");
+    }
+
+    @FXML
+    private void incomeHistoryMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(historyMenuButton, "Admin - Riwayat Pendapatan", "income-admin-view.fxml");
+    }
+
+    @FXML
+    private void supplierHistoryMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(historyMenuButton, "Admin - Riwayat Supplier", "supplier-history-view.fxml");
     }
 
     @FXML

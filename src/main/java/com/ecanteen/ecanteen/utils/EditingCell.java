@@ -5,7 +5,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 
 public class EditingCell extends TableCell<Sale, Integer> {
     private TextField textField;

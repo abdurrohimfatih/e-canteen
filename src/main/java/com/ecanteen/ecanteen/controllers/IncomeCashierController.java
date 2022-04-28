@@ -18,7 +18,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class IncomeController implements Initializable {
+public class IncomeCashierController implements Initializable {
 
     @FXML
     private Button transactionMenuButton;

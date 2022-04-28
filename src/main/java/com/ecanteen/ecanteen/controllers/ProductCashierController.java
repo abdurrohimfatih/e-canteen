@@ -35,12 +35,6 @@ public class ProductCashierController implements Initializable {
     private MenuItem soldProductMenuItem;
     @FXML
     private MenuItem favoriteProductMenuItem;
-//    @FXML
-//    private MenuButton stockMenuButton;
-//    @FXML
-//    private MenuItem productMenuItem;
-//    @FXML
-//    private MenuItem promotionMenuItem;
     @FXML
     private Button productMenuButton;
     @FXML
@@ -69,8 +63,6 @@ public class ProductCashierController implements Initializable {
     private TableColumn<Product, Supplier> supplierTableColumn;
     @FXML
     private TableColumn<Product, String> expiredDateTableColumn;
-//    @FXML
-//    private TableColumn<Product, Promotion> promotionTableColumn;
     private ObservableList<Product> products;
 
     @Override
@@ -78,17 +70,14 @@ public class ProductCashierController implements Initializable {
         ProductDaoImpl productDao = new ProductDaoImpl();
         CategoryDaoImpl categoryDao = new CategoryDaoImpl();
         SupplierDaoImpl supplierDao = new SupplierDaoImpl();
-//        PromotionDaoImpl promotionDao = new PromotionDaoImpl();
         products = FXCollections.observableArrayList();
         ObservableList<Category> categories = FXCollections.observableArrayList();
         ObservableList<Supplier> suppliers = FXCollections.observableArrayList();
-//        ObservableList<Promotion> promotions = FXCollections.observableArrayList();
 
         try {
             products.addAll(productDao.fetchAll());
             categories.addAll(categoryDao.fetchAll());
             suppliers.addAll(supplierDao.fetchAll());
-//            promotions.addAll(promotionDao.fetchAll());
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -102,7 +91,6 @@ public class ProductCashierController implements Initializable {
         stockAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStockAmount()).asObject());
         supplierTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getSupplier()));
         expiredDateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getExpiredDate()));
-//        promotionTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getPromotion()));
     }
 
     @FXML
@@ -114,11 +102,6 @@ public class ProductCashierController implements Initializable {
     private void historyMenuButtonAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(transactionMenuButton, "Kasir - Riwayat", "income-cashier-view.fxml");
     }
-
-//    @FXML
-//    private void promotionCashierMenuItemAction(ActionEvent actionEvent) throws IOException {
-//        Helper.changePage(stockMenuButton, "Kasir - Promosi", "promotion-cashier-view.fxml");
-//    }
 
     @FXML
     private void logoutButtonAction(ActionEvent actionEvent) throws IOException {

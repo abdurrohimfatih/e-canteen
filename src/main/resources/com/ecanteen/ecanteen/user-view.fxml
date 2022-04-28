@@ -73,14 +73,18 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="historyMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="646.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" text="RIWAYAT" textAlignment="CENTER" textFill="WHITE">
-               <padding>
-                  <Insets left="20.0" right="20.0" />
-               </padding>
+            <MenuButton fx:id="historyMenuButton" alignment="CENTER" contentDisplay="CENTER" layoutX="165.0" layoutY="10.0" minHeight="40.0" mnemonicParsing="false" text="RIWAYAT" textAlignment="CENTER" textFill="WHITE">
+               <items>
+                  <MenuItem fx:id="incomeHistoryMenuItem" mnemonicParsing="false" onAction="#incomeHistoryMenuItemAction" text="Riwayat Pendapatan" />
+                  <MenuItem fx:id="supplierHistoryMenuItem" mnemonicParsing="false" onAction="#supplierHistoryMenuItemAction" text="Riwayat Supplier" />
+               </items>
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
-            </Button>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </MenuButton>
             <Button fx:id="topUpMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="812.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" text="TOP UP" textAlignment="CENTER" textFill="WHITE">
                <padding>
                   <Insets left="20.0" right="20.0" />
