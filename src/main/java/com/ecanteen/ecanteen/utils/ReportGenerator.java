@@ -6,6 +6,7 @@ import com.ecanteen.ecanteen.entities.Transaction;
 import javafx.collections.ObservableList;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 import org.apache.log4j.BasicConfigurator;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class ReportGenerator {
         }
     }
 
-    public void printAdminSupply(ObservableList<Supply> supplies, String supplier, String date, String total) {
+    public void printSupplierHistory(ObservableList<Supply> supplies, String supplier, String date, String total) {
         BasicConfigurator.configure();
         HashMap<String, Object> param = new HashMap<>();
         List<Supply> supplyList = new ArrayList<>();
@@ -56,7 +57,7 @@ public class ReportGenerator {
         for (Supply item : supplies) {
             Supply supply = new Supply();
             supply.setProduct(item.getProduct());
-            supply.setQuantity(item.getQuantity());
+            supply.setSold(item.getSold());
             supply.setSubtotal(item.getSubtotal());
 
             supplyList.add(supply);
@@ -70,8 +71,9 @@ public class ReportGenerator {
         param.put("total", total);
 
         try {
-            JasperReport report = JasperCompileManager.compileReport("src/main/java/com/ecanteen/ecanteen/template/admin-supply-history.jrxml");
+            JasperReport report = JasperCompileManager.compileReport("src/main/java/com/ecanteen/ecanteen/template/supplier-history-report.jrxml");
             JasperPrint print = JasperFillManager.fillReport(report, param, new JREmptyDataSource());
+//            JasperViewer.viewReport(print, false);
             JasperPrintManager.printReport(print, false);
         } catch (JRException e) {
             e.printStackTrace();

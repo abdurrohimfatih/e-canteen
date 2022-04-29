@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionDaoImpl implements DaoService<Transaction> {
@@ -105,5 +106,24 @@ public class TransactionDaoImpl implements DaoService<Transaction> {
         }
 
         return result;
+    }
+
+    public List<Transaction> getTransactionDate() throws SQLException, ClassNotFoundException {
+        List<Transaction> transactions = new ArrayList<>();
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT t.date AS t_date FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN supplier su ON p.supplier_id = su.id JOIN transaction t ON sa.transaction_id = t.id GROUP BY t.date";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Transaction transaction = new Transaction();
+                        transaction.setDate(rs.getString("t_date"));
+
+                        transactions.add(transaction);
+                    }
+                }
+            }
+        }
+
+        return transactions;
     }
 }

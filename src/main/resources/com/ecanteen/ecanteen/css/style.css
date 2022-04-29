@@ -163,3 +163,7 @@
 .column-left {
     -fx-alignment: CENTER-LEFT;
 }
+
+.supplier-history-combo-box {
+    -fx-font-size: 14px;
+}

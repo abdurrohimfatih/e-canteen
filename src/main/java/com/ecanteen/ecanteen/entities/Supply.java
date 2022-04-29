@@ -2,7 +2,7 @@ package com.ecanteen.ecanteen.entities;
 
 public class Supply {
     String product, subtotal;
-    int quantity;
+    int sold;
 
     public String getProduct() {
         return product;
@@ -20,11 +20,11 @@ public class Supply {
         this.subtotal = subtotal;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getSold() {
+        return sold;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setSold(int sold) {
+        this.sold = sold;
     }
 }

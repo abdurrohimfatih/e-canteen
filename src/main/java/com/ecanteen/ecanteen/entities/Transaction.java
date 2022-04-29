@@ -82,4 +82,9 @@ public class Transaction {
     public void setChange(String change) {
         this.change = change;
     }
+
+    @Override
+    public String toString() {
+        return date;
+    }
 }

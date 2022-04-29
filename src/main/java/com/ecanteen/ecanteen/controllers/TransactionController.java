@@ -343,10 +343,10 @@ public class TransactionController implements Initializable {
 //            int totalDiscountAmount = 0;
             int totalAmount = 0;
 
-            for (Sale i: saleTableView.getItems()) {
+            for (Sale i : saleTableView.getItems()) {
                 String[] subtotalArray = i.getSubtotal().split("\\.");
                 StringBuilder sub = new StringBuilder();
-                for (String s: subtotalArray) {
+                for (String s : subtotalArray) {
                     sub.append(s);
                 }
                 subtotalInt = Integer.parseInt(String.valueOf(sub));

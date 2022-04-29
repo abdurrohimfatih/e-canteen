@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 28, 2022 at 05:52 PM
+-- Generation Time: Apr 29, 2022 at 05:34 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -64,8 +64,9 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`barcode`, `name`, `category_id`, `purchase_price`, `selling_price`, `stock_amount`, `supplier_id`, `date_added`, `expired_date`) VALUES
+('123', 'Dummy', 1, '2.000', '3.000', 100, '17', '29-04-2022', '07-05-2022'),
 ('4970129727514', 'Spidol', 2, '3.000', '5.000', 0, '10', '25-04-2022', '09-04-2022'),
-('CT652', 'Barcode Scanner', 2, '50.000', '60.000', 0, '4', '19-04-2022', '22-04-2022');
+('CT652', 'Barcode Scanner', 2, '50.000', '60.000', 100, '10', '29-04-2022', '22-04-2022');
 
 -- --------------------------------------------------------
 

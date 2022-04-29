@@ -6,6 +6,7 @@ module com.ecanteen.ecanteen {
     requires log4j;
     requires jasperreports;
     requires commons.validator;
+    requires org.controlsfx.controls;
 
     opens com.ecanteen.ecanteen to javafx.fxml;
     exports com.ecanteen.ecanteen;
