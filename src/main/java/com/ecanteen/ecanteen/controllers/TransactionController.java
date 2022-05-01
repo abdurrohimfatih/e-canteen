@@ -466,9 +466,7 @@ public class TransactionController implements Initializable {
                         productDao.updateStock(newStock, item.getBarcode());
                     }
 
-                    new ReportGenerator().generateInvoice(this, saleData, transaction);
-
-                    transactionDao.addSale(saleData, transaction.getId());
+                    new ReportGenerator().generateInvoice(transactionDao, this, saleData, transaction);
 
                     resetProductButtonAction(actionEvent);
                     products.clear();
