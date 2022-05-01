@@ -16,6 +16,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,6 +27,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
+import org.apache.log4j.BasicConfigurator;
 
 import java.io.IOException;
 import java.net.URL;
@@ -35,9 +40,9 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class TransactionController implements Initializable {
     @FXML
@@ -461,14 +466,13 @@ public class TransactionController implements Initializable {
                         productDao.updateStock(newStock, item.getBarcode());
                     }
 
-                    new ReportGenerator().generateInvoice(saleData, transaction);
+                    new ReportGenerator().generateInvoice(this, saleData, transaction);
 
                     transactionDao.addSale(saleData, transaction.getId());
 
                     resetProductButtonAction(actionEvent);
                     products.clear();
                     products.addAll(productDao.fetchAll());
-                    resetSale();
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -487,7 +491,7 @@ public class TransactionController implements Initializable {
         }
     }
 
-    private void resetSale() {
+    public void resetSale() {
         barcodeTextField.clear();
         saleTableView.getItems().clear();
         totalAmountTextField.setText("");

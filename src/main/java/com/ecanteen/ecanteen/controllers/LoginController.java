@@ -36,7 +36,7 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    private void loginButtonAction(ActionEvent actionEvent) throws IOException, SQLException, ClassNotFoundException {
+    private void loginButtonAction(ActionEvent actionEvent) throws IOException {
         String username = usernameTextField.getText().trim();
         String password = passwordPasswordField.getText();
 
@@ -46,21 +46,27 @@ public class LoginController implements Initializable {
         }
 
         password = Helper.hashPassword(password);
-        User user = userDao.login(username, password);
 
-        if (user != null && user.getUsername().equals(username)) {
-            if (user.getStatus().equals("1")) {
-                Common.user = user;
-                if (user.getLevel().equals("Admin")) {
-                    Helper.changePage(loginButton, "Admin - Produk", "product-view.fxml");
+        try {
+            User user = userDao.login(username, password);
+
+            if (user != null && user.getUsername().equals(username)) {
+                if (user.getStatus().equals("1")) {
+                    Common.user = user;
+                    if (user.getLevel().equals("Admin")) {
+                        Helper.changePage(loginButton, "Admin - Produk", "product-view.fxml");
+                    } else {
+                        Helper.changePage(loginButton, "Kasir - Transaksi", "transaction-view.fxml");
+                    }
                 } else {
-                    Helper.changePage(loginButton, "Kasir - Transaksi", "transaction-view.fxml");
+                    infoLabel.setText("Status user sedang tidak aktif. Silakan aktifkan di admin!");
                 }
             } else {
-                infoLabel.setText("Status user sedang tidak aktif. Silakan aktifkan di admin!");
+                infoLabel.setText("Username atau password salah. Silakan coba lagi!");
             }
-        } else {
-            infoLabel.setText("Username atau password salah. Silakan coba lagi!");
+        } catch (SQLException | ClassNotFoundException e) {
+            String content = "Koneksi ke database error, periksa kembali!";
+            Helper.alert(Alert.AlertType.ERROR, content);
         }
     }
 }

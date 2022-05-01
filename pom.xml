@@ -5,12 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.e-canteen</groupId>
-    <artifactId>eCanteen</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <name>eCanteen</name>
+    <artifactId>integrated-digital-canteen</artifactId>
+    <version>1.0</version>
+    <name>integrated-digital-canteen</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <junit.version>5.8.2</junit.version>
         <openjfx.version>17.0.1</openjfx.version>
     </properties>
@@ -24,6 +26,11 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
+            <version>${openjfx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
             <version>${openjfx.version}</version>
         </dependency>
         <dependency>
@@ -64,7 +71,6 @@
             <version>6.19.1</version>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -72,9 +78,32 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.ecanteen.ecanteen.App</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.openjfx</groupId>
@@ -85,7 +114,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.ecanteen.ecanteen/com.ecanteen.ecanteen.Main</mainClass>
+                            <mainClass>com.ecanteen.ecanteen/com.ecanteen.ecanteen.App</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
