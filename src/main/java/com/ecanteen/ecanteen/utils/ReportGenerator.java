@@ -9,8 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.view.JasperViewer;
 import org.apache.log4j.BasicConfigurator;
 
 import java.io.File;
@@ -52,7 +50,7 @@ public class ReportGenerator {
                 param.put("change", transaction.getChange());
 
                 try {
-                    JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(new File("").getAbsolutePath() + "/src/main/resources/com/ecanteen/ecanteen/template/receipt-report.jasper");
+                    JasperReport report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/main/resources/com/ecanteen/ecanteen/template/receipt-report.jrxml");
                     JasperPrint print = JasperFillManager.fillReport(report, param, new JREmptyDataSource());
                     JasperPrintManager.printReport(print, false);
 
@@ -100,7 +98,7 @@ public class ReportGenerator {
                 param.put("total", total);
 
                 try {
-                    JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(new File("").getAbsolutePath() + "/src/main/resources/com/ecanteen/ecanteen/template/supplier-history-report.jasper");
+                    JasperReport report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/main/resources/com/ecanteen/ecanteen/template/supplier-history-report.jrxml");
                     JasperPrint print = JasperFillManager.fillReport(report, param, new JREmptyDataSource());
                     JasperPrintManager.printReport(print, false);
 
