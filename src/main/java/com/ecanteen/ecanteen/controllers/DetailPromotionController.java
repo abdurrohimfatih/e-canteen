@@ -20,7 +20,6 @@ import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class DetailPromotionController implements Initializable {
@@ -57,6 +56,7 @@ public class DetailPromotionController implements Initializable {
 //            e.printStackTrace();
 //        }
 
+        detailPromotionTableView.setPlaceholder(new Label("Tidak ada data."));
         detailPromotionTableView.setItems(products);
         promotionNameLabel.setText(selectedPromotion.getName());
         noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(detailPromotionTableView.getItems().indexOf(data.getValue()) + 1));

@@ -154,6 +154,7 @@ public class ProductController implements Initializable {
         supplierComboBox.setItems(suppliers);
 //        promotionComboBox.setItems(promotions);
 //        promotionComboBox.getItems().add(0, null);
+        productTableView.setPlaceholder(new Label("Tidak ada data."));
         productTableView.setItems(products);
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));

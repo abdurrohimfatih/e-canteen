@@ -83,6 +83,7 @@ public class ProductCashierController implements Initializable {
         }
 
         profileButton.setText(Common.user.getName());
+        productTableView.setPlaceholder(new Label("Tidak ada data."));
         productTableView.setItems(products);
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));

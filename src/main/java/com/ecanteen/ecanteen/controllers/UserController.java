@@ -130,6 +130,7 @@ public class UserController implements Initializable {
         genderComboBox.setItems(FXCollections.observableArrayList("Laki-laki", "Perempuan"));
         levelComboBox.setItems(FXCollections.observableArrayList("Admin", "Kasir"));
         statusComboBox.setItems(FXCollections.observableArrayList("Aktif", "Tidak Aktif"));
+        userTableView.setPlaceholder(new Label("Tidak ada data."));
         userTableView.setItems(users);
         usernameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));

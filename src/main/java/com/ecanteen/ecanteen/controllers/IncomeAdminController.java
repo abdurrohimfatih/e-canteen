@@ -82,6 +82,7 @@ public class IncomeAdminController implements Initializable {
         }
 
         profileButton.setText(Common.user.getName());
+        incomeTableView.setPlaceholder(new Label("Tidak ada data."));
         incomeTableView.setItems(incomes);
         dateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDate()));
         cashierTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCashier()));

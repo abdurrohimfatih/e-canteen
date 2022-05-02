@@ -66,6 +66,7 @@ public class IncomeCashierController implements Initializable {
         }
 
         profileButton.setText(Common.user.getName());
+        incomeTableView.setPlaceholder(new Label("Tidak ada data."));
         incomeTableView.setItems(incomes);
         dateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDate()));
         incomeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIncome()));

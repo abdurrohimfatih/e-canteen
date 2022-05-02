@@ -64,6 +64,7 @@ public class DetailCategoryController implements Initializable {
             e.printStackTrace();
         }
 
+        detailCategoryTableView.setPlaceholder(new Label("Tidak ada data."));
         detailCategoryTableView.setItems(products);
         categoryNameLabel.setText(selectedCategory.getName());
         noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(detailCategoryTableView.getItems().indexOf(data.getValue()) + 1));

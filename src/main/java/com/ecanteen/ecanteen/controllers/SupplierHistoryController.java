@@ -105,6 +105,7 @@ public class SupplierHistoryController implements Initializable {
         profileButton.setText(Common.user.getName());
         supplierComboBox.setItems(suppliers);
         dateComboBox.setItems(transactions);
+        supplyTableView.setPlaceholder(new Label("Tidak ada data."));
         productTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct()));
         soldTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getSold()).asObject());
         subtotalTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSubtotal()));
@@ -143,8 +144,13 @@ public class SupplierHistoryController implements Initializable {
             }
             String totalString = formatter.format(totalInt);
 
-            totalTextField.setText(totalString);
-            printSupplierButton.setDisable(false);
+            if (totalInt != 0) {
+                totalTextField.setText(totalString);
+            } else {
+                totalTextField.setText("");
+            }
+
+            printSupplierButton.setDisable(suppliesData.isEmpty());
         }
     }
 
@@ -181,8 +187,13 @@ public class SupplierHistoryController implements Initializable {
             }
             String totalString = formatter.format(totalInt);
 
-            totalTextField.setText(totalString);
-            printSupplierButton.setDisable(false);
+            if (totalInt != 0) {
+                totalTextField.setText(totalString);
+            } else {
+                totalTextField.setText("");
+            }
+
+            printSupplierButton.setDisable(suppliesData.isEmpty());
         }
     }
 

@@ -137,6 +137,7 @@ public class SupplierController implements Initializable {
         Helper.addTextLimiter(accountNumberTextField, 25);
         genderComboBox.setItems(FXCollections.observableArrayList("Laki-laki", "Perempuan"));
         statusComboBox.setItems(FXCollections.observableArrayList("Aktif", "Tidak Aktif"));
+        supplierTableView.setPlaceholder(new Label("Tidak ada data."));
         supplierTableView.setItems(suppliers);
         idTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));

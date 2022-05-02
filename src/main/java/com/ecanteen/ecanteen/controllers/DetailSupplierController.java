@@ -57,6 +57,7 @@ public class DetailSupplierController implements Initializable {
             e.printStackTrace();
         }
 
+        detailSupplierTableView.setPlaceholder(new Label("Tidak ada data."));
         detailSupplierTableView.setItems(products);
         supplierNameLabel.setText(supplierNameLabel.getText() + selectedSupplier.getName());
         noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(detailSupplierTableView.getItems().indexOf(data.getValue()) + 1));

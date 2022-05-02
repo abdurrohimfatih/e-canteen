@@ -108,6 +108,7 @@ public class CategoryController implements Initializable {
 
         profileButton.setText(Common.user.getName());
         Helper.addTextLimiter(nameTextField, 30);
+        categoryTableView.setPlaceholder(new Label("Tidak ada data."));
         categoryTableView.setItems(categories);
         noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(categoryTableView.getItems().indexOf(data.getValue()) + 1));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));

@@ -76,6 +76,7 @@ public class PromotionCashierController implements Initializable {
         }
 
         profileButton.setText(Common.user.getName());
+        promotionTableView.setPlaceholder(new Label("Tidak ada data."));
         promotionTableView.setItems(promotions);
         idTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
