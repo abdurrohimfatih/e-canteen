@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 import org.apache.log4j.BasicConfigurator;
 
 import java.io.File;
@@ -102,9 +103,9 @@ public class ReportGenerator {
                     JasperPrint print = JasperFillManager.fillReport(report, param, new JREmptyDataSource());
                     JasperPrintManager.printReport(print, false);
 
-//                    JasperViewer viewer = new JasperViewer(print, false);
-//                    viewer.setVisible(true);
-//                    viewer.setFitPageZoomRatio();
+                    JasperViewer viewer = new JasperViewer(print, false);
+                    viewer.setVisible(true);
+                    viewer.setFitPageZoomRatio();
                 } catch (JRException e) {
                     e.printStackTrace();
                 }
