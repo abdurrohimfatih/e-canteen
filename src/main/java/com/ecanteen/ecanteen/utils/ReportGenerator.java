@@ -103,9 +103,9 @@ public class ReportGenerator {
                     JasperPrint print = JasperFillManager.fillReport(report, param, new JREmptyDataSource());
                     JasperPrintManager.printReport(print, false);
 
-                    JasperViewer viewer = new JasperViewer(print, false);
-                    viewer.setVisible(true);
-                    viewer.setFitPageZoomRatio();
+//                    JasperViewer viewer = new JasperViewer(print, false);
+//                    viewer.setVisible(true);
+//                    viewer.setFitPageZoomRatio();
                 } catch (JRException e) {
                     e.printStackTrace();
                 }
