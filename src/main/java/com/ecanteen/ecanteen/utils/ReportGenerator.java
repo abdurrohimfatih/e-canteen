@@ -50,9 +50,8 @@ public class ReportGenerator {
                 param.put("change", transaction.getChange());
 
                 try {
-                    InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/receipt-report.jrxml");
-                    JasperReport report = JasperCompileManager.compileReport(inputStream);
-                    JasperPrint print = JasperFillManager.fillReport(report, param, new JREmptyDataSource());
+                    InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/receipt-report.jasper");
+                    JasperPrint print = JasperFillManager.fillReport(inputStream, param, new JREmptyDataSource());
                     JasperPrintManager.printReport(print, false);
 
 //                    JasperViewer viewer = new JasperViewer(print, false);
@@ -99,10 +98,8 @@ public class ReportGenerator {
                 param.put("total", total);
 
                 try {
-                    InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/supplier-history-report.jrxml");
-                    System.out.println(inputStream);
-                    JasperReport report = JasperCompileManager.compileReport(inputStream);
-                    JasperPrint print = JasperFillManager.fillReport(report, param, new JREmptyDataSource());
+                    InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/supplier-history-report.jasper");
+                    JasperPrint print = JasperFillManager.fillReport(inputStream, param, new JREmptyDataSource());
                     JasperPrintManager.printReport(print, false);
 
 //                    JasperViewer viewer = new JasperViewer(print, false);
