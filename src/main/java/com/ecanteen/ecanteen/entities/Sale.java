@@ -7,9 +7,6 @@ public class Sale {
     private String subtotal;
     private int quantity;
 
-    public Sale() {
-    }
-
     public String getBarcode() {
         return barcode;
     }

@@ -1,7 +1,10 @@
 package com.ecanteen.ecanteen.entities;
 
 public class Income {
-    String date, cashier, income, profit;
+    private String date;
+    private String cashier;
+    private String income;
+    private String profit;
 
     public String getDate() {
         return date;

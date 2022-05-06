@@ -1,7 +1,9 @@
 package com.ecanteen.ecanteen.dao;
 
 import com.ecanteen.ecanteen.entities.Sale;
+import com.ecanteen.ecanteen.entities.Supplier;
 import com.ecanteen.ecanteen.entities.Transaction;
+import com.ecanteen.ecanteen.entities.User;
 import com.ecanteen.ecanteen.utils.DaoService;
 import com.ecanteen.ecanteen.utils.MySQLConnection;
 import javafx.collections.ObservableList;
@@ -125,5 +127,23 @@ public class TransactionDaoImpl implements DaoService<Transaction> {
         }
 
         return transactions;
+    }
+
+    public static int getTransactionAmount(User object) throws SQLException, ClassNotFoundException {
+        int transactionAmount = 0;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT COUNT(*) AS amount FROM transaction WHERE username = ? GROUP BY username";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, object.getUsername());
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        transactionAmount = rs.getInt("amount");
+                    }
+                }
+            }
+        }
+
+        return transactionAmount;
     }
 }

@@ -15,9 +15,7 @@ public class EditingCell extends TableCell<Sale, Integer> {
     @Override
     public void startEdit() {
         super.startEdit();
-        if (textField == null) {
-            createTextField();
-        }
+        createTextField();
         setGraphic(textField);
         setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         textField.selectAll();
@@ -27,12 +25,13 @@ public class EditingCell extends TableCell<Sale, Integer> {
     public void cancelEdit() {
         super.cancelEdit();
         setText(String.valueOf(getItem()));
-        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        setContentDisplay(ContentDisplay.TEXT_ONLY);
     }
 
     @Override
     public void updateItem(Integer item, boolean empty) {
         super.updateItem(item, empty);
+
         if (empty) {
             setText(null);
             setGraphic(textField);
@@ -53,10 +52,14 @@ public class EditingCell extends TableCell<Sale, Integer> {
     public void createTextField() {
         textField = new TextField(getString());
         textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
-        textField.setOnAction(e -> commitEdit(Integer.parseInt(textField.getText())));
+        textField.setOnAction(e -> commitEdit(Integer.valueOf(textField.getText())));
         textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if (!newValue) {
-                commitEdit(Integer.parseInt(textField.getText()));
+            if (textField.getText().isEmpty() || textField.getText().equals("0")) {
+                commitEdit(Integer.valueOf(getString()));
+            } else {
+                if (!newValue) {
+                    commitEdit(Integer.valueOf(textField.getText()));
+                }
             }
         });
         Helper.toNumberField(textField);

@@ -144,7 +144,6 @@ public class TransactionController implements Initializable {
         sellingPriceTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSellingPrice()));
         stockAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStockAmount()).asObject());
         expiredDateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getExpiredDate()));
-
         barcodeSaleTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameSaleTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         sellingPriceSaleTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSellingPrice()));
@@ -155,19 +154,38 @@ public class TransactionController implements Initializable {
         Callback<TableColumn<Sale, Integer>, TableCell<Sale, Integer>> cellFactory = p -> new EditingCell();
         quantitySaleTableColumn.setCellFactory(cellFactory);
         quantitySaleTableColumn.setOnEditCommit(t -> {
-            t.getRowValue().setQuantity(t.getNewValue());
+            String barcode = t.getTableView().getItems().get(t.getTablePosition().getRow()).getBarcode();
 
-            String sellingPrice = t.getRowValue().getSellingPrice();
-            int qty = t.getRowValue().getQuantity();
+            int stockAmount;
+            try {
+                stockAmount = productDao.getStockAmount(barcode);
+            } catch (SQLException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+            String sellingPrice = t.getTableView().getItems().get(t.getTablePosition().getRow()).getSellingPrice();
+            int qty = t.getTableView().getItems().get(t.getTablePosition().getRow()).getQuantity();
+
+            if (qty > stockAmount) {
+                t.getRowValue().setQuantity(1);
+                content = "Kuantitas melebihi stok produk!";
+                Helper.alert(Alert.AlertType.ERROR, content);
+            } else {
+                t.getRowValue().setQuantity(t.getNewValue());
+            }
+
+            qty = t.getTableView().getItems().get(t.getTablePosition().getRow()).getQuantity();
+
 //            int discount = t.getRowValue().getDiscount();
 
 //            int discountAmountInt;
 //            String discountAmountString;
+
             int subtotalInt;
             String subtotalString;
             String[] selling = sellingPrice.split("\\.");
             StringBuilder price = new StringBuilder();
-            for (String s: selling) {
+            for (String s : selling) {
                 price.append(s);
             }
             int sellingInt = Integer.parseInt(String.valueOf(price));
@@ -194,10 +212,10 @@ public class TransactionController implements Initializable {
 //            int totalDiscountAmount = 0;
             int totalAmount = 0;
 
-            for (Sale i: saleTableView.getItems()) {
+            for (Sale i : saleTableView.getItems()) {
                 String[] subtotalArray = i.getSubtotal().split("\\.");
                 StringBuilder sub = new StringBuilder();
-                for (String s: subtotalArray) {
+                for (String s : subtotalArray) {
                     sub.append(s);
                 }
                 subtotalInt = Integer.parseInt(String.valueOf(sub));
@@ -235,10 +253,10 @@ public class TransactionController implements Initializable {
 //                int totalDiscountAmount = 0;
                 int totalAmount = 0;
 
-                for (Sale i: saleTableView.getItems()) {
+                for (Sale i : saleTableView.getItems()) {
                     String[] subtotalArray = i.getSubtotal().split("\\.");
                     StringBuilder sub = new StringBuilder();
-                    for (String s: subtotalArray) {
+                    for (String s : subtotalArray) {
                         sub.append(s);
                     }
                     int subtotalInt = Integer.parseInt(String.valueOf(sub));
@@ -322,7 +340,7 @@ public class TransactionController implements Initializable {
 
             String[] selling = sale.getSellingPrice().split("\\.");
             StringBuilder price = new StringBuilder();
-            for (String s: selling) {
+            for (String s : selling) {
                 price.append(s);
             }
             int sellingInt = Integer.parseInt(String.valueOf(price));
@@ -423,13 +441,14 @@ public class TransactionController implements Initializable {
 
             String[] totalArray = totalAmountTextField.getText().split("\\.");
             StringBuilder total = new StringBuilder();
-            for (String t: totalArray) {
+            for (String t : totalArray) {
                 total.append(t);
             }
 
             int totalAmountInt = Integer.parseInt(String.valueOf(total));
 
             transaction.setTotalAmount(String.valueOf(totalAmountInt));
+            Common.totalAmountString = totalAmountTextField.getText();
 
             int payAmountInt;
 
@@ -440,7 +459,7 @@ public class TransactionController implements Initializable {
 
                     String[] payArray = transaction.getPayAmount().split("\\.");
                     StringBuilder pay = new StringBuilder();
-                    for (String p: payArray) {
+                    for (String p : payArray) {
                         pay.append(p);
                     }
                     payAmountInt = Integer.parseInt(String.valueOf(pay));
@@ -509,7 +528,7 @@ public class TransactionController implements Initializable {
             ObservableList<Product> tableItems = FXCollections.observableArrayList();
             ObservableList<TableColumn<Product, ?>> columns = productTableView.getColumns();
 
-            for (Product value: products) {
+            for (Product value : products) {
                 for (int j = 0; j < 2; j++) {
                     TableColumn<Product, ?> col = columns.get(j);
                     String cellValue = String.valueOf(col.getCellData(value)).toLowerCase();
@@ -578,7 +597,7 @@ public class TransactionController implements Initializable {
         String subtotalString;
         String[] selling = sale.getSellingPrice().split("\\.");
         StringBuilder price = new StringBuilder();
-        for (String s: selling) {
+        for (String s : selling) {
             price.append(s);
         }
 
@@ -598,10 +617,10 @@ public class TransactionController implements Initializable {
         int subtotalInt;
         int totalAmount = 0;
 
-        for (Sale i: saleTableView.getItems()) {
+        for (Sale i : saleTableView.getItems()) {
             String[] subtotalArray = i.getSubtotal().split("\\.");
             StringBuilder sub = new StringBuilder();
-            for (String s: subtotalArray) {
+            for (String s : subtotalArray) {
                 sub.append(s);
             }
             subtotalInt = Integer.parseInt(String.valueOf(sub));

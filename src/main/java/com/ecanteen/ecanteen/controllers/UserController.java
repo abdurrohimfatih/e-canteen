@@ -100,6 +100,8 @@ public class UserController implements Initializable {
     @FXML
     private TableColumn<User, String> phoneTableColumn;
     @FXML
+    private TableColumn<User, String> emailTableColumn;
+    @FXML
     private TableColumn<User, String> levelTableColumn;
     @FXML
     private TableColumn<User, String> statusTableColumn;
@@ -136,6 +138,7 @@ public class UserController implements Initializable {
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         addressTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAddress()));
         phoneTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPhone()));
+        emailTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
         levelTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLevel()));
         statusTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStatus()));
     }
@@ -164,7 +167,7 @@ public class UserController implements Initializable {
             if (levelComboBox.getValue() == null) levelComboBox.setStyle("-fx-border-color: RED");
             if (statusComboBox.getValue() == null) statusComboBox.setStyle("-fx-border-color: RED");
 
-        } else if (!Helper.validateNumberPhone(phoneTextField)) {
+        } else if (Helper.validateNumberPhone(phoneTextField)) {
             resetError();
             warningLabel.setText("No telp tidak valid");
             phoneTextField.setStyle("-fx-border-color: RED");
@@ -226,8 +229,7 @@ public class UserController implements Initializable {
 
     @FXML
     private void updateButtonAction(ActionEvent actionEvent) {
-        if (usernameTextField.getText().trim().isEmpty() ||
-                passwordTextField.getText().isEmpty() ||
+        if (passwordTextField.getText().isEmpty() ||
                 nameTextField.getText().trim().isEmpty() ||
                 addressTextField.getText().trim().isEmpty() ||
                 genderComboBox.getValue() == null ||
@@ -247,7 +249,7 @@ public class UserController implements Initializable {
             if (levelComboBox.getValue() == null) levelComboBox.setStyle("-fx-border-color: RED");
             if (statusComboBox.getValue() == null) statusComboBox.setStyle("-fx-border-color: RED");
 
-        } else if (!Helper.validateNumberPhone(phoneTextField)) {
+        } else if (Helper.validateNumberPhone(phoneTextField)) {
             resetError();
             warningLabel.setText("No telp tidak valid");
             phoneTextField.setStyle("-fx-border-color: RED");
@@ -305,19 +307,27 @@ public class UserController implements Initializable {
 
     @FXML
     private void deleteButtonAction(ActionEvent actionEvent) {
-        content = "Anda yakin ingin menghapus?";
-        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-            try {
-                if (userDao.deleteData(selectedUser) == 1) {
-                    users.clear();
-                    users.addAll(userDao.fetchAll());
-                    resetUser();
-                    userTableView.requestFocus();
-                    content = "Data berhasil dihapus!";
-                    Helper.alert(Alert.AlertType.INFORMATION, content);
+        if (selectedUser.getTransactionAmount() > 0) {
+            content = "Pengguna ini pernah melakukan transaksi,\ntidak dapat dihapus!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+        } else if (selectedUser.getUsername().equals(Common.user.getUsername())) {
+            content = "Pengguna ini sedang login, tidak dapat dihapus!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+        } else {
+            content = "Anda yakin ingin menghapus?";
+            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
+                try {
+                    if (userDao.deleteData(selectedUser) == 1) {
+                        users.clear();
+                        users.addAll(userDao.fetchAll());
+                        resetUser();
+                        userTableView.requestFocus();
+                        content = "Data berhasil dihapus!";
+                        Helper.alert(Alert.AlertType.INFORMATION, content);
+                    }
+                } catch (SQLException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -339,6 +349,7 @@ public class UserController implements Initializable {
             emailTextField.setText(selectedUser.getEmail());
             levelComboBox.setValue(selectedUser.getLevel());
             statusComboBox.setValue(selectedUser.getStatus());
+            usernameTextField.setDisable(true);
             warningLabel.setText("");
             addButton.setDisable(true);
             updateButton.setDisable(false);
@@ -387,6 +398,7 @@ public class UserController implements Initializable {
         selectedUser = null;
         userTableView.getSelectionModel().clearSelection();
         resetError();
+        usernameTextField.setDisable(false);
         addButton.setDisable(false);
         updateButton.setDisable(true);
         deleteButton.setDisable(true);

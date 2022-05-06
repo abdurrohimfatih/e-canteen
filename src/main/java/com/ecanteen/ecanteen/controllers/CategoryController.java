@@ -173,7 +173,7 @@ public class CategoryController implements Initializable {
     }
 
     @FXML
-    private void deleteButtonAction(ActionEvent actionEvent) throws IOException {
+    private void deleteButtonAction(ActionEvent actionEvent) {
         if (selectedCategory.getProductAmount() > 0) {
             content = "Kategori ini memiliki produk, tidak dapat dihapus!";
             Helper.alert(Alert.AlertType.ERROR, content);

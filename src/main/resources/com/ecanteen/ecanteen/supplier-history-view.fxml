@@ -133,7 +133,7 @@
    </top>
    <center>
       <AnchorPane style="-fx-background-color: #75dfff;" BorderPane.alignment="CENTER">
-         <Label layoutX="22.0" layoutY="7.0" text="RIWAYAT SUPPLY BARANG HARIAN" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="21.0">
+         <Label layoutX="22.0" layoutY="7.0" text="RIWAYAT PENJUALAN BARANG HARIAN" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="21.0">
             <font>
                <Font name="System Bold" size="18.0" />
             </font>

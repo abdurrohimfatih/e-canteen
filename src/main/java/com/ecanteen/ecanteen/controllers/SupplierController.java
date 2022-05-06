@@ -167,7 +167,7 @@ public class SupplierController implements Initializable {
             if (phoneTextField.getText().trim().isEmpty()) phoneTextField.setStyle("-fx-border-color: RED");
             if (statusComboBox.getValue() == null) statusComboBox.setStyle("-fx-border-color: RED");
 
-        } else if (!Helper.validateNumberPhone(phoneTextField)) {
+        } else if (Helper.validateNumberPhone(phoneTextField)) {
             resetError();
             warningLabel.setText("No telp tidak valid");
             phoneTextField.setStyle("-fx-border-color: RED");
@@ -250,7 +250,7 @@ public class SupplierController implements Initializable {
             if (phoneTextField.getText().trim().isEmpty()) phoneTextField.setStyle("-fx-border-color: RED");
             if (statusComboBox.getValue() == null) statusComboBox.setStyle("-fx-border-color: RED");
 
-        } else if (!Helper.validateNumberPhone(phoneTextField)) {
+        } else if (Helper.validateNumberPhone(phoneTextField)) {
             resetError();
             warningLabel.setText("No telp tidak valid");
             phoneTextField.setStyle("-fx-border-color: RED");
@@ -314,7 +314,7 @@ public class SupplierController implements Initializable {
     @FXML
     private void deleteButtonAction(ActionEvent actionEvent) {
         if (selectedSupplier.getProductAmount() > 0 && selectedSupplier.getStatus().equals("Aktif")) {
-            content = "Supplier ini memiliki produk dan berstatus aktif, tidak dapat dihapus!";
+            content = "Supplier ini memiliki produk dan berstatus aktif,\ntidak dapat dihapus!";
             Helper.alert(Alert.AlertType.ERROR, content);
         } else {
             content = "Anda yakin ingin menghapus?";

@@ -1,8 +1,10 @@
 package com.ecanteen.ecanteen.entities;
 
 public class Category {
-    private int id, productAmount;
-    private String name, dateCreated;
+    private int id;
+    private int productAmount;
+    private String name;
+    private String dateCreated;
 
     public int getId() {
         return id;

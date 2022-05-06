@@ -326,7 +326,7 @@ public class ProductController implements Initializable {
     @FXML
     private void deleteButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         if (new TransactionDaoImpl().getProductInSale(selectedProduct.getBarcode())) {
-            content = "Produk ini tidak dapat dihapus karena pernah dijual!";
+            content = "Produk ini pernah dijual, tidak dapat dihapus!";
             Helper.alert(Alert.AlertType.ERROR, content);
         } else {
             content = "Anda yakin ingin menghapus?";

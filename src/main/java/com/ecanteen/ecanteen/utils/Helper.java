@@ -39,16 +39,16 @@ public class Helper {
     public static void toNumberField(final TextField tf) {
         tf.textProperty().addListener((observableValue, s, t1) -> {
             if (!t1.matches("\\d*")) {
-                tf.setText(t1.replaceAll("[^\\d]", ""));
+                tf.setText(t1.replaceAll("\\D", ""));
             }
         });
     }
 
     public static boolean validateNumberPhone(final TextField textField) {
-        if (textField.getText().matches("\\d{10}")) return true;
-        else if (textField.getText().matches("\\d{11}")) return true;
-        else if (textField.getText().matches("\\d{12}")) return true;
-        else return textField.getText().matches("\\d{13}");
+        return !textField.getText().matches("\\d{10}") &&
+                !textField.getText().matches("\\d{11}") &&
+                !textField.getText().matches("\\d{12}") &&
+                !textField.getText().matches("\\d{13}");
     }
 
     public static void addThousandSeparator(final TextInputControl textField) {
@@ -180,6 +180,7 @@ public class Helper {
         DialogPane pane = alert.getDialogPane();
         pane.getStylesheets().add(String.valueOf(Main.class.getResource("css/style.css")));
         pane.getStyleClass().add("myDialog");
+        pane.setPrefWidth(400);
 
         alert.showAndWait();
 

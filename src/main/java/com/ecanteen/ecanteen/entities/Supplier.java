@@ -1,7 +1,15 @@
 package com.ecanteen.ecanteen.entities;
 
 public class Supplier {
-    private String id, name, address, gender, phone, email, bankAccount, accountNumber, status;
+    private String id;
+    private String name;
+    private String address;
+    private String gender;
+    private String phone;
+    private String email;
+    private String bankAccount;
+    private String accountNumber;
+    private String status;
     private int productAmount;
 
     public String getId() {

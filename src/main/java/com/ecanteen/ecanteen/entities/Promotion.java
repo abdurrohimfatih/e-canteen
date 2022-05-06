@@ -1,8 +1,13 @@
 package com.ecanteen.ecanteen.entities;
 
 public class Promotion {
-    private String id, name, dateAdded, expiredDate, status;
-    private int percentage, productAmount;
+    private String id;
+    private String name;
+    private String dateAdded;
+    private String expiredDate;
+    private String status;
+    private int percentage;
+    private int productAmount;
 
     public String getId() {
         return id;

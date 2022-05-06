@@ -54,7 +54,7 @@ public class LoginController implements Initializable {
                 if (user.getStatus().equals("1")) {
                     Common.user = user;
                     if (user.getLevel().equals("Admin")) {
-                        Helper.changePage(loginButton, "Admin - Produk", "product-view.fxml");
+                        Helper.changePage(loginButton, "Admin - Riwayat Pendapatan", "income-admin-view.fxml");
                     } else {
                         Helper.changePage(loginButton, "Kasir - Transaksi", "transaction-view.fxml");
                     }

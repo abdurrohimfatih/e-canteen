@@ -116,7 +116,7 @@
             <font>
                <Font size="16.0" />
             </font></TextField>
-         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="15.0" layoutY="197.0" text="MENU PROMOSI" textAlignment="CENTER" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="15.0" layoutY="197.0" text="DATA PROMOSI" textAlignment="CENTER" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
             <font>
                <Font name="System Bold" size="18.0" />
             </font>

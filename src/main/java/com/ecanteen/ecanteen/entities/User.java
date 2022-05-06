@@ -1,7 +1,17 @@
 package com.ecanteen.ecanteen.entities;
 
 public class User {
-    String username, password, name, address, gender, phone, email, level, dateCreated, status;
+    private String username;
+    private String password;
+    private String name;
+    private String address;
+    private String gender;
+    private String phone;
+    private String email;
+    private String level;
+    private String dateCreated;
+    private String status;
+    private int transactionAmount;
 
     public String getUsername() {
         return username;
@@ -81,5 +91,13 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getTransactionAmount() {
+        return transactionAmount;
+    }
+
+    public void setTransactionAmount(int transactionAmount) {
+        this.transactionAmount = transactionAmount;
     }
 }

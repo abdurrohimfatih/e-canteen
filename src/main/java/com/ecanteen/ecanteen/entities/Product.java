@@ -1,7 +1,12 @@
 package com.ecanteen.ecanteen.entities;
 
 public class Product {
-    private String barcode, name, dateAdded, expiredDate, purchasePrice, sellingPrice;
+    private String barcode;
+    private String name;
+    private String dateAdded;
+    private String expiredDate;
+    private String purchasePrice;
+    private String sellingPrice;
     private int stockAmount;
     private Category category;
     private Supplier supplier;

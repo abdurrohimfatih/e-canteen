@@ -120,7 +120,7 @@
             <font>
                <Font size="16.0" />
             </font></TextField>
-         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="15.0" layoutY="76.0" text="MENU USER" textAlignment="CENTER" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="15.0" layoutY="76.0" text="DATA USER" textAlignment="CENTER" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
             <font>
                <Font name="System Bold" size="18.0" />
             </font>
@@ -208,8 +208,9 @@
                <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="Nama" />
                <TableColumn fx:id="addressTableColumn" prefWidth="75.0" text="Alamat" />
                <TableColumn fx:id="phoneTableColumn" prefWidth="75.0" text="No Telp" />
-               <TableColumn fx:id="levelTableColumn" prefWidth="75.0" text="Level" />
-               <TableColumn fx:id="statusTableColumn" prefWidth="75.0" text="Status" />
+               <TableColumn fx:id="emailTableColumn" prefWidth="75.0" text="Email" />
+               <TableColumn fx:id="levelTableColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Level" />
+               <TableColumn fx:id="statusTableColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Status" />
             </columns>
             <columnResizePolicy>
                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

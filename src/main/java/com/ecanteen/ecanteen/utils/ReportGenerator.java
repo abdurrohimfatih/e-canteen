@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 import org.apache.log4j.BasicConfigurator;
 
 import java.io.InputStream;
@@ -45,18 +46,18 @@ public class ReportGenerator {
                 param.put("username", transaction.getUsername());
                 param.put("date", transaction.getDate());
                 param.put("time", transaction.getTime());
-                param.put("totalAmount", transaction.getTotalAmount());
+                param.put("totalAmount", Common.totalAmountString);
                 param.put("pay", transaction.getPayAmount());
                 param.put("change", transaction.getChange());
 
                 try {
                     InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/receipt-report.jasper");
                     JasperPrint print = JasperFillManager.fillReport(inputStream, param, new JREmptyDataSource());
-                    JasperPrintManager.printReport(print, false);
+//                    JasperPrintManager.printReport(print, false);
 
-//                    JasperViewer viewer = new JasperViewer(print, false);
-//                    viewer.setVisible(true);
-//                    viewer.setFitPageZoomRatio();
+                    JasperViewer viewer = new JasperViewer(print, false);
+                    viewer.setVisible(true);
+                    viewer.setFitPageZoomRatio();
 
                     transactionDao.addSale(saleData, transaction.getId());
                     controller.resetSale();

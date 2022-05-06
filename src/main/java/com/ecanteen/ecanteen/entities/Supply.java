@@ -1,7 +1,8 @@
 package com.ecanteen.ecanteen.entities;
 
 public class Supply {
-    String product, subtotal;
+    String product;
+    String subtotal;
     int sold;
 
     public String getProduct() {
