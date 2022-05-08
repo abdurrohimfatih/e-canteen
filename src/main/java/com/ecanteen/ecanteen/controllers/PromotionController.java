@@ -146,33 +146,35 @@ public class PromotionController implements Initializable {
             if (percentageTextField.getText().trim().isEmpty()) percentageTextField.setStyle("-fx-border-color: RED");
             if (expiredDateDatePicker.getValue() == null) expiredDateDatePicker.setStyle("-fx-border-color: RED");
 
-        } else {
-            resetError();
+            return;
+        }
 
-            if (promotionDao.getId(idTextField.getText()) == 1) {
-                content = "ID promosi tersebut sudah digunakan!";
-                Helper.alert(Alert.AlertType.ERROR, content);
-            } else {
-                Promotion promotion = new Promotion();
-                promotion.setId(idTextField.getText().trim());
-                promotion.setName(nameTextField.getText().trim());
-                promotion.setPercentage(Integer.parseInt(percentageTextField.getText().trim()));
-                promotion.setDateAdded(Helper.formattedDateNow());
-                promotion.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        resetError();
 
-                try {
-                    if (promotionDao.addData(promotion) == 1) {
-                        promotions.clear();
-                        promotions.addAll(promotionDao.fetchAll());
-                        resetPromotion();
-                        idTextField.requestFocus();
-                        content = "Data berhasil ditambahkan!";
-                        Helper.alert(Alert.AlertType.INFORMATION, content);
-                    }
-                } catch (SQLException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+        if (promotionDao.getId(idTextField.getText()) == 1) {
+            content = "ID promosi tersebut sudah digunakan!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+            return;
+        }
+
+        Promotion promotion = new Promotion();
+        promotion.setId(idTextField.getText().trim());
+        promotion.setName(nameTextField.getText().trim());
+        promotion.setPercentage(Integer.parseInt(percentageTextField.getText().trim()));
+        promotion.setDateAdded(Helper.formattedDateNow());
+        promotion.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+        try {
+            if (promotionDao.addData(promotion) == 1) {
+                promotions.clear();
+                promotions.addAll(promotionDao.fetchAll());
+                resetPromotion();
+                idTextField.requestFocus();
+                content = "Data berhasil ditambahkan!";
+                Helper.alert(Alert.AlertType.INFORMATION, content);
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -190,28 +192,31 @@ public class PromotionController implements Initializable {
             if (percentageTextField.getText().trim().isEmpty()) percentageTextField.setStyle("-fx-border-color: RED");
             if (expiredDateDatePicker.getValue() == null) expiredDateDatePicker.setStyle("-fx-border-color: RED");
 
-        } else {
-            resetError();
+            return;
+        }
 
-            selectedPromotion.setName(nameTextField.getText().trim());
-            selectedPromotion.setPercentage(Integer.parseInt(percentageTextField.getText().trim()));
-            selectedPromotion.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        resetError();
 
-            content = "Anda yakin ingin mengubah?";
-            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-                try {
-                    if (promotionDao.updateData(selectedPromotion) == 1) {
-                        promotions.clear();
-                        promotions.addAll(promotionDao.fetchAll());
-                        resetPromotion();
-                        promotionTableView.requestFocus();
-                        content = "Data berhasil diubah!";
-                        Helper.alert(Alert.AlertType.INFORMATION, content);
-                    }
-                } catch (SQLException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+        selectedPromotion.setName(nameTextField.getText().trim());
+        selectedPromotion.setPercentage(Integer.parseInt(percentageTextField.getText().trim()));
+        selectedPromotion.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+        content = "Anda yakin ingin mengubah?";
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) != ButtonType.OK) {
+            return;
+        }
+
+        try {
+            if (promotionDao.updateData(selectedPromotion) == 1) {
+                promotions.clear();
+                promotions.addAll(promotionDao.fetchAll());
+                resetPromotion();
+                promotionTableView.requestFocus();
+                content = "Data berhasil diubah!";
+                Helper.alert(Alert.AlertType.INFORMATION, content);
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -219,19 +224,21 @@ public class PromotionController implements Initializable {
     private void deleteButtonAction(ActionEvent actionEvent) {
         content = "Anda yakin ingin menghapus?";
 
-        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-            try {
-                if (promotionDao.deleteData(selectedPromotion) == 1) {
-                    promotions.clear();
-                    promotions.addAll(promotionDao.fetchAll());
-                    resetPromotion();
-                    promotionTableView.requestFocus();
-                    content = "Data berhasil dihapus!";
-                    Helper.alert(Alert.AlertType.INFORMATION, content);
-                }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) != ButtonType.OK) {
+            return;
+        }
+
+        try {
+            if (promotionDao.deleteData(selectedPromotion) == 1) {
+                promotions.clear();
+                promotions.addAll(promotionDao.fetchAll());
+                resetPromotion();
+                promotionTableView.requestFocus();
+                content = "Data berhasil dihapus!";
+                Helper.alert(Alert.AlertType.INFORMATION, content);
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -243,33 +250,35 @@ public class PromotionController implements Initializable {
     @FXML
     private void promotionTableViewClicked(MouseEvent mouseEvent) {
         selectedPromotion = promotionTableView.getSelectionModel().getSelectedItem();
-        if (selectedPromotion != null) {
-            idTextField.setText(selectedPromotion.getId());
-            nameTextField.setText(selectedPromotion.getName());
-            percentageTextField.setText(String.valueOf(selectedPromotion.getPercentage()));
-            expiredDateDatePicker.setValue(Helper.formatter(selectedPromotion.getExpiredDate()));
-            idTextField.setDisable(true);
-            addButton.setDisable(true);
-            updateButton.setDisable(false);
-            deleteButton.setDisable(false);
-            resetButton.setDisable(false);
+        if (selectedPromotion == null) {
+            return;
+        }
 
-            if (mouseEvent.getClickCount() > 1) {
-                Stage stage = new Stage();
-                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("detail-promotion-view.fxml"));
-                Scene scene = null;
-                try {
-                    scene = new Scene(fxmlLoader.load());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                stage.setTitle("Detail Promosi");
-                stage.setScene(scene);
-                stage.centerOnScreen();
-                stage.initOwner(promotionTableView.getScene().getWindow());
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.show();
+        idTextField.setText(selectedPromotion.getId());
+        nameTextField.setText(selectedPromotion.getName());
+        percentageTextField.setText(String.valueOf(selectedPromotion.getPercentage()));
+        expiredDateDatePicker.setValue(Helper.formatter(selectedPromotion.getExpiredDate()));
+        idTextField.setDisable(true);
+        addButton.setDisable(true);
+        updateButton.setDisable(false);
+        deleteButton.setDisable(false);
+        resetButton.setDisable(false);
+
+        if (mouseEvent.getClickCount() > 1) {
+            Stage stage = new Stage();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("detail-promotion-view.fxml"));
+            Scene scene = null;
+            try {
+                scene = new Scene(fxmlLoader.load());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            stage.setTitle("Detail Promosi");
+            stage.setScene(scene);
+            stage.centerOnScreen();
+            stage.initOwner(promotionTableView.getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
         }
     }
 

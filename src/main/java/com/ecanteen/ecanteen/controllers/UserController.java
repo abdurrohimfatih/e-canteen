@@ -39,7 +39,7 @@ public class UserController implements Initializable {
     private MenuItem productMenuItem;
     @FXML
     private MenuItem categoryMenuItem;
-//    @FXML
+    //    @FXML
 //    private MenuItem promotionMenuItem;
     @FXML
     private Button userMenuButton;
@@ -167,63 +167,71 @@ public class UserController implements Initializable {
             if (levelComboBox.getValue() == null) levelComboBox.setStyle("-fx-border-color: RED");
             if (statusComboBox.getValue() == null) statusComboBox.setStyle("-fx-border-color: RED");
 
-        } else if (Helper.validateNumberPhone(phoneTextField)) {
+            return;
+        }
+
+        if (Helper.validateNumberPhone(phoneTextField)) {
             resetError();
             warningLabel.setText("No telp tidak valid");
             phoneTextField.setStyle("-fx-border-color: RED");
             phoneTextField.requestFocus();
-        } else if (!emailTextField.getText().trim().equals("") &&
+            return;
+        }
+
+        if (!emailTextField.getText().trim().equals("") &&
                 !EmailValidator.getInstance().isValid(emailTextField.getText())) {
             resetError();
             warningLabel.setText("Email tidak valid");
             emailTextField.setStyle("-fx-border-color: RED");
             emailTextField.requestFocus();
+            return;
+        }
+
+        resetError();
+
+        if (userDao.getUsername(usernameTextField.getText()) == 1) {
+            content = "Username tersebut sudah digunakan!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+            return;
+        }
+
+        User user = new User();
+        user.setUsername(usernameTextField.getText().trim());
+
+        String password = Helper.hashPassword(passwordTextField.getText());
+
+        user.setPassword(password);
+        user.setName(nameTextField.getText().trim());
+        user.setAddress(addressTextField.getText().trim());
+        user.setGender(genderComboBox.getValue());
+        user.setPhone(phoneTextField.getText().trim());
+
+        if (emailTextField.getText().trim().isEmpty()) {
+            user.setEmail("-");
         } else {
-            resetError();
+            user.setEmail(emailTextField.getText().trim());
+        }
 
-            if (userDao.getUsername(usernameTextField.getText()) == 1) {
-                content = "Username tersebut sudah digunakan!";
-                Helper.alert(Alert.AlertType.ERROR, content);
-            } else {
-                User user = new User();
-                user.setUsername(usernameTextField.getText().trim());
+        user.setLevel(levelComboBox.getValue());
+        user.setDateCreated(Helper.formattedDateNow());
 
-                String password = Helper.hashPassword(passwordTextField.getText());
+        if (statusComboBox.getValue().equals("Aktif")) {
+            user.setStatus("1");
+        } else {
+            user.setStatus("0");
+        }
 
-                user.setPassword(password);
-                user.setName(nameTextField.getText().trim());
-                user.setAddress(addressTextField.getText().trim());
-                user.setGender(genderComboBox.getValue());
-                user.setPhone(phoneTextField.getText().trim());
-
-                if (emailTextField.getText().trim().isEmpty()) {
-                    user.setEmail("-");
-                } else {
-                    user.setEmail(emailTextField.getText().trim());
-                }
-
-                user.setLevel(levelComboBox.getValue());
-                user.setDateCreated(Helper.formattedDateNow());
-
-                if (statusComboBox.getValue().equals("Aktif")) {
-                    user.setStatus("1");
-                } else {
-                    user.setStatus("0");
-                }
-
-                try {
-                    if (userDao.addData(user) == 1) {
-                        users.clear();
-                        users.addAll(userDao.fetchAll());
-                        resetUser();
-                        usernameTextField.requestFocus();
-                        content = "Data berhasil ditambahkan!";
-                        Helper.alert(Alert.AlertType.INFORMATION, content);
-                    }
-                } catch (SQLException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+        try {
+            if (userDao.addData(user) == 1) {
+                users.clear();
+                users.addAll(userDao.fetchAll());
+                resetUser();
+                usernameTextField.requestFocus();
+                content = "Data berhasil ditambahkan!";
+                Helper.alert(Alert.AlertType.INFORMATION, content);
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -249,59 +257,68 @@ public class UserController implements Initializable {
             if (levelComboBox.getValue() == null) levelComboBox.setStyle("-fx-border-color: RED");
             if (statusComboBox.getValue() == null) statusComboBox.setStyle("-fx-border-color: RED");
 
-        } else if (Helper.validateNumberPhone(phoneTextField)) {
+            return;
+        }
+
+        if (Helper.validateNumberPhone(phoneTextField)) {
             resetError();
             warningLabel.setText("No telp tidak valid");
             phoneTextField.setStyle("-fx-border-color: RED");
             phoneTextField.requestFocus();
-        } else if (!emailTextField.getText().trim().equals("") &&
+            return;
+        }
+
+        if (!emailTextField.getText().trim().equals("") &&
                 !EmailValidator.getInstance().isValid(emailTextField.getText())) {
             resetError();
             warningLabel.setText("Email tidak valid");
             emailTextField.setStyle("-fx-border-color: RED");
             emailTextField.requestFocus();
+            return;
+        }
+
+        resetError();
+
+        selectedUser.setUsername(usernameTextField.getText().trim());
+
+        String password = Helper.hashPassword(passwordTextField.getText());
+        selectedUser.setPassword(password);
+
+        selectedUser.setName(nameTextField.getText().trim());
+        selectedUser.setAddress(addressTextField.getText().trim());
+        selectedUser.setGender(genderComboBox.getValue());
+        selectedUser.setPhone(phoneTextField.getText().trim());
+
+        if (emailTextField.getText().trim().isEmpty()) {
+            selectedUser.setEmail("-");
         } else {
-            resetError();
+            selectedUser.setEmail(emailTextField.getText().trim());
+        }
 
-            selectedUser.setUsername(usernameTextField.getText().trim());
+        selectedUser.setLevel(levelComboBox.getValue());
 
-            String password = Helper.hashPassword(passwordTextField.getText());
-            selectedUser.setPassword(password);
+        if (statusComboBox.getValue().equals("Aktif")) {
+            selectedUser.setStatus("1");
+        } else {
+            selectedUser.setStatus("0");
+        }
 
-            selectedUser.setName(nameTextField.getText().trim());
-            selectedUser.setAddress(addressTextField.getText().trim());
-            selectedUser.setGender(genderComboBox.getValue());
-            selectedUser.setPhone(phoneTextField.getText().trim());
+        content = "Anda yakin ingin mengubah?";
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) != ButtonType.OK) {
+            return;
+        }
 
-            if (emailTextField.getText().trim().isEmpty()) {
-                selectedUser.setEmail("-");
-            } else {
-                selectedUser.setEmail(emailTextField.getText().trim());
+        try {
+            if (userDao.updateData(selectedUser) == 1) {
+                users.clear();
+                users.addAll(userDao.fetchAll());
+                resetUser();
+                userTableView.requestFocus();
+                content = "Data berhasil diubah!";
+                Helper.alert(Alert.AlertType.INFORMATION, content);
             }
-
-            selectedUser.setLevel(levelComboBox.getValue());
-
-            if (statusComboBox.getValue().equals("Aktif")) {
-                selectedUser.setStatus("1");
-            } else {
-                selectedUser.setStatus("0");
-            }
-
-            content = "Anda yakin ingin mengubah?";
-            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-                try {
-                    if (userDao.updateData(selectedUser) == 1) {
-                        users.clear();
-                        users.addAll(userDao.fetchAll());
-                        resetUser();
-                        userTableView.requestFocus();
-                        content = "Data berhasil diubah!";
-                        Helper.alert(Alert.AlertType.INFORMATION, content);
-                    }
-                } catch (SQLException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -310,25 +327,31 @@ public class UserController implements Initializable {
         if (selectedUser.getTransactionAmount() > 0) {
             content = "Pengguna ini pernah melakukan transaksi,\ntidak dapat dihapus!";
             Helper.alert(Alert.AlertType.ERROR, content);
-        } else if (selectedUser.getUsername().equals(Common.user.getUsername())) {
+            return;
+        }
+
+        if (selectedUser.getUsername().equals(Common.user.getUsername())) {
             content = "Pengguna ini sedang login, tidak dapat dihapus!";
             Helper.alert(Alert.AlertType.ERROR, content);
-        } else {
-            content = "Anda yakin ingin menghapus?";
-            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-                try {
-                    if (userDao.deleteData(selectedUser) == 1) {
-                        users.clear();
-                        users.addAll(userDao.fetchAll());
-                        resetUser();
-                        userTableView.requestFocus();
-                        content = "Data berhasil dihapus!";
-                        Helper.alert(Alert.AlertType.INFORMATION, content);
-                    }
-                } catch (SQLException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+            return;
+        }
+
+        content = "Anda yakin ingin menghapus?";
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) != ButtonType.OK) {
+            return;
+        }
+
+        try {
+            if (userDao.deleteData(selectedUser) == 1) {
+                users.clear();
+                users.addAll(userDao.fetchAll());
+                resetUser();
+                userTableView.requestFocus();
+                content = "Data berhasil dihapus!";
+                Helper.alert(Alert.AlertType.INFORMATION, content);
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

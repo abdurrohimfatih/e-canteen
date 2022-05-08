@@ -50,20 +50,24 @@ public class LoginController implements Initializable {
         try {
             User user = userDao.login(username, password);
 
-            if (user != null && user.getUsername().equals(username)) {
-                if (user.getStatus().equals("1")) {
-                    Common.user = user;
-                    if (user.getLevel().equals("Admin")) {
-                        Helper.changePage(loginButton, "Admin - Riwayat Pendapatan", "income-admin-view.fxml");
-                    } else {
-                        Helper.changePage(loginButton, "Kasir - Transaksi", "transaction-view.fxml");
-                    }
-                } else {
-                    infoLabel.setText("Status user sedang tidak aktif. Silakan aktifkan di admin!");
-                }
-            } else {
+            if (user == null || !user.getUsername().equals(username)) {
                 infoLabel.setText("Username atau password salah. Silakan coba lagi!");
+                return;
             }
+
+            if (!user.getStatus().equals("1")) {
+                infoLabel.setText("Status user sedang tidak aktif. Silakan aktifkan di admin!");
+                return;
+            }
+
+            Common.user = user;
+
+            if (!user.getLevel().equals("Kasir")) {
+                Helper.changePage(loginButton, "Admin - Riwayat Pendapatan", "income-admin-view.fxml");
+                return;
+            }
+
+            Helper.changePage(loginButton, "Kasir - Transaksi", "transaction-view.fxml");
         } catch (SQLException | ClassNotFoundException e) {
             String content = "Koneksi ke database error, periksa kembali!";
             Helper.alert(Alert.AlertType.ERROR, content);

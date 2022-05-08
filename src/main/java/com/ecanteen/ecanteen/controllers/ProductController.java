@@ -46,7 +46,7 @@ public class ProductController implements Initializable {
     private MenuItem productMenuItem;
     @FXML
     private MenuItem categoryMenuItem;
-//    @FXML
+    //    @FXML
 //    private MenuItem promotionMenuItem;
     @FXML
     private Button userMenuButton;
@@ -82,7 +82,7 @@ public class ProductController implements Initializable {
     private ComboBox<Supplier> supplierComboBox;
     @FXML
     private DatePicker expiredDateDatePicker;
-//    @FXML
+    //    @FXML
 //    private ComboBox<Promotion> promotionComboBox;
     @FXML
     private Button addButton;
@@ -168,80 +168,75 @@ public class ProductController implements Initializable {
 
     @FXML
     private void addButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        if (productDao.getBarcode(barcodeTextField.getText()) == 1) {
+            resetError();
+            barcodeTextField.setStyle("-fx-border-color: RED");
+            content = "Produk dengan barcode tersebut sudah ada!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+            barcodeTextField.requestFocus();
+            return;
+        }
+
         if (barcodeTextField.getText().trim().isEmpty()) {
             resetError();
             barcodeTextField.setStyle("-fx-border-color: RED");
             content = "Barcode wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
             barcodeTextField.requestFocus();
-        } else if (nameTextField.getText().trim().isEmpty()) {
-            resetError();
-            nameTextField.setStyle("-fx-border-color: RED");
-            content = "Nama produk wajib diisi!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            nameTextField.requestFocus();
-        } else if (categoryComboBox.getValue() == null) {
-            resetError();
-            categoryComboBox.setStyle("-fx-border-color: RED");
-            content = "Kategori wajib dipilih!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            categoryComboBox.requestFocus();
-        } else if (purchasePriceTextField.getText().trim().isEmpty()) {
-            resetError();
-            purchasePriceTextField.setStyle("-fx-border-color: RED");
-            content = "Harga beli wajib diisi!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            purchasePriceTextField.requestFocus();
-        } else if (sellingPriceTextField.getText().trim().isEmpty()) {
-            resetError();
-            sellingPriceTextField.setStyle("-fx-border-color: RED");
-            content = "Harga jual wajib diisi!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            sellingPriceTextField.requestFocus();
-        } else if (stockAmountTextField.getText().trim().isEmpty()) {
-            resetError();
-            stockAmountTextField.setStyle("-fx-border-color: RED");
-            content = "Jumlah stok wajib diisi!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            stockAmountTextField.requestFocus();
-        } else if (supplierComboBox.getValue() == null) {
-            resetError();
-            supplierComboBox.setStyle("-fx-border-color: RED");
-            content = "Supplier wajib dipilih!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            supplierComboBox.requestFocus();
-        } else if (expiredDateDatePicker.getValue() == null) {
-            resetError();
-            expiredDateDatePicker.setStyle("-fx-border-color: RED");
-            content = "Tanggal kedaluwarsa wajib diisi!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            expiredDateDatePicker.requestFocus();
-        } else if (productDao.getBarcode(barcodeTextField.getText()) == 1) {
-            resetError();
-            barcodeTextField.setStyle("-fx-border-color: RED");
-            content = "Produk dengan barcode tersebut sudah ada!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            barcodeTextField.requestFocus();
-        } else {
-            resetError();
-            Product product = new Product();
-            product.setBarcode(barcodeTextField.getText().trim());
-            product.setName(nameTextField.getText().trim());
-            product.setCategory(categoryComboBox.getValue());
-            product.setPurchasePrice(purchasePriceTextField.getText());
-            product.setSellingPrice(sellingPriceTextField.getText());
-            product.setStockAmount(Integer.parseInt(stockAmountTextField.getText().trim()));
-            product.setSupplier(supplierComboBox.getValue());
-            product.setDateAdded(Helper.formattedDateNow());
-            product.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            return;
+        }
+
+        if (validateForm()) return;
+
+        resetError();
+        Product product = new Product();
+        product.setBarcode(barcodeTextField.getText().trim());
+        product.setName(nameTextField.getText().trim());
+        product.setCategory(categoryComboBox.getValue());
+        product.setPurchasePrice(purchasePriceTextField.getText());
+        product.setSellingPrice(sellingPriceTextField.getText());
+        product.setStockAmount(Integer.parseInt(stockAmountTextField.getText().trim()));
+        product.setSupplier(supplierComboBox.getValue());
+        product.setDateAdded(Helper.formattedDateNow());
+        product.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 //            product.setPromotion(promotionComboBox.getValue());
 
+        try {
+            if (productDao.addData(product) == 1) {
+                products.clear();
+                products.addAll(productDao.fetchAll());
+                resetProduct();
+                content = "Data berhasil ditambahkan!";
+                Helper.alert(Alert.AlertType.INFORMATION, content);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void updateButtonAction(ActionEvent actionEvent) {
+        if (validateForm()) return;
+
+        resetError();
+        selectedProduct.setName(nameTextField.getText().trim());
+        selectedProduct.setCategory(categoryComboBox.getValue());
+        selectedProduct.setPurchasePrice(purchasePriceTextField.getText().trim());
+        selectedProduct.setSellingPrice(sellingPriceTextField.getText().trim());
+        selectedProduct.setStockAmount(Integer.parseInt(stockAmountTextField.getText().trim()));
+        selectedProduct.setSupplier(supplierComboBox.getValue());
+        selectedProduct.setDateAdded(Helper.formattedDateNow());
+        selectedProduct.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+//            selectedProduct.setPromotion(promotionComboBox.getValue());
+
+        content = "Anda yakin ingin mengubah?";
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
             try {
-                if (productDao.addData(product) == 1) {
+                if (productDao.updateData(selectedProduct) == 1) {
                     products.clear();
                     products.addAll(productDao.fetchAll());
                     resetProduct();
-                    content = "Data berhasil ditambahkan!";
+                    content = "Data berhasil diubah!";
                     Helper.alert(Alert.AlertType.INFORMATION, content);
                 }
             } catch (SQLException | ClassNotFoundException e) {
@@ -251,99 +246,29 @@ public class ProductController implements Initializable {
     }
 
     @FXML
-    private void updateButtonAction(ActionEvent actionEvent) {
-        if (nameTextField.getText().trim().isEmpty()) {
-            resetError();
-            nameTextField.setStyle("-fx-border-color: RED");
-            content = "Nama produk wajib diisi!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            nameTextField.requestFocus();
-        } else if (categoryComboBox.getValue() == null) {
-            resetError();
-            categoryComboBox.setStyle("-fx-border-color: RED");
-            content = "Kategori wajib dipilih!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            categoryComboBox.requestFocus();
-        } else if (purchasePriceTextField.getText().trim().isEmpty()) {
-            resetError();
-            purchasePriceTextField.setStyle("-fx-border-color: RED");
-            content = "Harga beli wajib diisi!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            purchasePriceTextField.requestFocus();
-        } else if (sellingPriceTextField.getText().trim().isEmpty()) {
-            resetError();
-            sellingPriceTextField.setStyle("-fx-border-color: RED");
-            content = "Harga jual wajib diisi!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            sellingPriceTextField.requestFocus();
-        } else if (stockAmountTextField.getText().trim().isEmpty()) {
-            resetError();
-            stockAmountTextField.setStyle("-fx-border-color: RED");
-            content = "Jumlah stok wajib diisi!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            stockAmountTextField.requestFocus();
-        } else if (supplierComboBox.getValue() == null) {
-            resetError();
-            supplierComboBox.setStyle("-fx-border-color: RED");
-            content = "Supplier wajib dipilih!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            supplierComboBox.requestFocus();
-        } else if (expiredDateDatePicker.getValue() == null) {
-            resetError();
-            expiredDateDatePicker.setStyle("-fx-border-color: RED");
-            content = "Tanggal kedaluwarsa wajib diisi!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            expiredDateDatePicker.requestFocus();
-        } else {
-            resetError();
-            selectedProduct.setName(nameTextField.getText().trim());
-            selectedProduct.setCategory(categoryComboBox.getValue());
-            selectedProduct.setPurchasePrice(purchasePriceTextField.getText().trim());
-            selectedProduct.setSellingPrice(sellingPriceTextField.getText().trim());
-            selectedProduct.setStockAmount(Integer.parseInt(stockAmountTextField.getText().trim()));
-            selectedProduct.setSupplier(supplierComboBox.getValue());
-            selectedProduct.setDateAdded(Helper.formattedDateNow());
-            selectedProduct.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-//            selectedProduct.setPromotion(promotionComboBox.getValue());
-
-            content = "Anda yakin ingin mengubah?";
-            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-                try {
-                    if (productDao.updateData(selectedProduct) == 1) {
-                        products.clear();
-                        products.addAll(productDao.fetchAll());
-                        resetProduct();
-                        content = "Data berhasil diubah!";
-                        Helper.alert(Alert.AlertType.INFORMATION, content);
-                    }
-                } catch (SQLException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    @FXML
     private void deleteButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         if (new TransactionDaoImpl().getProductInSale(selectedProduct.getBarcode())) {
             content = "Produk ini pernah dijual, tidak dapat dihapus!";
             Helper.alert(Alert.AlertType.ERROR, content);
-        } else {
-            content = "Anda yakin ingin menghapus?";
-            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-                try {
-                    if (productDao.deleteData(selectedProduct) == 1) {
-                        products.clear();
-                        products.addAll(productDao.fetchAll());
-                        resetProduct();
-                        productTableView.requestFocus();
-                        content = "Data berhasil dihapus!";
-                        Helper.alert(Alert.AlertType.INFORMATION, content);
-                    }
-                } catch (SQLException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
+            return;
+        }
+
+        content = "Anda yakin ingin menghapus?";
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) != ButtonType.OK) {
+            return;
+        }
+
+        try {
+            if (productDao.deleteData(selectedProduct) == 1) {
+                products.clear();
+                products.addAll(productDao.fetchAll());
+                resetProduct();
+                productTableView.requestFocus();
+                content = "Data berhasil dihapus!";
+                Helper.alert(Alert.AlertType.INFORMATION, content);
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -434,6 +359,72 @@ public class ProductController implements Initializable {
         stockAmountTextField.setStyle("-fx-border-color: #424242");
         supplierComboBox.setStyle("-fx-border-color: #424242");
         expiredDateDatePicker.setStyle("-fx-border-color: #424242");
+    }
+
+    private boolean validateForm() {
+        if (nameTextField.getText().trim().isEmpty()) {
+            resetError();
+            nameTextField.setStyle("-fx-border-color: RED");
+            content = "Nama produk wajib diisi!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+            nameTextField.requestFocus();
+            return true;
+        }
+
+        if (categoryComboBox.getValue() == null) {
+            resetError();
+            categoryComboBox.setStyle("-fx-border-color: RED");
+            content = "Kategori wajib dipilih!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+            categoryComboBox.requestFocus();
+            return true;
+        }
+
+        if (purchasePriceTextField.getText().trim().isEmpty()) {
+            resetError();
+            purchasePriceTextField.setStyle("-fx-border-color: RED");
+            content = "Harga beli wajib diisi!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+            purchasePriceTextField.requestFocus();
+            return true;
+        }
+
+        if (sellingPriceTextField.getText().trim().isEmpty()) {
+            resetError();
+            sellingPriceTextField.setStyle("-fx-border-color: RED");
+            content = "Harga jual wajib diisi!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+            sellingPriceTextField.requestFocus();
+            return true;
+        }
+
+        if (stockAmountTextField.getText().trim().isEmpty()) {
+            resetError();
+            stockAmountTextField.setStyle("-fx-border-color: RED");
+            content = "Jumlah stok wajib diisi!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+            stockAmountTextField.requestFocus();
+            return true;
+        }
+
+        if (supplierComboBox.getValue() == null) {
+            resetError();
+            supplierComboBox.setStyle("-fx-border-color: RED");
+            content = "Supplier wajib dipilih!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+            supplierComboBox.requestFocus();
+            return true;
+        }
+
+        if (expiredDateDatePicker.getValue() == null) {
+            resetError();
+            expiredDateDatePicker.setStyle("-fx-border-color: RED");
+            content = "Tanggal kedaluwarsa wajib diisi!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+            expiredDateDatePicker.requestFocus();
+            return true;
+        }
+        return false;
     }
 
     @FXML

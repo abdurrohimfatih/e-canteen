@@ -305,77 +305,85 @@ public class TransactionController implements Initializable {
         if (barcodeTextField.getText().trim().isEmpty()) {
             content = "Masukkan barcode terlebih dahulu!";
             Helper.alert(Alert.AlertType.ERROR, content);
-        } else if (product == null) {
+            return;
+        }
+
+        if (product == null) {
             content = "Produk dengan barcode tersebut tidak ditemukan!";
             Helper.alert(Alert.AlertType.ERROR, content);
-        } else if (productDao.getStockAmount(barcodeTextField.getText().trim()) <= 0) {
+            return;
+        }
+
+        if (productDao.getStockAmount(barcodeTextField.getText().trim()) <= 0) {
             content = "Produk tersebut stoknya habis!";
             Helper.alert(Alert.AlertType.ERROR, content);
-        } else {
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            LocalDate now = Helper.formatter(LocalDate.now().format(dateTimeFormatter));
-            LocalDate nowPlus1 = now.plusDays(1);
-            String expiredDate = productDao.getExpiredDate(barcodeTextField.getText().trim());
+            return;
+        }
 
-            if (now.isEqual(Helper.formatter(expiredDate)) ||
-                    now.isAfter(Helper.formatter(expiredDate))) {
-                content = "Produk tersebut sudah kedaluwarsa!";
-                Helper.alert(Alert.AlertType.ERROR, content);
-            } else if (nowPlus1.isEqual(Helper.formatter(expiredDate))) {
-                content = "Produk tersebut kedaluwarsa besok!";
-                Helper.alert(Alert.AlertType.ERROR, content);
-            }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate now = Helper.formatter(LocalDate.now().format(dateTimeFormatter));
+        LocalDate nowPlus1 = now.plusDays(1);
+        String expiredDate = productDao.getExpiredDate(barcodeTextField.getText().trim());
 
-            Sale sale = new Sale();
-            sale.setBarcode(product.getBarcode());
-            sale.setName(product.getName());
-            sale.setSellingPrice(product.getSellingPrice());
-            sale.setQuantity(1);
+        if (now.isEqual(Helper.formatter(expiredDate)) ||
+                now.isAfter(Helper.formatter(expiredDate))) {
+            content = "Produk tersebut sudah kedaluwarsa!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+        } else if (nowPlus1.isEqual(Helper.formatter(expiredDate))) {
+            content = "Produk tersebut kedaluwarsa besok!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+        }
+
+        Sale sale = new Sale();
+        sale.setBarcode(product.getBarcode());
+        sale.setName(product.getName());
+        sale.setSellingPrice(product.getSellingPrice());
+        sale.setQuantity(1);
 //            sale.setDiscount(productDao.getDiscount(barcodeTextField.getText()));
 
 //            int discountAmountInt;
 //            String discountAmountString;
-            int subtotalInt;
-            String subtotalString;
+        int subtotalInt;
+        String subtotalString;
 
-            String[] selling = sale.getSellingPrice().split("\\.");
-            StringBuilder price = new StringBuilder();
-            for (String s : selling) {
-                price.append(s);
-            }
-            int sellingInt = Integer.parseInt(String.valueOf(price));
-            int subtotalStart = sellingInt * sale.getQuantity();
+        String[] selling = sale.getSellingPrice().split("\\.");
+        StringBuilder price = new StringBuilder();
+        for (String s : selling) {
+            price.append(s);
+        }
+        int sellingInt = Integer.parseInt(String.valueOf(price));
+        int subtotalStart = sellingInt * sale.getQuantity();
 //            if (sale.getDiscount() != 0) {
 //                discountAmountInt = subtotalStart * sale.getDiscount() / 100;
 //            } else {
 //                discountAmountInt = 0;
 //            }
 
-            DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-            DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-            symbols.setGroupingSeparator('.');
-            formatter.setDecimalFormatSymbols(symbols);
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        formatter.setDecimalFormatSymbols(symbols);
 
 //            discountAmountString = formatter.format(discountAmountInt);
-            subtotalString = formatter.format(subtotalStart);
+        subtotalString = formatter.format(subtotalStart);
 
 //            sale.setDiscountAmount(discountAmountString);
-            sale.setSubtotal(subtotalString);
+        sale.setSubtotal(subtotalString);
 
-            saleTableView.getItems().add(sale);
+        saleTableView.getItems().add(sale);
 //            int totalAll = 0;
 //            int totalDiscountInt;
 //            int totalDiscountAmount = 0;
-            int totalAmount = 0;
+        int totalAmount = 0;
 
-            for (Sale i : saleTableView.getItems()) {
-                String[] subtotalArray = i.getSubtotal().split("\\.");
-                StringBuilder sub = new StringBuilder();
-                for (String s : subtotalArray) {
-                    sub.append(s);
-                }
-                subtotalInt = Integer.parseInt(String.valueOf(sub));
-                totalAmount += subtotalInt;
+        for (Sale i : saleTableView.getItems()) {
+            String[] subtotalArray = i.getSubtotal().split("\\.");
+            StringBuilder sub = new StringBuilder();
+            for (String s : subtotalArray) {
+                sub.append(s);
+            }
+            subtotalInt = Integer.parseInt(String.valueOf(sub));
+            totalAmount += subtotalInt;
 
 //                String[] discountAmountArray = i.getDiscountAmount().split("\\.");
 //                StringBuilder disc = new StringBuilder();
@@ -384,17 +392,16 @@ public class TransactionController implements Initializable {
 //                }
 //                totalDiscountInt = Integer.parseInt(String.valueOf(disc));
 //                totalDiscountAmount += totalDiscountInt;
-            }
+        }
 
 //            totalAmount = totalAll - totalDiscountAmount;
 //            String totalAllString = formatter.format(totalAll);
 //            String totalDiscountString = formatter.format(totalDiscountAmount);
-            String totalAmountString = formatter.format(totalAmount);
+        String totalAmountString = formatter.format(totalAmount);
 
 //            totalAllTextField.setText(totalAllString);
 //            totalDiscountTextField.setText(totalDiscountString);
-            totalAmountTextField.setText(totalAmountString);
-        }
+        totalAmountTextField.setText(totalAmountString);
 
         resetProductButtonAction(actionEvent);
     }
@@ -411,91 +418,92 @@ public class TransactionController implements Initializable {
         if (saleData.isEmpty()) {
             content = "Isi barang terlebih dahulu ke dalam list!";
             Helper.alert(Alert.AlertType.ERROR, content);
-        } else {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Tunai");
-            dialog.setContentText("Jumlah bayar");
-            dialog.setHeaderText(null);
-            dialog.setGraphic(null);
-            DialogPane pane = dialog.getDialogPane();
-            pane.getStylesheets().add(String.valueOf(Main.class.getResource("css/style.css")));
-            pane.getStyleClass().add("myDialog");
-            Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image(String.valueOf(Main.class.getResource("image/logo.png"))));
-            Optional<String> result;
-            TextInputControl control = dialog.getEditor();
-            control.setPrefWidth(200);
-            control.setStyle("-fx-font-size: 16px");
-            Helper.addThousandSeparator(control);
+            return;
+        }
 
-            Transaction transaction = new Transaction();
-            try {
-                transaction.setId(String.valueOf(transactionDao.getNowSaleId()));
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Tunai");
+        dialog.setContentText("Jumlah bayar");
+        dialog.setHeaderText(null);
+        dialog.setGraphic(null);
+        DialogPane pane = dialog.getDialogPane();
+        pane.getStylesheets().add(String.valueOf(Main.class.getResource("css/style.css")));
+        pane.getStyleClass().add("myDialog");
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(String.valueOf(Main.class.getResource("image/logo.png"))));
+        Optional<String> result;
+        TextInputControl control = dialog.getEditor();
+        control.setPrefWidth(200);
+        control.setStyle("-fx-font-size: 16px");
+        Helper.addThousandSeparator(control);
 
-            transaction.setUsername(Common.user.getUsername());
-            transaction.setDate(Helper.formattedDateNow());
-            transaction.setTime(Helper.formattedTimeNow());
+        Transaction transaction = new Transaction();
+        try {
+            transaction.setId(String.valueOf(transactionDao.getNowSaleId()));
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
-            String[] totalArray = totalAmountTextField.getText().split("\\.");
-            StringBuilder total = new StringBuilder();
-            for (String t : totalArray) {
-                total.append(t);
-            }
+        transaction.setUsername(Common.user.getUsername());
+        transaction.setDate(Helper.formattedDateNow());
+        transaction.setTime(Helper.formattedTimeNow());
 
-            int totalAmountInt = Integer.parseInt(String.valueOf(total));
+        String[] totalArray = totalAmountTextField.getText().split("\\.");
+        StringBuilder total = new StringBuilder();
+        for (String t : totalArray) {
+            total.append(t);
+        }
 
-            transaction.setTotalAmount(String.valueOf(totalAmountInt));
-            Common.totalAmountString = totalAmountTextField.getText();
+        int totalAmountInt = Integer.parseInt(String.valueOf(total));
 
-            int payAmountInt;
+        transaction.setTotalAmount(String.valueOf(totalAmountInt));
+        Common.totalAmountString = totalAmountTextField.getText();
 
-            do {
-                result = dialog.showAndWait();
-                if (result.isPresent()) {
-                    transaction.setPayAmount(dialog.getResult());
+        int payAmountInt;
 
-                    String[] payArray = transaction.getPayAmount().split("\\.");
-                    StringBuilder pay = new StringBuilder();
-                    for (String p : payArray) {
-                        pay.append(p);
-                    }
-                    payAmountInt = Integer.parseInt(String.valueOf(pay));
+        do {
+            result = dialog.showAndWait();
+            if (result.isPresent()) {
+                transaction.setPayAmount(dialog.getResult());
 
-                    DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-                    DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-                    symbols.setGroupingSeparator('.');
-                    formatter.setDecimalFormatSymbols(symbols);
-                    int changeInt = payAmountInt - totalAmountInt;
-                    String changeString = formatter.format(changeInt);
-
-                    transaction.setChange(changeString);
-
-                    dialog.setHeaderText("Jumlah bayar kurang dari total!");
-                } else {
-                    return;
+                String[] payArray = transaction.getPayAmount().split("\\.");
+                StringBuilder pay = new StringBuilder();
+                for (String p : payArray) {
+                    pay.append(p);
                 }
-            } while (totalAmountInt > payAmountInt);
+                payAmountInt = Integer.parseInt(String.valueOf(pay));
 
-            try {
-                if (transactionDao.addData(transaction) == 1) {
-                    for (Sale item : saleData) {
-                        int oldStock = productDao.getStockAmount(item.getBarcode());
-                        int newStock = oldStock - item.getQuantity();
-                        productDao.updateStock(newStock, item.getBarcode());
-                    }
+                DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+                DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+                symbols.setGroupingSeparator('.');
+                formatter.setDecimalFormatSymbols(symbols);
+                int changeInt = payAmountInt - totalAmountInt;
+                String changeString = formatter.format(changeInt);
 
-                    new ReportGenerator().generateInvoice(transactionDao, this, saleData, transaction);
+                transaction.setChange(changeString);
 
-                    resetProductButtonAction(actionEvent);
-                    products.clear();
-                    products.addAll(productDao.fetchAll());
-                }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
+                dialog.setHeaderText("Jumlah bayar kurang dari total!");
+            } else {
+                return;
             }
+        } while (totalAmountInt > payAmountInt);
+
+        try {
+            if (transactionDao.addData(transaction) == 1) {
+                for (Sale item : saleData) {
+                    int oldStock = productDao.getStockAmount(item.getBarcode());
+                    int newStock = oldStock - item.getQuantity();
+                    productDao.updateStock(newStock, item.getBarcode());
+                }
+
+                new ReportGenerator().generateInvoice(transactionDao, this, saleData, transaction);
+
+                resetProductButtonAction(actionEvent);
+                products.clear();
+                products.addAll(productDao.fetchAll());
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
         barcodeTextField.requestFocus();

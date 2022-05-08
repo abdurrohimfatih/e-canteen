@@ -45,7 +45,7 @@ public class CategoryController implements Initializable {
     private MenuItem productMenuItem;
     @FXML
     private MenuItem categoryMenuItem;
-//    @FXML
+    //    @FXML
 //    private MenuItem promotionMenuItem;
     @FXML
     private Button userMenuButton;
@@ -122,24 +122,26 @@ public class CategoryController implements Initializable {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
             nameTextField.setStyle("-fx-border-color: RED");
-        } else {
-            nameTextField.setStyle("-fx-border-color: #424242");
-            Category category = new Category();
-            category.setName(nameTextField.getText().trim());
-            category.setDateCreated(Helper.formattedDateNow());
+            nameTextField.requestFocus();
+            return;
+        }
 
-            try {
-                if (categoryDao.addData(category) == 1) {
-                    categories.clear();
-                    categories.addAll(categoryDao.fetchAll());
-                    resetCategory();
-                    nameTextField.requestFocus();
-                    content = "Data berhasil ditambahkan!";
-                    Helper.alert(Alert.AlertType.INFORMATION, content);
-                }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
+        nameTextField.setStyle("-fx-border-color: #424242");
+        Category category = new Category();
+        category.setName(nameTextField.getText().trim());
+        category.setDateCreated(Helper.formattedDateNow());
+
+        try {
+            if (categoryDao.addData(category) == 1) {
+                categories.clear();
+                categories.addAll(categoryDao.fetchAll());
+                resetCategory();
+                nameTextField.requestFocus();
+                content = "Data berhasil ditambahkan!";
+                Helper.alert(Alert.AlertType.INFORMATION, content);
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -149,26 +151,30 @@ public class CategoryController implements Initializable {
             content = "Silakan isi semua field yang wajib diisi!";
             Helper.alert(Alert.AlertType.ERROR, content);
             nameTextField.setStyle("-fx-border-color: RED");
-        } else {
-            nameTextField.setStyle("-fx-border-color: #424242");
-            selectedCategory.setName(nameTextField.getText().trim());
-            selectedCategory.setDateCreated(Helper.formattedDateNow());
+            nameTextField.requestFocus();
+            return;
+        }
 
-            content = "Anda yakin ingin mengubah?";
-            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-                try {
-                    if (categoryDao.updateData(selectedCategory) == 1) {
-                        categories.clear();
-                        categories.addAll(categoryDao.fetchAll());
-                        resetCategory();
-                        categoryTableView.requestFocus();
-                        content = "Data berhasil diubah!";
-                        Helper.alert(Alert.AlertType.INFORMATION, content);
-                    }
-                } catch (SQLException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+        nameTextField.setStyle("-fx-border-color: #424242");
+        selectedCategory.setName(nameTextField.getText().trim());
+        selectedCategory.setDateCreated(Helper.formattedDateNow());
+
+        content = "Anda yakin ingin mengubah?";
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) != ButtonType.OK) {
+            return;
+        }
+
+        try {
+            if (categoryDao.updateData(selectedCategory) == 1) {
+                categories.clear();
+                categories.addAll(categoryDao.fetchAll());
+                resetCategory();
+                categoryTableView.requestFocus();
+                content = "Data berhasil diubah!";
+                Helper.alert(Alert.AlertType.INFORMATION, content);
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -177,22 +183,25 @@ public class CategoryController implements Initializable {
         if (selectedCategory.getProductAmount() > 0) {
             content = "Kategori ini memiliki produk, tidak dapat dihapus!";
             Helper.alert(Alert.AlertType.ERROR, content);
-        } else {
-            content = "Anda yakin ingin menghapus?";
-            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-                try {
-                    if (categoryDao.deleteData(selectedCategory) == 1) {
-                        categories.clear();
-                        categories.addAll(categoryDao.fetchAll());
-                        resetCategory();
-                        categoryTableView.requestFocus();
-                        content = "Data berhasil dihapus!";
-                        Helper.alert(Alert.AlertType.INFORMATION, content);
-                    }
-                } catch (SQLException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+            return;
+        }
+
+        content = "Anda yakin ingin menghapus?";
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) != ButtonType.OK) {
+            return;
+        }
+
+        try {
+            if (categoryDao.deleteData(selectedCategory) == 1) {
+                categories.clear();
+                categories.addAll(categoryDao.fetchAll());
+                resetCategory();
+                categoryTableView.requestFocus();
+                content = "Data berhasil dihapus!";
+                Helper.alert(Alert.AlertType.INFORMATION, content);
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -231,30 +240,32 @@ public class CategoryController implements Initializable {
     @FXML
     private void categoryTableViewClicked(MouseEvent mouseEvent) {
         selectedCategory = categoryTableView.getSelectionModel().getSelectedItem();
-        if (selectedCategory != null) {
-            idTextField.setText(String.valueOf(selectedCategory.getId()));
-            nameTextField.setText(selectedCategory.getName());
-            addButton.setDisable(true);
-            updateButton.setDisable(false);
-            deleteButton.setDisable(false);
-            resetButton.setDisable(false);
+        if (selectedCategory == null) {
+            return;
+        }
 
-            if (mouseEvent.getClickCount() > 1) {
-                Stage stage = new Stage();
-                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("detail-category-view.fxml"));
-                Scene scene = null;
-                try {
-                    scene = new Scene(fxmlLoader.load());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                stage.setTitle("Detail Kategori");
-                stage.setScene(scene);
-                stage.centerOnScreen();
-                stage.initOwner(categoryTableView.getScene().getWindow());
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.show();
+        idTextField.setText(String.valueOf(selectedCategory.getId()));
+        nameTextField.setText(selectedCategory.getName());
+        addButton.setDisable(true);
+        updateButton.setDisable(false);
+        deleteButton.setDisable(false);
+        resetButton.setDisable(false);
+
+        if (mouseEvent.getClickCount() > 1) {
+            Stage stage = new Stage();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("detail-category-view.fxml"));
+            Scene scene = null;
+            try {
+                scene = new Scene(fxmlLoader.load());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            stage.setTitle("Detail Kategori");
+            stage.setScene(scene);
+            stage.centerOnScreen();
+            stage.initOwner(categoryTableView.getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
         }
     }
 

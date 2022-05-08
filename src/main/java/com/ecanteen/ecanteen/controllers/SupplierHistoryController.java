@@ -113,88 +113,92 @@ public class SupplierHistoryController implements Initializable {
 
     @FXML
     private void supplierComboBoxAction(ActionEvent actionEvent) {
-        if (supplierComboBox.getValue() != null && dateComboBox.getValue() != null) {
-            String supplierId = supplierComboBox.getValue().getId();
-            String transactionDate = dateComboBox.getValue().getDate();
-
-            try {
-                supplies.clear();
-                supplies.addAll(incomeDao.fetchSupplierHistory(supplierId, transactionDate));
-            } catch (SQLException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-
-            supplyTableView.setItems(supplies);
-            suppliesData = supplyTableView.getItems();
-
-            DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-            DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-            symbols.setGroupingSeparator('.');
-            formatter.setDecimalFormatSymbols(symbols);
-
-            int totalInt = 0;
-            for (Supply i : suppliesData) {
-                String[] subtotalArray = i.getSubtotal().split("\\.");
-                StringBuilder sub = new StringBuilder();
-                for (String s : subtotalArray) {
-                    sub.append(s);
-                }
-                int subtotalInt = Integer.parseInt(String.valueOf(sub));
-                totalInt += subtotalInt;
-            }
-            String totalString = formatter.format(totalInt);
-
-            if (totalInt != 0) {
-                totalTextField.setText(totalString);
-            } else {
-                totalTextField.setText("");
-            }
-
-            printSupplierButton.setDisable(suppliesData.isEmpty());
+        if (supplierComboBox.getValue() == null || dateComboBox.getValue() == null) {
+            return;
         }
+
+        String supplierId = supplierComboBox.getValue().getId();
+        String transactionDate = dateComboBox.getValue().getDate();
+
+        try {
+            supplies.clear();
+            supplies.addAll(incomeDao.fetchSupplierHistory(supplierId, transactionDate));
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        supplyTableView.setItems(supplies);
+        suppliesData = supplyTableView.getItems();
+
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        formatter.setDecimalFormatSymbols(symbols);
+
+        int totalInt = 0;
+        for (Supply i : suppliesData) {
+            String[] subtotalArray = i.getSubtotal().split("\\.");
+            StringBuilder sub = new StringBuilder();
+            for (String s : subtotalArray) {
+                sub.append(s);
+            }
+            int subtotalInt = Integer.parseInt(String.valueOf(sub));
+            totalInt += subtotalInt;
+        }
+        String totalString = formatter.format(totalInt);
+
+        if (totalInt != 0) {
+            totalTextField.setText(totalString);
+        } else {
+            totalTextField.setText("");
+        }
+
+        printSupplierButton.setDisable(suppliesData.isEmpty());
     }
 
     @FXML
     private void dateComboBoxAction(ActionEvent actionEvent) {
-        if (supplierComboBox.getValue() != null && dateComboBox.getValue() != null) {
-            String supplierId = supplierComboBox.getValue().getId();
-            String transactionDate = dateComboBox.getValue().getDate();
-
-            try {
-                supplies.clear();
-                supplies.addAll(incomeDao.fetchSupplierHistory(supplierId, transactionDate));
-            } catch (SQLException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-
-            supplyTableView.setItems(supplies);
-            suppliesData = supplyTableView.getItems();
-
-            DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-            DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-            symbols.setGroupingSeparator('.');
-            formatter.setDecimalFormatSymbols(symbols);
-
-            int totalInt = 0;
-            for (Supply i : suppliesData) {
-                String[] subtotalArray = i.getSubtotal().split("\\.");
-                StringBuilder sub = new StringBuilder();
-                for (String s : subtotalArray) {
-                    sub.append(s);
-                }
-                int subtotalInt = Integer.parseInt(String.valueOf(sub));
-                totalInt += subtotalInt;
-            }
-            String totalString = formatter.format(totalInt);
-
-            if (totalInt != 0) {
-                totalTextField.setText(totalString);
-            } else {
-                totalTextField.setText("");
-            }
-
-            printSupplierButton.setDisable(suppliesData.isEmpty());
+        if (supplierComboBox.getValue() == null || dateComboBox.getValue() == null) {
+            return;
         }
+
+        String supplierId = supplierComboBox.getValue().getId();
+        String transactionDate = dateComboBox.getValue().getDate();
+
+        try {
+            supplies.clear();
+            supplies.addAll(incomeDao.fetchSupplierHistory(supplierId, transactionDate));
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        supplyTableView.setItems(supplies);
+        suppliesData = supplyTableView.getItems();
+
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        formatter.setDecimalFormatSymbols(symbols);
+
+        int totalInt = 0;
+        for (Supply i : suppliesData) {
+            String[] subtotalArray = i.getSubtotal().split("\\.");
+            StringBuilder sub = new StringBuilder();
+            for (String s : subtotalArray) {
+                sub.append(s);
+            }
+            int subtotalInt = Integer.parseInt(String.valueOf(sub));
+            totalInt += subtotalInt;
+        }
+        String totalString = formatter.format(totalInt);
+
+        if (totalInt != 0) {
+            totalTextField.setText(totalString);
+        } else {
+            totalTextField.setText("");
+        }
+
+        printSupplierButton.setDisable(suppliesData.isEmpty());
     }
 
     @FXML
