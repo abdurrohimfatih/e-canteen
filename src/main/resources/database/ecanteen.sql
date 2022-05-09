@@ -104,24 +104,6 @@ CREATE TABLE `sale` (
   `subtotal` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `sale`
---
-
-INSERT INTO `sale` (`id`, `transaction_id`, `barcode`, `quantity`, `subtotal`) VALUES
-(5, 1117, '4970129727514', 1, '5.000'),
-(6, 1117, 'CT652', 1, '60.000'),
-(7, 1118, '4970129727514', 1, '5.000'),
-(8, 1118, 'CT652', 1, '60.000'),
-(9, 1119, '4970129727514', 3, '15.000'),
-(10, 1120, '4970129727514', 1, '5.000'),
-(11, 1121, '4970129727514', 2, '10.000'),
-(12, 1122, '4970129727514', 1, '5.000'),
-(13, 1123, 'CT652', 1, '60.000'),
-(14, 1124, 'CT652', 1, '60.000'),
-(15, 1125, 'CT652', 1, '60.000'),
-(16, 1126, 'CT652', 7, '420.000');
-
 -- --------------------------------------------------------
 
 --
@@ -166,22 +148,6 @@ CREATE TABLE `transaction` (
   `total_amount` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `transaction`
---
-
-INSERT INTO `transaction` (`id`, `username`, `date`, `time`, `total_amount`) VALUES
-(1117, 'kasir', '26-04-2022', '15:19:07', '65000'),
-(1118, 'kasir', '26-04-2022', '15:21:55', '65000'),
-(1119, 'andi', '26-04-2022', '15:59:46', '15000'),
-(1120, 'kasir', '28-04-2022', '20:46:25', '5000'),
-(1121, 'kasir', '28-04-2022', '20:49:06', '10000'),
-(1122, 'kasir', '28-04-2022', '20:52:22', '5000'),
-(1123, 'kasir', '28-04-2022', '20:58:32', '60000'),
-(1124, 'kasir', '28-04-2022', '22:21:20', '60000'),
-(1125, 'kasir', '28-04-2022', '22:27:12', '60000'),
-(1126, 'andi', '28-04-2022', '22:46:51', '420000');
-
 -- --------------------------------------------------------
 
 --
@@ -207,7 +173,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`username`, `password`, `name`, `address`, `gender`, `phone`, `email`, `level`, `date_created`, `status`) VALUES
 ('admin', 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec', 'Administrator', 'Cirebon', 'Laki-laki', '-', '-', 'Admin', '09-04-2022', '1'),
-('andi', 'ed0d587073b2a487fa0638d970255179f0f4d298b33ed39317797681bb57e2277c560ffb9a3f75a81adc261d4d7cee06769380751d44e0669226d4cf042e44b0', 'Andi', 'Cirebon', 'Laki-laki', '0899999999999', 'andi@gmail.com', 'Kasir', '09-04-2022', '1'),
+('andi', 'ed0d587073b2a487fa0638d970255179f0f4d298b33ed39317797681bb57e2277c560ffb9a3f75a81adc261d4d7cee06769380751d44e0669226d4cf042e44b0', 'Andi', 'Bandung', 'Laki-laki', '0899999999999', 'andi@gmail.com', 'Kasir', '09-04-2022', '0'),
 ('kasir', 'e2c23518e63445135a75cb5b39585b6a2e3f7261108674fe606c16947aa2d4e1f5ceb3766c2a2b60e93e79e6b4d267f5054f361ce4f364d2f2e95bdd7db9678d', 'Kasir', 'Kuningan', 'Perempuan', '-', '-', 'Kasir', '09-04-2022', '1');
 
 --
