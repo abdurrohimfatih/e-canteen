@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.ecanteen</groupId>
-    <artifactId>integrated-digital-canteen</artifactId>
+    <artifactId>ecanteen</artifactId>
     <version>1.0</version>
-    <name>integrated-digital-canteen</name>
+    <name>ecanteen</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
