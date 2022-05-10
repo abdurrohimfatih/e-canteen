@@ -2,9 +2,11 @@ package com.ecanteen.ecanteen.utils;
 
 import com.ecanteen.ecanteen.Main;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -157,6 +159,19 @@ public class Helper {
     public static ButtonType alert(Alert.AlertType alertType, String content) {
         Image image;
         String title;
+        Alert alert = new Alert(alertType);
+        DialogPane pane = alert.getDialogPane();
+
+        HBox hBox = new HBox();
+        Label label = new Label(content + "  ");
+        label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        TextField textField = new TextField(Common.change);
+        textField.setEditable(false);
+        textField.setStyle("-fx-font-size: 20px; -fx-pref-width: 200px; -fx-font-weight: bold;");
+        hBox.setAlignment(Pos.CENTER_LEFT);
+        hBox.getChildren().add(label);
+        hBox.getChildren().add(textField);
+
         if (alertType == Alert.AlertType.CONFIRMATION) {
             image = new Image(String.valueOf(Main.class.getResource("image/confirm.png")));
             title = "Konfirmasi";
@@ -168,7 +183,6 @@ public class Helper {
             title = "Sukses";
         }
 
-        Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setGraphic(null);
@@ -177,10 +191,14 @@ public class Helper {
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(image);
 
-        DialogPane pane = alert.getDialogPane();
         pane.getStylesheets().add(String.valueOf(Main.class.getResource("css/style.css")));
         pane.getStyleClass().add("myDialog");
         pane.setPrefWidth(400);
+
+        if (content.equals("Kembalian Rp")) {
+            pane.setContent(hBox);
+            pane.getContent().setStyle("-fx-alignment: center;");
+        }
 
         alert.showAndWait();
 

@@ -423,18 +423,19 @@ public class TransactionController implements Initializable {
 
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Tunai");
-        dialog.setContentText("Jumlah bayar");
+        dialog.setContentText("Jumlah bayar Rp");
         dialog.setHeaderText(null);
         dialog.setGraphic(null);
         DialogPane pane = dialog.getDialogPane();
+        pane.setPrefWidth(400);
         pane.getStylesheets().add(String.valueOf(Main.class.getResource("css/style.css")));
         pane.getStyleClass().add("myDialog");
+        pane.getContent().setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-alignment: center;");
         Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(String.valueOf(Main.class.getResource("image/logo.png"))));
         Optional<String> result;
         TextInputControl control = dialog.getEditor();
-        control.setPrefWidth(200);
-        control.setStyle("-fx-font-size: 16px");
+        control.setStyle("-fx-font-size: 20px; -fx-pref-width: 200px;");
         Helper.addThousandSeparator(control);
 
         Transaction transaction = new Transaction();
@@ -482,6 +483,8 @@ public class TransactionController implements Initializable {
 
                 transaction.setChange(changeString);
 
+                Common.change = changeString;
+
                 dialog.setHeaderText("Jumlah bayar kurang dari total!");
             } else {
                 return;
@@ -497,6 +500,9 @@ public class TransactionController implements Initializable {
                 }
 
                 new ReportGenerator().generateInvoice(transactionDao, this, saleData, transaction);
+
+                content = "Kembalian Rp";
+                Helper.alert(Alert.AlertType.INFORMATION, content);
 
                 resetProductButtonAction(actionEvent);
                 products.clear();
