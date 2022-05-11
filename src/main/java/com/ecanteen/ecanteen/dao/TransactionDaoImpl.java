@@ -113,7 +113,7 @@ public class TransactionDaoImpl implements DaoService<Transaction> {
     public List<Transaction> getTransactionDate() throws SQLException, ClassNotFoundException {
         List<Transaction> transactions = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT t.date AS t_date FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN supplier su ON p.supplier_id = su.id JOIN transaction t ON sa.transaction_id = t.id GROUP BY t.date";
+            String query = "SELECT t.id, t.date AS t_date FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN supplier su ON p.supplier_id = su.id JOIN transaction t ON sa.transaction_id = t.id GROUP BY t.date ORDER BY 1 DESC";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {

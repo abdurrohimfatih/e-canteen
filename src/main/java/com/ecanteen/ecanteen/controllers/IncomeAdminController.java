@@ -76,7 +76,7 @@ public class IncomeAdminController implements Initializable {
         incomes = FXCollections.observableArrayList();
 
         try {
-            incomes.addAll(incomeDao.fetchAll());
+            incomes.addAll(incomeDao.fetchIncomeAdmin());
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

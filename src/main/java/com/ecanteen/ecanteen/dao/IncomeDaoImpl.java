@@ -3,7 +3,6 @@ package com.ecanteen.ecanteen.dao;
 import com.ecanteen.ecanteen.entities.Income;
 import com.ecanteen.ecanteen.entities.Supply;
 import com.ecanteen.ecanteen.utils.Common;
-import com.ecanteen.ecanteen.utils.DaoService;
 import com.ecanteen.ecanteen.utils.MySQLConnection;
 
 import java.sql.Connection;
@@ -17,9 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class IncomeDaoImpl implements DaoService<Income> {
-    @Override
-    public List<Income> fetchAll() throws SQLException, ClassNotFoundException {
+public class IncomeDaoImpl {
+    public List<Income> fetchIncomeAdmin() throws SQLException, ClassNotFoundException {
         List<Income> incomes = new ArrayList<>();
         DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
@@ -27,7 +25,7 @@ public class IncomeDaoImpl implements DaoService<Income> {
         formatter.setDecimalFormatSymbols(symbols);
 
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT date, username AS cashier, SUM(total_amount) AS income FROM transaction GROUP BY date, username";
+            String query = "SELECT id, date, username AS cashier, SUM(total_amount) AS income FROM transaction GROUP BY date, username ORDER BY 1 DESC";
 
             String query2 = "SELECT s.quantity AS qty, p.purchase_price AS pp, p.selling_price AS sp FROM sale s JOIN product p ON s.barcode = p.barcode JOIN transaction t ON s.transaction_id = t.id WHERE t.date = ? AND t.username = ?";
 
@@ -86,7 +84,7 @@ public class IncomeDaoImpl implements DaoService<Income> {
     public List<Income> fetchIncomeCashier() throws SQLException, ClassNotFoundException {
         List<Income> incomes = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT date, SUM(total_amount) AS income FROM transaction WHERE username = ? GROUP BY date";
+            String query = "SELECT id, date, SUM(total_amount) AS income FROM transaction WHERE username = ? GROUP BY date ORDER BY 1 DESC";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setString(1, Common.user.getName());
 
@@ -152,20 +150,5 @@ public class IncomeDaoImpl implements DaoService<Income> {
         }
 
         return supplies;
-    }
-
-    @Override
-    public int addData(Income object) throws SQLException, ClassNotFoundException {
-        return 0;
-    }
-
-    @Override
-    public int updateData(Income object) throws SQLException, ClassNotFoundException {
-        return 0;
-    }
-
-    @Override
-    public int deleteData(Income object) throws SQLException, ClassNotFoundException {
-        return 0;
     }
 }
