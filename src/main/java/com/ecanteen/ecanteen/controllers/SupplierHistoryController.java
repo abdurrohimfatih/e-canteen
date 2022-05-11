@@ -2,10 +2,8 @@ package com.ecanteen.ecanteen.controllers;
 
 import com.ecanteen.ecanteen.dao.IncomeDaoImpl;
 import com.ecanteen.ecanteen.dao.SupplierDaoImpl;
-import com.ecanteen.ecanteen.dao.TransactionDaoImpl;
 import com.ecanteen.ecanteen.entities.Supplier;
 import com.ecanteen.ecanteen.entities.Supply;
-import com.ecanteen.ecanteen.entities.Transaction;
 import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
 import com.ecanteen.ecanteen.utils.ReportGenerator;
@@ -25,6 +23,7 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -68,7 +67,7 @@ public class SupplierHistoryController implements Initializable {
     @FXML
     private SearchableComboBox<Supplier> supplierComboBox;
     @FXML
-    private SearchableComboBox<Transaction> dateComboBox;
+    private DatePicker dateDatePicker;
     @FXML
     private TableView<Supply> supplyTableView;
     @FXML
@@ -91,20 +90,17 @@ public class SupplierHistoryController implements Initializable {
         incomeDao = new IncomeDaoImpl();
         supplies = FXCollections.observableArrayList();
         SupplierDaoImpl supplierDao = new SupplierDaoImpl();
-        TransactionDaoImpl transactionDao = new TransactionDaoImpl();
         ObservableList<Supplier> suppliers = FXCollections.observableArrayList();
-        ObservableList<Transaction> transactions = FXCollections.observableArrayList();
 
         try {
             suppliers.addAll(supplierDao.fetchSuppliedSupplier());
-            transactions.addAll(transactionDao.getTransactionDate());
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
         profileButton.setText(Common.user.getName());
+        Helper.formatDatePicker(dateDatePicker);
         supplierComboBox.setItems(suppliers);
-        dateComboBox.setItems(transactions);
         supplyTableView.setPlaceholder(new Label("Tidak ada data."));
         productTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct()));
         soldTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getSold()).asObject());
@@ -113,12 +109,12 @@ public class SupplierHistoryController implements Initializable {
 
     @FXML
     private void supplierComboBoxAction(ActionEvent actionEvent) {
-        if (supplierComboBox.getValue() == null || dateComboBox.getValue() == null) {
+        if (supplierComboBox.getValue() == null || dateDatePicker.getValue() == null) {
             return;
         }
 
         String supplierId = supplierComboBox.getValue().getId();
-        String transactionDate = dateComboBox.getValue().getDate();
+        String transactionDate = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
         try {
             supplies.clear();
@@ -157,13 +153,13 @@ public class SupplierHistoryController implements Initializable {
     }
 
     @FXML
-    private void dateComboBoxAction(ActionEvent actionEvent) {
-        if (supplierComboBox.getValue() == null || dateComboBox.getValue() == null) {
+    private void dateDatePickerAction(ActionEvent actionEvent) {
+        if (supplierComboBox.getValue() == null || dateDatePicker.getValue() == null) {
             return;
         }
 
         String supplierId = supplierComboBox.getValue().getId();
-        String transactionDate = dateComboBox.getValue().getDate();
+        String transactionDate = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
         try {
             supplies.clear();
@@ -205,7 +201,7 @@ public class SupplierHistoryController implements Initializable {
     private void printSupplierButtonAction(ActionEvent actionEvent) {
         suppliesData = supplyTableView.getItems();
         String supplier = supplierComboBox.getValue().getName();
-        String date = dateComboBox.getValue().getDate();
+        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         String total = totalTextField.getText();
 
         new ReportGenerator().printSupplierHistory(suppliesData, supplier, date, total);

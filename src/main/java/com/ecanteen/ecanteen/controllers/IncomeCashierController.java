@@ -90,31 +90,4 @@ public class IncomeCashierController implements Initializable {
             Helper.changePage(logoutButton, "Login", "login-view.fxml");
         }
     }
-
-    @FXML
-    private void searchTextFieldKeyPressed(KeyEvent keyEvent) {
-        searchTextField.textProperty().addListener(observable -> {
-            if (searchTextField.textProperty().get().isEmpty()) {
-                incomeTableView.setItems(incomes);
-                return;
-            }
-
-            ObservableList<Income> tableItems = FXCollections.observableArrayList();
-            ObservableList<TableColumn<Income, ?>> columns = incomeTableView.getColumns();
-
-            for (Income value : incomes) {
-                for (int j = 0; j < 2; j++) {
-                    TableColumn<Income, ?> col = columns.get(j);
-                    String cellValue = String.valueOf(col.getCellData(value)).toLowerCase();
-
-                    if (cellValue.contains(searchTextField.getText().toLowerCase().trim())) {
-                        tableItems.add(value);
-                        break;
-                    }
-                }
-            }
-
-            incomeTableView.setItems(tableItems);
-        });
-    }
 }
