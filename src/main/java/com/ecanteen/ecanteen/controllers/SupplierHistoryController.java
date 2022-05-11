@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -100,6 +101,7 @@ public class SupplierHistoryController implements Initializable {
 
         profileButton.setText(Common.user.getName());
         Helper.formatDatePicker(dateDatePicker);
+        dateDatePicker.setValue(LocalDate.now());
         supplierComboBox.setItems(suppliers);
         supplyTableView.setPlaceholder(new Label("Tidak ada data."));
         productTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct()));
