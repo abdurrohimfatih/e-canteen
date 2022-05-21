@@ -119,6 +119,8 @@ public class PromotionController implements Initializable {
         Helper.addTextLimiter(nameTextField, 100);
         Helper.addTextLimiter(percentageTextField, 3);
         Helper.formatDatePicker(expiredDateDatePicker);
+        expiredDateDatePicker.getEditor().setDisable(true);
+        expiredDateDatePicker.getEditor().setOpacity(1);
         promotionTableView.setPlaceholder(new Label("Tidak ada data."));
         promotionTableView.setItems(promotions);
         idTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId()));

@@ -31,10 +31,6 @@ public class ProductDaoImpl implements DaoService<Product> {
                         supplier.setId(rs.getString("supplier_id"));
                         supplier.setName(rs.getString("supplier_name"));
 
-//                        Promotion promotion = new Promotion();
-//                        promotion.setId(rs.getString("promotion_id"));
-//                        promotion.setName(rs.getString("promotion_name"));
-
                         Product product = new Product();
                         product.setBarcode(rs.getString("barcode"));
                         product.setName(rs.getString("name"));
@@ -45,7 +41,6 @@ public class ProductDaoImpl implements DaoService<Product> {
                         product.setSupplier(supplier);
                         product.setDateAdded(rs.getString("date_added"));
                         product.setExpiredDate(rs.getString("expired_date"));
-//                        product.setPromotion(promotion);
                         products.add(product);
                     }
                 }
@@ -70,11 +65,6 @@ public class ProductDaoImpl implements DaoService<Product> {
                 ps.setString(7, object.getSupplier().getId());
                 ps.setString(8, object.getDateAdded());
                 ps.setString(9, object.getExpiredDate());
-//                if (object.getPromotion() == null) {
-//                    ps.setString(10, "-1");
-//                } else {
-//                    ps.setString(10, object.getPromotion().getId());
-//                }
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();
@@ -102,11 +92,6 @@ public class ProductDaoImpl implements DaoService<Product> {
                 ps.setString(6, object.getSupplier().getId());
                 ps.setString(7, object.getDateAdded());
                 ps.setString(8, object.getExpiredDate());
-//                if (object.getPromotion() == null) {
-//                    ps.setString(9, "-1");
-//                } else {
-//                    ps.setString(9, object.getPromotion().getId());
-//                }
                 ps.setString(9, object.getBarcode());
 
                 if (ps.executeUpdate() != 0) {
@@ -195,24 +180,6 @@ public class ProductDaoImpl implements DaoService<Product> {
         return productAmount;
     }
 
-//    public static int getProductAmountPromotion(Promotion object) throws SQLException, ClassNotFoundException {
-//        int productAmount = 0;
-//        try (Connection connection = MySQLConnection.createConnection()) {
-//            String query = "SELECT COUNT(*) AS amount FROM product WHERE promotion_id = ? GROUP BY promotion_id";
-//            try (PreparedStatement ps = connection.prepareStatement(query)) {
-//                ps.setString(1, object.getId());
-//
-//                try (ResultSet rs = ps.executeQuery()) {
-//                    while (rs.next()) {
-//                        productAmount = rs.getInt("amount");
-//                    }
-//                }
-//            }
-//        }
-//
-//        return productAmount;
-//    }
-
     public List<Product> detailCategory(Category object) throws SQLException, ClassNotFoundException {
         List<Product> products = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()){
@@ -273,36 +240,6 @@ public class ProductDaoImpl implements DaoService<Product> {
         return products;
     }
 
-//    public List<Product> detailPromotion(Promotion object) throws SQLException, ClassNotFoundException {
-//        List<Product> products = new ArrayList<>();
-//        try (Connection connection = MySQLConnection.createConnection()){
-//            String query =
-//                    "SELECT p.barcode, p.name, p.purchase_price, p.selling_price, p.stock_amount, p.supplier_id, p.promotion_id, s.name AS supplier_name FROM product p JOIN supplier s ON p.supplier_id = s.id WHERE p.promotion_id = ?";
-//            try (PreparedStatement ps = connection.prepareStatement(query)) {
-//                ps.setString(1, object.getId());
-//
-//                try (ResultSet rs = ps.executeQuery()) {
-//                    while (rs.next()) {
-//                        Supplier supplier = new Supplier();
-//                        supplier.setId(rs.getString("supplier_id"));
-//                        supplier.setName(rs.getString("supplier_name"));
-//
-//                        Product product = new Product();
-//                        product.setBarcode(rs.getString("barcode"));
-//                        product.setName(rs.getString("name"));
-//                        product.setPurchasePrice(rs.getString("purchase_price"));
-//                        product.setSellingPrice(rs.getString("selling_price"));
-//                        product.setStockAmount(rs.getInt("stock_amount"));
-//                        product.setSupplier(supplier);
-//                        products.add(product);
-//                    }
-//                }
-//            }
-//        }
-//
-//        return products;
-//    }
-
     public Product fetchProduct(String barcode) throws SQLException, ClassNotFoundException {
         Product product = null;
         try (Connection connection = MySQLConnection.createConnection()) {
@@ -340,23 +277,6 @@ public class ProductDaoImpl implements DaoService<Product> {
 
         return expiredDate;
     }
-
-//    public int getDiscount(String barcode) throws SQLException, ClassNotFoundException {
-//        int discount = 0;
-//        try (Connection connection = MySQLConnection.createConnection()) {
-//            String query = "SELECT promotion.percentage FROM product JOIN promotion ON product.promotion_id = promotion.id WHERE barcode = ?";
-//            try (PreparedStatement ps = connection.prepareStatement(query)) {
-//                ps.setString(1, barcode);
-//                try (ResultSet rs = ps.executeQuery()) {
-//                    while (rs.next()) {
-//                        discount = rs.getInt("percentage");
-//                    }
-//                }
-//            }
-//        }
-//
-//        return discount;
-//    }
 
     public int getStockAmount(String barcode) throws SQLException, ClassNotFoundException {
         int stock = 0;
@@ -410,18 +330,4 @@ public class ProductDaoImpl implements DaoService<Product> {
         return product;
     }
 
-//    public static void updatePromotionIdProduct(String promotion_id) throws SQLException, ClassNotFoundException {
-//        try (Connection connection = MySQLConnection.createConnection()) {
-//            String query = "UPDATE product SET promotion_id = '-1' WHERE promotion_id = ?";
-//            try (PreparedStatement ps = connection.prepareStatement(query)) {
-//                ps.setString(1, promotion_id);
-//
-//                if (ps.executeUpdate() != 0) {
-//                    connection.commit();
-//                } else {
-//                    connection.rollback();
-//                }
-//            }
-//        }
-//    }
 }

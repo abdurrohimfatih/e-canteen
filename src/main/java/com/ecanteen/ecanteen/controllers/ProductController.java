@@ -46,8 +46,6 @@ public class ProductController implements Initializable {
     private MenuItem productMenuItem;
     @FXML
     private MenuItem categoryMenuItem;
-    //    @FXML
-//    private MenuItem promotionMenuItem;
     @FXML
     private Button userMenuButton;
     @FXML
@@ -82,8 +80,6 @@ public class ProductController implements Initializable {
     private ComboBox<Supplier> supplierComboBox;
     @FXML
     private DatePicker expiredDateDatePicker;
-    //    @FXML
-//    private ComboBox<Promotion> promotionComboBox;
     @FXML
     private Button addButton;
     @FXML
@@ -110,8 +106,6 @@ public class ProductController implements Initializable {
     private TableColumn<Product, Supplier> supplierTableColumn;
     @FXML
     private TableColumn<Product, String> expiredDateTableColumn;
-//    @FXML
-//    private TableColumn<Product, Promotion> promotionTableColumn;
 
     private ObservableList<Product> products;
     private ProductDaoImpl productDao;
@@ -123,17 +117,14 @@ public class ProductController implements Initializable {
         productDao = new ProductDaoImpl();
         CategoryDaoImpl categoryDao = new CategoryDaoImpl();
         SupplierDaoImpl supplierDao = new SupplierDaoImpl();
-//        PromotionDaoImpl promotionDao = new PromotionDaoImpl();
         products = FXCollections.observableArrayList();
         ObservableList<Category> categories = FXCollections.observableArrayList();
         ObservableList<Supplier> suppliers = FXCollections.observableArrayList();
-//        ObservableList<Promotion> promotions = FXCollections.observableArrayList();
 
         try {
             products.addAll(productDao.fetchAll());
             categories.addAll(categoryDao.fetchAll());
             suppliers.addAll(supplierDao.fetchActiveSupplier());
-//            promotions.addAll(promotionDao.fetchAll());
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -150,10 +141,10 @@ public class ProductController implements Initializable {
         Helper.addTextLimiter(sellingPriceTextField, 9);
         Helper.addTextLimiter(stockAmountTextField, 11);
         Helper.formatDatePicker(expiredDateDatePicker);
+        expiredDateDatePicker.getEditor().setDisable(true);
+        expiredDateDatePicker.getEditor().setOpacity(1);
         categoryComboBox.setItems(categories);
         supplierComboBox.setItems(suppliers);
-//        promotionComboBox.setItems(promotions);
-//        promotionComboBox.getItems().add(0, null);
         productTableView.setPlaceholder(new Label("Tidak ada data."));
         productTableView.setItems(products);
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
@@ -163,7 +154,6 @@ public class ProductController implements Initializable {
         stockAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStockAmount()).asObject());
         supplierTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getSupplier()));
         expiredDateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getExpiredDate()));
-//        promotionTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getPromotion()));
     }
 
     @FXML
@@ -199,7 +189,6 @@ public class ProductController implements Initializable {
         product.setSupplier(supplierComboBox.getValue());
         product.setDateAdded(Helper.formattedDateNow());
         product.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-//            product.setPromotion(promotionComboBox.getValue());
 
         try {
             if (productDao.addData(product) == 1) {
@@ -227,7 +216,6 @@ public class ProductController implements Initializable {
         selectedProduct.setSupplier(supplierComboBox.getValue());
         selectedProduct.setDateAdded(Helper.formattedDateNow());
         selectedProduct.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-//            selectedProduct.setPromotion(promotionComboBox.getValue());
 
         content = "Anda yakin ingin mengubah?";
         if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
@@ -289,11 +277,6 @@ public class ProductController implements Initializable {
             stockAmountTextField.setText(String.valueOf(selectedProduct.getStockAmount()));
             supplierComboBox.setValue(selectedProduct.getSupplier());
             expiredDateDatePicker.setValue(Helper.formatter(selectedProduct.getExpiredDate()));
-//            if (!selectedProduct.getPromotion().getId().equals("-1")) {
-//                promotionComboBox.setValue(selectedProduct.getPromotion());
-//            } else {
-//                promotionComboBox.setValue(null);
-//            }
             barcodeTextField.setDisable(true);
             addButton.setDisable(true);
             updateButton.setDisable(false);
@@ -338,7 +321,6 @@ public class ProductController implements Initializable {
         stockAmountTextField.clear();
         supplierComboBox.setValue(null);
         expiredDateDatePicker.setValue(null);
-//        promotionComboBox.setValue(null);
         selectedProduct = null;
         productTableView.getSelectionModel().clearSelection();
         resetError();
@@ -431,11 +413,6 @@ public class ProductController implements Initializable {
     private void categoryMenuItemAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(stockMenuButton, "Admin - Kategori", "category-view.fxml");
     }
-
-//    @FXML
-//    private void promotionMenuItemAction(ActionEvent actionEvent) throws IOException {
-//        Helper.changePage(stockMenuButton, "Admin - Promosi", "promotion-view.fxml");
-//    }
 
     @FXML
     private void userButtonAction(ActionEvent actionEvent) throws IOException {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 29, 2022 at 05:34 PM
+-- Generation Time: May 21, 2022 at 04:21 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -33,14 +33,6 @@ CREATE TABLE `category` (
   `date_created` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `category`
---
-
-INSERT INTO `category` (`id`, `name`, `date_created`) VALUES
-(1, 'Minuman', '19-04-2022'),
-(2, 'Makanan Ringan', '17-04-2022');
-
 -- --------------------------------------------------------
 
 --
@@ -58,15 +50,6 @@ CREATE TABLE `product` (
   `date_added` varchar(10) NOT NULL,
   `expired_date` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `product`
---
-
-INSERT INTO `product` (`barcode`, `name`, `category_id`, `purchase_price`, `selling_price`, `stock_amount`, `supplier_id`, `date_added`, `expired_date`) VALUES
-('123', 'Dummy', 1, '2.000', '3.000', 100, '17', '29-04-2022', '07-05-2022'),
-('4970129727514', 'Spidol', 2, '3.000', '5.000', 0, '10', '25-04-2022', '09-04-2022'),
-('CT652', 'Barcode Scanner', 2, '50.000', '60.000', 100, '10', '29-04-2022', '22-04-2022');
 
 -- --------------------------------------------------------
 
@@ -87,8 +70,7 @@ CREATE TABLE `promotion` (
 --
 
 INSERT INTO `promotion` (`id`, `name`, `percentage`, `date_added`, `expired_date`) VALUES
-('-1', '', 0, '09-04-2022', '09-04-2022'),
-('4567898765', 'Diskon Idul Fitri', 10, '09-04-2022', '09-04-2022');
+('-1', '', 0, '09-04-2022', '09-04-2022');
 
 -- --------------------------------------------------------
 
@@ -127,12 +109,8 @@ CREATE TABLE `supplier` (
 --
 
 INSERT INTO `supplier` (`id`, `name`, `address`, `gender`, `phone`, `email`, `bank_account`, `account_number`, `status`) VALUES
-('10', 'Andi', 'Cirebon', 'Laki-laki', '08222222222222', '-', '-', '-', '1'),
-('14', 'Budi', 'Kuningan', 'Laki-laki', '08333333333333', '-', '-', '-', '1'),
-('17', 'Dani', 'Indramayu', 'Laki-laki', '08555555555555', '-', '-', '-', '1'),
-('4', 'Eki', 'Kab. Cirebon', 'Laki-laki', '081111111111', 'email@gmail.com', '-', '-', '1'),
-('SP123', 'Feri', 'Bandung', 'Laki-laki', '08777777777777', '-', '-', '-', '1'),
-('WGS123', 'Gani', 'Jakarta', 'Laki-laki', '08666666666666', '-', '-', '-', '0');
+('123', 'Budi', 'Kuningan', 'Laki-laki', '089999999999', 'budi@gmail.com', 'BNI', '8712937912', '1'),
+('ID123', 'Andi', 'Cirebon', 'Laki-laki', '081234567890', 'andi@gmail.com', 'BRI', '398127832', '1');
 
 -- --------------------------------------------------------
 
@@ -172,9 +150,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`username`, `password`, `name`, `address`, `gender`, `phone`, `email`, `level`, `date_created`, `status`) VALUES
-('admin', 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec', 'Administrator', 'Cirebon', 'Laki-laki', '-', '-', 'Admin', '09-04-2022', '1'),
-('andi', 'ed0d587073b2a487fa0638d970255179f0f4d298b33ed39317797681bb57e2277c560ffb9a3f75a81adc261d4d7cee06769380751d44e0669226d4cf042e44b0', 'Andi', 'Bandung', 'Laki-laki', '0899999999999', 'andi@gmail.com', 'Kasir', '09-04-2022', '0'),
-('kasir', 'e2c23518e63445135a75cb5b39585b6a2e3f7261108674fe606c16947aa2d4e1f5ceb3766c2a2b60e93e79e6b4d267f5054f361ce4f364d2f2e95bdd7db9678d', 'Kasir', 'Kuningan', 'Perempuan', '-', '-', 'Kasir', '09-04-2022', '1');
+('admin', 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec', 'Administrator', 'Cirebon', 'Laki-laki', '089999999999', '-', 'Admin', '09-04-2022', '1'),
+('kasir', 'e2c23518e63445135a75cb5b39585b6a2e3f7261108674fe606c16947aa2d4e1f5ceb3766c2a2b60e93e79e6b4d267f5054f361ce4f364d2f2e95bdd7db9678d', 'Kasir', 'Kuningan', 'Perempuan', '08123456789', '-', 'Kasir', '09-04-2022', '1');
 
 --
 -- Indexes for dumped tables
@@ -235,19 +212,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sale`
 --
 ALTER TABLE `sale`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
-
---
--- AUTO_INCREMENT for table `transaction`
---
-ALTER TABLE `transaction`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1127;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -257,14 +228,14 @@ ALTER TABLE `transaction`
 -- Constraints for table `product`
 --
 ALTER TABLE `product`
-  ADD CONSTRAINT `product_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `product_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `product_ibfk_3` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `sale`
 --
 ALTER TABLE `sale`
-  ADD CONSTRAINT `sale_ibfk_1` FOREIGN KEY (`barcode`) REFERENCES `product` (`barcode`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `sale_ibfk_1` FOREIGN KEY (`barcode`) REFERENCES `product` (`barcode`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `sale_ibfk_2` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --

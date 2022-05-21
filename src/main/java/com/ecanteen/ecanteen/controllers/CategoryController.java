@@ -45,8 +45,6 @@ public class CategoryController implements Initializable {
     private MenuItem productMenuItem;
     @FXML
     private MenuItem categoryMenuItem;
-    //    @FXML
-//    private MenuItem promotionMenuItem;
     @FXML
     private Button userMenuButton;
     @FXML
@@ -285,11 +283,6 @@ public class CategoryController implements Initializable {
     private void productMenuItemAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(stockMenuButton, "Admin - Produk", "product-view.fxml");
     }
-
-//    @FXML
-//    private void promotionMenuItemAction(ActionEvent actionEvent) throws IOException {
-//        Helper.changePage(stockMenuButton, "Admin - Promosi", "promotion-view.fxml");
-//    }
 
     @FXML
     private void userButtonAction(ActionEvent actionEvent) throws IOException {

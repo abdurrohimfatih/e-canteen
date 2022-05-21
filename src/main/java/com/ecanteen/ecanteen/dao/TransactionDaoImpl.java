@@ -1,7 +1,6 @@
 package com.ecanteen.ecanteen.dao;
 
 import com.ecanteen.ecanteen.entities.Sale;
-import com.ecanteen.ecanteen.entities.Supplier;
 import com.ecanteen.ecanteen.entities.Transaction;
 import com.ecanteen.ecanteen.entities.User;
 import com.ecanteen.ecanteen.utils.DaoService;
@@ -110,25 +109,6 @@ public class TransactionDaoImpl implements DaoService<Transaction> {
         return result;
     }
 
-    public List<Transaction> getTransactionDate() throws SQLException, ClassNotFoundException {
-        List<Transaction> transactions = new ArrayList<>();
-        try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT t.id, t.date AS t_date FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN supplier su ON p.supplier_id = su.id JOIN transaction t ON sa.transaction_id = t.id GROUP BY t.date ORDER BY 1 DESC";
-            try (PreparedStatement ps = connection.prepareStatement(query)) {
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        Transaction transaction = new Transaction();
-                        transaction.setDate(rs.getString("t_date"));
-
-                        transactions.add(transaction);
-                    }
-                }
-            }
-        }
-
-        return transactions;
-    }
-
     public static int getTransactionAmount(User object) throws SQLException, ClassNotFoundException {
         int transactionAmount = 0;
         try (Connection connection = MySQLConnection.createConnection()) {
@@ -145,5 +125,95 @@ public class TransactionDaoImpl implements DaoService<Transaction> {
         }
 
         return transactionAmount;
+    }
+
+    public List<String> getDateReport(String month) throws SQLException, ClassNotFoundException {
+        List<String> date = new ArrayList<>();
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT DISTINCT date FROM transaction WHERE date LIKE ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, '%' + month);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        date.add(rs.getString("date"));
+                    }
+                }
+            }
+        }
+
+        return date;
+    }
+
+    public double getTotalAmount(String date) throws SQLException, ClassNotFoundException {
+        double totalAmount = 0;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT SUM(total_amount) as total FROM transaction WHERE date = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, date);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        totalAmount = Double.parseDouble(rs.getString("total"));
+                    }
+                }
+            }
+        }
+
+        return totalAmount;
+    }
+
+    public List<String> getSoldProductName(String month) throws SQLException, ClassNotFoundException {
+        List<String> soldProduct = new ArrayList<>();
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT DISTINCT p.name FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN transaction t ON sa.transaction_id = t.id WHERE t.date LIKE ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, '%' + month);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        soldProduct.add(rs.getString("name"));
+                    }
+                }
+            }
+        }
+
+        return soldProduct;
+    }
+
+    public int getSoldProductQty(String name, String month) throws SQLException, ClassNotFoundException {
+        int soldProduct = 0;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT SUM(sa.quantity) AS sold FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN transaction t ON sa.transaction_id = t.id WHERE p.name = ? AND t.date LIKE ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, name);
+                ps.setString(2, '%' + month);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        soldProduct = rs.getInt("sold");
+                    }
+                }
+            }
+        }
+
+        return soldProduct;
+    }
+
+    public List<String> getFavoriteProduct(String month) throws SQLException, ClassNotFoundException {
+        List<String> favoriteProduct = new ArrayList<>();
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "SELECT DISTINCT p.name, SUM(sa.quantity) AS sold FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN transaction t ON sa.transaction_id = t.id WHERE t.date LIKE ? GROUP BY p.barcode ORDER BY sold DESC LIMIT 5";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, '%' + month);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        favoriteProduct.add(rs.getString("name"));
+                    }
+                }
+            }
+        }
+
+        return favoriteProduct;
     }
 }

@@ -1,7 +1,6 @@
 package com.ecanteen.ecanteen.controllers;
 
 import com.ecanteen.ecanteen.Main;
-import com.ecanteen.ecanteen.dao.IncomeDaoImpl;
 import com.ecanteen.ecanteen.dao.ProductDaoImpl;
 import com.ecanteen.ecanteen.dao.TransactionDaoImpl;
 import com.ecanteen.ecanteen.entities.Product;
@@ -16,7 +15,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,10 +25,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.view.JasperViewer;
-import org.apache.log4j.BasicConfigurator;
 
 import java.io.IOException;
 import java.net.URL;
@@ -40,9 +34,9 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class TransactionController implements Initializable {
     @FXML
@@ -55,12 +49,6 @@ public class TransactionController implements Initializable {
     private MenuItem soldProductMenuItem;
     @FXML
     private MenuItem favoriteProductMenuItem;
-    //    @FXML
-//    private MenuButton stockMenuButton;
-//    @FXML
-//    private MenuItem productMenuItem;
-//    @FXML
-//    private MenuItem promotionMenuItem;
     @FXML
     private Button productMenuButton;
     @FXML
@@ -101,14 +89,8 @@ public class TransactionController implements Initializable {
     private TableColumn<Sale, String> sellingPriceSaleTableColumn;
     @FXML
     private TableColumn<Sale, Integer> quantitySaleTableColumn;
-    //    @FXML
-//    private TableColumn<Sale, String> discountSaleTableColumn;
     @FXML
     private TableColumn<Sale, String> subtotalSaleTableColumn;
-    //    @FXML
-//    private TextField totalAllTextField;
-//    @FXML
-//    private TextField totalDiscountTextField;
     @FXML
     private TextField totalAmountTextField;
     @FXML
@@ -148,7 +130,6 @@ public class TransactionController implements Initializable {
         nameSaleTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         sellingPriceSaleTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSellingPrice()));
         quantitySaleTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getQuantity()).asObject());
-//        discountSaleTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDiscountAmount()));
         subtotalSaleTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSubtotal()));
 
         Callback<TableColumn<Sale, Integer>, TableCell<Sale, Integer>> cellFactory = p -> new EditingCell();
@@ -176,11 +157,6 @@ public class TransactionController implements Initializable {
 
             qty = t.getTableView().getItems().get(t.getTablePosition().getRow()).getQuantity();
 
-//            int discount = t.getRowValue().getDiscount();
-
-//            int discountAmountInt;
-//            String discountAmountString;
-
             int subtotalInt;
             String subtotalString;
             String[] selling = sellingPrice.split("\\.");
@@ -190,26 +166,16 @@ public class TransactionController implements Initializable {
             }
             int sellingInt = Integer.parseInt(String.valueOf(price));
             int subtotalStart = sellingInt * qty;
-//            if (discount != 0) {
-//                discountAmountInt = subtotalStart * discount / 100;
-//            } else {
-//                discountAmountInt = 0;
-//            }
 
             DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
             DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
             symbols.setGroupingSeparator('.');
             formatter.setDecimalFormatSymbols(symbols);
 
-//            discountAmountString = formatter.format(discountAmountInt);
             subtotalString = formatter.format(subtotalStart);
 
-//            t.getRowValue().setDiscountAmount(discountAmountString);
             t.getRowValue().setSubtotal(subtotalString);
             saleTableView.refresh();
-//            int totalAll = 0;
-//            int totalDiscountInt;
-//            int totalDiscountAmount = 0;
             int totalAmount = 0;
 
             for (Sale i : saleTableView.getItems()) {
@@ -220,23 +186,10 @@ public class TransactionController implements Initializable {
                 }
                 subtotalInt = Integer.parseInt(String.valueOf(sub));
                 totalAmount += subtotalInt;
-
-//                String[] discountAmountArray = i.getDiscountAmount().split("\\.");
-//                StringBuilder disc = new StringBuilder();
-//                for (String d : discountAmountArray) {
-//                    disc.append(d);
-//                }
-//                totalDiscountInt = Integer.parseInt(String.valueOf(disc));
-//                totalDiscountAmount += totalDiscountInt;
             }
 
-//            totalAmount = totalAll - totalDiscountAmount;
-//            String totalAllString = formatter.format(totalAll);
-//            String totalDiscountString = formatter.format(totalDiscountAmount);
             String totalAmountString = formatter.format(totalAmount);
 
-//            totalAllTextField.setText(totalAllString);
-//            totalDiscountTextField.setText(totalDiscountString);
             totalAmountTextField.setText(totalAmountString);
             t.getTableView().getSelectionModel().clearSelection();
             barcodeTextField.requestFocus();
@@ -248,9 +201,6 @@ public class TransactionController implements Initializable {
             final MenuItem removeMenuItem = new MenuItem("Hapus");
             removeMenuItem.setOnAction(actionEvent -> {
                 saleTableView.getItems().remove(row.getItem());
-//                int totalAll = 0;
-//                int totalDiscountInt;
-//                int totalDiscountAmount = 0;
                 int totalAmount = 0;
 
                 for (Sale i : saleTableView.getItems()) {
@@ -261,27 +211,14 @@ public class TransactionController implements Initializable {
                     }
                     int subtotalInt = Integer.parseInt(String.valueOf(sub));
                     totalAmount += subtotalInt;
-
-//                    String[] discountAmountArray = i.getDiscountAmount().split("\\.");
-//                    StringBuilder disc = new StringBuilder();
-//                    for (String d : discountAmountArray) {
-//                        disc.append(d);
-//                    }
-//                    totalDiscountInt = Integer.parseInt(String.valueOf(disc));
-//                    totalDiscountAmount += totalDiscountInt;
                 }
 
                 DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
                 DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
                 symbols.setGroupingSeparator('.');
                 formatter.setDecimalFormatSymbols(symbols);
-//                totalAmount = totalAll - totalDiscountAmount;
-//                String totalAllString = formatter.format(totalAll);
-//                String totalDiscountString = formatter.format(totalDiscountAmount);
                 String totalAmountString = formatter.format(totalAmount);
 
-//                totalAllTextField.setText(totalAllString);
-//                totalDiscountTextField.setText(totalDiscountString);
                 if (totalAmountString.equals("0")) {
                     totalAmountTextField.setText("");
                 } else {
@@ -353,27 +290,17 @@ public class TransactionController implements Initializable {
         }
         int sellingInt = Integer.parseInt(String.valueOf(price));
         int subtotalStart = sellingInt * sale.getQuantity();
-//            if (sale.getDiscount() != 0) {
-//                discountAmountInt = subtotalStart * sale.getDiscount() / 100;
-//            } else {
-//                discountAmountInt = 0;
-//            }
 
         DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
         symbols.setGroupingSeparator('.');
         formatter.setDecimalFormatSymbols(symbols);
 
-//            discountAmountString = formatter.format(discountAmountInt);
         subtotalString = formatter.format(subtotalStart);
 
-//            sale.setDiscountAmount(discountAmountString);
         sale.setSubtotal(subtotalString);
 
         saleTableView.getItems().add(sale);
-//            int totalAll = 0;
-//            int totalDiscountInt;
-//            int totalDiscountAmount = 0;
         int totalAmount = 0;
 
         for (Sale i : saleTableView.getItems()) {
@@ -384,23 +311,10 @@ public class TransactionController implements Initializable {
             }
             subtotalInt = Integer.parseInt(String.valueOf(sub));
             totalAmount += subtotalInt;
-
-//                String[] discountAmountArray = i.getDiscountAmount().split("\\.");
-//                StringBuilder disc = new StringBuilder();
-//                for (String d : discountAmountArray) {
-//                    disc.append(d);
-//                }
-//                totalDiscountInt = Integer.parseInt(String.valueOf(disc));
-//                totalDiscountAmount += totalDiscountInt;
         }
 
-//            totalAmount = totalAll - totalDiscountAmount;
-//            String totalAllString = formatter.format(totalAll);
-//            String totalDiscountString = formatter.format(totalDiscountAmount);
         String totalAmountString = formatter.format(totalAmount);
 
-//            totalAllTextField.setText(totalAllString);
-//            totalDiscountTextField.setText(totalDiscountString);
         totalAmountTextField.setText(totalAmountString);
 
         resetProductButtonAction(actionEvent);
@@ -646,6 +560,48 @@ public class TransactionController implements Initializable {
 
         productTableView.getSelectionModel().clearSelection();
         barcodeTextField.requestFocus();
+    }
+
+    @FXML
+    private void saleTableViewClicked(MouseEvent mouseEvent) {
+        Sale row = saleTableView.getSelectionModel().getSelectedItem();
+        saleTableView.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.DELETE) {
+                Common.productName = row.getName();
+                content = "Tidak jadi membeli ini?";
+                if (Helper.alert(Alert.AlertType.CONFIRMATION, content) != ButtonType.OK) {
+                    return;
+                }
+
+                saleTableView.getItems().remove(row);
+
+                int totalAmount = 0;
+
+                for (Sale i : saleTableView.getItems()) {
+                    String[] subtotalArray = i.getSubtotal().split("\\.");
+                    StringBuilder sub = new StringBuilder();
+                    for (String s : subtotalArray) {
+                        sub.append(s);
+                    }
+                    int subtotalInt = Integer.parseInt(String.valueOf(sub));
+                    totalAmount += subtotalInt;
+                }
+
+                DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+                DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+                symbols.setGroupingSeparator('.');
+                formatter.setDecimalFormatSymbols(symbols);
+                String totalAmountString = formatter.format(totalAmount);
+
+                if (totalAmountString.equals("0")) {
+                    totalAmountTextField.setText("");
+                } else {
+                    totalAmountTextField.setText(totalAmountString);
+                }
+                saleTableView.getSelectionModel().clearSelection();
+                barcodeTextField.requestFocus();
+            }
+        });
     }
 
     @FXML

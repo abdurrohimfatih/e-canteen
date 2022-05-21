@@ -101,6 +101,8 @@ public class SupplierHistoryController implements Initializable {
 
         profileButton.setText(Common.user.getName());
         Helper.formatDatePicker(dateDatePicker);
+        dateDatePicker.getEditor().setDisable(true);
+        dateDatePicker.getEditor().setOpacity(1);
         dateDatePicker.setValue(LocalDate.now());
         supplierComboBox.setItems(suppliers);
         supplyTableView.setPlaceholder(new Label("Tidak ada data."));

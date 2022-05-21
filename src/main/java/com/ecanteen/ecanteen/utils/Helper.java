@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -198,6 +199,15 @@ public class Helper {
         if (content.equals("Kembalian Rp")) {
             pane.setContent(hBox);
             pane.getContent().setStyle("-fx-alignment: center;");
+        } else if (content.equals("Tidak jadi membeli ini?")) {
+            Label label1 = new Label(content);
+            Label label2 = new Label(Common.productName);
+            label2.setStyle("-fx-font-weight: bold");
+            VBox vBox = new VBox();
+            vBox.getChildren().add(label1);
+            vBox.getChildren().add(label2);
+
+            pane.setContent(vBox);
         }
 
         alert.showAndWait();

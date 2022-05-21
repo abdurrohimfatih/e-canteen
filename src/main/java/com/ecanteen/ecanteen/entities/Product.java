@@ -10,7 +10,6 @@ public class Product {
     private int stockAmount;
     private Category category;
     private Supplier supplier;
-//    private Promotion promotion;
 
     public String getBarcode() {
         return barcode;
@@ -84,19 +83,4 @@ public class Product {
         this.supplier = supplier;
     }
 
-//    public Promotion getPromotion() {
-//        return promotion;
-//    }
-//
-//    public void setPromotion(Promotion promotion) {
-//        this.promotion = promotion;
-//    }
-
-//    public int getDiscount() {
-//        return discount;
-//    }
-//
-//    public void setDiscount(int discount) {
-//        this.discount = discount;
-//    }
 }

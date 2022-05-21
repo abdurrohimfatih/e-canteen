@@ -156,7 +156,7 @@
                     <Font name="System Bold" size="20.0" />
                 </font>
             </Label>
-            <TableView fx:id="saleTableView" editable="true" AnchorPane.bottomAnchor="170.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="70.0">
+            <TableView fx:id="saleTableView" onMouseClicked="#saleTableViewClicked" editable="true" AnchorPane.bottomAnchor="170.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="70.0">
                 <columns>
                     <TableColumn fx:id="barcodeSaleTableColumn" prefWidth="75.0" styleClass="column-left" text="Barcode" />
                     <TableColumn fx:id="nameSaleTableColumn" prefWidth="75.0" styleClass="column-left" text="Nama Produk" />
