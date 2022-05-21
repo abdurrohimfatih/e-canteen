@@ -130,7 +130,7 @@ public class SupplierController implements Initializable {
         Helper.addTextLimiter(idTextField, 16);
         Helper.addTextLimiter(nameTextField, 30);
         Helper.addTextLimiter(addressTextField, 15);
-        Helper.addTextLimiter(phoneTextField, 14);
+        Helper.addTextLimiter(phoneTextField, 13);
         Helper.addTextLimiter(bankAccountTextField, 30);
         Helper.addTextLimiter(accountNumberTextField, 25);
         genderComboBox.setItems(FXCollections.observableArrayList("Laki-laki", "Perempuan"));

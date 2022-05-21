@@ -125,7 +125,7 @@ public class UserController implements Initializable {
         Helper.addTextLimiter(usernameTextField, 20);
         Helper.addTextLimiter(nameTextField, 30);
         Helper.addTextLimiter(addressTextField, 15);
-        Helper.addTextLimiter(phoneTextField, 14);
+        Helper.addTextLimiter(phoneTextField, 13);
         Helper.addTextLimiter(emailTextField, 50);
         genderComboBox.setItems(FXCollections.observableArrayList("Laki-laki", "Perempuan"));
         levelComboBox.setItems(FXCollections.observableArrayList("Admin", "Kasir"));
