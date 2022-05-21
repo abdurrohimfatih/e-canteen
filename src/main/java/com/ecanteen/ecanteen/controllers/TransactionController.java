@@ -60,6 +60,8 @@ public class TransactionController implements Initializable {
     @FXML
     private Button logoutButton;
     @FXML
+    private Button refreshProductButton;
+    @FXML
     private TextField searchTextField;
     @FXML
     private TableView<Product> productTableView;
@@ -276,10 +278,7 @@ public class TransactionController implements Initializable {
         sale.setName(product.getName());
         sale.setSellingPrice(product.getSellingPrice());
         sale.setQuantity(1);
-//            sale.setDiscount(productDao.getDiscount(barcodeTextField.getText()));
 
-//            int discountAmountInt;
-//            String discountAmountString;
         int subtotalInt;
         String subtotalString;
 
@@ -636,5 +635,12 @@ public class TransactionController implements Initializable {
         if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
             Helper.changePage(logoutButton, "Login", "login-view.fxml");
         }
+    }
+
+    @FXML
+    private void refreshProductButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        products.clear();
+        products.addAll(productDao.fetchAll());
+        barcodeTextField.requestFocus();
     }
 }

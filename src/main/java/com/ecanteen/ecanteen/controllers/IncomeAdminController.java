@@ -55,7 +55,7 @@ public class IncomeAdminController implements Initializable {
     @FXML
     private Button logoutButton;
     @FXML
-    private TextField searchTextField;
+    private Button refreshIncomeButton;
     @FXML
     private TableView<Income> incomeTableView;
     @FXML
@@ -67,11 +67,12 @@ public class IncomeAdminController implements Initializable {
     @FXML
     private TableColumn<Income, String> profitTableColumn;
 
+    private IncomeDaoImpl incomeDao;
     private ObservableList<Income> incomes;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        IncomeDaoImpl incomeDao = new IncomeDaoImpl();
+        incomeDao = new IncomeDaoImpl();
         incomes = FXCollections.observableArrayList();
 
         try {
@@ -121,5 +122,11 @@ public class IncomeAdminController implements Initializable {
         if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
             Helper.changePage(logoutButton, "Login", "login-view.fxml");
         }
+    }
+
+    @FXML
+    private void refreshIncomeButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        incomes.clear();
+        incomes.addAll(incomeDao.fetchIncomeAdmin());
     }
 }
