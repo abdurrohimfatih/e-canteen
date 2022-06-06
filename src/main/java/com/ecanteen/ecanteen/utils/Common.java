@@ -11,4 +11,5 @@ public class Common {
     public static String change;
     public static String productName;
     public static List<Integer> oldStocks;
+    public static List<String> oldExpiredDate;
 }

@@ -19,7 +19,7 @@ public class ProductDaoImpl implements DaoService<Product> {
         List<Product> products = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()){
             String query =
-                    "SELECT p.barcode, p.name, p.category_id, p.purchase_price, p.selling_price, p.stock_amount, p.supplier_id, p.date_added, p.expired_date, c.name AS category_name, s.name AS supplier_name, s.status AS supplier_status FROM product p JOIN category c ON p.category_id = c.id JOIN supplier s ON p.supplier_id = s.id WHERE s.status = 1";
+                    "SELECT p.barcode, p.name, p.category_id, p.purchase_price, p.selling_price, p.stock_amount, p.supplier_id, p.date_added, p.expired_date, c.name AS category_name, s.name AS supplier_name, s.status AS supplier_status FROM product p JOIN category c ON p.category_id = c.id JOIN supplier s ON p.supplier_id = s.id WHERE s.status = 1 ORDER BY p.name";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
@@ -82,17 +82,15 @@ public class ProductDaoImpl implements DaoService<Product> {
     public int updateData(Product object) throws SQLException, ClassNotFoundException {
         int result = 0;
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "UPDATE product SET name = ?, category_id = ?, purchase_price = ?, selling_price = ?, stock_amount = ?, supplier_id = ?, date_added = ?, expired_date = ? WHERE barcode = ?";
+            String query = "UPDATE product SET name = ?, category_id = ?, purchase_price = ?, selling_price = ?, supplier_id = ?, date_added = ? WHERE barcode = ?";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setString(1, object.getName());
                 ps.setInt(2, object.getCategory().getId());
                 ps.setString(3, object.getPurchasePrice());
                 ps.setString(4, object.getSellingPrice());
-                ps.setInt(5, object.getStockAmount());
-                ps.setString(6, object.getSupplier().getId());
-                ps.setString(7, object.getDateAdded());
-                ps.setString(8, object.getExpiredDate());
-                ps.setString(9, object.getBarcode());
+                ps.setString(5, object.getSupplier().getId());
+                ps.setString(6, object.getDateAdded());
+                ps.setString(7, object.getBarcode());
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();
@@ -311,23 +309,20 @@ public class ProductDaoImpl implements DaoService<Product> {
         }
     }
 
-    public static Product getPurchaseSelling(String barcode) throws SQLException, ClassNotFoundException {
-        Product product = new Product();
+    public void updateStockAndExpired(int stock, String expiredDate, String barcode) throws SQLException, ClassNotFoundException {
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT purchase_price, selling_price FROM product WHERE barcode = ?";
+            String query = "UPDATE product SET stock_amount = ?, expired_date = ? WHERE barcode =?";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
-                ps.setString(1, barcode);
+                ps.setInt(1, stock);
+                ps.setString(2, expiredDate);
+                ps.setString(3, barcode);
 
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        product.setPurchasePrice(rs.getString("purchase_price"));
-                        product.setSellingPrice(rs.getString("selling_price"));
-                    }
+                if (ps.executeUpdate() != 0) {
+                    connection.commit();
+                } else {
+                    connection.rollback();
                 }
             }
         }
-
-        return product;
     }
-
 }

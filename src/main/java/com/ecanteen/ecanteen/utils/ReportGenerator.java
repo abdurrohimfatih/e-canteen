@@ -3,12 +3,14 @@ package com.ecanteen.ecanteen.utils;
 import com.ecanteen.ecanteen.controllers.TransactionCashierController;
 import com.ecanteen.ecanteen.dao.TransactionDaoImpl;
 import com.ecanteen.ecanteen.entities.Sale;
+import com.ecanteen.ecanteen.entities.Stock;
 import com.ecanteen.ecanteen.entities.Supply;
 import com.ecanteen.ecanteen.entities.Transaction;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 import org.apache.log4j.BasicConfigurator;
 
 import java.io.InputStream;
@@ -105,6 +107,52 @@ public class ReportGenerator {
 //                    JasperViewer viewer = new JasperViewer(print, false);
 //                    viewer.setVisible(true);
 //                    viewer.setFitPageZoomRatio();
+                } catch (JRException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        };
+
+        ExecutorService service = Executors.newCachedThreadPool();
+        service.execute(task);
+        service.shutdown();
+    }
+
+    public void printAddStock(ObservableList<Stock> stocks, String date, String employee) {
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                BasicConfigurator.configure();
+                HashMap<String, Object> param = new HashMap<>();
+                List<Stock> stockList = new ArrayList<>();
+
+                for (Stock item : stocks) {
+                    Stock stock = new Stock();
+                    stock.setId(item.getId());
+                    stock.setBarcode(item.getProduct().getBarcode());
+                    stock.setName(item.getProduct().getName());
+                    stock.setQty(item.getQty());
+                    stock.setSupplier(item.getProduct().getSupplier().getName());
+
+                    stockList.add(stock);
+                }
+
+                JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(stockList);
+
+                param.put("DS", itemsJRBean);
+                param.put("date", date);
+                param.put("employee", employee);
+
+                try {
+                    InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/add-stock.jasper");
+                    JasperPrint print = JasperFillManager.fillReport(inputStream, param, new JREmptyDataSource());
+//                    JasperPrintManager.printReport(print, true);
+
+                    JasperViewer viewer = new JasperViewer(print, false);
+                    viewer.setVisible(true);
+                    viewer.setFitPageZoomRatio();
                 } catch (JRException e) {
                     e.printStackTrace();
                 }

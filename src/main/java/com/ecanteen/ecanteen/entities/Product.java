@@ -85,6 +85,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return barcode + "-" + name;
+        return barcode + " - " + name;
     }
 }

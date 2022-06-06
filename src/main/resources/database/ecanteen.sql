@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 01, 2022 at 11:04 AM
+-- Generation Time: Jun 06, 2022 at 12:30 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -63,8 +63,10 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`barcode`, `name`, `category_id`, `purchase_price`, `selling_price`, `stock_amount`, `supplier_id`, `date_added`, `expired_date`) VALUES
+('1000', 'Kopi Panas', 1, '1.000', '2.000', 320, 'ID123', '06-06-2022', '-'),
+('10000', 'Susu Frisian Flag', 1, '1.000', '1.500', 560, 'ID123', '06-06-2022', '-'),
 ('123', 'Nu Milk Tea', 1, '4.500', '5.000', 97, '123', '21-05-2022', '11-06-2022'),
-('321', 'Es Teh Manis', 1, '1.000', '2.000', 99, 'ID123', '21-05-2022', '11-06-2022');
+('321', 'Es Teh Manis', 1, '1.000', '2.000', 350, 'ID123', '06-06-2022', '-');
 
 -- --------------------------------------------------------
 
@@ -124,6 +126,18 @@ CREATE TABLE `stock` (
   `expired_date` varchar(10) DEFAULT NULL,
   `type` enum('add','return') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `stock`
+--
+
+INSERT INTO `stock` (`id`, `barcode`, `qty`, `expired_date`, `type`) VALUES
+(1, '1000', 10, '-', 'add'),
+(2, '10000', 20, '-', 'add'),
+(3, '10000', 20, '-', 'add'),
+(4, '321', 20, '-', 'add'),
+(5, '321', 20, '-', 'add'),
+(6, '1000', 20, '-', 'add');
 
 -- --------------------------------------------------------
 
@@ -280,7 +294,7 @@ ALTER TABLE `sale`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables

@@ -3,6 +3,9 @@ package com.ecanteen.ecanteen.entities;
 public class Stock {
     private int id;
     private Product product;
+    private String barcode;
+    private String name;
+    private String supplier;
     private int qty;
     private String expiredDate;
     private String type;
@@ -21,6 +24,30 @@ public class Stock {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
     }
 
     public int getQty() {

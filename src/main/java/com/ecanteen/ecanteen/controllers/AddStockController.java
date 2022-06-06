@@ -6,6 +6,8 @@ import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Stock;
 import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
+import com.ecanteen.ecanteen.utils.ReportGenerator;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -19,8 +21,10 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 
 public class AddStockController implements Initializable {
@@ -97,12 +101,12 @@ public class AddStockController implements Initializable {
 
     private ObservableList<Stock> stocks;
     private ProductDaoImpl productDao;
-    private Product product;
     private StockDaoImpl stockDao;
     private Stock selectedStock;
     private String content;
     private int oldStock;
     private int newStock;
+    private String oldExpiredDate;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -111,6 +115,7 @@ public class AddStockController implements Initializable {
         stockDao = new StockDaoImpl();
         stocks = FXCollections.observableArrayList();
         Common.oldStocks = new ArrayList<>();
+        Common.oldExpiredDate = new ArrayList<>();
 
         try {
             products.addAll(productDao.fetchAll());
@@ -176,10 +181,12 @@ public class AddStockController implements Initializable {
                 stocks = stockTableView.getItems();
 
                 oldStock = productDao.getStockAmount(stock.getProduct().getBarcode());
+                oldExpiredDate = productDao.getExpiredDate(stock.getProduct().getBarcode());
                 newStock = oldStock + stock.getQty();
-                productDao.updateStock(newStock, stock.getProduct().getBarcode());
+                productDao.updateStockAndExpired(newStock, stock.getExpiredDate(), stock.getProduct().getBarcode());
 
                 Common.oldStocks.add(oldStock);
+                Common.oldExpiredDate.add(oldExpiredDate);
 
                 resetStock();
                 content = "Data berhasil ditambahkan!";
@@ -211,7 +218,7 @@ public class AddStockController implements Initializable {
 
                     oldStock = Common.oldStocks.get(stockTableView.getSelectionModel().getSelectedIndex());
                     newStock = oldStock + selectedStock.getQty();
-                    productDao.updateStock(newStock, selectedStock.getProduct().getBarcode());
+                    productDao.updateStockAndExpired(newStock, selectedStock.getExpiredDate(), selectedStock.getProduct().getBarcode());
 
                     resetStock();
                     content = "Data berhasil diubah!";
@@ -235,8 +242,9 @@ public class AddStockController implements Initializable {
         try {
             if (stockDao.deleteData(selectedStock) == 1) {
                 oldStock = Common.oldStocks.get(stockTableView.getSelectionModel().getSelectedIndex());
+                oldExpiredDate = Common.oldExpiredDate.get(stockTableView.getSelectionModel().getSelectedIndex());
                 newStock = oldStock;
-                productDao.updateStock(newStock, selectedStock.getProduct().getBarcode());
+                productDao.updateStockAndExpired(newStock, oldExpiredDate, selectedStock.getProduct().getBarcode());
 
                 stockTableView.getItems().remove(stockTableView.getSelectionModel().getSelectedIndex());
                 resetStock();
@@ -290,6 +298,44 @@ public class AddStockController implements Initializable {
 
     @FXML
     private void printButtonAction(ActionEvent actionEvent) {
+        stocks = stockTableView.getItems();
+
+        Calendar now = Calendar.getInstance();
+        int day = now.get(Calendar.DATE);
+        int year = now.get(Calendar.YEAR);
+
+        String[] strDayOfWeek = new String[] {
+                "Senin, ",
+                "Selasa, ",
+                "Rabu, ",
+                "Kamis, ",
+                "Jumat, ",
+                "Sabtu, ",
+                "Minggu, "
+        };
+
+        String[] strMonth = new String[] {
+                " Januari ",
+                " Februari ",
+                " Maret ",
+                " April ",
+                " Mei ",
+                " Juni ",
+                " Juli ",
+                " Agustus ",
+                " September ",
+                " Oktober ",
+                " November ",
+                " Desember "
+        };
+
+        String dayOfWeek = strDayOfWeek[now.get(Calendar.DAY_OF_WEEK)];
+        String month = strMonth[now.get(Calendar.MONTH)];
+
+        String date = dayOfWeek + day + month + year;
+        String employee = Common.user.getName();
+
+        new ReportGenerator().printAddStock(stocks, date, employee);
     }
 
     @FXML

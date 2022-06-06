@@ -23,7 +23,6 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class ProductController implements Initializable {
@@ -78,11 +77,7 @@ public class ProductController implements Initializable {
     @FXML
     private TextField sellingPriceTextField;
     @FXML
-    private TextField stockAmountTextField;
-    @FXML
     private ComboBox<Supplier> supplierComboBox;
-    @FXML
-    private DatePicker expiredDateDatePicker;
     @FXML
     private Button addButton;
     @FXML
@@ -134,17 +129,12 @@ public class ProductController implements Initializable {
 
         Helper.toNumberField(barcodeTextField);
         Helper.toNumberField(sellingPriceTextField);
-        Helper.toNumberField(stockAmountTextField);
         Helper.addThousandSeparator(purchasePriceTextField);
         Helper.addThousandSeparator(sellingPriceTextField);
         Helper.addTextLimiter(barcodeTextField, 20);
         Helper.addTextLimiter(nameTextField, 100);
         Helper.addTextLimiter(purchasePriceTextField, 9);
         Helper.addTextLimiter(sellingPriceTextField, 9);
-        Helper.addTextLimiter(stockAmountTextField, 11);
-        Helper.formatDatePicker(expiredDateDatePicker);
-        expiredDateDatePicker.getEditor().setDisable(true);
-        expiredDateDatePicker.getEditor().setOpacity(1);
         categoryComboBox.setItems(categories);
         supplierComboBox.setItems(suppliers);
         productTableView.setPlaceholder(new Label("Tidak ada data."));
@@ -187,10 +177,10 @@ public class ProductController implements Initializable {
         product.setCategory(categoryComboBox.getValue());
         product.setPurchasePrice(purchasePriceTextField.getText());
         product.setSellingPrice(sellingPriceTextField.getText());
-        product.setStockAmount(Integer.parseInt(stockAmountTextField.getText().trim()));
+        product.setStockAmount(0);
         product.setSupplier(supplierComboBox.getValue());
         product.setDateAdded(Helper.formattedDateNow());
-        product.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        product.setExpiredDate("-");
 
         try {
             if (productDao.addData(product) == 1) {
@@ -214,10 +204,8 @@ public class ProductController implements Initializable {
         selectedProduct.setCategory(categoryComboBox.getValue());
         selectedProduct.setPurchasePrice(purchasePriceTextField.getText().trim());
         selectedProduct.setSellingPrice(sellingPriceTextField.getText().trim());
-        selectedProduct.setStockAmount(Integer.parseInt(stockAmountTextField.getText().trim()));
         selectedProduct.setSupplier(supplierComboBox.getValue());
         selectedProduct.setDateAdded(Helper.formattedDateNow());
-        selectedProduct.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
         content = "Anda yakin ingin mengubah?";
         if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
@@ -276,9 +264,7 @@ public class ProductController implements Initializable {
             categoryComboBox.setValue(selectedProduct.getCategory());
             purchasePriceTextField.setText(String.valueOf(selectedProduct.getPurchasePrice()));
             sellingPriceTextField.setText(String.valueOf(selectedProduct.getSellingPrice()));
-            stockAmountTextField.setText(String.valueOf(selectedProduct.getStockAmount()));
             supplierComboBox.setValue(selectedProduct.getSupplier());
-            expiredDateDatePicker.setValue(Helper.formatter(selectedProduct.getExpiredDate()));
             barcodeTextField.setDisable(true);
             addButton.setDisable(true);
             updateButton.setDisable(false);
@@ -320,9 +306,7 @@ public class ProductController implements Initializable {
         categoryComboBox.setValue(null);
         purchasePriceTextField.clear();
         sellingPriceTextField.clear();
-        stockAmountTextField.clear();
         supplierComboBox.setValue(null);
-        expiredDateDatePicker.setValue(null);
         selectedProduct = null;
         productTableView.getSelectionModel().clearSelection();
         resetError();
@@ -340,9 +324,7 @@ public class ProductController implements Initializable {
         categoryComboBox.setStyle("-fx-border-color: #424242");
         purchasePriceTextField.setStyle("-fx-border-color: #424242");
         sellingPriceTextField.setStyle("-fx-border-color: #424242");
-        stockAmountTextField.setStyle("-fx-border-color: #424242");
         supplierComboBox.setStyle("-fx-border-color: #424242");
-        expiredDateDatePicker.setStyle("-fx-border-color: #424242");
     }
 
     private boolean validateForm() {
@@ -382,15 +364,6 @@ public class ProductController implements Initializable {
             return true;
         }
 
-        if (stockAmountTextField.getText().trim().isEmpty()) {
-            resetError();
-            stockAmountTextField.setStyle("-fx-border-color: RED");
-            content = "Jumlah stok wajib diisi!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            stockAmountTextField.requestFocus();
-            return true;
-        }
-
         if (supplierComboBox.getValue() == null) {
             resetError();
             supplierComboBox.setStyle("-fx-border-color: RED");
@@ -400,14 +373,6 @@ public class ProductController implements Initializable {
             return true;
         }
 
-        if (expiredDateDatePicker.getValue() == null) {
-            resetError();
-            expiredDateDatePicker.setStyle("-fx-border-color: RED");
-            content = "Tanggal kedaluwarsa wajib diisi!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-            expiredDateDatePicker.requestFocus();
-            return true;
-        }
         return false;
     }
 

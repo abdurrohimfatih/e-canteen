@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" styleClass="border-pane" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.AddStockController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" styleClass="border-pane" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.AddStockController">
    <top>
       <AnchorPane prefHeight="70.0" prefWidth="1366.0" BorderPane.alignment="CENTER">
          <HBox alignment="CENTER" layoutX="334.0" layoutY="15.0" spacing="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
@@ -197,7 +197,7 @@
    </left>
    <center>
       <AnchorPane BorderPane.alignment="CENTER">
-         <TableView fx:id="stockTableView" onMouseClicked="#stockTableViewClicked" layoutX="34.0" layoutY="57.0" prefWidth="439.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+         <TableView fx:id="stockTableView" layoutX="34.0" layoutY="57.0" onMouseClicked="#stockTableViewClicked" prefWidth="439.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
             <columns>
                <TableColumn fx:id="barcodeTableColumn" prefWidth="75.0" text="Barcode" />
                <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="Nama Produk" />
