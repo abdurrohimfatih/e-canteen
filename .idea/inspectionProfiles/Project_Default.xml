@@ -53,6 +53,7 @@
           <option value="org.openjfx:javafx-fxml" />
           <option value="org.openjfx:javafx-controls" />
           <option value="org.openjfx:javafx-graphics" />
+          <option value="net.sf.jasperreports:jasperreports" />
         </list>
       </option>
     </inspection_tool>

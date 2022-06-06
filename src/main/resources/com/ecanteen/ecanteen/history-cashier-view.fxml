@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.HistoryCashierController">
+   <top>
+      <AnchorPane prefHeight="70.0" prefWidth="1366.0" style="-fx-background-color: #0c80d4;" BorderPane.alignment="CENTER">
+         <HBox alignment="CENTER" layoutX="334.0" layoutY="15.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="15.0">
+            <Label alignment="CENTER" prefWidth="400.0" text="INTEGRATED DIGITAL CANTEEN" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="-10.0" />
+               </HBox.margin>
+            </Label>
+            <Button fx:id="transactionMenuButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#transactionMenuButtonAction" prefHeight="40.0" text="TRANSAKSI" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="cashier-button" />
+                  <String fx:value="button-menu" />
+               </styleClass>
+            </Button>
+            <Button fx:id="historyMenuButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="646.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" text="RIWAYAT" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="cashier-button-active" />
+                  <String fx:value="button-menu" />
+               </styleClass>
+            </Button>
+            <Button fx:id="topUpMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" focusTraversable="false" layoutX="812.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" styleClass="button-menu" text="TOP UP" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+         </HBox>
+         <HBox alignment="CENTER" layoutX="1244.0" layoutY="15.0" spacing="20.0" AnchorPane.rightAnchor="15.0">
+            <Button fx:id="settingsButton" alignment="CENTER" contentDisplay="CENTER" disable="true" focusTraversable="false" mnemonicParsing="false" prefHeight="40.0" styleClass="button-menu" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIconView glyphName="GEAR" size="20" tabSize="0" />
+               </graphic>
+            </Button>
+            <Button fx:id="logoutButton" focusTraversable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#logoutButtonAction" prefHeight="40.0" text="LOGOUT" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="cashier-button" />
+                  <String fx:value="button-menu" />
+               </styleClass>
+            </Button>
+         </HBox>
+      </AnchorPane>
+   </top>
+   <center>
+      <AnchorPane BorderPane.alignment="CENTER">
+         <Label fx:id="cashierNameLabel" layoutX="704.0" layoutY="20.0" text="RIWAYAT PENDAPATAN HARIAN OLEH : " AnchorPane.leftAnchor="20.0">
+            <font>
+               <Font name="System Bold" size="18.0" />
+            </font>
+         </Label>
+         <TableView fx:id="incomeTableView" layoutX="34.0" layoutY="57.0" prefWidth="439.0" styleClass="table-income" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="65.0">
+            <columns>
+               <TableColumn fx:id="dateTableColumn" prefWidth="75.0" text="Tanggal" />
+               <TableColumn fx:id="incomeTableColumn" prefWidth="75.0" text="Pendapatan" />
+            </columns>
+            <columnResizePolicy>
+               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+         </TableView>
+      </AnchorPane>
+   </center>
+</BorderPane>

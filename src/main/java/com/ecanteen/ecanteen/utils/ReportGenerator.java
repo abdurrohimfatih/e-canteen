@@ -1,6 +1,6 @@
 package com.ecanteen.ecanteen.utils;
 
-import com.ecanteen.ecanteen.controllers.TransactionController;
+import com.ecanteen.ecanteen.controllers.TransactionCashierController;
 import com.ecanteen.ecanteen.dao.TransactionDaoImpl;
 import com.ecanteen.ecanteen.entities.Sale;
 import com.ecanteen.ecanteen.entities.Supply;
@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ReportGenerator {
-    public void generateInvoice(TransactionDaoImpl transactionDao, TransactionController controller, ObservableList<Sale> saleData, Transaction transaction) {
+    public void generateInvoice(TransactionDaoImpl transactionDao, TransactionCashierController controller, ObservableList<Sale> saleData, Transaction transaction) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {

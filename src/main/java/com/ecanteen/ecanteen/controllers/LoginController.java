@@ -63,11 +63,11 @@ public class LoginController implements Initializable {
             Common.user = user;
 
             if (!user.getLevel().equals("Kasir")) {
-                Helper.changePage(loginButton, "Admin - Riwayat Pendapatan", "income-admin-view.fxml");
+                Helper.changePage(loginButton, "Admin - Riwayat Pendapatan", "income-report-view.fxml");
                 return;
             }
 
-            Helper.changePage(loginButton, "Kasir - Transaksi", "transaction-view.fxml");
+            Helper.changePage(loginButton, "Kasir - Transaksi", "transaction-cashier-view.fxml");
         } catch (SQLException | ClassNotFoundException e) {
             String content = "Koneksi ke database error, periksa kembali!";
             Helper.alert(Alert.AlertType.ERROR, content);

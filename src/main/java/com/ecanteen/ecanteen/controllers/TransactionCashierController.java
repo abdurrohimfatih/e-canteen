@@ -38,25 +38,15 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class TransactionController implements Initializable {
+public class TransactionCashierController implements Initializable {
     @FXML
     private Button transactionMenuButton;
-    @FXML
-    private MenuButton reportMenuButton;
-    @FXML
-    private MenuItem incomeMenuItem;
-    @FXML
-    private MenuItem soldProductMenuItem;
-    @FXML
-    private MenuItem favoriteProductMenuItem;
-    @FXML
-    private Button productMenuButton;
     @FXML
     private Button historyMenuButton;
     @FXML
     private Button topUpMenuButton;
     @FXML
-    private Button profileButton;
+    private Button settingsButton;
     @FXML
     private Button logoutButton;
     @FXML
@@ -119,7 +109,6 @@ public class TransactionController implements Initializable {
             e.printStackTrace();
         }
 
-        profileButton.setText(Common.user.getName());
         productTableView.setPlaceholder(new Label("Tidak ada data."));
         saleTableView.setPlaceholder(new Label("Tidak ada data."));
         productTableView.setItems(products);
@@ -604,28 +593,15 @@ public class TransactionController implements Initializable {
     }
 
     @FXML
-    private void productMenuButtonAction(ActionEvent actionEvent) throws IOException {
-        if (!saleData.isEmpty()) {
-            content = "Data transaksi akan di-reset.\nAnda yakin ingin pindah halaman?";
-            ButtonType result = Helper.alert(Alert.AlertType.CONFIRMATION, content);
-            if (result == ButtonType.OK) {
-                Helper.changePage(productMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
-            }
-        } else {
-            Helper.changePage(productMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
-        }
-    }
-
-    @FXML
     private void historyMenuButtonAction(ActionEvent actionEvent) throws IOException {
         if (!saleData.isEmpty()) {
             content = "Data transaksi akan di-reset.\nAnda yakin ingin pindah halaman?";
             ButtonType result = Helper.alert(Alert.AlertType.CONFIRMATION, content);
             if (result == ButtonType.OK) {
-                Helper.changePage(productMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
+                Helper.changePage(historyMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
             }
         } else {
-            Helper.changePage(productMenuButton, "Kasir - Riwayat", "income-cashier-view.fxml");
+            Helper.changePage(historyMenuButton, "Kasir - Riwayat", "history-cashier-view.fxml");
         }
     }
 

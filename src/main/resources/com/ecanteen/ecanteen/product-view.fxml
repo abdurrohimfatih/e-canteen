@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
@@ -18,29 +20,11 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.ProductController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" styleClass="border-pane" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.ProductController">
    <top>
-      <AnchorPane prefHeight="70.0" prefWidth="1366.0" style="-fx-background-color: #75dfff;" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="70.0" prefWidth="1366.0" BorderPane.alignment="CENTER">
          <HBox alignment="CENTER" layoutX="334.0" layoutY="15.0" spacing="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
-            <MenuButton fx:id="reportMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" text="LAPORAN" textAlignment="CENTER" textFill="WHITE">
-               <items>
-                  <MenuItem fx:id="incomeMenuItem" mnemonicParsing="false" text="Pendapatan" />
-                  <MenuItem fx:id="soldProductMenuItem" mnemonicParsing="false" text="Produk Terjual" />
-                  <MenuItem fx:id="favoriteProductMenuItem" mnemonicParsing="false" text="Produk Favorit" />
-                  <MenuItem fx:id="supplierMenuItem" mnemonicParsing="false" text="Supplier" />
-                  <MenuItem fx:id="benefitMenuItem" mnemonicParsing="false" text="Laba" />
-               </items>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <padding>
-                  <Insets left="20.0" right="20.0" />
-               </padding>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </MenuButton>
-            <MenuButton fx:id="stockMenuButton" alignment="CENTER" contentDisplay="CENTER" minHeight="40.0" mnemonicParsing="false" styleClass="active" text="DATA STOK" textAlignment="CENTER" textFill="WHITE">
+            <MenuButton fx:id="masterMenuButton" alignment="CENTER" contentDisplay="CENTER" minHeight="40.0" mnemonicParsing="false" text="DATA MASTER" textAlignment="CENTER" textFill="WHITE">
                <items>
                   <MenuItem fx:id="productMenuItem" mnemonicParsing="false" text="Data Produk" />
                   <MenuItem fx:id="categoryMenuItem" mnemonicParsing="false" onAction="#categoryMenuItemAction" text="Data Kategori" />
@@ -48,62 +32,77 @@
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
-               <padding>
-                  <Insets left="20.0" right="20.0" />
-               </padding>
                <HBox.margin>
                   <Insets />
                </HBox.margin>
+               <styleClass>
+                  <String fx:value="menu-button-menu" />
+                  <String fx:value="active" />
+               </styleClass>
             </MenuButton>
-            <Button fx:id="userMenuButton" alignment="CENTER" contentDisplay="CENTER" layoutX="350.0" layoutY="10.0" mnemonicParsing="false" onAction="#userButtonAction" prefHeight="40.0" text="DATA PENGGUNA" textAlignment="CENTER" textFill="WHITE">
-               <padding>
-                  <Insets left="20.0" right="20.0" />
-               </padding>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="customerMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="40.0" text="DATA PELANGGAN" textAlignment="CENTER" textFill="WHITE">
-               <padding>
-                  <Insets left="20.0" right="20.0" />
-               </padding>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="supplierMenuButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#supplierButtonAction" prefHeight="40.0" text="DATA SUPPLIER" textAlignment="CENTER" textFill="WHITE">
-               <padding>
-                  <Insets left="20.0" right="20.0" />
-               </padding>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Button>
-            <MenuButton fx:id="historyMenuButton" alignment="CENTER" contentDisplay="CENTER" layoutX="165.0" layoutY="10.0" minHeight="40.0" mnemonicParsing="false" text="RIWAYAT" textAlignment="CENTER" textFill="WHITE">
+            <MenuButton fx:id="stockMenuButton" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" minHeight="40.0" mnemonicParsing="false" styleClass="menu-button-menu" text="DATA STOK" textAlignment="CENTER" textFill="WHITE">
                <items>
-                  <MenuItem fx:id="incomeHistoryMenuItem" mnemonicParsing="false" onAction="#incomeHistoryMenuItemAction" text="Riwayat Pendapatan" />
-                  <MenuItem fx:id="supplierHistoryMenuItem" mnemonicParsing="false" onAction="#supplierHistoryMenuItemAction" text="Riwayat Supplier" />
+                  <MenuItem fx:id="addStockMenuItem" mnemonicParsing="false" onAction="#addStockMenuItemAction" text="Tambah Stok" />
+                  <MenuItem fx:id="returnStockMenuItem" mnemonicParsing="false" onAction="#returnStockMenuItemAction" text="Return Stok" />
                </items>
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
-               <padding>
-                  <Insets left="20.0" right="20.0" />
-               </padding>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
             </MenuButton>
-            <Button fx:id="topUpMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="812.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" text="TOP UP" textAlignment="CENTER" textFill="WHITE">
-               <padding>
-                  <Insets left="20.0" right="20.0" />
-               </padding>
+            <Button fx:id="userMenuButton" alignment="CENTER" contentDisplay="CENTER" layoutX="350.0" layoutY="10.0" mnemonicParsing="false" onAction="#userButtonAction" prefHeight="40.0" styleClass="button-menu" text="DATA PENGGUNA" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="customerMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="40.0" styleClass="button-menu" text="DATA PELANGGAN" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="supplierMenuButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#supplierButtonAction" prefHeight="40.0" styleClass="button-menu" text="DATA SUPPLIER" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Button>
+            <MenuButton fx:id="reportMenuButton" alignment="CENTER" contentDisplay="CENTER" layoutX="165.0" layoutY="10.0" minHeight="40.0" mnemonicParsing="false" styleClass="menu-button-menu" text="LAPORAN" textAlignment="CENTER" textFill="WHITE">
+               <items>
+                  <MenuItem fx:id="stockReportMenuItem" mnemonicParsing="false" onAction="#stockReportMenuItemAction" text="Laporan Stok" />
+                  <MenuItem fx:id="incomeReportMenuItem" mnemonicParsing="false" onAction="#incomeReportMenuItemAction" text="Laporan Pendapatan" />
+                  <MenuItem fx:id="supplierReportMenuItem" mnemonicParsing="false" onAction="#supplierReportMenuItemAction" text="Laporan Supplier" />
+               </items>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </MenuButton>
+            <MenuButton fx:id="recapMenuButton" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" styleClass="menu-button-menu" text="REKAPITULASI" textAlignment="CENTER" textFill="WHITE">
+               <items>
+                  <MenuItem fx:id="incomeRecapMenuItem" mnemonicParsing="false" onAction="#incomeRecapMenuItemAction" text="Rekap Stok" />
+                  <MenuItem fx:id="stockRecapMenuItem" mnemonicParsing="false" onAction="#stockRecapMenuItemAction" text="Rekap Pendapatan" />
+                  <MenuItem fx:id="supplierRecapMenuItem" mnemonicParsing="false" onAction="#supplierRecapMenuItemAction" text="Rekap Supplier" />
+               </items>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </MenuButton>
+            <Button fx:id="topUpMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="812.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" styleClass="button-menu" text="TOP UP" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -113,21 +112,18 @@
             </Button>
          </HBox>
          <HBox alignment="CENTER" layoutX="1244.0" layoutY="15.0" spacing="10.0" AnchorPane.rightAnchor="15.0">
-            <Button fx:id="profileButton" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="40.0" textAlignment="CENTER">
+            <Button fx:id="settingsButton" alignment="CENTER" contentDisplay="CENTER" disable="true" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="40.0" styleClass="button-menu" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
-               <padding>
-                  <Insets left="20.0" right="20.0" />
-               </padding>
+               <graphic>
+                  <FontAwesomeIconView glyphName="GEAR" size="20" tabSize="0" />
+               </graphic>
             </Button>
-            <Button fx:id="logoutButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#logoutButtonAction" prefHeight="40.0" text="LOGOUT" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="logoutButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#logoutButtonAction" prefHeight="40.0" styleClass="button-menu" text="LOGOUT" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
-               <padding>
-                  <Insets left="20.0" right="20.0" />
-               </padding>
                <HBox.margin>
                   <Insets />
                </HBox.margin>
@@ -136,7 +132,7 @@
       </AnchorPane>
    </top>
    <left>
-      <AnchorPane prefWidth="330.0" style="-fx-background-color: #75dfff;" BorderPane.alignment="CENTER">
+      <AnchorPane prefWidth="330.0" BorderPane.alignment="CENTER">
          <TextField fx:id="searchTextField" layoutX="30.0" layoutY="17.0" onKeyPressed="#searchTextFieldKeyPressed" promptText="Cari" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="16.0">
             <font>
                <Font size="16.0" />
@@ -218,7 +214,7 @@
       </AnchorPane>
    </left>
    <center>
-      <AnchorPane style="-fx-background-color: #75dfff;" BorderPane.alignment="CENTER">
+      <AnchorPane BorderPane.alignment="CENTER">
          <TableView fx:id="productTableView" layoutX="34.0" layoutY="57.0" onMouseClicked="#productTableViewClicked" prefWidth="439.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
             <columns>
                <TableColumn fx:id="barcodeTableColumn" prefWidth="75.0" text="Barcode" />

@@ -2,7 +2,6 @@ package com.ecanteen.ecanteen.controllers;
 
 import com.ecanteen.ecanteen.dao.IncomeDaoImpl;
 import com.ecanteen.ecanteen.entities.Income;
-import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -17,25 +16,19 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class IncomeAdminController implements Initializable {
+public class IncomeReportController implements Initializable {
     @FXML
-    private MenuButton reportMenuButton;
-    @FXML
-    private MenuItem incomeMenuItem;
-    @FXML
-    private MenuItem soldProductMenuItem;
-    @FXML
-    private MenuItem favoriteProductMenuItem;
-    @FXML
-    private MenuItem supplierMenuItem;
-    @FXML
-    private MenuItem benefitMenuItem;
-    @FXML
-    private MenuButton stockMenuButton;
+    private MenuButton masterMenuButton;
     @FXML
     private MenuItem productMenuItem;
     @FXML
     private MenuItem categoryMenuItem;
+    @FXML
+    private MenuButton stockMenuButton;
+    @FXML
+    private MenuItem addStockMenuItem;
+    @FXML
+    private MenuItem returnStockMenuItem;
     @FXML
     private Button userMenuButton;
     @FXML
@@ -43,15 +36,25 @@ public class IncomeAdminController implements Initializable {
     @FXML
     private Button supplierMenuButton;
     @FXML
-    private MenuButton historyMenuButton;
+    private MenuButton reportMenuButton;
     @FXML
-    private MenuItem incomeHistoryMenuItem;
+    private MenuItem stockReportMenuItem;
     @FXML
-    private MenuItem supplierHistoryMenuItem;
+    private MenuItem incomeReportMenuItem;
+    @FXML
+    private MenuItem supplierReportMenuItem;
+    @FXML
+    private MenuButton recapMenuButton;
+    @FXML
+    private MenuItem incomeRecapMenuItem;
+    @FXML
+    private MenuItem stockRecapMenuItem;
+    @FXML
+    private MenuItem supplierRecapMenuItem;
     @FXML
     private Button topUpMenuButton;
     @FXML
-    private Button profileButton;
+    private Button settingsButton;
     @FXML
     private Button logoutButton;
     @FXML
@@ -81,7 +84,6 @@ public class IncomeAdminController implements Initializable {
             throw new RuntimeException(e);
         }
 
-        profileButton.setText(Common.user.getName());
         incomeTableView.setPlaceholder(new Label("Tidak ada data."));
         incomeTableView.setItems(incomes);
         dateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDate()));
@@ -92,12 +94,22 @@ public class IncomeAdminController implements Initializable {
 
     @FXML
     private void productMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(stockMenuButton, "Admin - Produk", "product-view.fxml");
+        Helper.changePage(masterMenuButton, "Admin - Produk", "product-view.fxml");
     }
 
     @FXML
     private void categoryMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(stockMenuButton, "Admin - Kategori", "category-view.fxml");
+        Helper.changePage(masterMenuButton, "Admin - Kategori", "category-view.fxml");
+    }
+
+    @FXML
+    private void addStockMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(stockMenuButton, "Admin - Tambah Stok", "add-stock-view.fxml");
+    }
+
+    @FXML
+    private void returnStockMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(stockMenuButton, "Admin - Return Stok", "return-stock-view.fxml");
     }
 
     @FXML
@@ -111,8 +123,28 @@ public class IncomeAdminController implements Initializable {
     }
 
     @FXML
-    private void supplierHistoryMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(historyMenuButton, "Admin - Riwayat Supplier", "supplier-history-view.fxml");
+    private void stockReportMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(reportMenuButton, "Admin - Laporan Stok", "stock-report-view.fxml");
+    }
+
+    @FXML
+    private void supplierReportMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(reportMenuButton, "Admin - Laporan Supplier", "supplier-report-view.fxml");
+    }
+
+    @FXML
+    private void stockRecapMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(recapMenuButton, "Admin - Rekap Stok", "stock-recap-view.fxml");
+    }
+
+    @FXML
+    private void incomeRecapMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(recapMenuButton, "Admin - Rekap Pendapatan", "income-recap-view.fxml");
+    }
+
+    @FXML
+    private void supplierRecapMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(recapMenuButton, "Admin - Rekap Pendapatan", "supplier-recap-view.fxml");
     }
 
     @FXML

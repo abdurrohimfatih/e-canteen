@@ -1,3 +1,7 @@
+.border-pane {
+    -fx-background-color: #75dfff;
+}
+
 .table-view, .table-view:focused, .text-field:focused, .date-picker:focused, .text-area:focused, .combo-box:focused {
     -fx-border-color: #23BBCF;
 }
@@ -13,6 +17,14 @@
 
 .table-view .column-header .label {
     -fx-text-fill: white;
+}
+
+.button-menu {
+    -fx-padding: 0 15px 0 15px;
+}
+
+.menu-button-menu {
+    -fx-padding: 0 10px 0 10px;
 }
 
 .button, .menu-button {
@@ -75,6 +87,10 @@
 
 .date-picker .text-field {
     -fx-border-width: 0;
+}
+
+.date-picker, .searchable-combo-box {
+    -fx-cursor: HAND;
 }
 
 .link {
