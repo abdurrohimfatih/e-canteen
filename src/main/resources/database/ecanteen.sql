@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 21, 2022 at 04:21 AM
+-- Generation Time: Jun 01, 2022 at 11:04 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -33,6 +33,13 @@ CREATE TABLE `category` (
   `date_created` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `category`
+--
+
+INSERT INTO `category` (`id`, `name`, `date_created`) VALUES
+(1, 'Minuman', '21-05-2022');
+
 -- --------------------------------------------------------
 
 --
@@ -50,6 +57,14 @@ CREATE TABLE `product` (
   `date_added` varchar(10) NOT NULL,
   `expired_date` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `product`
+--
+
+INSERT INTO `product` (`barcode`, `name`, `category_id`, `purchase_price`, `selling_price`, `stock_amount`, `supplier_id`, `date_added`, `expired_date`) VALUES
+('123', 'Nu Milk Tea', 1, '4.500', '5.000', 97, '123', '21-05-2022', '11-06-2022'),
+('321', 'Es Teh Manis', 1, '1.000', '2.000', 99, 'ID123', '21-05-2022', '11-06-2022');
 
 -- --------------------------------------------------------
 
@@ -86,6 +101,30 @@ CREATE TABLE `sale` (
   `subtotal` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `sale`
+--
+
+INSERT INTO `sale` (`id`, `transaction_id`, `barcode`, `quantity`, `subtotal`) VALUES
+(1, 1, '123', 1, '5.000'),
+(2, 2, '123', 1, '5.000'),
+(3, 3, '123', 1, '5.000'),
+(4, 4, '321', 1, '2.000');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stock`
+--
+
+CREATE TABLE `stock` (
+  `id` int(11) NOT NULL,
+  `barcode` varchar(20) NOT NULL,
+  `qty` int(11) NOT NULL,
+  `expired_date` varchar(10) DEFAULT NULL,
+  `type` enum('add','return') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- --------------------------------------------------------
 
 --
@@ -109,7 +148,7 @@ CREATE TABLE `supplier` (
 --
 
 INSERT INTO `supplier` (`id`, `name`, `address`, `gender`, `phone`, `email`, `bank_account`, `account_number`, `status`) VALUES
-('123', 'Budi', 'Kuningan', 'Laki-laki', '089999999999', 'budi@gmail.com', 'BNI', '8712937912', '1'),
+('123', 'Budi', 'Kuningan', 'Laki-laki', '089999999999', 'budi@gmail.com', 'BNI', '8712937912', '0'),
 ('ID123', 'Andi', 'Cirebon', 'Laki-laki', '081234567890', 'andi@gmail.com', 'BRI', '398127832', '1');
 
 -- --------------------------------------------------------
@@ -125,6 +164,16 @@ CREATE TABLE `transaction` (
   `time` varchar(8) NOT NULL,
   `total_amount` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `transaction`
+--
+
+INSERT INTO `transaction` (`id`, `username`, `date`, `time`, `total_amount`) VALUES
+(1, 'kasir', '21-05-2022', '09:23:58', '5000'),
+(2, 'kasir', '21-05-2022', '09:56:37', '5000'),
+(3, 'kasir', '21-05-2022', '09:57:08', '5000'),
+(4, 'kasir', '21-05-2022', '10:45:08', '2000');
 
 -- --------------------------------------------------------
 
@@ -186,6 +235,13 @@ ALTER TABLE `sale`
   ADD KEY `sale_ibfk_1` (`barcode`);
 
 --
+-- Indexes for table `stock`
+--
+ALTER TABLE `stock`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `barcode` (`barcode`);
+
+--
 -- Indexes for table `supplier`
 --
 ALTER TABLE `supplier`
@@ -212,12 +268,18 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `sale`
 --
 ALTER TABLE `sale`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `stock`
+--
+ALTER TABLE `stock`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -237,6 +299,12 @@ ALTER TABLE `product`
 ALTER TABLE `sale`
   ADD CONSTRAINT `sale_ibfk_1` FOREIGN KEY (`barcode`) REFERENCES `product` (`barcode`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `sale_ibfk_2` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `stock`
+--
+ALTER TABLE `stock`
+  ADD CONSTRAINT `stock_ibfk_1` FOREIGN KEY (`barcode`) REFERENCES `product` (`barcode`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `transaction`
