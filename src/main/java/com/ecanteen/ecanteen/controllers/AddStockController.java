@@ -1,8 +1,10 @@
 package com.ecanteen.ecanteen.controllers;
 
 import com.ecanteen.ecanteen.dao.ProductDaoImpl;
+import com.ecanteen.ecanteen.dao.StockDaoImpl;
 import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Stock;
+import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class AddStockController implements Initializable {
@@ -92,15 +95,22 @@ public class AddStockController implements Initializable {
     @FXML
     private Button printButton;
 
-    private ObservableList<Product> products;
+    private ObservableList<Stock> stocks;
     private ProductDaoImpl productDao;
-    private String content;
+    private Product product;
+    private StockDaoImpl stockDao;
     private Stock selectedStock;
+    private String content;
+    private int oldStock;
+    private int newStock;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         productDao = new ProductDaoImpl();
-        products = FXCollections.observableArrayList();
+        ObservableList<Product> products = FXCollections.observableArrayList();
+        stockDao = new StockDaoImpl();
+        stocks = FXCollections.observableArrayList();
+        Common.oldStocks = new ArrayList<>();
 
         try {
             products.addAll(productDao.fetchAll());
@@ -146,6 +156,11 @@ public class AddStockController implements Initializable {
         resetError();
         Product product = productComboBox.getValue();
         Stock stock = new Stock();
+        try {
+            stock.setId(stockDao.getNowId());
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         stock.setProduct(product);
         stock.setQty(Integer.parseInt(amountTextField.getText()));
         if (expiredDateDatePicker.getEditor().getText().trim().isEmpty()) {
@@ -154,13 +169,32 @@ public class AddStockController implements Initializable {
             stock.setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         }
         stock.setType("add");
-        stockTableView.getItems().add(stock);
-        resetButtonAction(actionEvent);
+
+        try {
+            if (stockDao.addData(stock) == 1) {
+                stockTableView.getItems().add(stock);
+                stocks = stockTableView.getItems();
+
+                oldStock = productDao.getStockAmount(stock.getProduct().getBarcode());
+                newStock = oldStock + stock.getQty();
+                productDao.updateStock(newStock, stock.getProduct().getBarcode());
+
+                Common.oldStocks.add(oldStock);
+
+                resetStock();
+                content = "Data berhasil ditambahkan!";
+                Helper.alert(Alert.AlertType.INFORMATION, content);
+                productComboBox.requestFocus();
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
     private void updateButtonAction(ActionEvent actionEvent) {
         resetError();
+        selectedStock.setId(Integer.parseInt(idTextField.getText()));
         selectedStock.setProduct(productComboBox.getValue());
         selectedStock.setQty(Integer.parseInt(amountTextField.getText().trim()));
         if (expiredDateDatePicker.getEditor().getText().trim().isEmpty()) {
@@ -171,10 +205,22 @@ public class AddStockController implements Initializable {
 
         content = "Anda yakin ingin mengubah?";
         if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-            stockTableView.getItems().set(stockTableView.getSelectionModel().getSelectedIndex(), selectedStock);
-            resetButtonAction(actionEvent);
-            content = "Data berhasil diubah!";
-            Helper.alert(Alert.AlertType.INFORMATION, content);
+            try {
+                if (stockDao.updateData(selectedStock) == 1) {
+                    stockTableView.getItems().set(stockTableView.getSelectionModel().getSelectedIndex(), selectedStock);
+
+                    oldStock = Common.oldStocks.get(stockTableView.getSelectionModel().getSelectedIndex());
+                    newStock = oldStock + selectedStock.getQty();
+                    productDao.updateStock(newStock, selectedStock.getProduct().getBarcode());
+
+                    resetStock();
+                    content = "Data berhasil diubah!";
+                    Helper.alert(Alert.AlertType.INFORMATION, content);
+                    productComboBox.requestFocus();
+                }
+            } catch (SQLException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -186,14 +232,30 @@ public class AddStockController implements Initializable {
             return;
         }
 
-        stockTableView.getItems().remove(stockTableView.getSelectionModel().getSelectedIndex());
-        resetButtonAction(actionEvent);
-        content = "Data berhasil dihapus!";
-        Helper.alert(Alert.AlertType.INFORMATION, content);
+        try {
+            if (stockDao.deleteData(selectedStock) == 1) {
+                oldStock = Common.oldStocks.get(stockTableView.getSelectionModel().getSelectedIndex());
+                newStock = oldStock;
+                productDao.updateStock(newStock, selectedStock.getProduct().getBarcode());
+
+                stockTableView.getItems().remove(stockTableView.getSelectionModel().getSelectedIndex());
+                resetStock();
+                content = "Data berhasil dihapus!";
+                Helper.alert(Alert.AlertType.INFORMATION, content);
+                productComboBox.requestFocus();
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
     private void resetButtonAction(ActionEvent actionEvent) {
+        resetStock();
+    }
+
+    private void resetStock() {
+        idTextField.clear();
         productComboBox.setValue(null);
         amountTextField.clear();
         expiredDateDatePicker.setValue(null);
@@ -211,6 +273,7 @@ public class AddStockController implements Initializable {
     private void stockTableViewClicked(MouseEvent mouseEvent) {
         selectedStock = stockTableView.getSelectionModel().getSelectedItem();
         if (selectedStock != null) {
+            idTextField.setText(String.valueOf(selectedStock.getId()));
             productComboBox.setValue(selectedStock.getProduct());
             amountTextField.setText(String.valueOf(selectedStock.getQty()));
             if (selectedStock.getExpiredDate().equals("-")) {
