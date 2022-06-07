@@ -97,6 +97,7 @@
 	<parameter name="DS" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<parameter name="date" class="java.lang.String"/>
 	<parameter name="employee" class="java.lang.String"/>
+	<parameter name="bts-mart-dir" class="sun.nio.ch.ChannelInputStream"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -104,16 +105,16 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="94" splitType="Stretch">
+		<band height="85" splitType="Stretch">
 			<staticText>
-				<reportElement x="120" y="10" width="161" height="34" uuid="f0113827-aa39-4637-9d83-378c3fdf8c36"/>
+				<reportElement x="120" y="1" width="161" height="34" uuid="f0113827-aa39-4637-9d83-378c3fdf8c36"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="20" isBold="true"/>
 				</textElement>
 				<text><![CDATA[BTS Mart]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="120" y="44" width="405" height="25" uuid="f56b04e9-e804-49e7-a840-dccb02b44602">
+				<reportElement x="120" y="35" width="405" height="25" uuid="f56b04e9-e804-49e7-a840-dccb02b44602">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -122,7 +123,7 @@
 				<text><![CDATA[Jl. Ir. Soekarno Blok Cikedung Cirendang Kuningan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="120" y="69" width="405" height="25" uuid="76a3a946-ad18-4727-8fcc-5a031b69dae4">
+				<reportElement x="120" y="60" width="405" height="25" uuid="76a3a946-ad18-4727-8fcc-5a031b69dae4">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box bottomPadding="0">
@@ -137,6 +138,10 @@
 				</textElement>
 				<text><![CDATA[Telepon (0232) 88888888]]></text>
 			</staticText>
+			<image>
+				<reportElement x="10" y="17" width="89" height="60" uuid="8a5344ad-8640-479c-8687-4e3b37940fa1"/>
+				<imageExpression><![CDATA[$P{bts-mart-dir}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
@@ -185,8 +190,8 @@
 						<jr:detailCell style="Table 2_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="31" height="30" uuid="9e7c1638-de10-4210-943a-abf8bb16cdc3"/>
-								<box leftPadding="5"/>
-								<textElement verticalAlignment="Middle">
+								<box leftPadding="5" rightPadding="5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="12"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
@@ -206,7 +211,7 @@
 						<jr:detailCell style="Table 2_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="139" height="30" uuid="4b25f4bd-e161-4620-81ec-32ab4cab4ebc"/>
-								<box leftPadding="5"/>
+								<box leftPadding="5" rightPadding="5"/>
 								<textElement verticalAlignment="Middle">
 									<font size="12"/>
 								</textElement>
@@ -227,7 +232,7 @@
 						<jr:detailCell style="Table 2_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="152" height="30" uuid="fdb923d1-d962-490d-9f2c-ade132ab909e"/>
-								<box leftPadding="5"/>
+								<box leftPadding="5" rightPadding="5"/>
 								<textElement verticalAlignment="Middle">
 									<font size="12"/>
 								</textElement>
@@ -235,10 +240,10 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="48" uuid="a8afb359-3b32-4ed6-af78-8b4b115615b0">
+					<jr:column width="60" uuid="a8afb359-3b32-4ed6-af78-8b4b115615b0">
 						<jr:columnHeader style="Table 2_CH" height="30">
 							<staticText>
-								<reportElement x="0" y="0" width="48" height="30" uuid="cbb5f959-5b4f-4029-86bd-76fe3cdb40de"/>
+								<reportElement x="0" y="0" width="60" height="30" uuid="cbb5f959-5b4f-4029-86bd-76fe3cdb40de"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="12"/>
 								</textElement>
@@ -247,8 +252,8 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table 2_TD" height="30">
 							<textField>
-								<reportElement x="0" y="0" width="48" height="30" uuid="10d2c990-8ecc-40c0-bbdf-9d3e1161f1f7"/>
-								<box leftPadding="5"/>
+								<reportElement x="0" y="0" width="60" height="30" uuid="10d2c990-8ecc-40c0-bbdf-9d3e1161f1f7"/>
+								<box leftPadding="5" rightPadding="5"/>
 								<textElement verticalAlignment="Middle">
 									<font size="12"/>
 								</textElement>
@@ -256,10 +261,10 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="155" uuid="382577a6-e758-4357-8faa-8ebff79f8668">
+					<jr:column width="143" uuid="382577a6-e758-4357-8faa-8ebff79f8668">
 						<jr:columnHeader style="Table 2_CH" height="30">
 							<staticText>
-								<reportElement x="0" y="0" width="155" height="30" uuid="8750ad28-b46c-4cfb-8a51-d1615051ce67"/>
+								<reportElement x="0" y="0" width="143" height="30" uuid="8750ad28-b46c-4cfb-8a51-d1615051ce67"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="12"/>
 								</textElement>
@@ -268,8 +273,8 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table 2_TD" height="30">
 							<textField>
-								<reportElement x="0" y="0" width="155" height="30" uuid="56068617-f8e0-481d-81e5-b867def11fe9"/>
-								<box leftPadding="5"/>
+								<reportElement x="0" y="0" width="143" height="30" uuid="56068617-f8e0-481d-81e5-b867def11fe9"/>
+								<box leftPadding="5" rightPadding="5"/>
 								<textElement verticalAlignment="Middle">
 									<font size="12"/>
 								</textElement>

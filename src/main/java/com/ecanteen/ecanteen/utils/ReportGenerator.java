@@ -141,9 +141,12 @@ public class ReportGenerator {
 
                 JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(stockList);
 
+                InputStream logoStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/image/bts-mart.png");
+
                 param.put("DS", itemsJRBean);
                 param.put("date", date);
                 param.put("employee", employee);
+                param.put("bts-mart-dir", logoStream);
 
                 try {
                     InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/add-stock.jasper");

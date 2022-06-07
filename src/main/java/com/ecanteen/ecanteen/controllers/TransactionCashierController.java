@@ -248,19 +248,19 @@ public class TransactionCashierController implements Initializable {
             return;
         }
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate now = Helper.formatter(LocalDate.now().format(dateTimeFormatter));
-        LocalDate nowPlus1 = now.plusDays(1);
-        String expiredDate = productDao.getExpiredDate(barcodeTextField.getText().trim());
-
-        if (now.isEqual(Helper.formatter(expiredDate)) ||
-                now.isAfter(Helper.formatter(expiredDate))) {
-            content = "Produk tersebut sudah kedaluwarsa!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-        } else if (nowPlus1.isEqual(Helper.formatter(expiredDate))) {
-            content = "Produk tersebut kedaluwarsa besok!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-        }
+//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+//        LocalDate now = Helper.formatter(LocalDate.now().format(dateTimeFormatter));
+//        LocalDate nowPlus1 = now.plusDays(1);
+//        String expiredDate = productDao.getExpiredDate(barcodeTextField.getText().trim());
+//
+//        if (now.isEqual(Helper.formatter(expiredDate)) ||
+//                now.isAfter(Helper.formatter(expiredDate))) {
+//            content = "Produk tersebut sudah kedaluwarsa!";
+//            Helper.alert(Alert.AlertType.ERROR, content);
+//        } else if (nowPlus1.isEqual(Helper.formatter(expiredDate))) {
+//            content = "Produk tersebut kedaluwarsa besok!";
+//            Helper.alert(Alert.AlertType.ERROR, content);
+//        }
 
         Sale sale = new Sale();
         sale.setBarcode(product.getBarcode());
@@ -490,19 +490,19 @@ public class TransactionCashierController implements Initializable {
     }
 
     private void addProduct(Product selectedProduct) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate now = Helper.formatter(LocalDate.now().format(dateTimeFormatter));
-        LocalDate nowPlus1 = now.plusDays(1);
-        String expiredDate = selectedProduct.getExpiredDate();
-
-        if (now.isEqual(Helper.formatter(expiredDate)) ||
-                now.isAfter(Helper.formatter(expiredDate))) {
-            content = "Produk tersebut sudah kedaluwarsa!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-        } else if (nowPlus1.isEqual(Helper.formatter(expiredDate))) {
-            content = "Produk tersebut kedaluwarsa besok!";
-            Helper.alert(Alert.AlertType.ERROR, content);
-        }
+//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+//        LocalDate now = Helper.formatter(LocalDate.now().format(dateTimeFormatter));
+//        LocalDate nowPlus1 = now.plusDays(1);
+//        String expiredDate = selectedProduct.getExpiredDate();
+//
+//        if (now.isEqual(Helper.formatter(expiredDate)) ||
+//                now.isAfter(Helper.formatter(expiredDate))) {
+//            content = "Produk tersebut sudah kedaluwarsa!";
+//            Helper.alert(Alert.AlertType.ERROR, content);
+//        } else if (nowPlus1.isEqual(Helper.formatter(expiredDate))) {
+//            content = "Produk tersebut kedaluwarsa besok!";
+//            Helper.alert(Alert.AlertType.ERROR, content);
+//        }
 
         Sale sale = new Sale();
         sale.setBarcode(selectedProduct.getBarcode());
@@ -598,7 +598,7 @@ public class TransactionCashierController implements Initializable {
             content = "Data transaksi akan di-reset.\nAnda yakin ingin pindah halaman?";
             ButtonType result = Helper.alert(Alert.AlertType.CONFIRMATION, content);
             if (result == ButtonType.OK) {
-                Helper.changePage(historyMenuButton, "Kasir - Produk", "product-cashier-view.fxml");
+                Helper.changePage(historyMenuButton, "Kasir - Riwayat", "history-cashier-view.fxml");
             }
         } else {
             Helper.changePage(historyMenuButton, "Kasir - Riwayat", "history-cashier-view.fxml");

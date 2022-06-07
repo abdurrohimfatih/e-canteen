@@ -192,6 +192,7 @@ public class AddStockController implements Initializable {
                 content = "Data berhasil ditambahkan!";
                 Helper.alert(Alert.AlertType.INFORMATION, content);
                 productComboBox.requestFocus();
+                printButton.setDisable(false);
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -251,6 +252,10 @@ public class AddStockController implements Initializable {
                 content = "Data berhasil dihapus!";
                 Helper.alert(Alert.AlertType.INFORMATION, content);
                 productComboBox.requestFocus();
+
+                if (stockTableView.getItems().isEmpty()) {
+                    printButton.setDisable(true);
+                }
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -305,13 +310,13 @@ public class AddStockController implements Initializable {
         int year = now.get(Calendar.YEAR);
 
         String[] strDayOfWeek = new String[] {
+                "Sabtu, ",
+                "Minggu ",
                 "Senin, ",
                 "Selasa, ",
                 "Rabu, ",
                 "Kamis, ",
-                "Jumat, ",
-                "Sabtu, ",
-                "Minggu, "
+                "Jumat, "
         };
 
         String[] strMonth = new String[] {

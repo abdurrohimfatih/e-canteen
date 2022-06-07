@@ -209,7 +209,7 @@
                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
             </columnResizePolicy>
          </TableView>
-         <Button fx:id="printButton" alignment="CENTER" layoutX="925.0" layoutY="624.0" mnemonicParsing="false" onAction="#printButtonAction" prefHeight="40.0" prefWidth="90.0" styleClass="add" text="CETAK" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="15.0">
+         <Button fx:id="printButton" alignment="CENTER" layoutX="925.0" layoutY="624.0" mnemonicParsing="false" onAction="#printButtonAction" prefHeight="40.0" prefWidth="90.0" styleClass="add" text="CETAK" disable="true" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="15.0">
             <font>
                <Font name="System Bold" size="14.0" />
             </font>
