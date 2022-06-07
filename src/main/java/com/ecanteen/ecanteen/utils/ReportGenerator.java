@@ -120,7 +120,7 @@ public class ReportGenerator {
         service.shutdown();
     }
 
-    public void printAddStock(ObservableList<Stock> stocks, String date, String employee) {
+    public void printAddReturnStock(ObservableList<Stock> stocks, String date, String employee, String addReturn) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -147,9 +147,10 @@ public class ReportGenerator {
                 param.put("date", date);
                 param.put("employee", employee);
                 param.put("bts-mart-dir", logoStream);
+                param.put("add-return", addReturn);
 
                 try {
-                    InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/add-stock.jasper");
+                    InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/add-return-stock.jasper");
                     JasperPrint print = JasperFillManager.fillReport(inputStream, param, new JREmptyDataSource());
 //                    JasperPrintManager.printReport(print, true);
 

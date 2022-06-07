@@ -20,12 +20,11 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 
-public class AddStockController implements Initializable {
+public class ReturnStockController implements Initializable {
     @FXML
     private MenuButton masterMenuButton;
     @FXML
@@ -73,8 +72,6 @@ public class AddStockController implements Initializable {
     @FXML
     private TextField amountTextField;
     @FXML
-    private DatePicker expiredDateDatePicker;
-    @FXML
     private Button addButton;
     @FXML
     private Button updateButton;
@@ -104,7 +101,6 @@ public class AddStockController implements Initializable {
     private String content;
     private int oldStock;
     private int newStock;
-    private String oldExpiredDate;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -113,19 +109,15 @@ public class AddStockController implements Initializable {
         stockDao = new StockDaoImpl();
         stocks = FXCollections.observableArrayList();
         Common.oldStocks = new ArrayList<>();
-        Common.oldExpiredDate = new ArrayList<>();
 
         try {
-            products.addAll(productDao.fetchProductsAddStock());
+            products.addAll(productDao.fetchProductsReturnStock());
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         Helper.toNumberField(amountTextField);
         Helper.addTextLimiter(amountTextField, 11);
-        Helper.formatDatePicker(expiredDateDatePicker);
-        expiredDateDatePicker.getEditor().setDisable(true);
-        expiredDateDatePicker.getEditor().setOpacity(1);
         productComboBox.setItems(products);
         stockTableView.setPlaceholder(new Label("Tidak ada data."));
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct().getBarcode()));
@@ -156,34 +148,41 @@ public class AddStockController implements Initializable {
         }
 
         resetError();
-        Product product = productComboBox.getValue();
         Stock stock = new Stock();
+
         try {
             stock.setId(stockDao.getNowId());
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        stock.setProduct(product);
+        stock.setProduct(productComboBox.getValue());
         stock.setQty(Integer.parseInt(amountTextField.getText()));
-        if (expiredDateDatePicker.getEditor().getText().trim().isEmpty()) {
-            stock.getProduct().setExpiredDate("-");
-        } else {
-            stock.getProduct().setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        stock.setType("return");
+
+        try {
+            oldStock = productDao.getStockAmount(stock.getProduct().getBarcode());
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
-        stock.setType("add");
+
+        if (oldStock - stock.getQty() < 0) {
+            resetError();
+            amountTextField.setStyle("-fx-border-color: RED");
+            content = "Jumlah return lebih dari jumlah stok!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+            amountTextField.requestFocus();
+            return;
+        }
 
         try {
             if (stockDao.addData(stock) == 1) {
                 stockTableView.getItems().add(stock);
                 stocks = stockTableView.getItems();
 
-                oldStock = productDao.getStockAmount(stock.getProduct().getBarcode());
-                oldExpiredDate = productDao.getExpiredDate(stock.getProduct().getBarcode());
-                newStock = oldStock + stock.getQty();
-                productDao.updateStockAndExpired(newStock, stock.getProduct().getExpiredDate(), stock.getProduct().getBarcode());
+                newStock = oldStock - stock.getQty();
+                productDao.updateStock(newStock, stock.getProduct().getBarcode());
 
                 Common.oldStocks.add(oldStock);
-                Common.oldExpiredDate.add(oldExpiredDate);
 
                 resetStock();
                 content = "Data berhasil ditambahkan!";
@@ -219,10 +218,16 @@ public class AddStockController implements Initializable {
         selectedStock.setId(Integer.parseInt(idTextField.getText()));
         selectedStock.setProduct(productComboBox.getValue());
         selectedStock.setQty(Integer.parseInt(amountTextField.getText().trim()));
-        if (expiredDateDatePicker.getEditor().getText().trim().isEmpty()) {
-            selectedStock.getProduct().setExpiredDate("-");
-        } else {
-            selectedStock.getProduct().setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+        oldStock = Common.oldStocks.get(stockTableView.getSelectionModel().getSelectedIndex());
+
+        if (oldStock - selectedStock.getQty() < 0) {
+            resetError();
+            amountTextField.setStyle("-fx-border-color: RED");
+            content = "Jumlah return lebih dari jumlah stok!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+            amountTextField.requestFocus();
+            return;
         }
 
         content = "Anda yakin ingin mengubah?";
@@ -231,9 +236,8 @@ public class AddStockController implements Initializable {
                 if (stockDao.updateData(selectedStock) == 1) {
                     stockTableView.getItems().set(stockTableView.getSelectionModel().getSelectedIndex(), selectedStock);
 
-                    oldStock = Common.oldStocks.get(stockTableView.getSelectionModel().getSelectedIndex());
-                    newStock = oldStock + selectedStock.getQty();
-                    productDao.updateStockAndExpired(newStock, selectedStock.getProduct().getExpiredDate(), selectedStock.getProduct().getBarcode());
+                    newStock = oldStock - selectedStock.getQty();
+                    productDao.updateStock(newStock, selectedStock.getProduct().getBarcode());
 
                     resetStock();
                     content = "Data berhasil diubah!";
@@ -256,9 +260,8 @@ public class AddStockController implements Initializable {
         try {
             if (stockDao.deleteData(selectedStock) == 1) {
                 oldStock = Common.oldStocks.get(stockTableView.getSelectionModel().getSelectedIndex());
-                oldExpiredDate = Common.oldExpiredDate.get(stockTableView.getSelectionModel().getSelectedIndex());
                 newStock = oldStock;
-                productDao.updateStockAndExpired(newStock, oldExpiredDate, selectedStock.getProduct().getBarcode());
+                productDao.updateStock(newStock, selectedStock.getProduct().getBarcode());
 
                 stockTableView.getItems().remove(stockTableView.getSelectionModel().getSelectedIndex());
                 resetStock();
@@ -286,11 +289,6 @@ public class AddStockController implements Initializable {
             idTextField.setText(String.valueOf(selectedStock.getId()));
             productComboBox.setValue(selectedStock.getProduct());
             amountTextField.setText(String.valueOf(selectedStock.getQty()));
-            if (selectedStock.getProduct().getExpiredDate().equals("-")) {
-                expiredDateDatePicker.setValue(null);
-            } else {
-                expiredDateDatePicker.setValue(Helper.formatter(selectedStock.getProduct().getExpiredDate()));
-            }
             addButton.setDisable(true);
             updateButton.setDisable(false);
             deleteButton.setDisable(false);
@@ -337,20 +335,18 @@ public class AddStockController implements Initializable {
         String date = dayOfWeek + day + month + year;
         String employee = Common.user.getName();
 
-        new ReportGenerator().printAddReturnStock(stocks, date, employee, "MASUK");
+        new ReportGenerator().printAddReturnStock(stocks, date, employee, "RETURN");
     }
 
     private void resetError() {
         productComboBox.setStyle("-fx-border-color: #424242");
         amountTextField.setStyle("-fx-border-color: #424242");
-        expiredDateDatePicker.setStyle("-fx-border-color: #424242");
     }
 
     private void resetStock() {
         idTextField.clear();
         productComboBox.setValue(null);
         amountTextField.clear();
-        expiredDateDatePicker.setValue(null);
         selectedStock = null;
         stockTableView.getSelectionModel().clearSelection();
         resetError();
@@ -372,8 +368,8 @@ public class AddStockController implements Initializable {
     }
 
     @FXML
-    private void returnStockMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(stockMenuButton, "Admin - Return Stok", "return-stock-view.fxml");
+    private void addStockMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(stockMenuButton, "Admin - Tambah Stok", "add-stock-view.fxml");
     }
 
     @FXML

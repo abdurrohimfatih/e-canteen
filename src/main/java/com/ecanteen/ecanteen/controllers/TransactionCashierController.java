@@ -104,7 +104,7 @@ public class TransactionCashierController implements Initializable {
         products = FXCollections.observableArrayList();
 
         try {
-            products.addAll(productDao.fetchAll());
+            products.addAll(productDao.fetchProductsReturnStock());
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }

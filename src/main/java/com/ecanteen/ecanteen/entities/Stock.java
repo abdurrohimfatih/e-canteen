@@ -7,7 +7,6 @@ public class Stock {
     private String name;
     private String supplier;
     private int qty;
-    private String expiredDate;
     private String type;
 
     public int getId() {
@@ -56,14 +55,6 @@ public class Stock {
 
     public void setQty(int qty) {
         this.qty = qty;
-    }
-
-    public String getExpiredDate() {
-        return expiredDate;
-    }
-
-    public void setExpiredDate(String expiredDate) {
-        this.expiredDate = expiredDate;
     }
 
     public String getType() {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 06, 2022 at 12:30 PM
+-- Generation Time: Jun 07, 2022 at 11:23 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -63,10 +63,10 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`barcode`, `name`, `category_id`, `purchase_price`, `selling_price`, `stock_amount`, `supplier_id`, `date_added`, `expired_date`) VALUES
-('1000', 'Kopi Panas', 1, '1.000', '2.000', 320, 'ID123', '06-06-2022', '-'),
-('10000', 'Susu Frisian Flag', 1, '1.000', '1.500', 560, 'ID123', '06-06-2022', '-'),
-('123', 'Nu Milk Tea', 1, '4.500', '5.000', 97, '123', '21-05-2022', '11-06-2022'),
-('321', 'Es Teh Manis', 1, '1.000', '2.000', 350, 'ID123', '06-06-2022', '-');
+('1000', 'Kopi Panas', 1, '1.000', '2.000', 0, 'ID123', '06-06-2022', '14-06-2022'),
+('10000', 'Susu Frisian Flag', 1, '1.000', '1.500', 0, 'ID123', '06-06-2022', '-'),
+('123', 'Nu Milk Tea', 1, '4.500', '5.000', 117, '123', '21-05-2022', '25-06-2022'),
+('321', 'Es Teh Manis', 1, '1.000', '2.000', 45, 'ID123', '06-06-2022', '17-06-2022');
 
 -- --------------------------------------------------------
 
@@ -123,7 +123,6 @@ CREATE TABLE `stock` (
   `id` int(11) NOT NULL,
   `barcode` varchar(20) NOT NULL,
   `qty` int(11) NOT NULL,
-  `expired_date` varchar(10) DEFAULT NULL,
   `type` enum('add','return') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -131,13 +130,63 @@ CREATE TABLE `stock` (
 -- Dumping data for table `stock`
 --
 
-INSERT INTO `stock` (`id`, `barcode`, `qty`, `expired_date`, `type`) VALUES
-(1, '1000', 10, '-', 'add'),
-(2, '10000', 20, '-', 'add'),
-(3, '10000', 20, '-', 'add'),
-(4, '321', 20, '-', 'add'),
-(5, '321', 20, '-', 'add'),
-(6, '1000', 20, '-', 'add');
+INSERT INTO `stock` (`id`, `barcode`, `qty`, `type`) VALUES
+(1, '1000', 10, 'add'),
+(2, '10000', 20, 'add'),
+(3, '10000', 20, 'add'),
+(4, '321', 20, 'add'),
+(5, '321', 20, 'add'),
+(6, '1000', 20, 'add'),
+(7, '1000', 10, 'add'),
+(8, '10000', 10, 'add'),
+(9, '1000', 20, 'add'),
+(10, '1000', 10, 'add'),
+(11, '321', 20, 'add'),
+(12, '1000', 10, 'add'),
+(13, '1000', 10, 'add'),
+(14, '321', 10, 'add'),
+(15, '1000', 10, 'add'),
+(16, '1000', 10, 'add'),
+(17, '1000', 10, 'add'),
+(18, '1000', 20, 'add'),
+(19, '1000', 20, 'add'),
+(20, '1000', 10, 'add'),
+(21, '10000', 20, 'add'),
+(22, '321', 10, 'add'),
+(23, '1000', 10, 'add'),
+(24, '1000', 20, 'add'),
+(25, '321', 20, 'add'),
+(26, '1000', 20, 'add'),
+(27, '321', 10, 'add'),
+(28, '1000', 20, 'add'),
+(29, '1000', 30, 'add'),
+(30, '10000', 20, 'add'),
+(31, '321', 200, 'add'),
+(32, '10000', 20, 'add'),
+(33, '1000', 10, 'return'),
+(34, '321', 20, 'return'),
+(35, '321', 1000, 'return'),
+(36, '321', 500, 'add'),
+(37, '321', 100, 'return'),
+(38, '321', 10, 'add'),
+(39, '1000', 100, 'add'),
+(40, '321', 5, 'return'),
+(41, '321', 20, 'add'),
+(42, '321', 0, 'add'),
+(43, '321', 10, 'add'),
+(44, '123', 20, 'add'),
+(45, '321', 10, 'add'),
+(46, '1000', 20, 'return'),
+(47, '1000', 80, 'return'),
+(48, '1000', 100, 'add'),
+(49, '1000', 100, 'return'),
+(50, '1000', 100, 'add'),
+(51, '1000', 80, 'return'),
+(52, '1000', 10, 'return'),
+(53, '1000', 90, 'add'),
+(54, '10000', 100, 'add'),
+(55, '1000', 100, 'return'),
+(56, '10000', 100, 'return');
 
 -- --------------------------------------------------------
 
@@ -162,7 +211,7 @@ CREATE TABLE `supplier` (
 --
 
 INSERT INTO `supplier` (`id`, `name`, `address`, `gender`, `phone`, `email`, `bank_account`, `account_number`, `status`) VALUES
-('123', 'Budi', 'Kuningan', 'Laki-laki', '089999999999', 'budi@gmail.com', 'BNI', '8712937912', '0'),
+('123', 'Budi', 'Kuningan', 'Laki-laki', '089999999999', 'budi@gmail.com', 'BNI', '8712937912', '1'),
 ('ID123', 'Andi', 'Cirebon', 'Laki-laki', '081234567890', 'andi@gmail.com', 'BRI', '398127832', '1');
 
 -- --------------------------------------------------------
@@ -294,7 +343,7 @@ ALTER TABLE `sale`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- Constraints for dumped tables

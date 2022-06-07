@@ -20,13 +20,12 @@ public class StockDaoImpl implements DaoService<Stock> {
     public int addData(Stock object) throws SQLException, ClassNotFoundException {
         int result = 0;
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "INSERT INTO stock(id, barcode, qty, expired_date, type) VALUES(?, ?, ?, ?, ?)";
+            String query = "INSERT INTO stock(id, barcode, qty, type) VALUES(?, ?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setInt(1, object.getId());
                 ps.setString(2, object.getProduct().getBarcode());
                 ps.setInt(3, object.getQty());
-                ps.setString(4, object.getExpiredDate());
-                ps.setString(5, object.getType());
+                ps.setString(4, object.getType());
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();
@@ -44,12 +43,11 @@ public class StockDaoImpl implements DaoService<Stock> {
     public int updateData(Stock object) throws SQLException, ClassNotFoundException {
         int result = 0;
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "UPDATE stock SET barcode = ?, qty = ?, expired_date = ? WHERE id = ?";
+            String query = "UPDATE stock SET barcode = ?, qty = ? WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setString(1, object.getProduct().getBarcode());
                 ps.setInt(2, object.getQty());
-                ps.setString(3, object.getExpiredDate());
-                ps.setInt(4, object.getId());
+                ps.setInt(3, object.getId());
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();

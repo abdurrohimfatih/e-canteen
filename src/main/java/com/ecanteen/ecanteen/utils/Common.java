@@ -2,7 +2,6 @@ package com.ecanteen.ecanteen.utils;
 
 import com.ecanteen.ecanteen.entities.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Common {

@@ -1,6 +1,7 @@
 package com.ecanteen.ecanteen.controllers;
 
 import com.ecanteen.ecanteen.Main;
+import com.ecanteen.ecanteen.dao.ProductDaoImpl;
 import com.ecanteen.ecanteen.dao.SupplierDaoImpl;
 import com.ecanteen.ecanteen.entities.Supplier;
 import com.ecanteen.ecanteen.utils.Helper;
@@ -114,12 +115,14 @@ public class SupplierController implements Initializable {
     private ObservableList<Supplier> suppliers;
     private SupplierDaoImpl supplierDao;
     static Supplier selectedSupplier;
+    private ProductDaoImpl productDao;
     private String content;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         supplierDao = new SupplierDaoImpl();
         suppliers = FXCollections.observableArrayList();
+        productDao = new ProductDaoImpl();
 
         try {
             suppliers.addAll(supplierDao.fetchAll());
@@ -224,6 +227,7 @@ public class SupplierController implements Initializable {
             supplier.setStatus("1");
         } else {
             supplier.setStatus("0");
+            productDao.removeStock(supplier.getId());
         }
 
         try {
@@ -241,7 +245,7 @@ public class SupplierController implements Initializable {
     }
 
     @FXML
-    private void updateButtonAction(ActionEvent actionEvent) {
+    private void updateButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         if (nameTextField.getText().trim().isEmpty() ||
                 addressTextField.getText().trim().isEmpty() ||
                 genderComboBox.getValue() == null ||
@@ -307,6 +311,7 @@ public class SupplierController implements Initializable {
             selectedSupplier.setStatus("1");
         } else {
             selectedSupplier.setStatus("0");
+            productDao.removeStock(selectedSupplier.getId());
         }
 
         content = "Anda yakin ingin mengubah?";
