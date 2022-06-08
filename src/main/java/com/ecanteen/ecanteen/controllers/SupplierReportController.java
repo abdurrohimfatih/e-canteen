@@ -107,7 +107,7 @@ public class SupplierReportController implements Initializable {
         dateDatePicker.getEditor().setOpacity(1);
         dateDatePicker.setValue(LocalDate.now());
         supplierComboBox.setItems(suppliers);
-        supplyTableView.setPlaceholder(new Label("Tidak ada data."));
+        supplyTableView.setPlaceholder(new Label("Pilih supplier dan tanggal terlebih dahulu."));
         productTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct()));
         soldTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getSold()).asObject());
         subtotalTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSubtotal()));

@@ -371,7 +371,7 @@ public class ProductDaoImpl implements DaoService<Product> {
         List<Product> products = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()){
             String query =
-                    "SELECT p.barcode, p.name, p.supplier_id, p.expired_date, s.name AS supplier_name FROM product p JOIN supplier s ON p.supplier_id = s.id WHERE s.status = 1 AND p.stock_amount > 0 ORDER BY p.name";
+                    "SELECT p.barcode, p.name, p.purchase_price, p.selling_price, p.stock_amount, p.supplier_id, p.expired_date, s.name AS supplier_name FROM product p JOIN supplier s ON p.supplier_id = s.id WHERE s.status = 1 AND p.stock_amount > 0 ORDER BY p.name";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
@@ -382,6 +382,9 @@ public class ProductDaoImpl implements DaoService<Product> {
                         Product product = new Product();
                         product.setBarcode(rs.getString("barcode"));
                         product.setName(rs.getString("name"));
+                        product.setPurchasePrice(rs.getString("purchase_price"));
+                        product.setSellingPrice(rs.getString("selling_price"));
+                        product.setStockAmount(rs.getInt("stock_amount"));
                         product.setSupplier(supplier);
                         product.setExpiredDate(rs.getString("expired_date"));
                         products.add(product);

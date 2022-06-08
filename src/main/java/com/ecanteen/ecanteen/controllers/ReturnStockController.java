@@ -20,8 +20,11 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class ReturnStockController implements Initializable {
@@ -300,39 +303,7 @@ public class ReturnStockController implements Initializable {
     private void printButtonAction(ActionEvent actionEvent) {
         stocks = stockTableView.getItems();
 
-        Calendar now = Calendar.getInstance();
-        int day = now.get(Calendar.DATE);
-        int year = now.get(Calendar.YEAR);
-
-        String[] strDayOfWeek = new String[] {
-                "Sabtu, ",
-                "Minggu ",
-                "Senin, ",
-                "Selasa, ",
-                "Rabu, ",
-                "Kamis, ",
-                "Jumat, "
-        };
-
-        String[] strMonth = new String[] {
-                " Januari ",
-                " Februari ",
-                " Maret ",
-                " April ",
-                " Mei ",
-                " Juni ",
-                " Juli ",
-                " Agustus ",
-                " September ",
-                " Oktober ",
-                " November ",
-                " Desember "
-        };
-
-        String dayOfWeek = strDayOfWeek[now.get(Calendar.DAY_OF_WEEK)];
-        String month = strMonth[now.get(Calendar.MONTH)];
-
-        String date = dayOfWeek + day + month + year;
+        String date = LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
         String employee = Common.user.getName();
 
         new ReportGenerator().printAddReturnStock(stocks, date, employee, "RETURN");

@@ -32,8 +32,6 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -63,8 +61,6 @@ public class TransactionCashierController implements Initializable {
     private TableColumn<Product, String> sellingPriceTableColumn;
     @FXML
     private TableColumn<Product, Integer> stockAmountTableColumn;
-    @FXML
-    private TableColumn<Product, String> expiredDateTableColumn;
     @FXML
     private TextField barcodeTextField;
     @FXML
@@ -116,7 +112,6 @@ public class TransactionCashierController implements Initializable {
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         sellingPriceTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSellingPrice()));
         stockAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStockAmount()).asObject());
-        expiredDateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getExpiredDate()));
         barcodeSaleTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameSaleTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         sellingPriceSaleTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSellingPrice()));
@@ -408,7 +403,7 @@ public class TransactionCashierController implements Initializable {
 
                 resetProductButtonAction(actionEvent);
                 products.clear();
-                products.addAll(productDao.fetchAll());
+                products.addAll(productDao.fetchProductsReturnStock());
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -616,7 +611,7 @@ public class TransactionCashierController implements Initializable {
     @FXML
     private void refreshProductButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         products.clear();
-        products.addAll(productDao.fetchAll());
+        products.addAll(productDao.fetchProductsReturnStock());
         barcodeTextField.requestFocus();
     }
 }

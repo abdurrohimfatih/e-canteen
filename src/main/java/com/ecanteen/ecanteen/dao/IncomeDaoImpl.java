@@ -2,6 +2,7 @@ package com.ecanteen.ecanteen.dao;
 
 import com.ecanteen.ecanteen.entities.Income;
 import com.ecanteen.ecanteen.entities.Supply;
+import com.ecanteen.ecanteen.entities.User;
 import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.MySQLConnection;
 
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class IncomeDaoImpl {
-    public List<Income> fetchIncomeAdmin() throws SQLException, ClassNotFoundException {
+    public List<Income> fetchIncomeAdmin(String date) throws SQLException, ClassNotFoundException {
         List<Income> incomes = new ArrayList<>();
         DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
@@ -25,16 +26,21 @@ public class IncomeDaoImpl {
         formatter.setDecimalFormatSymbols(symbols);
 
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT id, date, username AS cashier, SUM(total_amount) AS income FROM transaction GROUP BY date, username ORDER BY 1 DESC";
+            String query = "SELECT t.username AS cashier, u.name, SUM(total_amount) AS income FROM transaction t JOIN user u ON u.username = t.username WHERE t.date = ? GROUP BY t.username ORDER BY 1 DESC";
 
             String query2 = "SELECT s.quantity AS qty, p.purchase_price AS pp, p.selling_price AS sp FROM sale s JOIN product p ON s.barcode = p.barcode JOIN transaction t ON s.transaction_id = t.id WHERE t.date = ? AND t.username = ?";
 
             try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, date);
+
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
+                        User user = new User();
+                        user.setUsername(rs.getString("cashier"));
+                        user.setName(rs.getString("name"));
+
                         Income income = new Income();
-                        income.setDate(rs.getString("date"));
-                        income.setCashier(rs.getString("cashier"));
+                        income.setCashier(user);
 
                         String incomeValue = formatter.format(rs.getInt("income"));
 
@@ -42,8 +48,8 @@ public class IncomeDaoImpl {
 
                         int profitInt = 0;
                         try (PreparedStatement ps2 = connection.prepareStatement(query2)) {
-                            ps2.setString(1, rs.getString("date"));
-                            ps2.setString(2, rs.getString("cashier"));
+                            ps2.setString(1, date);
+                            ps2.setString(2, income.getCashier().getUsername());
 
                             try (ResultSet rs2 = ps2.executeQuery()) {
                                 while (rs2.next()) {
