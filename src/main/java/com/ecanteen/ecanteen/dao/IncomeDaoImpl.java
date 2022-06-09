@@ -1,6 +1,7 @@
 package com.ecanteen.ecanteen.dao;
 
 import com.ecanteen.ecanteen.entities.Income;
+import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Supply;
 import com.ecanteen.ecanteen.entities.User;
 import com.ecanteen.ecanteen.utils.Common;
@@ -47,6 +48,7 @@ public class IncomeDaoImpl {
                         income.setIncome(incomeValue);
 
                         int profitInt = 0;
+
                         try (PreparedStatement ps2 = connection.prepareStatement(query2)) {
                             ps2.setString(1, date);
                             ps2.setString(2, income.getCashier().getUsername());
@@ -119,15 +121,26 @@ public class IncomeDaoImpl {
     public List<Supply> fetchSupplierHistory(String supplierId, String transactionDate) throws SQLException, ClassNotFoundException {
         List<Supply> supplies = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT p.name, p.purchase_price, SUM(sa.quantity) AS sold FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN supplier su ON p.supplier_id = su.id JOIN transaction t ON sa.transaction_id = t.id WHERE su.id = ? AND t.date = ? GROUP BY p.barcode";
-            try (PreparedStatement ps = connection.prepareStatement(query)) {
+            String querySold = "SELECT p.barcode, p.name, p.purchase_price, SUM(sa.quantity) AS sold FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN transaction t ON sa.transaction_id = t.id WHERE p.supplier_id = ? AND t.date = ? GROUP BY sa.barcode";
+
+            String queryAdded = "SELECT SUM(st.qty) AS added FROM stock st JOIN product p ON p.barcode = st.barcode WHERE st.barcode = ? AND st.date = ? AND st.type = ?";
+
+            String queryReturned = "SELECT SUM(st.qty) AS returned FROM stock st JOIN product p ON p.barcode = st.barcode WHERE st.barcode = ? AND st.date = ? AND st.type = ?";
+
+            try (PreparedStatement ps = connection.prepareStatement(querySold)) {
                 ps.setString(1, supplierId);
                 ps.setString(2, transactionDate);
 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
+                        Product product = new Product();
+                        product.setBarcode(rs.getString("barcode"));
+                        product.setName(rs.getString("name"));
+
                         Supply supply = new Supply();
-                        supply.setProduct(rs.getString("name"));
+                        supply.setProduct(product);
+                        supply.setBarcode(product.getBarcode());
+                        supply.setName(product.getName());
                         supply.setSold(rs.getInt("sold"));
 
                         String purchasePrice = rs.getString("purchase_price");
@@ -149,6 +162,35 @@ public class IncomeDaoImpl {
 
                         supply.setSubtotal(subtotalString);
 
+                        int added = 0;
+                        int returned = 0;
+
+                        try (PreparedStatement ps2 = connection.prepareStatement(queryAdded)) {
+                            ps2.setString(1, rs.getString("barcode"));
+                            ps2.setString(2, transactionDate);
+                            ps2.setString(3, "add");
+
+                            try (ResultSet rs2 = ps2.executeQuery()) {
+                                while (rs2.next()) {
+                                    added = rs2.getInt("added");
+                                }
+                            }
+                        }
+
+                        try (PreparedStatement ps2 = connection.prepareStatement(queryReturned)) {
+                            ps2.setString(1, rs.getString("barcode"));
+                            ps2.setString(2, transactionDate);
+                            ps2.setString(3, "return");
+
+                            try (ResultSet rs2 = ps2.executeQuery()) {
+                                while (rs2.next()) {
+                                    returned = rs2.getInt("returned");
+                                }
+                            }
+                        }
+
+                        supply.setAdded(added);
+                        supply.setReturned(returned);
                         supplies.add(supply);
                     }
                 }

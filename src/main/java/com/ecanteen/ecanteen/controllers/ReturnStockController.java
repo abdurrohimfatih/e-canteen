@@ -160,6 +160,7 @@ public class ReturnStockController implements Initializable {
         }
         stock.setProduct(productComboBox.getValue());
         stock.setQty(Integer.parseInt(amountTextField.getText()));
+        stock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         stock.setType("return");
 
         try {
@@ -221,6 +222,7 @@ public class ReturnStockController implements Initializable {
         selectedStock.setId(Integer.parseInt(idTextField.getText()));
         selectedStock.setProduct(productComboBox.getValue());
         selectedStock.setQty(Integer.parseInt(amountTextField.getText().trim()));
+        selectedStock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
         oldStock = Common.oldStocks.get(stockTableView.getSelectionModel().getSelectedIndex());
 

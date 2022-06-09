@@ -172,6 +172,7 @@ public class AddStockController implements Initializable {
         } else {
             stock.getProduct().setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         }
+        stock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         stock.setType("add");
 
         try {
@@ -226,6 +227,7 @@ public class AddStockController implements Initializable {
         } else {
             selectedStock.getProduct().setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         }
+        selectedStock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
         content = "Anda yakin ingin mengubah?";
         if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {

@@ -7,6 +7,8 @@ public class Stock {
     private String name;
     private String supplier;
     private int qty;
+
+    private String date;
     private String type;
 
     public int getId() {
@@ -55,6 +57,14 @@ public class Stock {
 
     public void setQty(int qty) {
         this.qty = qty;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getType() {

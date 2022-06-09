@@ -6,6 +6,7 @@ import com.ecanteen.ecanteen.entities.Supplier;
 import com.ecanteen.ecanteen.entities.Supply;
 import com.ecanteen.ecanteen.utils.Helper;
 import com.ecanteen.ecanteen.utils.ReportGenerator;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -75,9 +76,17 @@ public class SupplierReportController implements Initializable {
     @FXML
     private TableView<Supply> supplyTableView;
     @FXML
-    private TableColumn<Supply, String> productTableColumn;
+    private TableColumn<Supply, Integer> noTableColumn;
+    @FXML
+    private TableColumn<Supply, String> barcodeTableColumn;
+    @FXML
+    private TableColumn<Supply, String> nameTableColumn;
+    @FXML
+    private TableColumn<Supply, Integer> addedTableColumn;
     @FXML
     private TableColumn<Supply, Integer> soldTableColumn;
+    @FXML
+    private TableColumn<Supply, Integer> returnedTableColumn;
     @FXML
     private TableColumn<Supply, String> subtotalTableColumn;
     @FXML
@@ -107,9 +116,13 @@ public class SupplierReportController implements Initializable {
         dateDatePicker.getEditor().setOpacity(1);
         dateDatePicker.setValue(LocalDate.now());
         supplierComboBox.setItems(suppliers);
-        supplyTableView.setPlaceholder(new Label("Pilih supplier dan tanggal terlebih dahulu."));
-        productTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct()));
+        supplyTableView.setPlaceholder(new Label("Pilih supplier terlebih dahulu."));
+        noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(supplyTableView.getItems().indexOf(data.getValue()) + 1));
+        barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct().getBarcode()));
+        nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct().getName()));
+        addedTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getAdded()).asObject());
         soldTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getSold()).asObject());
+        returnedTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getReturned()).asObject());
         subtotalTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSubtotal()));
     }
 
@@ -207,10 +220,20 @@ public class SupplierReportController implements Initializable {
     private void printSupplierButtonAction(ActionEvent actionEvent) {
         suppliesData = supplyTableView.getItems();
         String supplier = supplierComboBox.getValue().getName();
-        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
         String total = totalTextField.getText();
 
-        new ReportGenerator().printSupplierHistory(suppliesData, supplier, date, total);
+        int totalAdd = 0;
+        int totalSold = 0;
+        int totalReturn = 0;
+
+        for (Supply item : suppliesData) {
+            totalAdd += item.getAdded();
+            totalSold += item.getSold();
+            totalReturn += item.getReturned();
+        }
+
+        new ReportGenerator().printSupplierReport(suppliesData, supplier, date, totalAdd, totalSold, totalReturn, total);
     }
 
     @FXML

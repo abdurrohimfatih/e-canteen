@@ -72,7 +72,7 @@ public class ReportGenerator {
         service.shutdown();
     }
 
-    public void printSupplierHistory(ObservableList<Supply> supplies, String supplier, String date, String total) {
+    public void printSupplierReport(ObservableList<Supply> supplies, String supplier, String date, int totalAdd, int totalSold, int totalReturn, String total) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -82,8 +82,11 @@ public class ReportGenerator {
 
                 for (Supply item : supplies) {
                     Supply supply = new Supply();
-                    supply.setProduct(item.getProduct());
+                    supply.setBarcode(item.getBarcode());
+                    supply.setName(item.getName());
+                    supply.setAdded(item.getAdded());
                     supply.setSold(item.getSold());
+                    supply.setReturned(item.getReturned());
                     supply.setSubtotal(item.getSubtotal());
 
                     supplyList.add(supply);
@@ -91,19 +94,26 @@ public class ReportGenerator {
 
                 JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(supplyList);
 
+                InputStream logoStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/image/bts-mart.png");
+
                 param.put("DS", itemsJRBean);
                 param.put("supplier", supplier);
                 param.put("date", date);
+                param.put("total-add", totalAdd);
+                param.put("total-sold", totalSold);
+                param.put("total-return", totalReturn);
                 param.put("total", total);
+                param.put("employee", Common.user.getName());
+                param.put("bts-mart-dir", logoStream);
 
                 try {
-                    InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/supplier-history-report.jasper");
+                    InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/supplier-report.jasper");
                     JasperPrint print = JasperFillManager.fillReport(inputStream, param, new JREmptyDataSource());
-                    JasperPrintManager.printReport(print, false);
+//                    JasperPrintManager.printReport(print, true);
 
-//                    JasperViewer viewer = new JasperViewer(print, false);
-//                    viewer.setVisible(true);
-//                    viewer.setFitPageZoomRatio();
+                    JasperViewer viewer = new JasperViewer(print, false);
+                    viewer.setVisible(true);
+                    viewer.setFitPageZoomRatio();
                 } catch (JRException e) {
                     e.printStackTrace();
                 }

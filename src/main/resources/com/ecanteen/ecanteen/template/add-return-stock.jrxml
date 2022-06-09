@@ -182,6 +182,12 @@
 						<jr:columnHeader style="Table 2_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="31" height="30" uuid="48e558cd-e487-447d-8924-caae1c33f2d1"/>
+								<box>
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14" isBold="true"/>
 								</textElement>
@@ -191,7 +197,12 @@
 						<jr:detailCell style="Table 2_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="31" height="30" uuid="9e7c1638-de10-4210-943a-abf8bb16cdc3"/>
-								<box leftPadding="5" rightPadding="5"/>
+								<box leftPadding="5" rightPadding="5">
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14"/>
 								</textElement>
@@ -203,6 +214,12 @@
 						<jr:columnHeader style="Table 2_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="139" height="30" uuid="16c1eaf7-d0a0-451f-9c71-7bb5eae7f452"/>
+								<box>
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14" isBold="true"/>
 								</textElement>
@@ -212,7 +229,12 @@
 						<jr:detailCell style="Table 2_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="139" height="30" uuid="4b25f4bd-e161-4620-81ec-32ab4cab4ebc"/>
-								<box leftPadding="5" rightPadding="5"/>
+								<box leftPadding="5" rightPadding="5">
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
 								<textElement verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14"/>
 								</textElement>
@@ -224,6 +246,12 @@
 						<jr:columnHeader style="Table 2_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="152" height="30" uuid="b5d0b92e-46cb-4957-bb2a-3a24b0ac1a12"/>
+								<box>
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14" isBold="true"/>
 								</textElement>
@@ -233,7 +261,12 @@
 						<jr:detailCell style="Table 2_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="152" height="30" uuid="fdb923d1-d962-490d-9f2c-ade132ab909e"/>
-								<box leftPadding="5" rightPadding="5"/>
+								<box leftPadding="5" rightPadding="5">
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
 								<textElement verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14"/>
 								</textElement>
@@ -245,6 +278,12 @@
 						<jr:columnHeader style="Table 2_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="60" height="30" uuid="cbb5f959-5b4f-4029-86bd-76fe3cdb40de"/>
+								<box>
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14" isBold="true"/>
 								</textElement>
@@ -254,7 +293,12 @@
 						<jr:detailCell style="Table 2_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="60" height="30" uuid="10d2c990-8ecc-40c0-bbdf-9d3e1161f1f7"/>
-								<box leftPadding="5" rightPadding="5"/>
+								<box leftPadding="5" rightPadding="5">
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
 								<textElement verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14"/>
 								</textElement>
@@ -266,6 +310,12 @@
 						<jr:columnHeader style="Table 2_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="143" height="30" uuid="8750ad28-b46c-4cfb-8a51-d1615051ce67"/>
+								<box>
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14" isBold="true"/>
 								</textElement>
@@ -275,7 +325,12 @@
 						<jr:detailCell style="Table 2_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="143" height="30" uuid="56068617-f8e0-481d-81e5-b867def11fe9"/>
-								<box leftPadding="5" rightPadding="5"/>
+								<box leftPadding="5" rightPadding="5">
+									<topPen lineWidth="0.5"/>
+									<leftPen lineWidth="0.5"/>
+									<bottomPen lineWidth="0.5"/>
+									<rightPen lineWidth="0.5"/>
+								</box>
 								<textElement verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14"/>
 								</textElement>
