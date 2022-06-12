@@ -32,6 +32,8 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -343,7 +345,7 @@ public class TransactionCashierController implements Initializable {
         }
 
         transaction.setUsername(Common.user.getUsername());
-        transaction.setDate(Helper.formattedDateNow());
+        transaction.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         transaction.setTime(Helper.formattedTimeNow());
 
         String[] totalArray = totalAmountTextField.getText().split("\\.");

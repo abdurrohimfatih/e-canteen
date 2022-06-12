@@ -25,10 +25,11 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class SupplierReportController implements Initializable {
+public class SupplierRecapController implements Initializable {
     @FXML
     private MenuButton masterMenuButton;
     @FXML
@@ -72,13 +73,15 @@ public class SupplierReportController implements Initializable {
     @FXML
     private SearchableComboBox<Supplier> supplierComboBox;
     @FXML
-    private DatePicker dateDatePicker;
+    private DatePicker fromDatePicker;
+    @FXML
+    private DatePicker toDatePicker;
     @FXML
     private TableView<Supply> supplyTableView;
     @FXML
     private TableColumn<Supply, Integer> noTableColumn;
     @FXML
-    private TableColumn<Supply, String> barcodeTableColumn;
+    private TableColumn<Supply, String> dateTableColumn;
     @FXML
     private TableColumn<Supply, String> nameTableColumn;
     @FXML
@@ -111,15 +114,20 @@ public class SupplierReportController implements Initializable {
             throw new RuntimeException(e);
         }
 
-        Helper.formatDatePicker(dateDatePicker);
-        dateDatePicker.getEditor().setDisable(true);
-        dateDatePicker.getEditor().setOpacity(1);
-        dateDatePicker.setValue(LocalDate.now());
-        supplierComboBox.setItems(suppliers);
+        Helper.formatDatePicker(fromDatePicker);
+        Helper.formatDatePicker(toDatePicker);
+        fromDatePicker.getEditor().setDisable(true);
+        toDatePicker.getEditor().setDisable(true);
+        fromDatePicker.getEditor().setOpacity(1);
+        toDatePicker.getEditor().setOpacity(1);
+        fromDatePicker.setValue(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()));
+        toDatePicker.setValue(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()));
+
         supplyTableView.setPlaceholder(new Label("Pilih supplier terlebih dahulu."));
+        supplierComboBox.setItems(suppliers);
         noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(supplyTableView.getItems().indexOf(data.getValue()) + 1));
-        barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct().getBarcode()));
-        nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct().getName()));
+        dateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDate()));
+        nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         addedTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getAdded()).asObject());
         soldTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getSold()).asObject());
         returnedTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getReturned()).asObject());
@@ -128,61 +136,31 @@ public class SupplierReportController implements Initializable {
 
     @FXML
     private void supplierComboBoxAction(ActionEvent actionEvent) {
-        if (supplierComboBox.getValue() == null || dateDatePicker.getValue() == null) {
-            return;
-        }
-
-        String supplierId = supplierComboBox.getValue().getId();
-        String transactionDate = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-        try {
-            supplies.clear();
-            supplies.addAll(incomeDao.fetchSupplierReport(supplierId, transactionDate));
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        supplyTableView.setItems(supplies);
-        suppliesData = supplyTableView.getItems();
-
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator('.');
-        formatter.setDecimalFormatSymbols(symbols);
-
-        int totalInt = 0;
-        for (Supply i : suppliesData) {
-            String[] subtotalArray = i.getSubtotal().split("\\.");
-            StringBuilder sub = new StringBuilder();
-            for (String s : subtotalArray) {
-                sub.append(s);
-            }
-            int subtotalInt = Integer.parseInt(String.valueOf(sub));
-            totalInt += subtotalInt;
-        }
-        String totalString = formatter.format(totalInt);
-
-        if (totalInt != 0) {
-            totalTextField.setText(totalString);
-        } else {
-            totalTextField.setText("");
-        }
-
-        printButton.setDisable(suppliesData.isEmpty());
+        filterAction();
     }
 
     @FXML
-    private void dateDatePickerAction(ActionEvent actionEvent) {
-        if (supplierComboBox.getValue() == null || dateDatePicker.getValue() == null) {
+    private void fromDatePickerAction(ActionEvent actionEvent) {
+        filterAction();
+    }
+
+    @FXML
+    private void toDatePickerAction(ActionEvent actionEvent) {
+        filterAction();
+    }
+
+    private void filterAction() {
+        if (supplierComboBox.getValue() == null || fromDatePicker.getValue() == null || toDatePicker.getValue() == null) {
             return;
         }
 
         String supplierId = supplierComboBox.getValue().getId();
-        String transactionDate = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         try {
             supplies.clear();
-            supplies.addAll(incomeDao.fetchSupplierReport(supplierId, transactionDate));
+            supplies.addAll(incomeDao.fetchSupplierRecap(supplierId, fromDate, toDate));
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -220,7 +198,8 @@ public class SupplierReportController implements Initializable {
     private void printButtonAction(ActionEvent actionEvent) {
         suppliesData = supplyTableView.getItems();
         String supplier = supplierComboBox.getValue().getName();
-        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
+        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
+        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
         String total = totalTextField.getText();
 
         int totalAdd = 0;
@@ -233,7 +212,7 @@ public class SupplierReportController implements Initializable {
             totalReturn += item.getReturned();
         }
 
-        new ReportGenerator().printSupplierReport(suppliesData, supplier, date, totalAdd, totalSold, totalReturn, total);
+        new ReportGenerator().printSupplierRecap(suppliesData, supplier, fromDate, toDate, totalAdd, totalSold, totalReturn, total);
     }
 
     @FXML
@@ -277,6 +256,11 @@ public class SupplierReportController implements Initializable {
     }
 
     @FXML
+    private void supplierReportMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(recapMenuButton, "Admin - Laporan Supplier", "supplier-report-view.fxml");
+    }
+
+    @FXML
     private void stockRecapMenuItemAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(recapMenuButton, "Admin - Rekap Stok", "stock-recap-view.fxml");
     }
@@ -284,11 +268,6 @@ public class SupplierReportController implements Initializable {
     @FXML
     private void incomeRecapMenuItemAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(recapMenuButton, "Admin - Rekap Pendapatan", "income-recap-view.fxml");
-    }
-
-    @FXML
-    private void supplierRecapMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(recapMenuButton, "Admin - Rekap Supplier", "supplier-recap-view.fxml");
     }
 
     @FXML

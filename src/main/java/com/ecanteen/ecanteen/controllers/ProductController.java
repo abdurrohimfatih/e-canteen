@@ -428,7 +428,7 @@ public class ProductController implements Initializable {
 
     @FXML
     private void supplierRecapMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(recapMenuButton, "Admin - Rekap Pendapatan", "supplier-recap-view.fxml");
+        Helper.changePage(recapMenuButton, "Admin - Rekap Supplier", "supplier-recap-view.fxml");
     }
 
     @FXML

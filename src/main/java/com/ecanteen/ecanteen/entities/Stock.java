@@ -6,10 +6,14 @@ public class Stock {
     private String barcode;
     private String name;
     private String supplier;
+    private int oldStock;
     private int qty;
-
     private String date;
     private String type;
+    private int added;
+    private int sold;
+    private int returned;
+    private int subtotal;
 
     public int getId() {
         return id;
@@ -51,6 +55,14 @@ public class Stock {
         this.supplier = supplier;
     }
 
+    public int getOldStock() {
+        return oldStock;
+    }
+
+    public void setOldStock(int oldStock) {
+        this.oldStock = oldStock;
+    }
+
     public int getQty() {
         return qty;
     }
@@ -73,5 +85,37 @@ public class Stock {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getAdded() {
+        return added;
+    }
+
+    public void setAdded(int added) {
+        this.added = added;
+    }
+
+    public int getSold() {
+        return sold;
+    }
+
+    public void setSold(int sold) {
+        this.sold = sold;
+    }
+
+    public int getReturned() {
+        return returned;
+    }
+
+    public void setReturned(int returned) {
+        this.returned = returned;
+    }
+
+    public int getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(int subtotal) {
+        this.subtotal = subtotal;
     }
 }

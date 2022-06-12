@@ -187,7 +187,7 @@ public class ReportGenerator {
 
                 for (Income item : incomes) {
                     Income income = new Income();
-                    income.setCashier(item.getCashier());
+                    income.setName(item.getCashier().getName());
                     income.setIncome(item.getIncome());
                     income.setProfit(item.getProfit());
 
@@ -207,6 +207,112 @@ public class ReportGenerator {
 
                 try {
                     InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/income-report.jasper");
+                    JasperPrint print = JasperFillManager.fillReport(inputStream, param, new JREmptyDataSource());
+//                    JasperPrintManager.printReport(print, true);
+
+                    JasperViewer viewer = new JasperViewer(print, false);
+                    viewer.setVisible(true);
+                    viewer.setFitPageZoomRatio();
+                } catch (JRException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        };
+
+        ExecutorService service = Executors.newCachedThreadPool();
+        service.execute(task);
+        service.shutdown();
+    }
+
+    public void printIncomeRecap(ObservableList<Income> incomes, String totalIncome, String totalProfit, String fromDate, String toDate, String employee) {
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                BasicConfigurator.configure();
+                HashMap<String, Object> param = new HashMap<>();
+                List<Income> incomeList = new ArrayList<>();
+
+                for (Income item : incomes) {
+                    Income income = new Income();
+                    income.setDate(item.getDate());
+                    income.setIncome(item.getIncome());
+                    income.setProfit(item.getProfit());
+
+                    incomeList.add(income);
+                }
+
+                JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(incomeList);
+
+                InputStream logoStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/image/bts-mart.png");
+
+                param.put("DS", itemsJRBean);
+                param.put("from-date", fromDate);
+                param.put("to-date", toDate);
+                param.put("employee", employee);
+                param.put("bts-mart-dir", logoStream);
+                param.put("total-income", totalIncome);
+                param.put("total-profit", totalProfit);
+
+                try {
+                    InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/income-recap.jasper");
+                    JasperPrint print = JasperFillManager.fillReport(inputStream, param, new JREmptyDataSource());
+//                    JasperPrintManager.printReport(print, true);
+
+                    JasperViewer viewer = new JasperViewer(print, false);
+                    viewer.setVisible(true);
+                    viewer.setFitPageZoomRatio();
+                } catch (JRException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        };
+
+        ExecutorService service = Executors.newCachedThreadPool();
+        service.execute(task);
+        service.shutdown();
+    }
+
+    public void printSupplierRecap(ObservableList<Supply> supplies, String supplier, String fromDate, String toDate, int totalAdd, int totalSold, int totalReturn, String total) {
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                BasicConfigurator.configure();
+                HashMap<String, Object> param = new HashMap<>();
+                List<Supply> supplyList = new ArrayList<>();
+
+                for (Supply item : supplies) {
+                    Supply supply = new Supply();
+                    supply.setDate(item.getDate());
+                    supply.setName(item.getName());
+                    supply.setAdded(item.getAdded());
+                    supply.setSold(item.getSold());
+                    supply.setReturned(item.getReturned());
+                    supply.setSubtotal(item.getSubtotal());
+
+                    supplyList.add(supply);
+                }
+
+                JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(supplyList);
+
+                InputStream logoStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/image/bts-mart.png");
+
+                param.put("DS", itemsJRBean);
+                param.put("supplier", supplier);
+                param.put("from-date", fromDate);
+                param.put("to-date", toDate);
+                param.put("total-add", totalAdd);
+                param.put("total-sold", totalSold);
+                param.put("total-return", totalReturn);
+                param.put("total", total);
+                param.put("employee", Common.user.getName());
+                param.put("bts-mart-dir", logoStream);
+
+                try {
+                    InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/supplier-recap.jasper");
                     JasperPrint print = JasperFillManager.fillReport(inputStream, param, new JREmptyDataSource());
 //                    JasperPrintManager.printReport(print, true);
 

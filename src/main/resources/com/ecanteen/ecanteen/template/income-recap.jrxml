@@ -89,12 +89,13 @@
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
-		<field name="name" class="java.lang.String"/>
+		<field name="date" class="java.lang.String"/>
 		<field name="income" class="java.lang.String"/>
 		<field name="profit" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="DS" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
-	<parameter name="date" class="java.lang.String"/>
+	<parameter name="from-date" class="java.lang.String"/>
+	<parameter name="to-date" class="java.lang.String"/>
 	<parameter name="employee" class="java.lang.String"/>
 	<parameter name="bts-mart-dir" class="sun.nio.ch.ChannelInputStream"/>
 	<parameter name="total-income" class="java.lang.String"/>
@@ -154,14 +155,14 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="16" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["LAPORAN PENDAPATAN HARIAN"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["REKAPITULASI PENDAPATAN"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="40" width="525" height="30" uuid="1fa57c70-c20c-4066-9624-f1bb35302e3f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Hari, tanggal : " + $P{date}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Tanggal : " + $P{from-date} + " - " + $P{to-date}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -225,7 +226,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14" isBold="true"/>
 								</textElement>
-								<text><![CDATA[Nama Kasir]]></text>
+								<text><![CDATA[Tanggal]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table 2_TD" height="30">
@@ -240,7 +241,7 @@
 								<textElement verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

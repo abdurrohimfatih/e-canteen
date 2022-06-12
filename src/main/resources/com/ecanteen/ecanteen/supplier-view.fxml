@@ -90,8 +90,8 @@
             </MenuButton>
             <MenuButton fx:id="recapMenuButton" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" styleClass="menu-button-menu" text="REKAPITULASI" textAlignment="CENTER" textFill="WHITE">
                <items>
-                  <MenuItem fx:id="incomeRecapMenuItem" mnemonicParsing="false" onAction="#incomeRecapMenuItemAction" text="Rekap Stok" />
-                  <MenuItem fx:id="stockRecapMenuItem" mnemonicParsing="false" onAction="#stockRecapMenuItemAction" text="Rekap Pendapatan" />
+                  <MenuItem fx:id="stockRecapMenuItem" mnemonicParsing="false" onAction="#stockRecapMenuItemAction" text="Rekap Stok" />
+                  <MenuItem fx:id="incomeRecapMenuItem" mnemonicParsing="false" onAction="#incomeRecapMenuItemAction" text="Rekap Pendapatan" />
                   <MenuItem fx:id="supplierRecapMenuItem" mnemonicParsing="false" onAction="#supplierRecapMenuItemAction" text="Rekap Supplier" />
                </items>
                <font>

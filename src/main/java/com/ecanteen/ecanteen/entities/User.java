@@ -100,4 +100,9 @@ public class User {
     public void setTransactionAmount(int transactionAmount) {
         this.transactionAmount = transactionAmount;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

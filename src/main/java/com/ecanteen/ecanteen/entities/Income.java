@@ -3,6 +3,7 @@ package com.ecanteen.ecanteen.entities;
 public class Income {
     private String date;
     private User cashier;
+    private String name;
     private String income;
     private String profit;
 
@@ -20,6 +21,14 @@ public class Income {
 
     public void setCashier(User cashier) {
         this.cashier = cashier;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getIncome() {

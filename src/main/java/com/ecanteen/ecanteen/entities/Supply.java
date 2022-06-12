@@ -1,13 +1,14 @@
 package com.ecanteen.ecanteen.entities;
 
 public class Supply {
-    Product product;
-    String barcode;
-    String name;
-    int added;
-    int sold;
-    int returned;
-    String subtotal;
+    private Product product;
+    private String barcode;
+    private String date;
+    private String name;
+    private int added;
+    private int sold;
+    private int returned;
+    private String subtotal;
 
     public Product getProduct() {
         return product;
@@ -23,6 +24,14 @@ public class Supply {
 
     public void setBarcode(String barcode) {
         this.barcode = barcode;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getName() {

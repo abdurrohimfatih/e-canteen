@@ -22,10 +22,11 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class IncomeReportController implements Initializable {
+public class IncomeRecapController implements Initializable {
     @FXML
     private MenuButton masterMenuButton;
     @FXML
@@ -67,17 +68,23 @@ public class IncomeReportController implements Initializable {
     @FXML
     private Button logoutButton;
     @FXML
-    private DatePicker dateDatePicker;
+    private DatePicker fromDatePicker;
+    @FXML
+    private DatePicker toDatePicker;
     @FXML
     private TableView<Income> incomeTableView;
     @FXML
     private TableColumn<Income, Integer> noTableColumn;
     @FXML
-    private TableColumn<Income, String> cashierTableColumn;
+    private TableColumn<Income, String> dateTableColumn;
     @FXML
     private TableColumn<Income, String> incomeTableColumn;
     @FXML
     private TableColumn<Income, String> profitTableColumn;
+    @FXML
+    private TextField totalIncomeTextField;
+    @FXML
+    private TextField totalProfitTextField;
     @FXML
     private Button printButton;
 
@@ -89,15 +96,20 @@ public class IncomeReportController implements Initializable {
         incomeDao = new IncomeDaoImpl();
         incomes = FXCollections.observableArrayList();
 
-        Helper.formatDatePicker(dateDatePicker);
-        dateDatePicker.getEditor().setDisable(true);
-        dateDatePicker.getEditor().setOpacity(1);
-        dateDatePicker.setValue(LocalDate.now());
+        Helper.formatDatePicker(fromDatePicker);
+        Helper.formatDatePicker(toDatePicker);
+        fromDatePicker.getEditor().setDisable(true);
+        toDatePicker.getEditor().setDisable(true);
+        fromDatePicker.getEditor().setOpacity(1);
+        toDatePicker.getEditor().setOpacity(1);
+        fromDatePicker.setValue(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()));
+        toDatePicker.setValue(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()));
 
-        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         try {
-            incomes.addAll(incomeDao.fetchIncomeAdmin(date));
+            incomes.addAll(incomeDao.fetchIncomeRecap(fromDate, toDate));
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -105,35 +117,44 @@ public class IncomeReportController implements Initializable {
         incomeTableView.setPlaceholder(new Label("Tidak ada data."));
         incomeTableView.setItems(incomes);
         noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(incomeTableView.getItems().indexOf(data.getValue()) + 1));
-        cashierTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCashier().getName()));
+        dateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDate()));
         incomeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIncome()));
         profitTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProfit()));
 
-        printButton.setDisable(incomeTableView.getItems().isEmpty());
+        getTotal();
     }
 
     @FXML
-    private void dateDatePickerAction(ActionEvent actionEvent) {
-        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    private void fromDatePickerAction(ActionEvent actionEvent) {
+        filterAction();
+    }
+
+    @FXML
+    private void toDatePickerAction(ActionEvent actionEvent) {
+        filterAction();
+    }
+
+    private void filterAction() {
+        if (fromDatePicker.getValue() == null || toDatePicker.getValue() == null) {
+            return;
+        }
+
+        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         try {
             incomes.clear();
-            incomes.addAll(incomeDao.fetchIncomeAdmin(date));
+            incomes.addAll(incomeDao.fetchIncomeRecap(fromDate, toDate));
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
         incomeTableView.setItems(incomes);
-
-        printButton.setDisable(incomeTableView.getItems().isEmpty());
+        getTotal();
     }
 
-    @FXML
-    private void printButtonAction(ActionEvent actionEvent) {
-        incomes = incomeTableView.getItems();
-
-        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
-        String employee = Common.user.getName();
+    private void getTotal() {
+        printButton.setDisable(incomeTableView.getItems().isEmpty());
 
         DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
@@ -165,7 +186,30 @@ public class IncomeReportController implements Initializable {
         String totalIncomeString = formatter.format(totalIncomeInt);
         String totalProfitString = formatter.format(totalProfitInt);
 
-        new ReportGenerator().printIncomeReport(incomes, totalIncomeString, totalProfitString, date, employee);
+        if (totalIncomeInt != 0) {
+            totalIncomeTextField.setText(totalIncomeString);
+        } else {
+            totalIncomeTextField.setText("");
+        }
+
+        if (totalProfitInt != 0) {
+            totalProfitTextField.setText(totalProfitString);
+        } else {
+            totalProfitTextField.setText("");
+        }
+    }
+
+    @FXML
+    private void printButtonAction(ActionEvent actionEvent) {
+        incomes = incomeTableView.getItems();
+
+        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
+        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
+        String employee = Common.user.getName();
+        String totalIncome = totalIncomeTextField.getText();
+        String totalProfit = totalProfitTextField.getText();
+
+        new ReportGenerator().printIncomeRecap(incomes, totalIncome, totalProfit, fromDate, toDate, employee);
     }
 
     @FXML
@@ -204,6 +248,11 @@ public class IncomeReportController implements Initializable {
     }
 
     @FXML
+    private void incomeReportMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(recapMenuButton, "Admin - Laporan Pendapatan", "income-report-view.fxml");
+    }
+
+    @FXML
     private void supplierReportMenuItemAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(reportMenuButton, "Admin - Laporan Supplier", "supplier-report-view.fxml");
     }
@@ -211,11 +260,6 @@ public class IncomeReportController implements Initializable {
     @FXML
     private void stockRecapMenuItemAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(recapMenuButton, "Admin - Rekap Stok", "stock-recap-view.fxml");
-    }
-
-    @FXML
-    private void incomeRecapMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(recapMenuButton, "Admin - Rekap Pendapatan", "income-recap-view.fxml");
     }
 
     @FXML

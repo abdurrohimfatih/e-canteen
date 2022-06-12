@@ -1,11 +1,10 @@
 package com.ecanteen.ecanteen.controllers;
 
-import com.ecanteen.ecanteen.dao.IncomeDaoImpl;
-import com.ecanteen.ecanteen.entities.Income;
-import com.ecanteen.ecanteen.utils.Common;
+import com.ecanteen.ecanteen.dao.StockDaoImpl;
+import com.ecanteen.ecanteen.entities.Stock;
 import com.ecanteen.ecanteen.utils.Helper;
-import com.ecanteen.ecanteen.utils.ReportGenerator;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,15 +16,11 @@ import javafx.scene.control.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class IncomeReportController implements Initializable {
+public class StockReportController implements Initializable {
     @FXML
     private MenuButton masterMenuButton;
     @FXML
@@ -69,25 +64,33 @@ public class IncomeReportController implements Initializable {
     @FXML
     private DatePicker dateDatePicker;
     @FXML
-    private TableView<Income> incomeTableView;
+    private TableView<Stock> stockTableView;
     @FXML
-    private TableColumn<Income, Integer> noTableColumn;
+    private TableColumn<Stock, Integer> noTableColumn;
     @FXML
-    private TableColumn<Income, String> cashierTableColumn;
+    private TableColumn<Stock, String> barcodeTableColumn;
     @FXML
-    private TableColumn<Income, String> incomeTableColumn;
+    private TableColumn<Stock, String> nameTableColumn;
     @FXML
-    private TableColumn<Income, String> profitTableColumn;
+    private TableColumn<Stock, Integer> stockAmountTableColumn;
+    @FXML
+    private TableColumn<Stock, Integer> addedTableColumn;
+    @FXML
+    private TableColumn<Stock, Integer> soldTableColumn;
+    @FXML
+    private TableColumn<Stock, Integer> returnedTableColumn;
+    @FXML
+    private TableColumn<Stock, Integer> subtotalTableColumn;
     @FXML
     private Button printButton;
 
-    private IncomeDaoImpl incomeDao;
-    private ObservableList<Income> incomes;
+    private ObservableList<Stock> stocks;
+    private StockDaoImpl stockDao;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        incomeDao = new IncomeDaoImpl();
-        incomes = FXCollections.observableArrayList();
+        stockDao = new StockDaoImpl();
+        stocks = FXCollections.observableArrayList();
 
         Helper.formatDatePicker(dateDatePicker);
         dateDatePicker.getEditor().setDisable(true);
@@ -97,75 +100,31 @@ public class IncomeReportController implements Initializable {
         String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         try {
-            incomes.addAll(incomeDao.fetchIncomeAdmin(date));
+            stocks.addAll(stockDao.fetchStocks(date));
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        incomeTableView.setPlaceholder(new Label("Tidak ada data."));
-        incomeTableView.setItems(incomes);
-        noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(incomeTableView.getItems().indexOf(data.getValue()) + 1));
-        cashierTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCashier().getName()));
-        incomeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIncome()));
-        profitTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProfit()));
+        stockTableView.setPlaceholder(new Label("Tidak ada data."));
+        stockTableView.setItems(stocks);
+        noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(stockTableView.getItems().indexOf(data.getValue()) + 1));
+        barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct().getBarcode()));
+        nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct().getName()));
+        stockAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getOldStock()).asObject());
+        addedTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getAdded()).asObject());
+        soldTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getSold()).asObject());
+        returnedTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getReturned()).asObject());
+        subtotalTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getSubtotal()).asObject());
 
-        printButton.setDisable(incomeTableView.getItems().isEmpty());
+        printButton.setDisable(stockTableView.getItems().isEmpty());
     }
 
     @FXML
     private void dateDatePickerAction(ActionEvent actionEvent) {
-        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-        try {
-            incomes.clear();
-            incomes.addAll(incomeDao.fetchIncomeAdmin(date));
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        incomeTableView.setItems(incomes);
-
-        printButton.setDisable(incomeTableView.getItems().isEmpty());
     }
 
     @FXML
     private void printButtonAction(ActionEvent actionEvent) {
-        incomes = incomeTableView.getItems();
-
-        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
-        String employee = Common.user.getName();
-
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator('.');
-        formatter.setDecimalFormatSymbols(symbols);
-
-        int incomeInt;
-        int profitInt;
-        int totalIncomeInt = 0;
-        int totalProfitInt = 0;
-
-        for (Income i : incomes) {
-            String[] incomeArray = i.getIncome().split("\\.");
-            String[] profitArray = i.getProfit().split("\\.");
-            StringBuilder inc = new StringBuilder();
-            StringBuilder pro = new StringBuilder();
-            for (String s : incomeArray) {
-                inc.append(s);
-            }
-            for (String s : profitArray) {
-                pro.append(s);
-            }
-            incomeInt = Integer.parseInt(String.valueOf(inc));
-            profitInt = Integer.parseInt(String.valueOf(pro));
-            totalIncomeInt += incomeInt;
-            totalProfitInt += profitInt;
-        }
-
-        String totalIncomeString = formatter.format(totalIncomeInt);
-        String totalProfitString = formatter.format(totalProfitInt);
-
-        new ReportGenerator().printIncomeReport(incomes, totalIncomeString, totalProfitString, date, employee);
     }
 
     @FXML
@@ -199,8 +158,8 @@ public class IncomeReportController implements Initializable {
     }
 
     @FXML
-    private void stockReportMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(reportMenuButton, "Admin - Laporan Stok", "stock-report-view.fxml");
+    private void incomeReportMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(reportMenuButton, "Admin - Laporan Pendapatan", "income-report-view.fxml");
     }
 
     @FXML

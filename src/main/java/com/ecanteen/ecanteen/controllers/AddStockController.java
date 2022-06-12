@@ -166,13 +166,22 @@ public class AddStockController implements Initializable {
             throw new RuntimeException(e);
         }
         stock.setProduct(product);
+
+        try {
+            oldStock = productDao.getStockAmount(stock.getProduct().getBarcode());
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        stock.setOldStock(oldStock);
+
         stock.setQty(Integer.parseInt(amountTextField.getText()));
         if (expiredDateDatePicker.getEditor().getText().trim().isEmpty()) {
             stock.getProduct().setExpiredDate("-");
         } else {
             stock.getProduct().setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         }
-        stock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        stock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         stock.setType("add");
 
         try {
@@ -180,9 +189,9 @@ public class AddStockController implements Initializable {
                 stockTableView.getItems().add(stock);
                 stocks = stockTableView.getItems();
 
-                oldStock = productDao.getStockAmount(stock.getProduct().getBarcode());
                 oldExpiredDate = productDao.getExpiredDate(stock.getProduct().getBarcode());
                 newStock = oldStock + stock.getQty();
+
                 productDao.updateStockAndExpired(newStock, stock.getProduct().getExpiredDate(), stock.getProduct().getBarcode());
 
                 Common.oldStocks.add(oldStock);
@@ -227,7 +236,7 @@ public class AddStockController implements Initializable {
         } else {
             selectedStock.getProduct().setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         }
-        selectedStock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        selectedStock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         content = "Anda yakin ingin mengubah?";
         if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
@@ -385,7 +394,7 @@ public class AddStockController implements Initializable {
 
     @FXML
     private void supplierRecapMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(recapMenuButton, "Admin - Rekap Pendapatan", "supplier-recap-view.fxml");
+        Helper.changePage(recapMenuButton, "Admin - Rekap Supplier", "supplier-recap-view.fxml");
     }
 
     @FXML

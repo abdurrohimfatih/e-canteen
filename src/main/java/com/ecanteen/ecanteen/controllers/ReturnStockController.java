@@ -159,8 +159,17 @@ public class ReturnStockController implements Initializable {
             throw new RuntimeException(e);
         }
         stock.setProduct(productComboBox.getValue());
+
+        try {
+            oldStock = productDao.getStockAmount(stock.getProduct().getBarcode());
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        stock.setOldStock(oldStock);
+
         stock.setQty(Integer.parseInt(amountTextField.getText()));
-        stock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        stock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         stock.setType("return");
 
         try {
@@ -222,7 +231,7 @@ public class ReturnStockController implements Initializable {
         selectedStock.setId(Integer.parseInt(idTextField.getText()));
         selectedStock.setProduct(productComboBox.getValue());
         selectedStock.setQty(Integer.parseInt(amountTextField.getText().trim()));
-        selectedStock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        selectedStock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         oldStock = Common.oldStocks.get(stockTableView.getSelectionModel().getSelectedIndex());
 
@@ -382,7 +391,7 @@ public class ReturnStockController implements Initializable {
 
     @FXML
     private void supplierRecapMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(recapMenuButton, "Admin - Rekap Pendapatan", "supplier-recap-view.fxml");
+        Helper.changePage(recapMenuButton, "Admin - Rekap Supplier", "supplier-recap-view.fxml");
     }
 
     @FXML
