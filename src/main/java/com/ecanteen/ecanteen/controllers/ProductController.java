@@ -23,6 +23,8 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class ProductController implements Initializable {
@@ -132,7 +134,7 @@ public class ProductController implements Initializable {
         Helper.addThousandSeparator(purchasePriceTextField);
         Helper.addThousandSeparator(sellingPriceTextField);
         Helper.addTextLimiter(barcodeTextField, 20);
-        Helper.addTextLimiter(nameTextField, 100);
+        Helper.addTextLimiter(nameTextField, 25);
         Helper.addTextLimiter(purchasePriceTextField, 9);
         Helper.addTextLimiter(sellingPriceTextField, 9);
         categoryComboBox.setItems(categories);
@@ -179,8 +181,8 @@ public class ProductController implements Initializable {
         product.setSellingPrice(sellingPriceTextField.getText());
         product.setStockAmount(0);
         product.setSupplier(supplierComboBox.getValue());
-        product.setDateAdded(Helper.formattedDateNow());
-        product.setExpiredDate("-");
+        product.setDateAdded(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        product.setExpiredDate("0001-01-01");
 
         try {
             if (productDao.addData(product) == 1) {
@@ -205,7 +207,7 @@ public class ProductController implements Initializable {
         selectedProduct.setPurchasePrice(purchasePriceTextField.getText().trim());
         selectedProduct.setSellingPrice(sellingPriceTextField.getText().trim());
         selectedProduct.setSupplier(supplierComboBox.getValue());
-        selectedProduct.setDateAdded(Helper.formattedDateNow());
+        selectedProduct.setDateAdded(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         content = "Anda yakin ingin mengubah?";
         if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {

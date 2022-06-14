@@ -22,11 +22,11 @@ public class StockDaoImpl implements DaoService<Stock> {
     public int addData(Stock object) throws SQLException, ClassNotFoundException {
         int result = 0;
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "INSERT INTO stock(id, barcode, old_stock, qty, date, type) VALUES(?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO stock(id, barcode, previous_stock, qty, date, type) VALUES(?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setInt(1, object.getId());
-                ps.setString(2, object.getProduct().getBarcode());
-                ps.setInt(3, object.getOldStock());
+                ps.setString(2, object.getBarcode());
+                ps.setInt(3, object.getPreviousStock());
                 ps.setInt(4, object.getQty());
                 ps.setString(5, object.getDate());
                 ps.setString(6, object.getType());
@@ -47,12 +47,13 @@ public class StockDaoImpl implements DaoService<Stock> {
     public int updateData(Stock object) throws SQLException, ClassNotFoundException {
         int result = 0;
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "UPDATE stock SET barcode = ?, qty = ?, date = ? WHERE id = ?";
+            String query = "UPDATE stock SET barcode = ?, previous_stock = ?, qty = ?, date = ? WHERE id = ?";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
-                ps.setString(1, object.getProduct().getBarcode());
-                ps.setInt(2, object.getQty());
-                ps.setString(3, object.getDate());
-                ps.setInt(4, object.getId());
+                ps.setString(1, object.getBarcode());
+                ps.setInt(2, object.getPreviousStock());
+                ps.setInt(3, object.getQty());
+                ps.setString(4, object.getDate());
+                ps.setInt(5, object.getId());
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();
@@ -102,28 +103,39 @@ public class StockDaoImpl implements DaoService<Stock> {
         return nowId;
     }
 
-    public List<Stock> fetchStocks(String date) throws SQLException, ClassNotFoundException {
+    public List<Stock> fetchStocksReport(String date) throws SQLException, ClassNotFoundException {
         List<Stock> stocks = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()) {
-//            String queryProduct = "SELECT p.barcode, p.name, p.stock_amount FROM product p JOIN stock st ON p.barcode = st.barcode JOIN sale sa ON p.barcode = sa.barcode JOIN transaction t ON sa.transaction_id = t.id WHERE st.date = ? OR t.date = ? GROUP BY p.name ORDER BY p.name";
-            String queryProduct = "SELECT p.barcode, p.name, p.stock_amount FROM product p ORDER BY p.name";
+            String queryProduct = "SELECT p.barcode, p.name FROM product p JOIN stock st ON p.barcode = st.barcode WHERE st.date = ? GROUP BY p.barcode, p.name ORDER BY p.name";
 
-            String queryStock = "SELECT SUM(st.qty) AS qty FROM stock st WHERE st.barcode = ? AND st.date = ? AND st.type = ?";
+            String queryPreviousStock = "SELECT previous_stock FROM stock WHERE barcode = ? AND date < ? ORDER BY id DESC LIMIT 1";
 
-            String querySale = "SELECT SUM(sa.quantity) AS quantity FROM sale sa JOIN transaction t on t.id = sa.transaction_id WHERE sa.barcode = ? AND t.date = ?";
-
-            String queryOldStock = "";
+            String queryStock = "SELECT SUM(qty) AS qty FROM stock WHERE barcode = ? AND date = ? AND type = ?";
 
             try (PreparedStatement ps = connection.prepareStatement(queryProduct)) {
+                ps.setString(1, date);
+
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         Product product = new Product();
                         product.setBarcode(rs.getString("barcode"));
                         product.setName(rs.getString("name"));
-                        product.setStockAmount(rs.getInt("stock_amount"));
 
                         Stock stock = new Stock();
                         stock.setProduct(product);
+                        stock.setBarcode(product.getBarcode());
+                        stock.setName(product.getName());
+
+                        try (PreparedStatement ps2 = connection.prepareStatement(queryPreviousStock)) {
+                            ps2.setString(1, stock.getProduct().getBarcode());
+                            ps2.setString(2, date);
+
+                            try (ResultSet rs2 = ps2.executeQuery()) {
+                                while (rs2.next()) {
+                                    stock.setPreviousStock(rs2.getInt("previous_stock"));
+                                }
+                            }
+                        }
 
                         try (PreparedStatement ps2 = connection.prepareStatement(queryStock)) {
                             ps2.setString(1, stock.getProduct().getBarcode());
@@ -137,13 +149,14 @@ public class StockDaoImpl implements DaoService<Stock> {
                             }
                         }
 
-                        try (PreparedStatement ps2 = connection.prepareStatement(querySale)) {
+                        try (PreparedStatement ps2 = connection.prepareStatement(queryStock)) {
                             ps2.setString(1, stock.getProduct().getBarcode());
                             ps2.setString(2, date);
+                            ps2.setString(3, "sale");
 
                             try (ResultSet rs2 = ps2.executeQuery()) {
                                 while (rs2.next()) {
-                                    stock.setSold(rs2.getInt("quantity"));
+                                    stock.setSold(rs2.getInt("qty"));
                                 }
                             }
                         }
@@ -163,10 +176,98 @@ public class StockDaoImpl implements DaoService<Stock> {
                         int added = stock.getAdded();
                         int sold = stock.getSold();
                         int returned = stock.getReturned();
-                        int subtotal = stock.getProduct().getStockAmount();
-                        int oldStock = subtotal + sold + returned - added;
+                        int previousStock = stock.getPreviousStock();
+                        int subtotal = previousStock + added - sold - returned;
 
-                        stock.setOldStock(oldStock);
+                        stock.setSubtotal(subtotal);
+
+                        stocks.add(stock);
+                    }
+                }
+            }
+        }
+
+        return stocks;
+    }
+
+    public List<Stock> fetchStocksRecap(String fromDate, String toDate) throws SQLException, ClassNotFoundException {
+        List<Stock> stocks = new ArrayList<>();
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String queryProduct = "SELECT st.date, p.barcode, p.name FROM product p JOIN stock st ON p.barcode = st.barcode WHERE st.date >= ? AND st.date <= ? GROUP BY p.barcode, p.name, st.date ORDER BY p.name";
+
+            String queryPreviousStock = "SELECT previous_stock FROM stock WHERE barcode = ? AND date < ? ORDER BY id DESC LIMIT 1";
+
+            String queryStock = "SELECT SUM(qty) AS qty FROM stock WHERE barcode = ? AND date = ? AND type = ?";
+
+            try (PreparedStatement ps = connection.prepareStatement(queryProduct)) {
+                ps.setString(1, fromDate);
+                ps.setString(2, toDate);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Product product = new Product();
+                        product.setBarcode(rs.getString("barcode"));
+                        product.setName(rs.getString("name"));
+
+                        Stock stock = new Stock();
+                        stock.setProduct(product);
+                        stock.setBarcode(product.getBarcode());
+                        stock.setName(product.getName());
+                        stock.setDate(rs.getString("date"));
+
+                        try (PreparedStatement ps2 = connection.prepareStatement(queryPreviousStock)) {
+                            ps2.setString(1, stock.getProduct().getBarcode());
+                            ps2.setString(2, stock.getDate());
+
+                            try (ResultSet rs2 = ps2.executeQuery()) {
+                                while (rs2.next()) {
+                                    stock.setPreviousStock(rs2.getInt("previous_stock"));
+                                }
+                            }
+                        }
+
+                        try (PreparedStatement ps2 = connection.prepareStatement(queryStock)) {
+                            ps2.setString(1, stock.getProduct().getBarcode());
+                            ps2.setString(2, stock.getDate());
+                            ps2.setString(3, "add");
+
+                            try (ResultSet rs2 = ps2.executeQuery()) {
+                                while (rs2.next()) {
+                                    stock.setAdded(rs2.getInt("qty"));
+                                }
+                            }
+                        }
+
+                        try (PreparedStatement ps2 = connection.prepareStatement(queryStock)) {
+                            ps2.setString(1, stock.getProduct().getBarcode());
+                            ps2.setString(2, stock.getDate());
+                            ps2.setString(3, "sale");
+
+                            try (ResultSet rs2 = ps2.executeQuery()) {
+                                while (rs2.next()) {
+                                    stock.setSold(rs2.getInt("qty"));
+                                }
+                            }
+                        }
+
+                        try (PreparedStatement ps2 = connection.prepareStatement(queryStock)) {
+                            ps2.setString(1, stock.getProduct().getBarcode());
+                            ps2.setString(2, stock.getDate());
+                            ps2.setString(3, "return");
+
+                            try (ResultSet rs2 = ps2.executeQuery()) {
+                                while (rs2.next()) {
+                                    stock.setReturned(rs2.getInt("qty"));
+                                }
+                            }
+                        }
+
+                        int added = stock.getAdded();
+                        int sold = stock.getSold();
+                        int returned = stock.getReturned();
+                        int previousStock = stock.getPreviousStock();
+                        int subtotal = previousStock + added - sold - returned;
+
                         stock.setSubtotal(subtotal);
 
                         stocks.add(stock);

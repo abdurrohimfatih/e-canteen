@@ -6,7 +6,7 @@ public class Stock {
     private String barcode;
     private String name;
     private String supplier;
-    private int oldStock;
+    private int previousStock;
     private int qty;
     private String date;
     private String type;
@@ -55,12 +55,12 @@ public class Stock {
         this.supplier = supplier;
     }
 
-    public int getOldStock() {
-        return oldStock;
+    public int getPreviousStock() {
+        return previousStock;
     }
 
-    public void setOldStock(int oldStock) {
-        this.oldStock = oldStock;
+    public void setPreviousStock(int previousStock) {
+        this.previousStock = previousStock;
     }
 
     public int getQty() {

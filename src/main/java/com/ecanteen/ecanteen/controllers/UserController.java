@@ -18,6 +18,8 @@ import org.apache.commons.validator.routines.EmailValidator;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class UserController implements Initializable {
@@ -214,7 +216,7 @@ public class UserController implements Initializable {
         }
 
         user.setLevel(levelComboBox.getValue());
-        user.setDateCreated(Helper.formattedDateNow());
+        user.setDateCreated(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         if (statusComboBox.getValue().equals("Aktif")) {
             user.setStatus("1");

@@ -20,10 +20,11 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class StockReportController implements Initializable {
+public class StockRecapController implements Initializable {
     @FXML
     private MenuButton masterMenuButton;
     @FXML
@@ -65,13 +66,15 @@ public class StockReportController implements Initializable {
     @FXML
     private Button logoutButton;
     @FXML
-    private DatePicker dateDatePicker;
+    private DatePicker fromDatePicker;
+    @FXML
+    private DatePicker toDatePicker;
     @FXML
     private TableView<Stock> stockTableView;
     @FXML
     private TableColumn<Stock, Integer> noTableColumn;
     @FXML
-    private TableColumn<Stock, String> barcodeTableColumn;
+    private TableColumn<Stock, String> dateTableColumn;
     @FXML
     private TableColumn<Stock, String> nameTableColumn;
     @FXML
@@ -95,15 +98,20 @@ public class StockReportController implements Initializable {
         stockDao = new StockDaoImpl();
         stocks = FXCollections.observableArrayList();
 
-        Helper.formatDatePicker(dateDatePicker);
-        dateDatePicker.getEditor().setDisable(true);
-        dateDatePicker.getEditor().setOpacity(1);
-        dateDatePicker.setValue(LocalDate.now());
+        Helper.formatDatePicker(fromDatePicker);
+        Helper.formatDatePicker(toDatePicker);
+        fromDatePicker.getEditor().setDisable(true);
+        toDatePicker.getEditor().setDisable(true);
+        fromDatePicker.getEditor().setOpacity(1);
+        toDatePicker.getEditor().setOpacity(1);
+        fromDatePicker.setValue(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()));
+        toDatePicker.setValue(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()));
 
-        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         try {
-            stocks.addAll(stockDao.fetchStocksReport(date));
+            stocks.addAll(stockDao.fetchStocksRecap(fromDate, toDate));
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -111,7 +119,7 @@ public class StockReportController implements Initializable {
         stockTableView.setPlaceholder(new Label("Tidak ada data."));
         stockTableView.setItems(stocks);
         noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(stockTableView.getItems().indexOf(data.getValue()) + 1));
-        barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
+        dateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDate()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         previousStockTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getPreviousStock()).asObject());
         addedTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getAdded()).asObject());
@@ -123,16 +131,37 @@ public class StockReportController implements Initializable {
     }
 
     @FXML
-    private void dateDatePickerAction(ActionEvent actionEvent) {
-        if (dateDatePicker.getValue() == null) {
+    private void fromDatePickerAction(ActionEvent actionEvent) {
+        if (fromDatePicker.getValue() == null || toDatePicker.getValue() == null) {
             return;
         }
 
-        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         try {
             stocks.clear();
-            stocks.addAll(stockDao.fetchStocksReport(date));
+            stocks.addAll(stockDao.fetchStocksRecap(fromDate, toDate));
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        stockTableView.setItems(stocks);
+        printButton.setDisable(stockTableView.getItems().isEmpty());
+    }
+
+    @FXML
+    private void toDatePickerAction(ActionEvent actionEvent) {
+        if (fromDatePicker.getValue() == null || toDatePicker.getValue() == null) {
+            return;
+        }
+
+        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        try {
+            stocks.clear();
+            stocks.addAll(stockDao.fetchStocksRecap(fromDate, toDate));
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -143,11 +172,11 @@ public class StockReportController implements Initializable {
 
     @FXML
     private void printButtonAction(ActionEvent actionEvent) {
-        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
-        String time = Helper.formattedTimeNow();
+        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
+        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
         String employee = Common.user.getName();
 
-        new ReportGenerator().printStockReport(stockTableView.getItems(), date, time, employee);
+        new ReportGenerator().printStockRecap(stockTableView.getItems(), fromDate, toDate, employee);
     }
 
     @FXML
@@ -181,6 +210,11 @@ public class StockReportController implements Initializable {
     }
 
     @FXML
+    private void stockReportMenuItemAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(recapMenuButton, "Admin - Laporan Stok", "stock-report-view.fxml");
+    }
+
+    @FXML
     private void incomeReportMenuItemAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(reportMenuButton, "Admin - Laporan Pendapatan", "income-report-view.fxml");
     }
@@ -188,11 +222,6 @@ public class StockReportController implements Initializable {
     @FXML
     private void supplierReportMenuItemAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(reportMenuButton, "Admin - Laporan Supplier", "supplier-report-view.fxml");
-    }
-
-    @FXML
-    private void stockRecapMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(recapMenuButton, "Admin - Rekap Stok", "stock-recap-view.fxml");
     }
 
     @FXML

@@ -151,6 +151,7 @@ public class ReturnStockController implements Initializable {
         }
 
         resetError();
+        Product product = productComboBox.getValue();
         Stock stock = new Stock();
 
         try {
@@ -158,15 +159,15 @@ public class ReturnStockController implements Initializable {
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        stock.setProduct(productComboBox.getValue());
+        stock.setProduct(product);
+        stock.setBarcode(product.getBarcode());
+        stock.setPreviousStock(product.getStockAmount());
 
         try {
             oldStock = productDao.getStockAmount(stock.getProduct().getBarcode());
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-        stock.setOldStock(oldStock);
 
         stock.setQty(Integer.parseInt(amountTextField.getText()));
         stock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
@@ -189,7 +190,6 @@ public class ReturnStockController implements Initializable {
 
         try {
             if (stockDao.addData(stock) == 1) {
-                stockTableView.getItems().add(stock);
                 stocks = stockTableView.getItems();
 
                 newStock = oldStock - stock.getQty();
@@ -197,10 +197,18 @@ public class ReturnStockController implements Initializable {
 
                 Common.oldStocks.add(oldStock);
 
-                resetStock();
                 content = "Data berhasil ditambahkan!";
                 Helper.alert(Alert.AlertType.INFORMATION, content);
                 printButton.setDisable(false);
+
+                if (stock.getProduct().getExpiredDate().equals("01-01-0001")) {
+                    stock.getProduct().setExpiredDate("-");
+                } else {
+                    stock.getProduct().setExpiredDate(stock.getProduct().getExpiredDate());
+                }
+                stockTableView.getItems().add(stock);
+
+                resetStock();
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -230,6 +238,8 @@ public class ReturnStockController implements Initializable {
         resetError();
         selectedStock.setId(Integer.parseInt(idTextField.getText()));
         selectedStock.setProduct(productComboBox.getValue());
+        selectedStock.setBarcode(productComboBox.getValue().getBarcode());
+        selectedStock.setPreviousStock(productComboBox.getValue().getStockAmount());
         selectedStock.setQty(Integer.parseInt(amountTextField.getText().trim()));
         selectedStock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 

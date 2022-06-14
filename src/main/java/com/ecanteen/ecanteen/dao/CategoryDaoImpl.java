@@ -16,7 +16,7 @@ public class CategoryDaoImpl implements DaoService<Category> {
     public List<Category> fetchAll() throws SQLException, ClassNotFoundException {
         List<Category> categories = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT id, name, date_created FROM category";
+            String query = "SELECT id, name, DATE_FORMAT(date_created, '%d-%m-%Y') AS date FROM category";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
@@ -24,7 +24,7 @@ public class CategoryDaoImpl implements DaoService<Category> {
                         category.setId(rs.getInt("id"));
                         category.setName(rs.getString("name"));
                         category.setProductAmount(ProductDaoImpl.getProductAmountCategory(category));
-                        category.setDateCreated(rs.getString("date_created"));
+                        category.setDateCreated(rs.getString("date"));
                         categories.add(category);
                     }
                 }

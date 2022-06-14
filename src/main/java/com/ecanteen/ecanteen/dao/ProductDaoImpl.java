@@ -19,7 +19,7 @@ public class ProductDaoImpl implements DaoService<Product> {
         List<Product> products = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()){
             String query =
-                    "SELECT p.barcode, p.name, p.category_id, p.purchase_price, p.selling_price, p.stock_amount, p.supplier_id, p.date_added, p.expired_date, c.name AS category_name, s.name AS supplier_name, s.status AS supplier_status FROM product p JOIN category c ON p.category_id = c.id JOIN supplier s ON p.supplier_id = s.id ORDER BY p.name";
+                    "SELECT p.barcode, p.name, p.category_id, p.purchase_price, p.selling_price, p.stock_amount, p.supplier_id, DATE_FORMAT(p.date_added, '%d-%m-%Y') AS date_added, DATE_FORMAT(p.expired_date, '%d-%m-%Y') AS expired_date, c.name AS category_name, s.name AS supplier_name, s.status AS supplier_status FROM product p JOIN category c ON p.category_id = c.id JOIN supplier s ON p.supplier_id = s.id ORDER BY p.name";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
@@ -40,7 +40,12 @@ public class ProductDaoImpl implements DaoService<Product> {
                         product.setStockAmount(rs.getInt("stock_amount"));
                         product.setSupplier(supplier);
                         product.setDateAdded(rs.getString("date_added"));
-                        product.setExpiredDate(rs.getString("expired_date"));
+
+                        if (rs.getString("expired_date").equals("01-01-0001")) {
+                            product.setExpiredDate("-");
+                        } else {
+                            product.setExpiredDate(rs.getString("expired_date"));
+                        }
                         products.add(product);
                     }
                 }
@@ -345,7 +350,7 @@ public class ProductDaoImpl implements DaoService<Product> {
         List<Product> products = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()){
             String query =
-                    "SELECT p.barcode, p.name, p.supplier_id, p.expired_date, s.name AS supplier_name FROM product p JOIN supplier s ON p.supplier_id = s.id WHERE s.status = 1 ORDER BY p.name";
+                    "SELECT p.barcode, p.name, p.supplier_id, DATE_FORMAT(p.expired_date, '%d-%m-%Y') AS expired_date, p.stock_amount, s.name AS supplier_name FROM product p JOIN supplier s ON p.supplier_id = s.id WHERE s.status = 1 ORDER BY p.name";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
@@ -357,6 +362,7 @@ public class ProductDaoImpl implements DaoService<Product> {
                         product.setBarcode(rs.getString("barcode"));
                         product.setName(rs.getString("name"));
                         product.setSupplier(supplier);
+                        product.setStockAmount(rs.getInt("stock_amount"));
                         product.setExpiredDate(rs.getString("expired_date"));
                         products.add(product);
                     }
@@ -371,7 +377,7 @@ public class ProductDaoImpl implements DaoService<Product> {
         List<Product> products = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()){
             String query =
-                    "SELECT p.barcode, p.name, p.purchase_price, p.selling_price, p.stock_amount, p.supplier_id, p.expired_date, s.name AS supplier_name FROM product p JOIN supplier s ON p.supplier_id = s.id WHERE s.status = 1 AND p.stock_amount > 0 ORDER BY p.name";
+                    "SELECT p.barcode, p.name, p.purchase_price, p.selling_price, p.stock_amount, p.supplier_id, DATE_FORMAT(p.expired_date, '%d-%m-%Y') AS expired_date, s.name AS supplier_name FROM product p JOIN supplier s ON p.supplier_id = s.id WHERE s.status = 1 AND p.stock_amount > 0 ORDER BY p.name";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {

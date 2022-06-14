@@ -189,9 +189,9 @@ public class IncomeDaoImpl {
         try (Connection connection = MySQLConnection.createConnection()) {
             String querySold = "SELECT p.barcode, p.name, p.purchase_price, SUM(sa.quantity) AS sold FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN transaction t ON sa.transaction_id = t.id WHERE p.supplier_id = ? AND t.date = ? GROUP BY sa.barcode";
 
-            String queryAdded = "SELECT SUM(st.qty) AS added FROM stock st JOIN product p ON p.barcode = st.barcode WHERE st.barcode = ? AND st.date = ? AND st.type = ?";
+            String queryAdded = "SELECT SUM(st.qty) AS added FROM stock st WHERE st.barcode = ? AND st.date = ? AND st.type = ?";
 
-            String queryReturned = "SELECT SUM(st.qty) AS returned FROM stock st JOIN product p ON p.barcode = st.barcode WHERE st.barcode = ? AND st.date = ? AND st.type = ?";
+            String queryReturned = "SELECT SUM(st.qty) AS returned FROM stock st WHERE st.barcode = ? AND st.date = ? AND st.type = ?";
 
             try (PreparedStatement ps = connection.prepareStatement(querySold)) {
                 ps.setString(1, supplierId);
@@ -269,11 +269,11 @@ public class IncomeDaoImpl {
     public List<Supply> fetchSupplierRecap(String supplierId, String fromDate, String toDate) throws SQLException, ClassNotFoundException {
         List<Supply> supplies = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()) {
-            String querySold = "SELECT DATE_FORMAT(t.date, '%d-%m-%Y') AS dt, t.date, p.barcode, p.name, p.purchase_price, SUM(sa.quantity) AS sold FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN transaction t ON sa.transaction_id = t.id WHERE p.supplier_id = ? AND (t.date >= ? AND t.date <= ?) GROUP BY sa.barcode";
+            String querySold = "SELECT DATE_FORMAT(t.date, '%d-%m-%Y') AS dt, t.date, p.barcode, p.name, p.purchase_price, SUM(sa.quantity) AS sold FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN transaction t ON sa.transaction_id = t.id WHERE p.supplier_id = ? AND (t.date >= ? AND t.date <= ?) GROUP BY t.date, sa.barcode";
 
-            String queryAdded = "SELECT SUM(st.qty) AS added FROM stock st JOIN product p ON p.barcode = st.barcode WHERE st.barcode = ? AND st.date = ? AND st.type = ?";
+            String queryAdded = "SELECT SUM(st.qty) AS added FROM stock st WHERE st.barcode = ? AND st.date = ? AND st.type = ?";
 
-            String queryReturned = "SELECT SUM(st.qty) AS returned FROM stock st JOIN product p ON p.barcode = st.barcode WHERE st.barcode = ? AND st.date = ? AND st.type = ?";
+            String queryReturned = "SELECT SUM(st.qty) AS returned FROM stock st WHERE st.barcode = ? AND st.date = ? AND st.type = ?";
 
             try (PreparedStatement ps = connection.prepareStatement(querySold)) {
                 ps.setString(1, supplierId);

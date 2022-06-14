@@ -40,7 +40,7 @@ public class UserDaoImpl implements LoginService, DaoService<User> {
     public List<User> fetchAll() throws SQLException, ClassNotFoundException {
         List<User> users = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT username, password, name, address, gender, phone, email, level, date_created, status FROM user";
+            String query = "SELECT username, password, name, address, gender, phone, email, level, DATE_FORMAT(date_created, '%d-%m-%Y') AS date_created, status FROM user";
             try (PreparedStatement ps = connection.prepareStatement(query)){
                 try (ResultSet rs = ps.executeQuery()){
                     while (rs.next()) {

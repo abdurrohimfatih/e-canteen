@@ -82,7 +82,6 @@ public class ReportGenerator {
 
                 for (Supply item : supplies) {
                     Supply supply = new Supply();
-                    supply.setBarcode(item.getBarcode());
                     supply.setName(item.getName());
                     supply.setAdded(item.getAdded());
                     supply.setSold(item.getSold());
@@ -313,6 +312,109 @@ public class ReportGenerator {
 
                 try {
                     InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/supplier-recap.jasper");
+                    JasperPrint print = JasperFillManager.fillReport(inputStream, param, new JREmptyDataSource());
+//                    JasperPrintManager.printReport(print, true);
+
+                    JasperViewer viewer = new JasperViewer(print, false);
+                    viewer.setVisible(true);
+                    viewer.setFitPageZoomRatio();
+                } catch (JRException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        };
+
+        ExecutorService service = Executors.newCachedThreadPool();
+        service.execute(task);
+        service.shutdown();
+    }
+
+    public void printStockReport(ObservableList<Stock> stocks, String date, String time, String employee) {
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                BasicConfigurator.configure();
+                HashMap<String, Object> param = new HashMap<>();
+                List<Stock> stockList = new ArrayList<>();
+
+                for (Stock item : stocks) {
+                    Stock stock = new Stock();
+                    stock.setName(item.getName());
+                    stock.setPreviousStock(item.getPreviousStock());
+                    stock.setAdded(item.getAdded());
+                    stock.setSold(item.getSold());
+                    stock.setReturned(item.getReturned());
+                    stock.setSubtotal(item.getSubtotal());
+
+                    stockList.add(stock);
+                }
+
+                JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(stockList);
+
+                InputStream logoStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/image/bts-mart.png");
+
+                param.put("DS", itemsJRBean);
+                param.put("employee", employee);
+                param.put("bts-mart-dir", logoStream);
+                param.put("date", date);
+                param.put("time", time);
+
+                try {
+                    InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/stock-report.jasper");
+                    JasperPrint print = JasperFillManager.fillReport(inputStream, param, new JREmptyDataSource());
+//                    JasperPrintManager.printReport(print, true);
+
+                    JasperViewer viewer = new JasperViewer(print, false);
+                    viewer.setVisible(true);
+                    viewer.setFitPageZoomRatio();
+                } catch (JRException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        };
+
+        ExecutorService service = Executors.newCachedThreadPool();
+        service.execute(task);
+        service.shutdown();
+    }
+
+    public void printStockRecap(ObservableList<Stock> stocks, String fromDate, String toDate, String employee) {
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                BasicConfigurator.configure();
+                HashMap<String, Object> param = new HashMap<>();
+                List<Stock> stockList = new ArrayList<>();
+
+                for (Stock item : stocks) {
+                    Stock stock = new Stock();
+                    stock.setDate(item.getDate());
+                    stock.setName(item.getName());
+                    stock.setPreviousStock(item.getPreviousStock());
+                    stock.setAdded(item.getAdded());
+                    stock.setSold(item.getSold());
+                    stock.setReturned(item.getReturned());
+                    stock.setSubtotal(item.getSubtotal());
+
+                    stockList.add(stock);
+                }
+
+                JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(stockList);
+
+                InputStream logoStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/image/bts-mart.png");
+
+                param.put("DS", itemsJRBean);
+                param.put("employee", employee);
+                param.put("bts-mart-dir", logoStream);
+                param.put("from-date", fromDate);
+                param.put("to-date", toDate);
+
+                try {
+                    InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/stock-recap.jasper");
                     JasperPrint print = JasperFillManager.fillReport(inputStream, param, new JREmptyDataSource());
 //                    JasperPrintManager.printReport(print, true);
 

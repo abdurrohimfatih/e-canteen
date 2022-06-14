@@ -1,11 +1,20 @@
 package com.ecanteen.ecanteen.entities;
 
 public class Sale {
+    private Product product;
     private String barcode;
     private String name;
     private String sellingPrice;
     private String subtotal;
     private int quantity;
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public String getBarcode() {
         return barcode;

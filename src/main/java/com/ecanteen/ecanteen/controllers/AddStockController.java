@@ -166,6 +166,8 @@ public class AddStockController implements Initializable {
             throw new RuntimeException(e);
         }
         stock.setProduct(product);
+        stock.setBarcode(product.getBarcode());
+        stock.setPreviousStock(product.getStockAmount());
 
         try {
             oldStock = productDao.getStockAmount(stock.getProduct().getBarcode());
@@ -173,20 +175,17 @@ public class AddStockController implements Initializable {
             throw new RuntimeException(e);
         }
 
-        stock.setOldStock(oldStock);
-
         stock.setQty(Integer.parseInt(amountTextField.getText()));
         if (expiredDateDatePicker.getEditor().getText().trim().isEmpty()) {
-            stock.getProduct().setExpiredDate("-");
+            stock.getProduct().setExpiredDate("0001-01-01");
         } else {
-            stock.getProduct().setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            stock.getProduct().setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         }
         stock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         stock.setType("add");
 
         try {
             if (stockDao.addData(stock) == 1) {
-                stockTableView.getItems().add(stock);
                 stocks = stockTableView.getItems();
 
                 oldExpiredDate = productDao.getExpiredDate(stock.getProduct().getBarcode());
@@ -197,10 +196,18 @@ public class AddStockController implements Initializable {
                 Common.oldStocks.add(oldStock);
                 Common.oldExpiredDate.add(oldExpiredDate);
 
-                resetStock();
                 content = "Data berhasil ditambahkan!";
                 Helper.alert(Alert.AlertType.INFORMATION, content);
                 printButton.setDisable(false);
+
+                if (expiredDateDatePicker.getEditor().getText().trim().isEmpty()) {
+                    stock.getProduct().setExpiredDate("-");
+                } else {
+                    stock.getProduct().setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+                }
+                stockTableView.getItems().add(stock);
+
+                resetStock();
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -230,11 +237,13 @@ public class AddStockController implements Initializable {
         resetError();
         selectedStock.setId(Integer.parseInt(idTextField.getText()));
         selectedStock.setProduct(productComboBox.getValue());
+        selectedStock.setBarcode(productComboBox.getValue().getBarcode());
+        selectedStock.setPreviousStock(productComboBox.getValue().getStockAmount());
         selectedStock.setQty(Integer.parseInt(amountTextField.getText().trim()));
         if (expiredDateDatePicker.getEditor().getText().trim().isEmpty()) {
-            selectedStock.getProduct().setExpiredDate("-");
+            selectedStock.getProduct().setExpiredDate("0001-01-01");
         } else {
-            selectedStock.getProduct().setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            selectedStock.getProduct().setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         }
         selectedStock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
@@ -242,15 +251,21 @@ public class AddStockController implements Initializable {
         if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
             try {
                 if (stockDao.updateData(selectedStock) == 1) {
-                    stockTableView.getItems().set(stockTableView.getSelectionModel().getSelectedIndex(), selectedStock);
-
                     oldStock = Common.oldStocks.get(stockTableView.getSelectionModel().getSelectedIndex());
                     newStock = oldStock + selectedStock.getQty();
                     productDao.updateStockAndExpired(newStock, selectedStock.getProduct().getExpiredDate(), selectedStock.getProduct().getBarcode());
 
-                    resetStock();
                     content = "Data berhasil diubah!";
                     Helper.alert(Alert.AlertType.INFORMATION, content);
+
+                    if (expiredDateDatePicker.getEditor().getText().trim().isEmpty()) {
+                        selectedStock.getProduct().setExpiredDate("-");
+                    } else {
+                        selectedStock.getProduct().setExpiredDate(expiredDateDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+                    }
+                    stockTableView.getItems().set(stockTableView.getSelectionModel().getSelectedIndex(), selectedStock);
+
+                    resetStock();
                 }
             } catch (SQLException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
@@ -269,7 +284,7 @@ public class AddStockController implements Initializable {
         try {
             if (stockDao.deleteData(selectedStock) == 1) {
                 oldStock = Common.oldStocks.get(stockTableView.getSelectionModel().getSelectedIndex());
-                oldExpiredDate = Common.oldExpiredDate.get(stockTableView.getSelectionModel().getSelectedIndex());
+                oldExpiredDate = LocalDate.parse(Common.oldExpiredDate.get(stockTableView.getSelectionModel().getSelectedIndex())).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 newStock = oldStock;
                 productDao.updateStockAndExpired(newStock, oldExpiredDate, selectedStock.getProduct().getBarcode());
 

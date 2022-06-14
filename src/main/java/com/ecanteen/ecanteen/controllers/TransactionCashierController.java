@@ -2,9 +2,11 @@ package com.ecanteen.ecanteen.controllers;
 
 import com.ecanteen.ecanteen.Main;
 import com.ecanteen.ecanteen.dao.ProductDaoImpl;
+import com.ecanteen.ecanteen.dao.StockDaoImpl;
 import com.ecanteen.ecanteen.dao.TransactionDaoImpl;
 import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Sale;
+import com.ecanteen.ecanteen.entities.Stock;
 import com.ecanteen.ecanteen.entities.Transaction;
 import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.EditingCell;
@@ -93,11 +95,13 @@ public class TransactionCashierController implements Initializable {
     private ObservableList<Sale> saleData = FXCollections.observableArrayList();
     private String content;
     private ObservableList<Product> products;
+    private StockDaoImpl stockDao;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         productDao = new ProductDaoImpl();
         transactionDao = new TransactionDaoImpl();
+        stockDao = new StockDaoImpl();
         saleData = saleTableView.getItems();
         products = FXCollections.observableArrayList();
 
@@ -245,20 +249,6 @@ public class TransactionCashierController implements Initializable {
             return;
         }
 
-//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//        LocalDate now = Helper.formatter(LocalDate.now().format(dateTimeFormatter));
-//        LocalDate nowPlus1 = now.plusDays(1);
-//        String expiredDate = productDao.getExpiredDate(barcodeTextField.getText().trim());
-//
-//        if (now.isEqual(Helper.formatter(expiredDate)) ||
-//                now.isAfter(Helper.formatter(expiredDate))) {
-//            content = "Produk tersebut sudah kedaluwarsa!";
-//            Helper.alert(Alert.AlertType.ERROR, content);
-//        } else if (nowPlus1.isEqual(Helper.formatter(expiredDate))) {
-//            content = "Produk tersebut kedaluwarsa besok!";
-//            Helper.alert(Alert.AlertType.ERROR, content);
-//        }
-
         Sale sale = new Sale();
         sale.setBarcode(product.getBarcode());
         sale.setName(product.getName());
@@ -396,8 +386,23 @@ public class TransactionCashierController implements Initializable {
                     int oldStock = productDao.getStockAmount(item.getBarcode());
                     int newStock = oldStock - item.getQuantity();
                     productDao.updateStock(newStock, item.getBarcode());
+
+                    Stock stock = new Stock();
+                    try {
+                        stock.setId(stockDao.getNowId());
+                    } catch (SQLException | ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    stock.setBarcode(item.getBarcode());
+                    stock.setPreviousStock(oldStock);
+                    stock.setQty(item.getQuantity());
+                    stock.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                    stock.setType("sale");
+
+                    stockDao.addData(stock);
                 }
 
+                transaction.setDate(LocalDate.parse(transaction.getDate()).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
                 new ReportGenerator().generateInvoice(transactionDao, this, saleData, transaction);
 
                 content = "Kembalian Rp";
@@ -487,20 +492,6 @@ public class TransactionCashierController implements Initializable {
     }
 
     private void addProduct(Product selectedProduct) {
-//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//        LocalDate now = Helper.formatter(LocalDate.now().format(dateTimeFormatter));
-//        LocalDate nowPlus1 = now.plusDays(1);
-//        String expiredDate = selectedProduct.getExpiredDate();
-//
-//        if (now.isEqual(Helper.formatter(expiredDate)) ||
-//                now.isAfter(Helper.formatter(expiredDate))) {
-//            content = "Produk tersebut sudah kedaluwarsa!";
-//            Helper.alert(Alert.AlertType.ERROR, content);
-//        } else if (nowPlus1.isEqual(Helper.formatter(expiredDate))) {
-//            content = "Produk tersebut kedaluwarsa besok!";
-//            Helper.alert(Alert.AlertType.ERROR, content);
-//        }
-
         Sale sale = new Sale();
         sale.setBarcode(selectedProduct.getBarcode());
         sale.setName(selectedProduct.getName());

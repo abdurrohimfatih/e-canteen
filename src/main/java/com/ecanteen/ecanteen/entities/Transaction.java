@@ -5,8 +5,6 @@ public class Transaction {
     private String username;
     private String date;
     private String time;
-//    private String totalAll;
-//    private String totalDiscount;
     private String totalAmount;
     private String payAmount;
     private String change;
@@ -42,22 +40,6 @@ public class Transaction {
     public void setTime(String time) {
         this.time = time;
     }
-
-//    public String getTotalAll() {
-//        return totalAll;
-//    }
-//
-//    public void setTotalAll(String totalAll) {
-//        this.totalAll = totalAll;
-//    }
-//
-//    public String getTotalDiscount() {
-//        return totalDiscount;
-//    }
-//
-//    public void setTotalDiscount(String totalDiscount) {
-//        this.totalDiscount = totalDiscount;
-//    }
 
     public String getTotalAmount() {
         return totalAmount;

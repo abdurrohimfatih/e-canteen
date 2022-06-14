@@ -23,6 +23,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class CategoryController implements Initializable {
@@ -129,7 +131,7 @@ public class CategoryController implements Initializable {
         nameTextField.setStyle("-fx-border-color: #424242");
         Category category = new Category();
         category.setName(nameTextField.getText().trim());
-        category.setDateCreated(Helper.formattedDateNow());
+        category.setDateCreated(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         try {
             if (categoryDao.addData(category) == 1) {
@@ -157,7 +159,7 @@ public class CategoryController implements Initializable {
 
         nameTextField.setStyle("-fx-border-color: #424242");
         selectedCategory.setName(nameTextField.getText().trim());
-        selectedCategory.setDateCreated(Helper.formattedDateNow());
+        selectedCategory.setDateCreated(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         content = "Anda yakin ingin mengubah?";
         if (Helper.alert(Alert.AlertType.CONFIRMATION, content) != ButtonType.OK) {
