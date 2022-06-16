@@ -93,6 +93,8 @@ public class TransactionCashierController implements Initializable {
     private ProductDaoImpl productDao;
     private TransactionDaoImpl transactionDao;
     private ObservableList<Sale> saleData = FXCollections.observableArrayList();
+    private Product selectedProduct;
+    private Sale selectedItem;
     private String content;
     private ObservableList<Product> products;
     private StockDaoImpl stockDao;
@@ -464,31 +466,21 @@ public class TransactionCashierController implements Initializable {
 
     @FXML
     private void productTableViewClicked(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
-        Product selectedProduct = productTableView.getSelectionModel().getSelectedItem();
-
-        if (mouseEvent.getClickCount() > 1) {
-            if (productDao.getStockAmount(selectedProduct.getBarcode()) <= 0) {
-                content = "Produk tersebut stoknya habis!";
-                Helper.alert(Alert.AlertType.ERROR, content);
-            } else {
-                addProduct(selectedProduct);
-            }
-        }
+        selectedProduct = productTableView.getSelectionModel().getSelectedItem();
 
         productTableView.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
+                selectedProduct = productTableView.getSelectionModel().getSelectedItem();
+            }
+
             if (keyEvent.getCode() == KeyCode.ENTER || mouseEvent.getClickCount() > 1) {
-                try {
-                    if (productDao.getStockAmount(selectedProduct.getBarcode()) <= 0) {
-                        content = "Produk tersebut stoknya habis!";
-                        Helper.alert(Alert.AlertType.ERROR, content);
-                    } else {
-                        addProduct(selectedProduct);
-                    }
-                } catch (SQLException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
+                addProduct(selectedProduct);
             }
         });
+
+        if (mouseEvent.getClickCount() > 1) {
+            addProduct(selectedProduct);
+        }
     }
 
     private void addProduct(Product selectedProduct) {
@@ -540,16 +532,21 @@ public class TransactionCashierController implements Initializable {
 
     @FXML
     private void saleTableViewClicked(MouseEvent mouseEvent) {
-        Sale row = saleTableView.getSelectionModel().getSelectedItem();
+        selectedItem = saleTableView.getSelectionModel().getSelectedItem();
+
         saleTableView.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
+                selectedItem = saleTableView.getSelectionModel().getSelectedItem();
+            }
+
             if (keyEvent.getCode() == KeyCode.DELETE) {
-                Common.productName = row.getName();
+                Common.productName = selectedItem.getName();
                 content = "Tidak jadi membeli ini?";
                 if (Helper.alert(Alert.AlertType.CONFIRMATION, content) != ButtonType.OK) {
                     return;
                 }
 
-                saleTableView.getItems().remove(row);
+                saleTableView.getItems().remove(selectedItem);
 
                 int totalAmount = 0;
 

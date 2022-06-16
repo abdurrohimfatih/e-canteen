@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
@@ -309,6 +310,19 @@ public class AddStockController implements Initializable {
 
     @FXML
     private void stockTableViewClicked(MouseEvent mouseEvent) {
+        selectFromTableView();
+        stockTableView.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
+                selectFromTableView();
+            }
+
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                productComboBox.requestFocus();
+            }
+        });
+    }
+
+    private void selectFromTableView() {
         selectedStock = stockTableView.getSelectionModel().getSelectedItem();
         if (selectedStock != null) {
             idTextField.setText(String.valueOf(selectedStock.getId()));

@@ -15,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
@@ -241,17 +242,16 @@ public class CategoryController implements Initializable {
 
     @FXML
     private void categoryTableViewClicked(MouseEvent mouseEvent) {
-        selectedCategory = categoryTableView.getSelectionModel().getSelectedItem();
-        if (selectedCategory == null) {
-            return;
-        }
+        selectFromTableView();
+        categoryTableView.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
+                selectFromTableView();
+            }
 
-        idTextField.setText(String.valueOf(selectedCategory.getId()));
-        nameTextField.setText(selectedCategory.getName());
-        addButton.setDisable(true);
-        updateButton.setDisable(false);
-        deleteButton.setDisable(false);
-        resetButton.setDisable(false);
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                nameTextField.requestFocus();
+            }
+        });
 
         if (mouseEvent.getClickCount() > 1) {
             Stage stage = new Stage();
@@ -268,6 +268,18 @@ public class CategoryController implements Initializable {
             stage.initOwner(categoryTableView.getScene().getWindow());
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
+        }
+    }
+
+    private void selectFromTableView() {
+        selectedCategory = categoryTableView.getSelectionModel().getSelectedItem();
+        if (selectedCategory != null) {
+            idTextField.setText(String.valueOf(selectedCategory.getId()));
+            nameTextField.setText(selectedCategory.getName());
+            addButton.setDisable(true);
+            updateButton.setDisable(false);
+            deleteButton.setDisable(false);
+            resetButton.setDisable(false);
         }
     }
 

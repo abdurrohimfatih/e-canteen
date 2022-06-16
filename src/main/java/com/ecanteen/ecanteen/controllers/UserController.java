@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -386,10 +387,24 @@ public class UserController implements Initializable {
 
     @FXML
     private void userTableViewClicked(MouseEvent mouseEvent) {
+        selectFromTableView();
+        userTableView.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
+                selectFromTableView();
+            }
+
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                usernameTextField.requestFocus();
+            }
+        });
+    }
+
+    private void selectFromTableView() {
         selectedUser = userTableView.getSelectionModel().getSelectedItem();
         if (selectedUser != null) {
             usernameTextField.setText(selectedUser.getUsername());
             Common.oldUsername = selectedUser.getUsername();
+            passwordTextField.setText("");
             passwordTextField.setPromptText("Kosongkan jika tidak mengubah");
             passwordLabel.setText("Password");
             nameTextField.setText(selectedUser.getName());

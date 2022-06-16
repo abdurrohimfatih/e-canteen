@@ -15,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
@@ -379,26 +380,16 @@ public class SupplierController implements Initializable {
 
     @FXML
     private void supplierTableViewClicked(MouseEvent mouseEvent) {
-        selectedSupplier = supplierTableView.getSelectionModel().getSelectedItem();
-        if (selectedSupplier == null) {
-            return;
-        }
+        selectFromTableView();
+        supplierTableView.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
+                selectFromTableView();
+            }
 
-        idTextField.setText(selectedSupplier.getId());
-        nameTextField.setText(selectedSupplier.getName());
-        addressTextField.setText(selectedSupplier.getAddress());
-        genderComboBox.setValue(selectedSupplier.getGender());
-        phoneTextField.setText(selectedSupplier.getPhone());
-        emailTextField.setText(selectedSupplier.getEmail());
-        bankAccountTextField.setText(selectedSupplier.getBankAccount());
-        accountNumberTextField.setText(selectedSupplier.getAccountNumber());
-        statusComboBox.setValue(selectedSupplier.getStatus());
-        idTextField.setDisable(true);
-        warningLabel.setText("");
-        addButton.setDisable(true);
-        updateButton.setDisable(false);
-        deleteButton.setDisable(false);
-        resetButton.setDisable(false);
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                nameTextField.requestFocus();
+            }
+        });
 
         if (mouseEvent.getClickCount() > 1) {
             Stage stage = new Stage();
@@ -415,6 +406,27 @@ public class SupplierController implements Initializable {
             stage.initOwner(supplierTableView.getScene().getWindow());
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
+        }
+    }
+
+    private void selectFromTableView() {
+        selectedSupplier = supplierTableView.getSelectionModel().getSelectedItem();
+        if (selectedSupplier != null) {
+            idTextField.setText(selectedSupplier.getId());
+            nameTextField.setText(selectedSupplier.getName());
+            addressTextField.setText(selectedSupplier.getAddress());
+            genderComboBox.setValue(selectedSupplier.getGender());
+            phoneTextField.setText(selectedSupplier.getPhone());
+            emailTextField.setText(selectedSupplier.getEmail());
+            bankAccountTextField.setText(selectedSupplier.getBankAccount());
+            accountNumberTextField.setText(selectedSupplier.getAccountNumber());
+            statusComboBox.setValue(selectedSupplier.getStatus());
+            idTextField.setDisable(true);
+            warningLabel.setText("");
+            addButton.setDisable(true);
+            updateButton.setDisable(false);
+            deleteButton.setDisable(false);
+            resetButton.setDisable(false);
         }
     }
 

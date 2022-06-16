@@ -17,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
@@ -259,6 +260,19 @@ public class ProductController implements Initializable {
 
     @FXML
     private void productTableViewClicked(MouseEvent mouseEvent) {
+        selectFromTableView();
+        productTableView.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
+                selectFromTableView();
+            }
+
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                nameTextField.requestFocus();
+            }
+        });
+    }
+
+    private void selectFromTableView() {
         selectedProduct = productTableView.getSelectionModel().getSelectedItem();
         if (selectedProduct != null) {
             barcodeTextField.setText(selectedProduct.getBarcode());
