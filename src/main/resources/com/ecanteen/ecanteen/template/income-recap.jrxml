@@ -97,7 +97,7 @@
 	<parameter name="from-date" class="java.lang.String"/>
 	<parameter name="to-date" class="java.lang.String"/>
 	<parameter name="employee" class="java.lang.String"/>
-	<parameter name="bts-mart-dir" class="sun.nio.ch.ChannelInputStream"/>
+	<parameter name="bts-mart-dir" class="java.io.InputStream"/>
 	<parameter name="total-income" class="java.lang.String"/>
 	<parameter name="total-profit" class="java.lang.String"/>
 	<queryString>

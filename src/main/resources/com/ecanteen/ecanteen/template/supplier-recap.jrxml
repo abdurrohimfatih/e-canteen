@@ -100,7 +100,7 @@
 	<parameter name="from-date" class="java.lang.String"/>
 	<parameter name="to-date" class="java.lang.String"/>
 	<parameter name="employee" class="java.lang.String"/>
-	<parameter name="bts-mart-dir" class="sun.nio.ch.ChannelInputStream"/>
+	<parameter name="bts-mart-dir" class="java.io.InputStream"/>
 	<parameter name="total-add" class="java.lang.Integer"/>
 	<parameter name="total-sold" class="java.lang.Integer"/>
 	<parameter name="total-return" class="java.lang.Integer"/>
