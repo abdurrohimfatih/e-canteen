@@ -281,7 +281,7 @@
 									<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{previousStock}]]></textFieldExpression>
@@ -314,7 +314,7 @@
 									<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{added}]]></textFieldExpression>
@@ -347,7 +347,7 @@
 									<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{sold}]]></textFieldExpression>
@@ -380,7 +380,7 @@
 									<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{returned}]]></textFieldExpression>
@@ -413,7 +413,7 @@
 									<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{subtotal}]]></textFieldExpression>
@@ -427,14 +427,14 @@
 	<summary>
 		<band height="118">
 			<staticText>
-				<reportElement x="410" y="10" width="60" height="30" uuid="8921b40b-6c62-4f7a-921b-658f89e079fa"/>
+				<reportElement x="360" y="10" width="165" height="30" uuid="8921b40b-6c62-4f7a-921b-658f89e079fa"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14"/>
 				</textElement>
 				<text><![CDATA[Petugas,]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="390" y="88" width="100" height="30" uuid="788060af-bf04-4238-adc6-08e21fec0ca4"/>
+				<reportElement x="360" y="88" width="165" height="30" uuid="788060af-bf04-4238-adc6-08e21fec0ca4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>

@@ -1,6 +1,7 @@
 package com.ecanteen.ecanteen.dao;
 
 import com.ecanteen.ecanteen.entities.User;
+import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.DaoService;
 import com.ecanteen.ecanteen.utils.LoginService;
 import com.ecanteen.ecanteen.utils.MySQLConnection;
@@ -113,7 +114,34 @@ public class UserDaoImpl implements LoginService, DaoService<User> {
                 ps.setString(7, object.getEmail());
                 ps.setString(8, object.getLevel());
                 ps.setString(9, object.getStatus());
-                ps.setString(10, object.getUsername());
+                ps.setString(10, Common.oldUsername);
+
+                if (ps.executeUpdate() != 0) {
+                    connection.commit();
+                    result = 1;
+                } else {
+                    connection.rollback();
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public int updateDataExceptPassword(User object) throws SQLException, ClassNotFoundException {
+        int result = 0;
+        try (Connection connection = MySQLConnection.createConnection()) {
+            String query = "UPDATE user SET username = ?, name = ?, address = ?, gender = ?, phone = ?, email = ?, level = ?, status = ? WHERE username = ?";
+            try (PreparedStatement ps = connection.prepareStatement(query)) {
+                ps.setString(1, object.getUsername());
+                ps.setString(2, object.getName());
+                ps.setString(3, object.getAddress());
+                ps.setString(4, object.getGender());
+                ps.setString(5, object.getPhone());
+                ps.setString(6, object.getEmail());
+                ps.setString(7, object.getLevel());
+                ps.setString(8, object.getStatus());
+                ps.setString(9, Common.oldUsername);
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();

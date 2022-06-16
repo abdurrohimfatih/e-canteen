@@ -162,7 +162,7 @@
             </rowConstraints>
             <Label layoutX="10.0" layoutY="67.0" text="Username *" />
             <TextField fx:id="usernameTextField" layoutX="110.0" layoutY="62.0" promptText="maks. 20 karakter" GridPane.columnIndex="1" />
-            <Label text="Password *" GridPane.rowIndex="1" />
+            <Label fx:id="passwordLabel" text="Password *" GridPane.rowIndex="1" />
             <PasswordField fx:id="passwordTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Nama *" GridPane.rowIndex="2" />
             <TextField fx:id="nameTextField" layoutX="110.0" layoutY="13.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />

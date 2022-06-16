@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Common {
     public static User user;
+    public static String oldUsername;
     public static String totalAmountString;
     public static String change;
     public static String productName;

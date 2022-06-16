@@ -66,6 +66,8 @@ public class UserController implements Initializable {
     @FXML
     private TextField usernameTextField;
     @FXML
+    private Label passwordLabel;
+    @FXML
     private PasswordField passwordTextField;
     @FXML
     private TextField nameTextField;
@@ -239,9 +241,8 @@ public class UserController implements Initializable {
     }
 
     @FXML
-    private void updateButtonAction(ActionEvent actionEvent) {
-        if (passwordTextField.getText().isEmpty() ||
-                nameTextField.getText().trim().isEmpty() ||
+    private void updateButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        if (nameTextField.getText().trim().isEmpty() ||
                 addressTextField.getText().trim().isEmpty() ||
                 genderComboBox.getValue() == null ||
                 phoneTextField.getText().trim().isEmpty() ||
@@ -252,7 +253,6 @@ public class UserController implements Initializable {
 
             resetError();
 
-            if (passwordTextField.getText().isEmpty()) passwordTextField.setStyle("-fx-border-color: RED");
             if (nameTextField.getText().trim().isEmpty()) nameTextField.setStyle("-fx-border-color: RED");
             if (addressTextField.getText().trim().isEmpty()) addressTextField.setStyle("-fx-border-color: RED");
             if (genderComboBox.getValue() == null) genderComboBox.setStyle("-fx-border-color: RED");
@@ -281,6 +281,12 @@ public class UserController implements Initializable {
         }
 
         resetError();
+
+        if (userDao.getUsername(usernameTextField.getText().trim()) == 1 && !Common.oldUsername.equals(usernameTextField.getText().trim())) {
+            content = "Username tersebut sudah digunakan!";
+            Helper.alert(Alert.AlertType.ERROR, content);
+            return;
+        }
 
         selectedUser.setUsername(usernameTextField.getText().trim());
 
@@ -311,17 +317,32 @@ public class UserController implements Initializable {
             return;
         }
 
-        try {
-            if (userDao.updateData(selectedUser) == 1) {
-                users.clear();
-                users.addAll(userDao.fetchAll());
-                resetUser();
-                userTableView.requestFocus();
-                content = "Data berhasil diubah!";
-                Helper.alert(Alert.AlertType.INFORMATION, content);
+        if (passwordTextField.getText().isEmpty()) {
+            try {
+                if (userDao.updateDataExceptPassword(selectedUser) == 1) {
+                    users.clear();
+                    users.addAll(userDao.fetchAll());
+                    resetUser();
+                    userTableView.requestFocus();
+                    content = "Data berhasil diubah!";
+                    Helper.alert(Alert.AlertType.INFORMATION, content);
+                }
+            } catch (SQLException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+        } else {
+            try {
+                if (userDao.updateData(selectedUser) == 1) {
+                    users.clear();
+                    users.addAll(userDao.fetchAll());
+                    resetUser();
+                    userTableView.requestFocus();
+                    content = "Data berhasil diubah!";
+                    Helper.alert(Alert.AlertType.INFORMATION, content);
+                }
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -368,14 +389,16 @@ public class UserController implements Initializable {
         selectedUser = userTableView.getSelectionModel().getSelectedItem();
         if (selectedUser != null) {
             usernameTextField.setText(selectedUser.getUsername());
+            Common.oldUsername = selectedUser.getUsername();
+            passwordTextField.setPromptText("Kosongkan jika tidak mengubah");
+            passwordLabel.setText("Password");
             nameTextField.setText(selectedUser.getName());
             addressTextField.setText(selectedUser.getAddress());
             genderComboBox.setValue(selectedUser.getGender());
             phoneTextField.setText(selectedUser.getPhone());
-            emailTextField.setText(selectedUser.getEmail());
+            emailTextField.setText(selectedUser.getEmail().equals("-") ? "" : selectedUser.getEmail());
             levelComboBox.setValue(selectedUser.getLevel());
             statusComboBox.setValue(selectedUser.getStatus());
-            usernameTextField.setDisable(true);
             warningLabel.setText("");
             addButton.setDisable(true);
             updateButton.setDisable(false);
@@ -414,6 +437,8 @@ public class UserController implements Initializable {
     private void resetUser() {
         usernameTextField.clear();
         passwordTextField.clear();
+        passwordTextField.setPromptText("");
+        passwordLabel.setText("Password *");
         nameTextField.clear();
         addressTextField.clear();
         genderComboBox.setValue(null);

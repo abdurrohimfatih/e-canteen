@@ -108,7 +108,7 @@ public class StockDaoImpl implements DaoService<Stock> {
         try (Connection connection = MySQLConnection.createConnection()) {
             String queryProduct = "SELECT p.barcode, p.name FROM product p JOIN stock st ON p.barcode = st.barcode WHERE st.date = ? GROUP BY p.barcode, p.name ORDER BY p.name";
 
-            String queryPreviousStock = "SELECT previous_stock FROM stock WHERE barcode = ? AND date < ? ORDER BY id DESC LIMIT 1";
+            String queryPreviousStock = "SELECT previous_stock FROM stock WHERE barcode = ? AND date = ? ORDER BY id LIMIT 1";
 
             String queryStock = "SELECT SUM(qty) AS qty FROM stock WHERE barcode = ? AND date = ? AND type = ?";
 
@@ -195,7 +195,7 @@ public class StockDaoImpl implements DaoService<Stock> {
         try (Connection connection = MySQLConnection.createConnection()) {
             String queryProduct = "SELECT st.date, p.barcode, p.name FROM product p JOIN stock st ON p.barcode = st.barcode WHERE st.date >= ? AND st.date <= ? GROUP BY p.barcode, p.name, st.date ORDER BY p.name";
 
-            String queryPreviousStock = "SELECT previous_stock FROM stock WHERE barcode = ? AND date < ? ORDER BY id DESC LIMIT 1";
+            String queryPreviousStock = "SELECT previous_stock FROM stock WHERE barcode = ? AND date = ? ORDER BY id LIMIT 1";
 
             String queryStock = "SELECT SUM(qty) AS qty FROM stock WHERE barcode = ? AND date = ? AND type = ?";
 

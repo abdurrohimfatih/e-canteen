@@ -184,27 +184,3 @@
 .supplier-history-combo-box {
     -fx-font-size: 14px;
 }
-
-.onHover {
-    -fx-background-color: #0C80D4;
-}
-
-.chart-legend-item {
-    -fx-text-fill: BLACK;
-}
-
-.chart-plot-background, .chart-legend {
-    -fx-background-color: WHITE;
-}
-
-.chart-alternative-row-fill {
-    -fx-fill: WHITE;
-}
-
-.chart-vertical-grid-lines, .chart-horizontal-grid-lines {
-    -fx-stroke: #0C80D4;
-}
-
-.axis-tick-mark, .axis-minor-tick-mark {
-    -fx-stroke: BLACK;
-}

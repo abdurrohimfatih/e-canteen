@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 15, 2022 at 08:58 AM
+-- Generation Time: Jun 16, 2022 at 05:21 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -64,12 +64,12 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`barcode`, `name`, `category_id`, `purchase_price`, `selling_price`, `stock_amount`, `supplier_id`, `date_added`, `expired_date`) VALUES
-('1000', 'Kopi Panas', 1, '1.000', '2.000', 392, 'ID123', '2022-05-21', '0001-01-01'),
-('10000', 'Susu Frisian Flag', 1, '1.000', '1.500', 208, 'ID123', '2022-05-21', '2022-07-29'),
-('123', 'Nu Milk Tea', 1, '4.500', '5.000', 466, '123', '2022-05-22', '2022-06-24'),
-('12321093821', 'Teh Pucuk Harum', 1, '3.000', '5.000', 300, 'ID123', '2022-05-30', '2022-07-08'),
-('321', 'Es Teh Manissssssssssssss', 1, '1.000', '2.000', 196, 'ID123', '2022-06-14', '0001-01-01'),
-('4569871023', 'Oreo Manis', 3, '2.000', '3.000', 240, '123', '2022-06-13', '2022-07-09');
+('1000', 'Kopi Panas', 1, '1.000', '2.000', 99, 'ID123', '2022-05-21', '0001-01-01'),
+('10000', 'Susu Frisian Flag', 1, '1.000', '1.500', 0, 'ID123', '2022-05-21', '2022-07-29'),
+('123', 'Nu Milk Tea', 1, '4.500', '5.000', 0, '123', '2022-05-22', '2022-06-24'),
+('12321093821', 'Teh Pucuk Harum', 1, '3.000', '5.000', 0, 'ID123', '2022-05-30', '2022-07-08'),
+('321', 'Es Teh Manissssssssssssss', 1, '1.000', '2.000', 58, 'ID123', '2022-06-14', '0001-01-01'),
+('4569871023', 'Oreo Manis', 3, '2.000', '3.000', 19, '123', '2022-06-13', '0001-01-01');
 
 -- --------------------------------------------------------
 
@@ -111,22 +111,10 @@ CREATE TABLE `sale` (
 --
 
 INSERT INTO `sale` (`id`, `transaction_id`, `barcode`, `quantity`, `subtotal`) VALUES
-(1, 1, '123', 1, '5.000'),
-(2, 2, '123', 1, '5.000'),
-(3, 3, '123', 1, '5.000'),
-(4, 4, '321', 1, '2.000'),
-(5, 6, '321', 1, '2.000'),
-(6, 7, '321', 5, '10.000'),
-(7, 7, '123', 1, '5.000'),
-(8, 8, '321', 10, '20.000'),
-(9, 9, '1000', 4, '8.000'),
-(10, 10, '321', 7, '14.000'),
-(11, 11, '1000', 8, '16.000'),
-(13, 12, '1000', 1, '2.000'),
-(14, 13, '321', 1, '2.000'),
-(15, 14, '321', 1, '2.000'),
-(16, 15, '321', 10, '20.000'),
-(17, 16, '1000', 5, '10.000');
+(1, 1, '321', 1, '2.000'),
+(2, 2, '1000', 1, '2.000'),
+(3, 2, '321', 1, '2.000'),
+(4, 2, '4569871023', 1, '3.000');
 
 -- --------------------------------------------------------
 
@@ -148,21 +136,15 @@ CREATE TABLE `stock` (
 --
 
 INSERT INTO `stock` (`id`, `barcode`, `previous_stock`, `qty`, `date`, `type`) VALUES
-(1, '123', 0, 20, '2022-06-13', 'add'),
-(2, '4569871023', 0, 20, '2022-06-13', 'return'),
-(3, '321', 0, 100, '2022-06-13', 'add'),
-(4, '321', 200, 100, '2022-06-13', 'add'),
-(5, '321', 207, 1, '2022-06-14', 'sale'),
-(6, '321', 207, 1, '2022-06-14', 'sale'),
-(7, '321', 206, 100, '2022-06-14', 'add'),
-(8, '321', 306, 50, '2022-06-14', 'return'),
-(9, '321', 256, 50, '2022-06-14', 'return'),
-(10, '321', 206, 20, '2022-06-14', 'add'),
-(11, '321', 226, 20, '2022-06-14', 'return'),
-(12, '321', 206, 10, '2022-06-14', 'sale'),
-(13, '1000', 397, 10, '2022-06-14', 'add'),
-(14, '1000', 407, 10, '2022-06-14', 'return'),
-(15, '1000', 397, 5, '2022-06-14', 'sale');
+(1, '321', 0, 100, '2022-06-15', 'add'),
+(2, '321', 100, 20, '2022-06-15', 'return'),
+(3, '321', 80, 1, '2022-06-15', 'sale'),
+(4, '1000', 0, 100, '2022-06-16', 'add'),
+(5, '321', 79, 20, '2022-06-16', 'return'),
+(6, '4569871023', 0, 20, '2022-06-16', 'add'),
+(7, '1000', 100, 1, '2022-06-16', 'sale'),
+(8, '321', 59, 1, '2022-06-16', 'sale'),
+(9, '4569871023', 20, 1, '2022-06-16', 'sale');
 
 -- --------------------------------------------------------
 
@@ -173,7 +155,7 @@ INSERT INTO `stock` (`id`, `barcode`, `previous_stock`, `qty`, `date`, `type`) V
 CREATE TABLE `supplier` (
   `id` varchar(16) NOT NULL,
   `name` varchar(30) NOT NULL,
-  `address` varchar(255) NOT NULL,
+  `address` varchar(15) NOT NULL,
   `gender` varchar(11) NOT NULL,
   `phone` varchar(14) NOT NULL,
   `email` varchar(50) DEFAULT NULL,
@@ -202,29 +184,17 @@ CREATE TABLE `transaction` (
   `date` date NOT NULL,
   `time` varchar(8) NOT NULL,
   `total_amount` int(11) NOT NULL,
-  `customer_id` int(5) NOT NULL DEFAULT 0
+  `customer_id` int(5) NOT NULL DEFAULT 0,
+  `limit_id` int(5) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `transaction`
 --
 
-INSERT INTO `transaction` (`id`, `username`, `date`, `time`, `total_amount`, `customer_id`) VALUES
-(1, 'kasir', '2022-05-21', '09:23:58', 5000, 0),
-(2, 'kasir', '2022-05-21', '09:56:37', 5000, 0),
-(3, 'kasir', '2022-05-22', '09:57:08', 5000, 0),
-(4, 'kasir', '2022-06-08', '10:45:08', 2000, 0),
-(6, 'kasir', '2022-06-08', '14:16:24', 2000, 0),
-(7, 'andi', '2022-06-08', '15:20:33', 15000, 0),
-(8, 'kasir', '2022-06-08', '15:21:41', 20000, 0),
-(9, 'kasir', '2022-06-09', '13:58:51', 8000, 0),
-(10, 'kasir', '2022-06-09', '13:59:45', 14000, 0),
-(11, 'kasir', '2022-06-11', '14:00:53', 16000, 0),
-(12, 'kasir', '2022-06-13', '18:46:08', 2000, 0),
-(13, 'kasir', '2022-06-14', '08:17:38', 2000, 0),
-(14, 'kasir', '2022-06-14', '08:19:40', 2000, 0),
-(15, 'kasir', '2022-06-14', '10:21:43', 20000, 0),
-(16, 'kasir', '2022-06-14', '10:29:26', 10000, 0);
+INSERT INTO `transaction` (`id`, `username`, `date`, `time`, `total_amount`, `customer_id`, `limit_id`) VALUES
+(1, 'sinta', '2022-06-15', '14:45:26', 2000, 0, 0),
+(2, 'sinta', '2022-06-16', '15:16:46', 7000, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -236,7 +206,7 @@ CREATE TABLE `user` (
   `username` varchar(20) NOT NULL,
   `password` varchar(255) NOT NULL,
   `name` varchar(30) NOT NULL,
-  `address` varchar(255) NOT NULL,
+  `address` varchar(15) NOT NULL,
   `gender` varchar(11) NOT NULL,
   `phone` varchar(14) NOT NULL,
   `email` varchar(50) DEFAULT NULL,
@@ -250,10 +220,11 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`username`, `password`, `name`, `address`, `gender`, `phone`, `email`, `level`, `date_created`, `status`) VALUES
-('admin', 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec', 'Admin', 'Cirebon', 'Laki-laki', '089999999999', '-', 'Admin', '0000-00-00', 1),
-('andi', 'ed0d587073b2a487fa0638d970255179f0f4d298b33ed39317797681bb57e2277c560ffb9a3f75a81adc261d4d7cee06769380751d44e0669226d4cf042e44b0', 'Andi', 'Karangmekar, Karangsembung, Cirebon', 'Laki-laki', '081234567890', '-', 'Kasir', '0000-00-00', 1),
-('feri', 'a7e4aee696782ca8708d21986a721f55b26929cd9927c3df9b4db75fe84d78842dfbbb5467d6fc7e9f80fcf3bdf6b6f13b31aacfbcafcb7a778e71d80777a513', 'Feri', 'Cirebon', 'Laki-laki', '0822222222222', '-', 'Kasir', '2022-06-13', 1),
-('kasir', 'e2c23518e63445135a75cb5b39585b6a2e3f7261108674fe606c16947aa2d4e1f5ceb3766c2a2b60e93e79e6b4d267f5054f361ce4f364d2f2e95bdd7db9678d', 'Kasir', 'Kuningan', 'Perempuan', '08123456789', '-', 'Kasir', '0000-00-00', 1);
+('admin', 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec', 'Nur Siti Fatimah', 'Cirebon', 'Laki-laki', '089999999999', '-', 'Admin', '0000-00-00', 1),
+('erika', 'be65c8af71949aec8e42b79e17fa3ef5e70c972a6248104c5649547a595771cd4d8051332366d979cdd00dd54834cabdfbc6246ea03859408c738e84e55cf018', 'Erika Nurjanah', 'Bandung', 'Perempuan', '081234567890', '-', 'Kasir', '0000-00-00', 1),
+('gina', '7ece985a1fef494d8d7664a2d3405c0e68c4fd71538a71767fe5254a4eb5021af43a39f822e707f518b5aa0c2343ca3ebcd96ee768d2796653b1b0209581b934', 'Gina Maulani Habibah', 'Bandung', 'Perempuan', '0777777777777', '-', 'Kasir', '2022-06-16', 0),
+('nurul', '2eeb4ad2e7135e671dc0f7f7e14bdc6446ecefb6aba91d5d0ecaa238fe2f7de136b803fd09c1dffb62a02e1903a86368e7fbfa7ea200d58a5ea733722ced2fc8', 'Nurul Siti Awaliyah', 'Bandung', 'Perempuan', '0822222222222', '-', 'Kasir', '2022-06-13', 1),
+('sinta', '38562b58706469b79113ee3a7a1540edcb41f36806e6155ef209fd4fa9036c1c00b5a81b8c62d84375a4405798d72b5e965e328b1deba512b9a64cef7e810600', 'Sinta Aulia', 'Kuningan', 'Perempuan', '08123456789', '-', 'Kasir', '0000-00-00', 1);
 
 --
 -- Indexes for dumped tables
@@ -327,13 +298,13 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `sale`
 --
 ALTER TABLE `sale`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
