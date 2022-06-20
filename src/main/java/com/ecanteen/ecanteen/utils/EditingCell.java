@@ -18,6 +18,7 @@ public class EditingCell extends TableCell<Sale, Integer> {
         createTextField();
         setGraphic(textField);
         setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        textField.requestFocus();
         textField.selectAll();
     }
 

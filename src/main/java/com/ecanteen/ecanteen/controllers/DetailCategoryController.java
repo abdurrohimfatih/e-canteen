@@ -20,6 +20,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,7 +30,8 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class DetailCategoryController implements Initializable {
-
+    @FXML
+    private AnchorPane containerPane;
     @FXML
     private Label categoryNameLabel;
     @FXML
@@ -74,6 +77,13 @@ public class DetailCategoryController implements Initializable {
         sellingPriceTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSellingPrice()));
         stockAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStockAmount()).asObject());
         supplierTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getSupplier()));
+
+        containerPane.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                Stage stage = (Stage) containerPane.getScene().getWindow();
+                stage.close();
+            }
+        });
     }
 
     @FXML

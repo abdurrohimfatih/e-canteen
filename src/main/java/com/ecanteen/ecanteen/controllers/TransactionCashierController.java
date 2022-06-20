@@ -19,12 +19,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -42,6 +45,8 @@ import java.util.ResourceBundle;
 
 public class TransactionCashierController implements Initializable {
     @FXML
+    private BorderPane containerPane;
+    @FXML
     private Button transactionMenuButton;
     @FXML
     private Button historyMenuButton;
@@ -51,20 +56,6 @@ public class TransactionCashierController implements Initializable {
     private Button settingsButton;
     @FXML
     private Button logoutButton;
-    @FXML
-    private Button refreshProductButton;
-    @FXML
-    private TextField searchTextField;
-    @FXML
-    private TableView<Product> productTableView;
-    @FXML
-    private TableColumn<Product, String> barcodeTableColumn;
-    @FXML
-    private TableColumn<Product, String> nameTableColumn;
-    @FXML
-    private TableColumn<Product, String> sellingPriceTableColumn;
-    @FXML
-    private TableColumn<Product, Integer> stockAmountTableColumn;
     @FXML
     private TextField barcodeTextField;
     @FXML
@@ -93,10 +84,8 @@ public class TransactionCashierController implements Initializable {
     private ProductDaoImpl productDao;
     private TransactionDaoImpl transactionDao;
     private ObservableList<Sale> saleData = FXCollections.observableArrayList();
-    private Product selectedProduct;
     private Sale selectedItem;
     private String content;
-    private ObservableList<Product> products;
     private StockDaoImpl stockDao;
 
     @Override
@@ -105,21 +94,8 @@ public class TransactionCashierController implements Initializable {
         transactionDao = new TransactionDaoImpl();
         stockDao = new StockDaoImpl();
         saleData = saleTableView.getItems();
-        products = FXCollections.observableArrayList();
 
-        try {
-            products.addAll(productDao.fetchProductsReturnStock());
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        productTableView.setPlaceholder(new Label("Tidak ada data."));
         saleTableView.setPlaceholder(new Label("Tidak ada data."));
-        productTableView.setItems(products);
-        barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
-        nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
-        sellingPriceTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSellingPrice()));
-        stockAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStockAmount()).asObject());
         barcodeSaleTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameSaleTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         sellingPriceSaleTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSellingPrice()));
@@ -299,7 +275,6 @@ public class TransactionCashierController implements Initializable {
 
     @FXML
     private void resetProductButtonAction(ActionEvent actionEvent) {
-        productTableView.getSelectionModel().clearSelection();
         barcodeTextField.clear();
         barcodeTextField.requestFocus();
     }
@@ -322,6 +297,12 @@ public class TransactionCashierController implements Initializable {
         pane.getStylesheets().add(String.valueOf(Main.class.getResource("css/style.css")));
         pane.getStyleClass().add("myDialog");
         pane.getContent().setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-alignment: center;");
+        pane.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                Stage stage = (Stage) pane.getScene().getWindow();
+                stage.close();
+            }
+        });
         Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image(String.valueOf(Main.class.getResource("image/logo.png"))));
         Optional<String> result;
@@ -411,8 +392,6 @@ public class TransactionCashierController implements Initializable {
                 Helper.alert(Alert.AlertType.INFORMATION, content);
 
                 resetProductButtonAction(actionEvent);
-                products.clear();
-                products.addAll(productDao.fetchProductsReturnStock());
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -438,143 +417,144 @@ public class TransactionCashierController implements Initializable {
     }
 
     @FXML
-    private void searchTextFieldKeyPressed(KeyEvent keyEvent) {
-        searchTextField.textProperty().addListener(observable -> {
-            if (searchTextField.textProperty().get().isEmpty()) {
-                productTableView.setItems(products);
+    private void saleTableViewKeyReleased(KeyEvent keyEvent) {
+        selectedItem = saleTableView.getSelectionModel().getSelectedItem();
+
+        if (selectedItem == null) {
+            return;
+        }
+
+        if (keyEvent.getCode() == KeyCode.ESCAPE) {
+            saleTableView.getSelectionModel().clearSelection();
+            barcodeTextField.requestFocus();
+        }
+
+        if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
+            selectedItem = saleTableView.getSelectionModel().getSelectedItem();
+        }
+
+        if (keyEvent.getCode() == KeyCode.F2) {
+            TablePosition<Sale, ?> position = new TablePosition<>(saleTableView, saleTableView.getSelectionModel().getSelectedIndex(), quantitySaleTableColumn);
+            saleTableView.getFocusModel().focus(position);
+            saleTableView.edit(saleTableView.getSelectionModel().getSelectedIndex(), quantitySaleTableColumn);
+            saleTableView.getFocusModel().focus(position);
+        }
+
+        if (keyEvent.getCode() == KeyCode.DELETE) {
+            Common.productName = selectedItem.getName();
+            content = "Tidak jadi membeli ini?";
+            if (Helper.alert(Alert.AlertType.CONFIRMATION, content) != ButtonType.OK) {
                 return;
             }
 
-            ObservableList<Product> tableItems = FXCollections.observableArrayList();
-            ObservableList<TableColumn<Product, ?>> columns = productTableView.getColumns();
+            saleTableView.getItems().remove(selectedItem);
 
-            for (Product value : products) {
-                for (int j = 0; j < 2; j++) {
-                    TableColumn<Product, ?> col = columns.get(j);
-                    String cellValue = String.valueOf(col.getCellData(value)).toLowerCase();
+            int totalAmount = 0;
 
-                    if (cellValue.contains(searchTextField.getText().toLowerCase().trim())) {
-                        tableItems.add(value);
-                        break;
-                    }
+            for (Sale i : saleTableView.getItems()) {
+                String[] subtotalArray = i.getSubtotal().split("\\.");
+                StringBuilder sub = new StringBuilder();
+                for (String s : subtotalArray) {
+                    sub.append(s);
                 }
+                int subtotalInt = Integer.parseInt(String.valueOf(sub));
+                totalAmount += subtotalInt;
             }
 
-            productTableView.setItems(tableItems);
-        });
+            DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+            DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+            symbols.setGroupingSeparator('.');
+            formatter.setDecimalFormatSymbols(symbols);
+            String totalAmountString = formatter.format(totalAmount);
+
+            if (totalAmountString.equals("0")) {
+                totalAmountTextField.setText("");
+            } else {
+                totalAmountTextField.setText(totalAmountString);
+            }
+            saleTableView.getSelectionModel().clearSelection();
+            barcodeTextField.requestFocus();
+        }
     }
 
     @FXML
-    private void productTableViewClicked(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
-        selectedProduct = productTableView.getSelectionModel().getSelectedItem();
-
-        productTableView.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
-                selectedProduct = productTableView.getSelectionModel().getSelectedItem();
+    private void containerPaneKeyReleased(KeyEvent keyEvent) throws IOException {
+        if (keyEvent.getCode() == KeyCode.F1) {
+            Stage stage = new Stage();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("detail-product-cashier-view.fxml"));
+            Scene scene = null;
+            try {
+                scene = new Scene(fxmlLoader.load());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            stage.setTitle("Kasir - Daftar Produk");
+            stage.setScene(scene);
+            stage.centerOnScreen();
+            stage.initOwner(containerPane.getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
 
-            if (keyEvent.getCode() == KeyCode.ENTER || mouseEvent.getClickCount() > 1) {
-                addProduct(selectedProduct);
-            }
-        });
+            stage.setOnHiding(windowEvent -> {
+                if (Common.sale != null) {
+                    saleTableView.getItems().add(Common.sale);
+                    Common.sale = null;
 
-        if (mouseEvent.getClickCount() > 1) {
-            addProduct(selectedProduct);
-        }
-    }
+                    int subtotalInt;
+                    int totalAmount = 0;
 
-    private void addProduct(Product selectedProduct) {
-        Sale sale = new Sale();
-        sale.setBarcode(selectedProduct.getBarcode());
-        sale.setName(selectedProduct.getName());
-        sale.setSellingPrice(selectedProduct.getSellingPrice());
-        sale.setQuantity(1);
-
-        String subtotalString;
-        String[] selling = sale.getSellingPrice().split("\\.");
-        StringBuilder price = new StringBuilder();
-        for (String s : selling) {
-            price.append(s);
-        }
-
-        int sellingInt = Integer.parseInt(String.valueOf(price));
-        int subtotalStart = sellingInt * sale.getQuantity();
-
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator('.');
-        formatter.setDecimalFormatSymbols(symbols);
-        subtotalString = formatter.format(subtotalStart);
-
-        sale.setSubtotal(subtotalString);
-
-        saleTableView.getItems().add(sale);
-
-        int subtotalInt;
-        int totalAmount = 0;
-
-        for (Sale i : saleTableView.getItems()) {
-            String[] subtotalArray = i.getSubtotal().split("\\.");
-            StringBuilder sub = new StringBuilder();
-            for (String s : subtotalArray) {
-                sub.append(s);
-            }
-            subtotalInt = Integer.parseInt(String.valueOf(sub));
-            totalAmount += subtotalInt;
-        }
-
-        String totalAmountString = formatter.format(totalAmount);
-        totalAmountTextField.setText(totalAmountString);
-
-        productTableView.getSelectionModel().clearSelection();
-        barcodeTextField.requestFocus();
-    }
-
-    @FXML
-    private void saleTableViewClicked(MouseEvent mouseEvent) {
-        selectedItem = saleTableView.getSelectionModel().getSelectedItem();
-
-        saleTableView.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
-                selectedItem = saleTableView.getSelectionModel().getSelectedItem();
-            }
-
-            if (keyEvent.getCode() == KeyCode.DELETE) {
-                Common.productName = selectedItem.getName();
-                content = "Tidak jadi membeli ini?";
-                if (Helper.alert(Alert.AlertType.CONFIRMATION, content) != ButtonType.OK) {
-                    return;
-                }
-
-                saleTableView.getItems().remove(selectedItem);
-
-                int totalAmount = 0;
-
-                for (Sale i : saleTableView.getItems()) {
-                    String[] subtotalArray = i.getSubtotal().split("\\.");
-                    StringBuilder sub = new StringBuilder();
-                    for (String s : subtotalArray) {
-                        sub.append(s);
+                    for (Sale i : saleTableView.getItems()) {
+                        String[] subtotalArray = i.getSubtotal().split("\\.");
+                        StringBuilder sub = new StringBuilder();
+                        for (String s : subtotalArray) {
+                            sub.append(s);
+                        }
+                        subtotalInt = Integer.parseInt(String.valueOf(sub));
+                        totalAmount += subtotalInt;
                     }
-                    int subtotalInt = Integer.parseInt(String.valueOf(sub));
-                    totalAmount += subtotalInt;
-                }
 
-                DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-                DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-                symbols.setGroupingSeparator('.');
-                formatter.setDecimalFormatSymbols(symbols);
-                String totalAmountString = formatter.format(totalAmount);
-
-                if (totalAmountString.equals("0")) {
-                    totalAmountTextField.setText("");
-                } else {
+                    DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+                    DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+                    symbols.setGroupingSeparator('.');
+                    formatter.setDecimalFormatSymbols(symbols);
+                    String totalAmountString = formatter.format(totalAmount);
                     totalAmountTextField.setText(totalAmountString);
+                    barcodeTextField.requestFocus();
                 }
-                saleTableView.getSelectionModel().clearSelection();
-                barcodeTextField.requestFocus();
+            });
+        }
+
+        if (keyEvent.getCode() == KeyCode.INSERT) {
+            barcodeTextField.requestFocus();
+        }
+
+        if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
+            saleTableView.requestFocus();
+        }
+
+        if (keyEvent.getCode() == KeyCode.ENTER && keyEvent.isShortcutDown()) {
+            printSaleButton.fire();
+        }
+
+        if (keyEvent.getCode() == KeyCode.F5) {
+            resetSaleButton.fire();
+        }
+
+        if (keyEvent.getCode() != KeyCode.TAB || !keyEvent.isShortcutDown()) {
+            return;
+        }
+
+        if (!saleData.isEmpty()) {
+            content = "Data transaksi akan di-reset.\nAnda yakin ingin pindah halaman?";
+            ButtonType result = Helper.alert(Alert.AlertType.CONFIRMATION, content);
+            if (result == ButtonType.OK) {
+                Helper.changePage(historyMenuButton, "Kasir - Riwayat", "history-cashier-view.fxml");
             }
-        });
+
+            barcodeTextField.requestFocus();
+        } else {
+            Helper.changePage(historyMenuButton, "Kasir - Riwayat", "history-cashier-view.fxml");
+        }
     }
 
     @FXML
@@ -596,12 +576,5 @@ public class TransactionCashierController implements Initializable {
         if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
             Helper.changePage(logoutButton, "Login", "login-view.fxml");
         }
-    }
-
-    @FXML
-    private void refreshProductButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-        products.clear();
-        products.addAll(productDao.fetchProductsReturnStock());
-        barcodeTextField.requestFocus();
     }
 }

@@ -17,6 +17,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -24,6 +26,8 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class DetailSupplierController implements Initializable {
+    @FXML
+    private AnchorPane containerPane;
     @FXML
     private Label supplierNameLabel;
     @FXML
@@ -67,6 +71,13 @@ public class DetailSupplierController implements Initializable {
         sellingPriceTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSellingPrice()));
         stockAmountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStockAmount()).asObject());
         categoryTableColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getCategory()));
+
+        containerPane.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                Stage stage = (Stage) containerPane.getScene().getWindow();
+                stage.close();
+            }
+        });
     }
 
     @FXML

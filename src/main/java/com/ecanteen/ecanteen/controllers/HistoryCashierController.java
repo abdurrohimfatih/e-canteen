@@ -11,6 +11,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,7 +21,8 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class HistoryCashierController implements Initializable {
-
+    @FXML
+    private BorderPane containerPane;
     @FXML
     private Button transactionMenuButton;
     @FXML
@@ -54,6 +58,13 @@ public class HistoryCashierController implements Initializable {
         incomeTableView.setItems(incomes);
         dateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDate()));
         incomeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIncome()));
+    }
+
+    @FXML
+    private void containerPaneKeyReleased(KeyEvent keyEvent) throws IOException {
+        if (keyEvent.getCode() == KeyCode.TAB && keyEvent.isShortcutDown()) {
+            Helper.changePage(transactionMenuButton, "Kasir - Transaksi", "transaction-cashier-view.fxml");
+        }
     }
 
     @FXML

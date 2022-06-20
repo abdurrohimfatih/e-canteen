@@ -392,7 +392,11 @@ public class ProductDaoImpl implements DaoService<Product> {
                         product.setSellingPrice(rs.getString("selling_price"));
                         product.setStockAmount(rs.getInt("stock_amount"));
                         product.setSupplier(supplier);
-                        product.setExpiredDate(rs.getString("expired_date"));
+                        if (rs.getString("expired_date").equals("01-01-0001")) {
+                            product.setExpiredDate("-");
+                        } else {
+                            product.setExpiredDate(rs.getString("expired_date"));
+                        }
                         products.add(product);
                     }
                 }
