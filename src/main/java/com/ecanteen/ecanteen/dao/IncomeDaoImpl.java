@@ -160,7 +160,7 @@ public class IncomeDaoImpl {
         try (Connection connection = MySQLConnection.createConnection()) {
             String query = "SELECT id, DATE_FORMAT(date, '%d-%m-%Y') AS date, SUM(total_amount) AS income FROM transaction WHERE username = ? GROUP BY date ORDER BY 1 DESC";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
-                ps.setString(1, Common.user.getName());
+                ps.setString(1, Common.user.getUsername());
 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
