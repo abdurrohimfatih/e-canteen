@@ -163,58 +163,61 @@
            </rowConstraints>
             <children>
                <Label styleClass="shortcut" text="F1" />
-               <Label layoutX="10.0" layoutY="17.0" text="Cari Produk" GridPane.columnIndex="1">
+               <Label layoutX="10.0" layoutY="17.0" text="Bantuan" GridPane.columnIndex="1">
                   <font>
                      <Font size="14.0" />
                   </font>
                </Label>
-               <Label layoutX="10.0" layoutY="17.0" styleClass="shortcut" text="Ctrl + Enter" GridPane.rowIndex="1" />
-               <Label layoutX="10.0" layoutY="47.0" text="Cetak Struk" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <Label layoutX="10.0" layoutY="17.0" styleClass="shortcut" text="F5" GridPane.rowIndex="1" />
+               <Label layoutX="10.0" layoutY="47.0" text="Reset Transaksi" GridPane.columnIndex="1" GridPane.rowIndex="1">
                   <font>
                      <Font size="14.0" />
                   </font>
                </Label>
-               <Label layoutX="110.0" layoutY="47.0" styleClass="shortcut" text="F5" GridPane.rowIndex="2" />
-               <Label layoutX="10.0" layoutY="77.0" text="Reset Struk" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <Label layoutX="110.0" layoutY="47.0" styleClass="shortcut" text="F12" GridPane.rowIndex="2" />
+               <Label layoutX="10.0" layoutY="77.0" text="Cari Produk" GridPane.columnIndex="1" GridPane.rowIndex="2">
                   <font>
                      <Font size="14.0" />
                   </font>
                </Label>
-               <Label layoutX="10.0" layoutY="107.0" text="Seleksi Produk" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <Label layoutX="10.0" layoutY="107.0" text="Scan Barcode" GridPane.columnIndex="1" GridPane.rowIndex="4">
                   <font>
                      <Font size="14.0" />
                   </font>
                </Label>
-               <Label layoutX="110.0" layoutY="107.0" styleClass="shortcut" text="F2" GridPane.rowIndex="5" />
-               <Label layoutX="10.0" layoutY="137.0" text="Ubah Kuantitas" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <Label layoutX="110.0" layoutY="107.0" styleClass="shortcut" text="Delete" GridPane.rowIndex="5" />
+               <Label layoutX="10.0" layoutY="137.0" text="Hapus Produk" GridPane.columnIndex="1" GridPane.rowIndex="5">
                   <font>
                      <Font size="14.0" />
                   </font>
                </Label>
-               <Label layoutX="110.0" layoutY="137.0" styleClass="shortcut" text="Delete" GridPane.rowIndex="6" />
-               <Label layoutX="10.0" layoutY="167.0" text="Hapus Produk" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <Label layoutX="110.0" layoutY="137.0" styleClass="shortcut" GridPane.rowIndex="6">
+                  <graphic>
+                     <FontAwesomeIconView glyphName="PLUS" />
+                  </graphic></Label>
+               <Label layoutX="10.0" layoutY="167.0" text="Ubah Kuantitas" GridPane.columnIndex="1" GridPane.rowIndex="6">
                   <font>
                      <Font size="14.0" />
                   </font>
                </Label>
-               <Label layoutX="110.0" layoutY="167.0" styleClass="shortcut" text="Ctrl + Tab" GridPane.rowIndex="7" />
-               <Label layoutX="10.0" layoutY="197.0" text="Riwayat Transaksi" GridPane.columnIndex="1" GridPane.rowIndex="7">
+               <Label layoutX="110.0" layoutY="167.0" styleClass="shortcut" text="Ctrl + Enter" GridPane.rowIndex="7" />
+               <Label layoutX="10.0" layoutY="197.0" text="Cetak Struk" GridPane.columnIndex="1" GridPane.rowIndex="7">
                   <font>
                      <Font size="14.0" />
                   </font>
                </Label>
-               <Label layoutX="110.0" layoutY="197.0" styleClass="shortcut" text="F10" GridPane.rowIndex="8" />
-               <Label layoutX="10.0" layoutY="227.0" text="Bantuan" GridPane.columnIndex="1" GridPane.rowIndex="8">
+               <Label layoutX="110.0" layoutY="197.0" styleClass="shortcut" text="Ctrl + Tab" GridPane.rowIndex="8" />
+               <Label layoutX="10.0" layoutY="227.0" text="Riwayat Transaksi" GridPane.columnIndex="1" GridPane.rowIndex="8">
                   <font>
                      <Font size="14.0" />
                   </font>
                </Label>
-               <Label layoutX="110.0" layoutY="95.0" text="Scan Barcode" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <Label layoutX="110.0" layoutY="95.0" text="Seleksi Produk" GridPane.columnIndex="1" GridPane.rowIndex="3">
                   <font>
                      <Font size="14.0" />
                   </font>
                </Label>
-               <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="130.0" maxWidth="-Infinity" spacing="1.0" styleClass="shortcut" GridPane.rowIndex="4">
+               <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="130.0" maxWidth="-Infinity" spacing="1.0" styleClass="shortcut" GridPane.rowIndex="3">
                   <children>
                      <Label>
                         <graphic>
@@ -228,7 +231,7 @@
                      </Label>
                   </children>
                </HBox>
-               <Label styleClass="shortcut" text="Insert" GridPane.rowIndex="3" />
+               <Label styleClass="shortcut" text="Insert" GridPane.rowIndex="4" />
             </children>
          </GridPane>
          <Label layoutX="140.0" layoutY="94.0" text="Pintasan Keyboard">

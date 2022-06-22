@@ -121,7 +121,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14"/>
 				</textElement>
-				<text><![CDATA[Jl. Ir. Soekarno Blok Cikedung Cirendang Kuningan]]></text>
+				<text><![CDATA[Jl. Ir. Sukarno Blok Cikedung, Kel. Cirendang, Kec./Kab. Kuningan]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="120" y="60" width="405" height="25" uuid="76a3a946-ad18-4727-8fcc-5a031b69dae4">
@@ -137,7 +137,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14"/>
 				</textElement>
-				<text><![CDATA[Telepon (0232) 88888888]]></text>
+				<text><![CDATA[No. Telp (0232) 8900944]]></text>
 			</staticText>
 			<image>
 				<reportElement x="10" y="17" width="89" height="60" uuid="8a5344ad-8640-479c-8687-4e3b37940fa1"/>
@@ -349,7 +349,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14"/>
 				</textElement>
-				<text><![CDATA[Petugas,]]></text>
+				<text><![CDATA[Admin,]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="360" y="88" width="165" height="30" uuid="788060af-bf04-4238-adc6-08e21fec0ca4"/>

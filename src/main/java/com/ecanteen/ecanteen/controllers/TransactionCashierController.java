@@ -433,14 +433,14 @@ public class TransactionCashierController implements Initializable {
             selectedItem = saleTableView.getSelectionModel().getSelectedItem();
         }
 
-        if (keyEvent.getCode() == KeyCode.F2) {
+        if (keyEvent.getCode() == KeyCode.PLUS || (keyEvent.getCode() == KeyCode.EQUALS && keyEvent.isShiftDown())) {
             TablePosition<Sale, ?> position = new TablePosition<>(saleTableView, saleTableView.getSelectionModel().getSelectedIndex(), quantitySaleTableColumn);
             saleTableView.getFocusModel().focus(position);
             saleTableView.edit(saleTableView.getSelectionModel().getSelectedIndex(), quantitySaleTableColumn);
             saleTableView.getFocusModel().focus(position);
         }
 
-        if (keyEvent.getCode() == KeyCode.DELETE) {
+        if (keyEvent.getCode() == KeyCode.DELETE || keyEvent.getCode() == KeyCode.MINUS) {
             Common.productName = selectedItem.getName();
             content = "Tidak jadi membeli ini?";
             if (Helper.alert(Alert.AlertType.CONFIRMATION, content) != ButtonType.OK) {
@@ -479,7 +479,7 @@ public class TransactionCashierController implements Initializable {
 
     @FXML
     private void containerPaneKeyReleased(KeyEvent keyEvent) throws IOException {
-        if (keyEvent.getCode() == KeyCode.F1) {
+        if (keyEvent.getCode() == KeyCode.F12) {
             Stage stage = new Stage();
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("detail-product-cashier-view.fxml"));
             Scene scene = null;
@@ -525,11 +525,16 @@ public class TransactionCashierController implements Initializable {
         }
 
         if (keyEvent.getCode() == KeyCode.INSERT) {
+            saleTableView.getSelectionModel().clearSelection();
             barcodeTextField.requestFocus();
         }
 
-        if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
-            saleTableView.requestFocus();
+        if (!saleTableView.isFocused()) {
+            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
+                saleTableView.requestFocus();
+                saleTableView.getSelectionModel().select(0);
+                saleTableView.getFocusModel().focus(0);
+            }
         }
 
         if (keyEvent.getCode() == KeyCode.ENTER && keyEvent.isShortcutDown()) {
