@@ -145,8 +145,10 @@ public class StockReportController implements Initializable {
     private void printButtonAction(ActionEvent actionEvent) {
         String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
         String employee = Common.user.getName();
+        String dateNow = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String timeNow = Helper.formattedTimeNow();
 
-        new ReportGenerator().printStockReport(stockTableView.getItems(), date, employee);
+        new ReportGenerator().printStockReport(stockTableView.getItems(), date, employee, dateNow, timeNow);
     }
 
     @FXML

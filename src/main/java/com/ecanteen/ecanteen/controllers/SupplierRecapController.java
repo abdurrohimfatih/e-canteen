@@ -198,8 +198,8 @@ public class SupplierRecapController implements Initializable {
     private void printButtonAction(ActionEvent actionEvent) {
         suppliesData = supplyTableView.getItems();
         String supplier = supplierComboBox.getValue().getName();
-        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
-        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
+        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         String total = totalTextField.getText();
 
         int totalAdd = 0;
@@ -212,7 +212,10 @@ public class SupplierRecapController implements Initializable {
             totalReturn += item.getReturned();
         }
 
-        new ReportGenerator().printSupplierRecap(suppliesData, supplier, fromDate, toDate, totalAdd, totalSold, totalReturn, total);
+        String dateNow = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String timeNow = Helper.formattedTimeNow();
+
+        new ReportGenerator().printSupplierRecap(suppliesData, supplier, fromDate, toDate, totalAdd, totalSold, totalReturn, total, dateNow, timeNow);
     }
 
     @FXML

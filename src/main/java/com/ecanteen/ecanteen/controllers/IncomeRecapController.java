@@ -203,13 +203,15 @@ public class IncomeRecapController implements Initializable {
     private void printButtonAction(ActionEvent actionEvent) {
         incomes = incomeTableView.getItems();
 
-        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
-        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
+        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         String employee = Common.user.getName();
         String totalIncome = totalIncomeTextField.getText();
         String totalProfit = totalProfitTextField.getText();
+        String dateNow = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String timeNow = Helper.formattedTimeNow();
 
-        new ReportGenerator().printIncomeRecap(incomes, totalIncome, totalProfit, fromDate, toDate, employee);
+        new ReportGenerator().printIncomeRecap(incomes, totalIncome, totalProfit, fromDate, toDate, employee, dateNow, timeNow);
     }
 
     @FXML

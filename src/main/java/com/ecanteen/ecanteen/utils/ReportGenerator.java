@@ -72,7 +72,7 @@ public class ReportGenerator {
         service.shutdown();
     }
 
-    public void printSupplierReport(ObservableList<Supply> supplies, String supplier, String date, int totalAdd, int totalSold, int totalReturn, String total) {
+    public void printSupplierReport(ObservableList<Supply> supplies, String supplier, String date, int totalAdd, int totalSold, int totalReturn, String total, String dateNow, String timeNow) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -104,6 +104,8 @@ public class ReportGenerator {
                 param.put("total", total);
                 param.put("employee", Common.user.getName());
                 param.put("bts-mart-dir", logoStream);
+                param.put("date-now", dateNow);
+                param.put("time-now", timeNow);
 
                 try {
                     InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/supplier-report.jasper");
@@ -126,7 +128,7 @@ public class ReportGenerator {
         service.shutdown();
     }
 
-    public void printAddReturnStock(ObservableList<Stock> stocks, String date, String employee, String addReturn) {
+    public void printAddReturnStock(ObservableList<Stock> stocks, String date, String employee, String addReturn, String dateNow, String timeNow) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -154,6 +156,8 @@ public class ReportGenerator {
                 param.put("employee", employee);
                 param.put("bts-mart-dir", logoStream);
                 param.put("add-return", addReturn);
+                param.put("date-now", dateNow);
+                param.put("time-now", timeNow);
 
                 try {
                     InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/add-return-stock.jasper");
@@ -178,7 +182,7 @@ public class ReportGenerator {
         service.shutdown();
     }
 
-    public void printIncomeReport(ObservableList<Income> incomes, String totalIncome, String totalProfit, String date, String employee) {
+    public void printIncomeReport(ObservableList<Income> incomes, String totalIncome, String totalProfit, String date, String employee, String dateNow, String timeNow) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -205,6 +209,8 @@ public class ReportGenerator {
                 param.put("bts-mart-dir", logoStream);
                 param.put("total-income", totalIncome);
                 param.put("total-profit", totalProfit);
+                param.put("date-now", dateNow);
+                param.put("time-now", timeNow);
 
                 try {
                     InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/income-report.jasper");
@@ -227,7 +233,7 @@ public class ReportGenerator {
         service.shutdown();
     }
 
-    public void printIncomeRecap(ObservableList<Income> incomes, String totalIncome, String totalProfit, String fromDate, String toDate, String employee) {
+    public void printIncomeRecap(ObservableList<Income> incomes, String totalIncome, String totalProfit, String fromDate, String toDate, String employee, String dateNow, String timeNow) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -255,6 +261,8 @@ public class ReportGenerator {
                 param.put("bts-mart-dir", logoStream);
                 param.put("total-income", totalIncome);
                 param.put("total-profit", totalProfit);
+                param.put("date-now", dateNow);
+                param.put("time-now", timeNow);
 
                 try {
                     InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/income-recap.jasper");
@@ -277,7 +285,7 @@ public class ReportGenerator {
         service.shutdown();
     }
 
-    public void printSupplierRecap(ObservableList<Supply> supplies, String supplier, String fromDate, String toDate, int totalAdd, int totalSold, int totalReturn, String total) {
+    public void printSupplierRecap(ObservableList<Supply> supplies, String supplier, String fromDate, String toDate, int totalAdd, int totalSold, int totalReturn, String total, String dateNow, String timeNow) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -311,6 +319,8 @@ public class ReportGenerator {
                 param.put("total", total);
                 param.put("employee", Common.user.getName());
                 param.put("bts-mart-dir", logoStream);
+                param.put("date-now", dateNow);
+                param.put("time-now", timeNow);
 
                 try {
                     InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/supplier-recap.jasper");
@@ -333,7 +343,7 @@ public class ReportGenerator {
         service.shutdown();
     }
 
-    public void printStockReport(ObservableList<Stock> stocks, String date, String employee) {
+    public void printStockReport(ObservableList<Stock> stocks, String date, String employee, String dateNow, String timeNow) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -361,6 +371,8 @@ public class ReportGenerator {
                 param.put("employee", employee);
                 param.put("bts-mart-dir", logoStream);
                 param.put("date", date);
+                param.put("date-now", dateNow);
+                param.put("time-now", timeNow);
 
                 try {
                     InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/stock-report.jasper");
@@ -383,7 +395,7 @@ public class ReportGenerator {
         service.shutdown();
     }
 
-    public void printStockRecap(ObservableList<Stock> stocks, String fromDate, String toDate, String employee) {
+    public void printStockRecap(ObservableList<Stock> stocks, String fromDate, String toDate, String employee, String dateNow, String timeNow) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -413,6 +425,8 @@ public class ReportGenerator {
                 param.put("bts-mart-dir", logoStream);
                 param.put("from-date", fromDate);
                 param.put("to-date", toDate);
+                param.put("date-now", dateNow);
+                param.put("time-now", timeNow);
 
                 try {
                     InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/stock-recap.jasper");

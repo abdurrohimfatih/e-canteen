@@ -233,7 +233,10 @@ public class SupplierReportController implements Initializable {
             totalReturn += item.getReturned();
         }
 
-        new ReportGenerator().printSupplierReport(suppliesData, supplier, date, totalAdd, totalSold, totalReturn, total);
+        String dateNow = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String timeNow = Helper.formattedTimeNow();
+
+        new ReportGenerator().printSupplierReport(suppliesData, supplier, date, totalAdd, totalSold, totalReturn, total, dateNow, timeNow);
     }
 
     @FXML

@@ -345,8 +345,10 @@ public class AddStockController implements Initializable {
 
         String date = LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
         String employee = Common.user.getName();
+        String dateNow = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String timeNow = Helper.formattedTimeNow();
 
-        new ReportGenerator().printAddReturnStock(stocks, date, employee, "MASUK");
+        new ReportGenerator().printAddReturnStock(stocks, date, employee, "MASUK", dateNow, timeNow);
     }
 
     private void resetError() {

@@ -100,6 +100,8 @@
 	<parameter name="date" class="java.lang.String"/>
 	<parameter name="employee" class="java.lang.String"/>
 	<parameter name="bts-mart-dir" class="java.io.InputStream"/>
+	<parameter name="date-now" class="java.lang.String"/>
+	<parameter name="time-now" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -107,7 +109,8 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="85" splitType="Stretch">
+		<band height="150" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
 				<reportElement x="120" y="1" width="161" height="34" uuid="f0113827-aa39-4637-9d83-378c3fdf8c36"/>
 				<textElement verticalAlignment="Middle">
@@ -120,7 +123,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="14"/>
+					<font fontName="Times New Roman" size="11"/>
 				</textElement>
 				<text><![CDATA[Jl. Ir. Sukarno Blok Cikedung, Kel. Cirendang, Kec./Kab. Kuningan]]></text>
 			</staticText>
@@ -136,7 +139,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="14"/>
+					<font fontName="Times New Roman" size="11"/>
 				</textElement>
 				<text><![CDATA[No. Telp (0232) 8900944]]></text>
 			</staticText>
@@ -144,33 +147,29 @@
 				<reportElement x="10" y="17" width="89" height="60" uuid="8a5344ad-8640-479c-8687-4e3b37940fa1"/>
 				<imageExpression><![CDATA[$P{bts-mart-dir}]]></imageExpression>
 			</image>
-		</band>
-	</title>
-	<pageHeader>
-		<band height="70" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="10" width="525" height="30" uuid="70beabb3-a482-4d55-bfc4-d7bf4b66dc9c">
+				<reportElement x="0" y="90" width="525" height="30" uuid="70beabb3-a482-4d55-bfc4-d7bf4b66dc9c">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="16" isBold="true"/>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["LAPORAN STOK HARIAN"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="40" width="525" height="30" uuid="34db55b6-1ab6-47b5-ba27-352d69de68f1"/>
+				<reportElement x="0" y="120" width="525" height="30" uuid="34db55b6-1ab6-47b5-ba27-352d69de68f1"/>
 				<box leftPadding="5" rightPadding="5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="14" isBold="false"/>
+					<font fontName="Times New Roman" size="12" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Hari, tanggal : " + $P{date}]]></textFieldExpression>
 			</textField>
 		</band>
-	</pageHeader>
+	</title>
 	<detail>
-		<band height="60" splitType="Stretch">
+		<band height="55" splitType="Stretch">
 			<componentElement>
-				<reportElement x="0" y="0" width="525" height="60" uuid="40e7d094-9194-4bd1-b81d-9b49387efc74">
+				<reportElement x="0" y="0" width="525" height="55" uuid="40e7d094-9194-4bd1-b81d-9b49387efc74">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
@@ -183,6 +182,7 @@
 					<jr:column width="26" uuid="4f7a82d6-dd93-41fc-b5bd-e5333758362e">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
 						<jr:columnHeader style="Table 2_CH" height="30" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
 							<staticText>
 								<reportElement x="0" y="0" width="26" height="30" uuid="48e558cd-e487-447d-8924-caae1c33f2d1"/>
 								<box>
@@ -192,14 +192,14 @@
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="14" isBold="true"/>
+									<font fontName="Times New Roman" size="12" isBold="true"/>
 								</textElement>
 								<text><![CDATA[No]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="Table 2_TD" height="30">
+						<jr:detailCell style="Table 2_TD" height="25">
 							<textField textAdjust="ScaleFont">
-								<reportElement x="0" y="0" width="26" height="30" uuid="9e7c1638-de10-4210-943a-abf8bb16cdc3"/>
+								<reportElement x="0" y="0" width="26" height="25" uuid="9e7c1638-de10-4210-943a-abf8bb16cdc3"/>
 								<box leftPadding="5" rightPadding="5">
 									<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -207,7 +207,7 @@
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="14"/>
+									<font fontName="Times New Roman" size="12"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 							</textField>
@@ -225,14 +225,15 @@
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="14" isBold="true"/>
+									<font fontName="Times New Roman" size="12" isBold="true"/>
 								</textElement>
 								<text><![CDATA[Nama Barang]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="Table 2_TD" height="30">
+						<jr:detailCell style="Table 2_TD" height="25">
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
 							<textField textAdjust="ScaleFont">
-								<reportElement x="0" y="0" width="204" height="30" uuid="fdb923d1-d962-490d-9f2c-ade132ab909e"/>
+								<reportElement x="0" y="0" width="204" height="25" uuid="fdb923d1-d962-490d-9f2c-ade132ab909e"/>
 								<box leftPadding="5" rightPadding="5">
 									<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -240,7 +241,7 @@
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="14"/>
+									<font fontName="Times New Roman" size="12"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 							</textField>
@@ -258,14 +259,14 @@
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="14" isBold="true"/>
+									<font fontName="Times New Roman" size="12" isBold="true"/>
 								</textElement>
 								<text><![CDATA[Stok]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="Table 2_TD" height="30">
+						<jr:detailCell style="Table 2_TD" height="25">
 							<textField textAdjust="ScaleFont">
-								<reportElement x="0" y="0" width="50" height="30" uuid="73ea5131-71cd-43c2-8dd2-4863478cb5e3"/>
+								<reportElement x="0" y="0" width="50" height="25" uuid="73ea5131-71cd-43c2-8dd2-4863478cb5e3"/>
 								<box leftPadding="5" rightPadding="5">
 									<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -273,7 +274,7 @@
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="14"/>
+									<font fontName="Times New Roman" size="12"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{previousStock}]]></textFieldExpression>
 							</textField>
@@ -282,6 +283,7 @@
 					<jr:column width="60" uuid="382577a6-e758-4357-8faa-8ebff79f8668">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
 						<jr:columnHeader style="Table 2_CH" height="30" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
 							<staticText>
 								<reportElement x="0" y="0" width="60" height="30" uuid="8750ad28-b46c-4cfb-8a51-d1615051ce67"/>
 								<box>
@@ -291,14 +293,14 @@
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="14" isBold="true"/>
+									<font fontName="Times New Roman" size="12" isBold="true"/>
 								</textElement>
 								<text><![CDATA[Masuk]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="Table 2_TD" height="30">
+						<jr:detailCell style="Table 2_TD" height="25">
 							<textField textAdjust="ScaleFont">
-								<reportElement x="0" y="0" width="60" height="30" uuid="56068617-f8e0-481d-81e5-b867def11fe9"/>
+								<reportElement x="0" y="0" width="60" height="25" uuid="56068617-f8e0-481d-81e5-b867def11fe9"/>
 								<box leftPadding="5" rightPadding="5">
 									<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -306,7 +308,7 @@
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="14"/>
+									<font fontName="Times New Roman" size="12"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{added}]]></textFieldExpression>
 							</textField>
@@ -324,14 +326,14 @@
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="14" isBold="true"/>
+									<font fontName="Times New Roman" size="12" isBold="true"/>
 								</textElement>
 								<text><![CDATA[Terjual]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="Table 2_TD" height="30">
+						<jr:detailCell style="Table 2_TD" height="25">
 							<textField textAdjust="ScaleFont">
-								<reportElement x="0" y="0" width="60" height="30" uuid="33a7abf9-50fc-4458-a450-60a426716fff"/>
+								<reportElement x="0" y="0" width="60" height="25" uuid="33a7abf9-50fc-4458-a450-60a426716fff"/>
 								<box leftPadding="5" rightPadding="5">
 									<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -339,7 +341,7 @@
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="14"/>
+									<font fontName="Times New Roman" size="12"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{sold}]]></textFieldExpression>
 							</textField>
@@ -357,14 +359,14 @@
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="14" isBold="true"/>
+									<font fontName="Times New Roman" size="12" isBold="true"/>
 								</textElement>
 								<text><![CDATA[Return]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="Table 2_TD" height="30">
+						<jr:detailCell style="Table 2_TD" height="25">
 							<textField textAdjust="ScaleFont">
-								<reportElement x="0" y="0" width="60" height="30" uuid="ff33e67e-a9c1-4777-8bac-8ae984248073"/>
+								<reportElement x="0" y="0" width="60" height="25" uuid="ff33e67e-a9c1-4777-8bac-8ae984248073"/>
 								<box leftPadding="5" rightPadding="5">
 									<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -372,7 +374,7 @@
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="14"/>
+									<font fontName="Times New Roman" size="12"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{returned}]]></textFieldExpression>
 							</textField>
@@ -390,14 +392,14 @@
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="14" isBold="true"/>
+									<font fontName="Times New Roman" size="12" isBold="true"/>
 								</textElement>
 								<text><![CDATA[Jumlah]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="Table 2_TD" height="30">
+						<jr:detailCell style="Table 2_TD" height="25">
 							<textField textAdjust="ScaleFont">
-								<reportElement x="0" y="0" width="65" height="30" uuid="7c9312c0-5baa-4fc9-8a84-5fb73d9606eb"/>
+								<reportElement x="0" y="0" width="65" height="25" uuid="7c9312c0-5baa-4fc9-8a84-5fb73d9606eb"/>
 								<box leftPadding="5" rightPadding="5">
 									<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -405,7 +407,7 @@
 									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="14"/>
+									<font fontName="Times New Roman" size="12"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{subtotal}]]></textFieldExpression>
 							</textField>
@@ -415,19 +417,38 @@
 			</componentElement>
 		</band>
 	</detail>
+	<pageFooter>
+		<band height="50">
+			<textField>
+				<reportElement x="0" y="30" width="260" height="20" uuid="088f0c67-c421-492d-8933-ed1b9c4afda6"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Dicetak Tanggal " + $P{date-now} + " Pukul " + $P{time-now} + " WIB"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Master">
+				<reportElement x="260" y="30" width="265" height="20" uuid="8384c40f-e26d-462c-80c6-99583c0b1b5e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Hlm " + $V{MASTER_CURRENT_PAGE} + " dari " + $V{MASTER_TOTAL_PAGES}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
 	<summary>
-		<band height="118">
+		<band height="156">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
 				<reportElement x="360" y="10" width="165" height="30" uuid="8921b40b-6c62-4f7a-921b-658f89e079fa"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="14"/>
+					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[Admin,]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="360" y="88" width="165" height="30" uuid="788060af-bf04-4238-adc6-08e21fec0ca4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="14" isBold="true"/>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{employee}]]></textFieldExpression>
 			</textField>

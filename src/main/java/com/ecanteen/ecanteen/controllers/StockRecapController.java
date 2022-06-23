@@ -172,11 +172,13 @@ public class StockRecapController implements Initializable {
 
     @FXML
     private void printButtonAction(ActionEvent actionEvent) {
-        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
-        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
+        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         String employee = Common.user.getName();
+        String dateNow = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String timeNow = Helper.formattedTimeNow();
 
-        new ReportGenerator().printStockRecap(stockTableView.getItems(), fromDate, toDate, employee);
+        new ReportGenerator().printStockRecap(stockTableView.getItems(), fromDate, toDate, employee, dateNow, timeNow);
     }
 
     @FXML

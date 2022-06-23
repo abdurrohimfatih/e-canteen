@@ -165,7 +165,10 @@ public class IncomeReportController implements Initializable {
         String totalIncomeString = formatter.format(totalIncomeInt);
         String totalProfitString = formatter.format(totalProfitInt);
 
-        new ReportGenerator().printIncomeReport(incomes, totalIncomeString, totalProfitString, date, employee);
+        String dateNow = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String timeNow = Helper.formattedTimeNow();
+
+        new ReportGenerator().printIncomeReport(incomes, totalIncomeString, totalProfitString, date, employee, dateNow, timeNow);
     }
 
     @FXML
