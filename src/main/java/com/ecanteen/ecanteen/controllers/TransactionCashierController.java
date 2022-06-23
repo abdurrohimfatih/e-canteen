@@ -433,14 +433,14 @@ public class TransactionCashierController implements Initializable {
             selectedItem = saleTableView.getSelectionModel().getSelectedItem();
         }
 
-        if (keyEvent.getCode() == KeyCode.PLUS || (keyEvent.getCode() == KeyCode.EQUALS && keyEvent.isShiftDown())) {
+        if (keyEvent.getCode() == KeyCode.PLUS || (keyEvent.getCode() == KeyCode.EQUALS && keyEvent.isShiftDown()) || keyEvent.getCode() == KeyCode.ADD) {
             TablePosition<Sale, ?> position = new TablePosition<>(saleTableView, saleTableView.getSelectionModel().getSelectedIndex(), quantitySaleTableColumn);
             saleTableView.getFocusModel().focus(position);
             saleTableView.edit(saleTableView.getSelectionModel().getSelectedIndex(), quantitySaleTableColumn);
             saleTableView.getFocusModel().focus(position);
         }
 
-        if (keyEvent.getCode() == KeyCode.DELETE || keyEvent.getCode() == KeyCode.MINUS) {
+        if (keyEvent.getCode() == KeyCode.DELETE || keyEvent.getCode() == KeyCode.MINUS || keyEvent.getCode() == KeyCode.SUBTRACT) {
             Common.productName = selectedItem.getName();
             content = "Tidak jadi membeli ini?";
             if (Helper.alert(Alert.AlertType.CONFIRMATION, content) != ButtonType.OK) {

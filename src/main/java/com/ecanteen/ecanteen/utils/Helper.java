@@ -176,9 +176,18 @@ public class Helper {
         if (alertType == Alert.AlertType.CONFIRMATION) {
             image = new Image(String.valueOf(Main.class.getResource("image/confirm.png")));
             title = "Konfirmasi";
+            ((Button) pane.lookupButton(ButtonType.OK)).setText("Ya");
+            ((Button) pane.lookupButton(ButtonType.CANCEL)).setText("Tidak");
         } else if (alertType == Alert.AlertType.ERROR) {
             image = new Image(String.valueOf(Main.class.getResource("image/warning.png")));
             title = "Warning";
+        } else if (alertType == Alert.AlertType.NONE) {
+            image = new Image(String.valueOf(Main.class.getResource("image/confirm.png")));
+            title = "Konfirmasi";
+            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+            ((Button) pane.lookupButton(ButtonType.YES)).setText("Ya");
+            ((Button) pane.lookupButton(ButtonType.NO)).setText("Tidak");
+            ((Button) pane.lookupButton(ButtonType.CANCEL)).setText("Batal");
         } else {
             image = new Image(String.valueOf(Main.class.getResource("image/success.png")));
             title = "Sukses";

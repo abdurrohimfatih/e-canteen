@@ -167,6 +167,8 @@ public class ReportGenerator {
                     e.printStackTrace();
                 }
 
+                stocks.clear();
+
                 return null;
             }
         };
@@ -331,7 +333,7 @@ public class ReportGenerator {
         service.shutdown();
     }
 
-    public void printStockReport(ObservableList<Stock> stocks, String date, String time, String employee) {
+    public void printStockReport(ObservableList<Stock> stocks, String date, String employee) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -359,7 +361,6 @@ public class ReportGenerator {
                 param.put("employee", employee);
                 param.put("bts-mart-dir", logoStream);
                 param.put("date", date);
-                param.put("time", time);
 
                 try {
                     InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/stock-report.jasper");

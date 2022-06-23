@@ -100,7 +100,6 @@
 	<parameter name="date" class="java.lang.String"/>
 	<parameter name="employee" class="java.lang.String"/>
 	<parameter name="bts-mart-dir" class="java.io.InputStream"/>
-	<parameter name="time" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -159,17 +158,9 @@
 				<textFieldExpression><![CDATA["LAPORAN STOK HARIAN"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="260" y="40" width="265" height="30" uuid="1fa57c70-c20c-4066-9624-f1bb35302e3f"/>
+				<reportElement x="0" y="40" width="525" height="30" uuid="34db55b6-1ab6-47b5-ba27-352d69de68f1"/>
 				<box leftPadding="5" rightPadding="5"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="14" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Waktu : " + $P{time}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="0" y="40" width="260" height="30" uuid="34db55b6-1ab6-47b5-ba27-352d69de68f1"/>
-				<box leftPadding="5" rightPadding="5"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Hari, tanggal : " + $P{date}]]></textFieldExpression>
@@ -269,7 +260,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14" isBold="true"/>
 								</textElement>
-								<text><![CDATA[Sisa]]></text>
+								<text><![CDATA[Stok]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table 2_TD" height="30">

@@ -121,7 +121,7 @@ public class ReturnStockController implements Initializable {
         }
 
         Helper.toNumberField(amountTextField);
-        Helper.addTextLimiter(amountTextField, 11);
+        Helper.addTextLimiter(amountTextField, 4);
         productComboBox.setItems(products);
         stockTableView.setPlaceholder(new Label("Tidak ada data."));
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct().getBarcode()));
@@ -365,57 +365,167 @@ public class ReturnStockController implements Initializable {
 
     @FXML
     private void productMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(masterMenuButton, "Admin - Produk", "product-view.fxml");
+        if (!stockTableView.getItems().isEmpty()) {
+            content = "Data belum dicetak. Apakah akan dicetak?";
+            ButtonType result = Helper.alert(Alert.AlertType.NONE, content);
+            if (result == ButtonType.YES) {
+                printButton.fire();
+            } else if (result == ButtonType.NO) {
+                Helper.changePage(masterMenuButton, "Admin - Produk", "product-view.fxml");
+            }
+        } else {
+            Helper.changePage(masterMenuButton, "Admin - Produk", "product-view.fxml");
+        }
     }
 
     @FXML
     private void categoryMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(masterMenuButton, "Admin - Kategori", "category-view.fxml");
+        if (!stockTableView.getItems().isEmpty()) {
+            content = "Data belum dicetak. Apakah akan dicetak?";
+            ButtonType result = Helper.alert(Alert.AlertType.NONE, content);
+            if (result == ButtonType.YES) {
+                printButton.fire();
+            } else if (result == ButtonType.NO) {
+                Helper.changePage(masterMenuButton, "Admin - Kategori", "category-view.fxml");
+            }
+        } else {
+            Helper.changePage(masterMenuButton, "Admin - Kategori", "category-view.fxml");
+        }
     }
 
     @FXML
     private void addStockMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(stockMenuButton, "Admin - Tambah Stok", "add-stock-view.fxml");
+        if (!stockTableView.getItems().isEmpty()) {
+            content = "Data belum dicetak. Apakah akan dicetak?";
+            ButtonType result = Helper.alert(Alert.AlertType.NONE, content);
+            if (result == ButtonType.YES) {
+                printButton.fire();
+            } else if (result == ButtonType.NO) {
+                Helper.changePage(stockMenuButton, "Admin - Tambah Stok", "add-stock-view.fxml");
+            }
+        } else {
+            Helper.changePage(stockMenuButton, "Admin - Tambah Stok", "add-stock-view.fxml");
+        }
     }
 
     @FXML
     private void userButtonAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(userMenuButton, "Admin - User", "user-view.fxml");
+        if (!stockTableView.getItems().isEmpty()) {
+            content = "Data belum dicetak. Apakah akan dicetak?";
+            ButtonType result = Helper.alert(Alert.AlertType.NONE, content);
+            if (result == ButtonType.YES) {
+                printButton.fire();
+            } else if (result == ButtonType.NO) {
+                Helper.changePage(userMenuButton, "Admin - User", "user-view.fxml");
+            }
+        } else {
+            Helper.changePage(userMenuButton, "Admin - User", "user-view.fxml");
+        }
     }
 
     @FXML
     private void supplierButtonAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(supplierMenuButton, "Admin - Supplier", "supplier-view.fxml");
+        if (!stockTableView.getItems().isEmpty()) {
+            content = "Data belum dicetak. Apakah akan dicetak?";
+            ButtonType result = Helper.alert(Alert.AlertType.NONE, content);
+            if (result == ButtonType.YES) {
+                printButton.fire();
+            } else if (result == ButtonType.NO) {
+                Helper.changePage(supplierMenuButton, "Admin - Supplier", "supplier-view.fxml");
+            }
+        } else {
+            Helper.changePage(supplierMenuButton, "Admin - Supplier", "supplier-view.fxml");
+        }
     }
 
     @FXML
     private void stockReportMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(reportMenuButton, "Admin - Laporan Stok", "stock-report-view.fxml");
+        if (!stockTableView.getItems().isEmpty()) {
+            content = "Data belum dicetak. Apakah akan dicetak?";
+            ButtonType result = Helper.alert(Alert.AlertType.NONE, content);
+            if (result == ButtonType.YES) {
+                printButton.fire();
+            } else if (result == ButtonType.NO) {
+                Helper.changePage(reportMenuButton, "Admin - Laporan Stok", "stock-report-view.fxml");
+            }
+        } else {
+            Helper.changePage(reportMenuButton, "Admin - Laporan Stok", "stock-report-view.fxml");
+        }
     }
 
     @FXML
     private void incomeReportMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(reportMenuButton, "Admin - Laporan Pendapatan", "income-report-view.fxml");
+        if (!stockTableView.getItems().isEmpty()) {
+            content = "Data belum dicetak. Apakah akan dicetak?";
+            ButtonType result = Helper.alert(Alert.AlertType.NONE, content);
+            if (result == ButtonType.YES) {
+                printButton.fire();
+            } else if (result == ButtonType.NO) {
+                Helper.changePage(reportMenuButton, "Admin - Laporan Pendapatan", "income-report-view.fxml");
+            }
+        } else {
+            Helper.changePage(reportMenuButton, "Admin - Laporan Pendapatan", "income-report-view.fxml");
+        }
     }
 
     @FXML
     private void supplierReportMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(reportMenuButton, "Admin - Laporan Supplier", "supplier-report-view.fxml");
+        if (!stockTableView.getItems().isEmpty()) {
+            content = "Data belum dicetak. Apakah akan dicetak?";
+            ButtonType result = Helper.alert(Alert.AlertType.NONE, content);
+            if (result == ButtonType.YES) {
+                printButton.fire();
+            } else if (result == ButtonType.NO) {
+                Helper.changePage(reportMenuButton, "Admin - Laporan Supplier", "supplier-report-view.fxml");
+            }
+        } else {
+            Helper.changePage(reportMenuButton, "Admin - Laporan Supplier", "supplier-report-view.fxml");
+        }
     }
 
     @FXML
     private void stockRecapMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(recapMenuButton, "Admin - Rekap Stok", "stock-recap-view.fxml");
+        if (!stockTableView.getItems().isEmpty()) {
+            content = "Data belum dicetak. Apakah akan dicetak?";
+            ButtonType result = Helper.alert(Alert.AlertType.NONE, content);
+            if (result == ButtonType.YES) {
+                printButton.fire();
+            } else if (result == ButtonType.NO) {
+                Helper.changePage(recapMenuButton, "Admin - Rekap Stok", "stock-recap-view.fxml");
+            }
+        } else {
+            Helper.changePage(recapMenuButton, "Admin - Rekap Stok", "stock-recap-view.fxml");
+        }
     }
 
     @FXML
     private void incomeRecapMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(recapMenuButton, "Admin - Rekap Pendapatan", "income-recap-view.fxml");
+        if (!stockTableView.getItems().isEmpty()) {
+            content = "Data belum dicetak. Apakah akan dicetak?";
+            ButtonType result = Helper.alert(Alert.AlertType.NONE, content);
+            if (result == ButtonType.YES) {
+                printButton.fire();
+            } else if (result == ButtonType.NO) {
+                Helper.changePage(recapMenuButton, "Admin - Rekap Pendapatan", "income-recap-view.fxml");
+            }
+        } else {
+            Helper.changePage(recapMenuButton, "Admin - Rekap Pendapatan", "income-recap-view.fxml");
+        }
     }
 
     @FXML
     private void supplierRecapMenuItemAction(ActionEvent actionEvent) throws IOException {
-        Helper.changePage(recapMenuButton, "Admin - Rekap Supplier", "supplier-recap-view.fxml");
+        if (!stockTableView.getItems().isEmpty()) {
+            content = "Data belum dicetak. Apakah akan dicetak?";
+            ButtonType result = Helper.alert(Alert.AlertType.NONE, content);
+            if (result == ButtonType.YES) {
+                printButton.fire();
+            } else if (result == ButtonType.NO) {
+                Helper.changePage(recapMenuButton, "Admin - Rekap Supplier", "supplier-recap-view.fxml");
+            }
+        } else {
+            Helper.changePage(recapMenuButton, "Admin - Rekap Supplier", "supplier-recap-view.fxml");
+        }
     }
 
     @FXML

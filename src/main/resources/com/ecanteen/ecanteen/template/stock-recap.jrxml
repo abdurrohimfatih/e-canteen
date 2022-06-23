@@ -295,7 +295,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="14" isBold="true"/>
 								</textElement>
-								<text><![CDATA[Sisa]]></text>
+								<text><![CDATA[Stok]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table 2_TD" height="30">
