@@ -198,8 +198,8 @@ public class SupplierRecapController implements Initializable {
     private void printButtonAction(ActionEvent actionEvent) {
         suppliesData = supplyTableView.getItems();
         String supplier = supplierComboBox.getValue().getName();
-        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", new Locale("id")));
+        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", new Locale("id")));
         String total = totalTextField.getText();
 
         int totalAdd = 0;

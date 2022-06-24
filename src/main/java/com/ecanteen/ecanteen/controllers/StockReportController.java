@@ -143,7 +143,7 @@ public class StockReportController implements Initializable {
 
     @FXML
     private void printButtonAction(ActionEvent actionEvent) {
-        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
+        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", new Locale("id")));
         String employee = Common.user.getName();
         String dateNow = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         String timeNow = Helper.formattedTimeNow();

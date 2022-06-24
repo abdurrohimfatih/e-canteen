@@ -207,8 +207,8 @@ public class IncomeRecapController implements Initializable {
     private void printButtonAction(ActionEvent actionEvent) {
         incomes = incomeTableView.getItems();
 
-        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", new Locale("id")));
+        String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", new Locale("id")));
         String employee = Common.user.getName();
         String totalIncome = totalIncomeTextField.getText();
         String totalProfit = totalProfitTextField.getText();

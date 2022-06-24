@@ -143,7 +143,7 @@ public class IncomeReportController implements Initializable {
     private void printButtonAction(ActionEvent actionEvent) {
         incomes = incomeTableView.getItems();
 
-        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
+        String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", new Locale("id")));
         String employee = Common.user.getName();
         String totalIncome = totalIncomeTextField.getText();
         String totalProfit = totalProfitTextField.getText();

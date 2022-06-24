@@ -164,7 +164,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Tanggal : " + $P{from-date} + " s.d. " + $P{to-date}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Tanggal : " + $P{from-date} + " - " + $P{to-date}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

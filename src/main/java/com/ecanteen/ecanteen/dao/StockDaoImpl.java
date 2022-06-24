@@ -193,7 +193,7 @@ public class StockDaoImpl implements DaoService<Stock> {
     public List<Stock> fetchStocksRecap(String fromDate, String toDate) throws SQLException, ClassNotFoundException {
         List<Stock> stocks = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()) {
-            String queryProduct = "SELECT st.date, p.barcode, p.name FROM product p JOIN stock st ON p.barcode = st.barcode WHERE st.date >= ? AND st.date <= ? GROUP BY p.barcode, p.name, st.date ORDER BY p.name";
+            String queryProduct = "SELECT DATE_FORMAT(st.date, '%d-%m-%Y') AS dt, st.date, p.barcode, p.name FROM product p JOIN stock st ON p.barcode = st.barcode WHERE st.date >= ? AND st.date <= ? GROUP BY p.barcode, p.name, st.date ORDER BY st.date, p.name";
 
             String queryPreviousStock = "SELECT previous_stock FROM stock WHERE barcode = ? AND date = ? ORDER BY id LIMIT 1";
 
@@ -213,11 +213,11 @@ public class StockDaoImpl implements DaoService<Stock> {
                         stock.setProduct(product);
                         stock.setBarcode(product.getBarcode());
                         stock.setName(product.getName());
-                        stock.setDate(rs.getString("date"));
+                        stock.setDate(rs.getString("dt"));
 
                         try (PreparedStatement ps2 = connection.prepareStatement(queryPreviousStock)) {
                             ps2.setString(1, stock.getProduct().getBarcode());
-                            ps2.setString(2, stock.getDate());
+                            ps2.setString(2, rs.getString("date"));
 
                             try (ResultSet rs2 = ps2.executeQuery()) {
                                 while (rs2.next()) {
@@ -228,7 +228,7 @@ public class StockDaoImpl implements DaoService<Stock> {
 
                         try (PreparedStatement ps2 = connection.prepareStatement(queryStock)) {
                             ps2.setString(1, stock.getProduct().getBarcode());
-                            ps2.setString(2, stock.getDate());
+                            ps2.setString(2, rs.getString("date"));
                             ps2.setString(3, "add");
 
                             try (ResultSet rs2 = ps2.executeQuery()) {
@@ -240,7 +240,7 @@ public class StockDaoImpl implements DaoService<Stock> {
 
                         try (PreparedStatement ps2 = connection.prepareStatement(queryStock)) {
                             ps2.setString(1, stock.getProduct().getBarcode());
-                            ps2.setString(2, stock.getDate());
+                            ps2.setString(2, rs.getString("date"));
                             ps2.setString(3, "sale");
 
                             try (ResultSet rs2 = ps2.executeQuery()) {
@@ -252,7 +252,7 @@ public class StockDaoImpl implements DaoService<Stock> {
 
                         try (PreparedStatement ps2 = connection.prepareStatement(queryStock)) {
                             ps2.setString(1, stock.getProduct().getBarcode());
-                            ps2.setString(2, stock.getDate());
+                            ps2.setString(2, rs.getString("date"));
                             ps2.setString(3, "return");
 
                             try (ResultSet rs2 = ps2.executeQuery()) {
