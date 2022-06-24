@@ -154,6 +154,10 @@ public class IncomeRecapController implements Initializable {
     }
 
     private void getTotal() {
+        getTotal(printButton, incomeTableView, incomes, totalIncomeTextField, totalProfitTextField);
+    }
+
+    static void getTotal(Button printButton, TableView<Income> incomeTableView, ObservableList<Income> incomes, TextField totalIncomeTextField, TextField totalProfitTextField) {
         printButton.setDisable(incomeTableView.getItems().isEmpty());
 
         DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);

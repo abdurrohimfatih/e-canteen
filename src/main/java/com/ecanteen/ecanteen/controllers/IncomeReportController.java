@@ -79,6 +79,10 @@ public class IncomeReportController implements Initializable {
     @FXML
     private TableColumn<Income, String> profitTableColumn;
     @FXML
+    private TextField totalIncomeTextField;
+    @FXML
+    private TextField totalProfitTextField;
+    @FXML
     private Button printButton;
 
     private IncomeDaoImpl incomeDao;
@@ -109,11 +113,15 @@ public class IncomeReportController implements Initializable {
         incomeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIncome()));
         profitTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProfit()));
 
-        printButton.setDisable(incomeTableView.getItems().isEmpty());
+        getTotal();
     }
 
     @FXML
     private void dateDatePickerAction(ActionEvent actionEvent) {
+        filterAction();
+    }
+
+    private void filterAction() {
         String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         try {
@@ -124,8 +132,11 @@ public class IncomeReportController implements Initializable {
         }
 
         incomeTableView.setItems(incomes);
+        getTotal();
+    }
 
-        printButton.setDisable(incomeTableView.getItems().isEmpty());
+    private void getTotal() {
+        IncomeRecapController.getTotal(printButton, incomeTableView, incomes, totalIncomeTextField, totalProfitTextField);
     }
 
     @FXML
@@ -134,41 +145,12 @@ public class IncomeReportController implements Initializable {
 
         String date = dateDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", new Locale("id")));
         String employee = Common.user.getName();
-
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator('.');
-        formatter.setDecimalFormatSymbols(symbols);
-
-        int incomeInt;
-        int profitInt;
-        int totalIncomeInt = 0;
-        int totalProfitInt = 0;
-
-        for (Income i : incomes) {
-            String[] incomeArray = i.getIncome().split("\\.");
-            String[] profitArray = i.getProfit().split("\\.");
-            StringBuilder inc = new StringBuilder();
-            StringBuilder pro = new StringBuilder();
-            for (String s : incomeArray) {
-                inc.append(s);
-            }
-            for (String s : profitArray) {
-                pro.append(s);
-            }
-            incomeInt = Integer.parseInt(String.valueOf(inc));
-            profitInt = Integer.parseInt(String.valueOf(pro));
-            totalIncomeInt += incomeInt;
-            totalProfitInt += profitInt;
-        }
-
-        String totalIncomeString = formatter.format(totalIncomeInt);
-        String totalProfitString = formatter.format(totalProfitInt);
-
+        String totalIncome = totalIncomeTextField.getText();
+        String totalProfit = totalProfitTextField.getText();
         String dateNow = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         String timeNow = Helper.formattedTimeNow();
 
-        new ReportGenerator().printIncomeReport(incomes, totalIncomeString, totalProfitString, date, employee, dateNow, timeNow);
+        new ReportGenerator().printIncomeReport(incomes, totalIncome, totalProfit, date, employee, dateNow, timeNow);
     }
 
     @FXML
