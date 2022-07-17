@@ -5,6 +5,7 @@ import com.ecanteen.ecanteen.dao.ProductDaoImpl;
 import com.ecanteen.ecanteen.dao.SupplierDaoImpl;
 import com.ecanteen.ecanteen.entities.Supplier;
 import com.ecanteen.ecanteen.utils.Helper;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -101,7 +102,7 @@ public class SupplierController implements Initializable {
     @FXML
     private TableView<Supplier> supplierTableView;
     @FXML
-    private TableColumn<Supplier, String> idTableColumn;
+    private TableColumn<Supplier, Integer> noTableColumn;
     @FXML
     private TableColumn<Supplier, String> nameTableColumn;
     @FXML
@@ -143,7 +144,7 @@ public class SupplierController implements Initializable {
         statusComboBox.setItems(FXCollections.observableArrayList("Aktif", "Tidak Aktif"));
         supplierTableView.setPlaceholder(new Label("Tidak ada data."));
         supplierTableView.setItems(suppliers);
-        idTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId()));
+        noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(supplierTableView.getItems().indexOf(data.getValue()) + 1));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         addressTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAddress()));
         phoneTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPhone()));
@@ -153,8 +154,7 @@ public class SupplierController implements Initializable {
 
     @FXML
     private void addButtonAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-        if (idTextField.getText().trim().isEmpty() ||
-                nameTextField.getText().trim().isEmpty() ||
+        if (nameTextField.getText().trim().isEmpty() ||
                 addressTextField.getText().trim().isEmpty() ||
                 genderComboBox.getValue() == null ||
                 phoneTextField.getText().trim().isEmpty() ||
@@ -164,7 +164,6 @@ public class SupplierController implements Initializable {
 
             resetError();
 
-            if (idTextField.getText().trim().isEmpty()) idTextField.setStyle("-fx-border-color: RED");
             if (nameTextField.getText().trim().isEmpty()) nameTextField.setStyle("-fx-border-color: RED");
             if (addressTextField.getText().trim().isEmpty()) addressTextField.setStyle("-fx-border-color: RED");
             if (genderComboBox.getValue() == null) genderComboBox.setStyle("-fx-border-color: RED");
@@ -200,7 +199,6 @@ public class SupplierController implements Initializable {
         }
 
         Supplier supplier = new Supplier();
-        supplier.setId(idTextField.getText().trim());
         supplier.setName(nameTextField.getText().trim());
         supplier.setAddress(addressTextField.getText().trim());
         supplier.setGender(genderComboBox.getValue());
@@ -417,7 +415,7 @@ public class SupplierController implements Initializable {
             addressTextField.setText(selectedSupplier.getAddress());
             genderComboBox.setValue(selectedSupplier.getGender());
             phoneTextField.setText(selectedSupplier.getPhone());
-            emailTextField.setText(selectedSupplier.getEmail());
+            emailTextField.setText(selectedSupplier.getEmail().equals("-") ? "" : selectedSupplier.getEmail());
             bankAccountTextField.setText(selectedSupplier.getBankAccount());
             accountNumberTextField.setText(selectedSupplier.getAccountNumber());
             statusComboBox.setValue(selectedSupplier.getStatus());

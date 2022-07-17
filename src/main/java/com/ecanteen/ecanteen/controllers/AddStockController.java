@@ -7,6 +7,7 @@ import com.ecanteen.ecanteen.entities.Stock;
 import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
 import com.ecanteen.ecanteen.utils.ReportGenerator;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -87,6 +88,8 @@ public class AddStockController implements Initializable {
     @FXML
     private TableView<Stock> stockTableView;
     @FXML
+    private TableColumn<Stock, Integer> noTableColumn;
+    @FXML
     private TableColumn<Stock, String> barcodeTableColumn;
     @FXML
     private TableColumn<Stock, String> nameTableColumn;
@@ -130,6 +133,7 @@ public class AddStockController implements Initializable {
         expiredDateDatePicker.getEditor().setOpacity(1);
         productComboBox.setItems(products);
         stockTableView.setPlaceholder(new Label("Tidak ada data."));
+        noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(stockTableView.getItems().indexOf(data.getValue()) + 1));
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct().getBarcode()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct().getName()));
         amountTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getQty()).asObject());

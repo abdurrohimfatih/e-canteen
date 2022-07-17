@@ -134,32 +134,32 @@
                <Font name="System Bold" size="18.0" />
             </font>
          </Label>
-         <HBox layoutX="768.0" layoutY="19.0" spacing="40.0" AnchorPane.bottomAnchor="647.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="19.0">
-            <children>
-               <HBox>
-                  <Label text="Dari: ">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <DatePicker fx:id="fromDatePicker" onAction="#fromDatePickerAction" styleClass="supplier-history-combo-box" />
-               </HBox>
-               <HBox>
-                  <Label text="Sampai: ">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <DatePicker fx:id="toDatePicker" onAction="#toDatePickerAction" styleClass="supplier-history-combo-box" />
-               </HBox>
-            </children>
+         <HBox layoutX="768.0" layoutY="19.0" spacing="40.0" AnchorPane.bottomAnchor="647.0"
+               AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="19.0">
+            <HBox>
+               <Label text="Dari: ">
+                  <font>
+                     <Font name="System Bold" size="18.0"/>
+                  </font>
+               </Label>
+               <DatePicker fx:id="fromDatePicker" onAction="#fromDatePickerAction"
+                           styleClass="supplier-history-combo-box"/>
+            </HBox>
+            <HBox>
+               <Label text="Sampai: ">
+                  <font>
+                     <Font name="System Bold" size="18.0"/>
+                  </font>
+               </Label>
+               <DatePicker fx:id="toDatePicker" onAction="#toDatePickerAction" styleClass="supplier-history-combo-box"/>
+            </HBox>
          </HBox>
          <TableView fx:id="incomeTableView" prefWidth="439.0" styleClass="table-income" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="65.0">
             <columns>
-               <TableColumn fx:id="noTableColumn" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" text="No" />
+               <TableColumn fx:id="noTableColumn" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" styleClass="column-center" text="No" />
                <TableColumn fx:id="dateTableColumn" prefWidth="75.0" text="Tanggal" />
-               <TableColumn fx:id="incomeTableColumn" prefWidth="75.0" text="Pendapatan" />
-               <TableColumn fx:id="profitTableColumn" prefWidth="75.0" text="Laba" />
+               <TableColumn fx:id="incomeTableColumn" prefWidth="75.0" styleClass="column-right" text="Pendapatan" />
+               <TableColumn fx:id="profitTableColumn" prefWidth="75.0" styleClass="column-right" text="Laba" />
             </columns>
             <columnResizePolicy>
                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

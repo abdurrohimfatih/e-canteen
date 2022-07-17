@@ -2,12 +2,16 @@
     -fx-background-color: #75dfff;
 }
 
-.table-view, .table-view:focused, .text-field:focused, .date-picker:focused, .text-area:focused, .combo-box:focused {
+.table-view {
     -fx-border-color: #23BBCF;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
 }
 
 .table-view .column-header-background {
     -fx-background-color: #23BBCF;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
 }
 
 .table-view .column-header, .table-view .filler {
@@ -89,8 +93,12 @@
     -fx-border-width: 0;
 }
 
-.date-picker, .searchable-combo-box {
+.date-picker, .searchable-combo-box, .combo-box {
     -fx-cursor: HAND;
+}
+
+.table-view:focused, .text-field:focused, .date-picker:focused, .text-area:focused, .combo-box:focused, .searchable-combo-box:focused {
+    -fx-border-color: #0C80D4;
 }
 
 .link {
@@ -175,10 +183,6 @@
 
 .column-center {
     -fx-alignment: CENTER;
-}
-
-.column-left {
-    -fx-alignment: CENTER-LEFT;
 }
 
 .supplier-history-combo-box {

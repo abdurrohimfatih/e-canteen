@@ -4,6 +4,7 @@ import com.ecanteen.ecanteen.dao.ProductDaoImpl;
 import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Sale;
 import com.ecanteen.ecanteen.utils.Common;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -36,6 +37,8 @@ public class DetailProductCashierController implements Initializable {
     @FXML
     private TableView<Product> productTableView;
     @FXML
+    private TableColumn<Product, Integer> noTableColumn;
+    @FXML
     private TableColumn<Product, String> barcodeTableColumn;
     @FXML
     private TableColumn<Product, String> nameTableColumn;
@@ -46,13 +49,12 @@ public class DetailProductCashierController implements Initializable {
     @FXML
     private TableColumn<Product, String> expiredDateTableColumn;
 
-    private ProductDaoImpl productDao;
     private Product selectedProduct;
     private ObservableList<Product> products;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        productDao = new ProductDaoImpl();
+        ProductDaoImpl productDao = new ProductDaoImpl();
         products = FXCollections.observableArrayList();
 
         try {
@@ -63,6 +65,7 @@ public class DetailProductCashierController implements Initializable {
 
         productTableView.setPlaceholder(new Label("Tidak ada data."));
         productTableView.setItems(products);
+        noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(productTableView.getItems().indexOf(data.getValue()) + 1));
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         sellingPriceTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSellingPrice()));

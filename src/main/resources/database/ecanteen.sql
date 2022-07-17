@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 14, 2022 at 12:17 AM
+-- Generation Time: Jul 17, 2022 at 05:12 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -55,7 +55,7 @@ CREATE TABLE `product` (
   `purchase_price` varchar(9) NOT NULL,
   `selling_price` varchar(9) NOT NULL,
   `stock_amount` int(11) NOT NULL,
-  `supplier_id` varchar(16) NOT NULL,
+  `supplier_id` int(5) NOT NULL,
   `date_added` date NOT NULL,
   `expired_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -65,14 +65,15 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`barcode`, `name`, `category_id`, `purchase_price`, `selling_price`, `stock_amount`, `supplier_id`, `date_added`, `expired_date`) VALUES
-('1000', 'Kopi Panas', 1, '1.000', '2.000', 3306, 'ID123', '2022-05-21', '0001-01-01'),
-('10000', 'Susu Frisian Flag', 1, '1.000', '1.500', 22, 'ID123', '2022-05-21', '0001-01-01'),
-('123', 'Nu Milk Tea', 1, '4.500', '5.000', 3252, '123', '2022-05-22', '0001-01-01'),
-('12321093821', 'Teh Pucuk Harum', 1, '3.000', '5.000', 211, 'ID123', '2022-05-30', '0001-01-01'),
-('2343', 'Mountoya Cup', 1, '20.800', '22.000', 31, 'ID123', '2022-07-01', '2023-06-03'),
-('321', 'Kopi Luwak', 1, '1.000', '2.000', 281, 'ID123', '2022-07-01', '0001-01-01'),
-('456', 'Beras', 3, '8.650', '9.500', 123, 'ID123', '2022-07-01', '0001-01-01'),
-('4569871023', 'Oreo Manis', 3, '2.000', '3.000', 1215, '123', '2022-06-13', '0001-01-01');
+('1000', 'Kopi Panas', 1, '1.000', '2.000', 3306, 2, '2022-05-21', '0001-01-01'),
+('10000', 'Susu Frisian Flag', 1, '1.000', '1.500', 22, 2, '2022-05-21', '0001-01-01'),
+('123', 'Nu Milk Tea', 1, '4.500', '5.000', 3240, 1, '2022-05-22', '0001-01-01'),
+('12321093821', 'Teh Pucuk Harum', 1, '3.000', '5.000', 211, 2, '2022-05-30', '0001-01-01'),
+('12345678900000000000', 'ABC', 1, '1.000', '1.500', 0, 1, '2022-07-17', '0001-01-01'),
+('2343', 'Mountoya Cup', 1, '20.800', '22.000', 31, 2, '2022-07-01', '2023-06-03'),
+('321', 'Kopi Luwak', 1, '1.000', '2.000', 281, 2, '2022-07-01', '0001-01-01'),
+('456', 'Beras', 3, '8.650', '9.500', 135, 2, '2022-07-01', '0001-01-01'),
+('4569871023', 'Oreo Manis', 3, '2.000', '3.000', 1215, 1, '2022-06-13', '0001-01-01');
 
 -- --------------------------------------------------------
 
@@ -289,7 +290,9 @@ INSERT INTO `stock` (`id`, `barcode`, `previous_stock`, `qty`, `date`, `type`) V
 (113, '2343', 50, 2, '2022-07-01', 'return'),
 (114, '2343', 48, 15, '2022-07-01', 'sale'),
 (115, '2343', 33, 2, '2022-07-01', 'sale'),
-(116, '456', 0, 123, '2022-07-13', 'add');
+(116, '456', 0, 123, '2022-07-13', 'add'),
+(117, '456', 123, 12, '2022-07-17', 'add'),
+(118, '123', 3252, 12, '2022-07-17', 'return');
 
 -- --------------------------------------------------------
 
@@ -298,7 +301,7 @@ INSERT INTO `stock` (`id`, `barcode`, `previous_stock`, `qty`, `date`, `type`) V
 --
 
 CREATE TABLE `supplier` (
-  `id` varchar(16) NOT NULL,
+  `id` int(5) NOT NULL,
   `name` varchar(30) NOT NULL,
   `address` varchar(15) NOT NULL,
   `gender` varchar(11) NOT NULL,
@@ -314,8 +317,8 @@ CREATE TABLE `supplier` (
 --
 
 INSERT INTO `supplier` (`id`, `name`, `address`, `gender`, `phone`, `email`, `bank_account`, `account_number`, `status`) VALUES
-('123', 'Budi', 'Kuningan', 'Laki-laki', '089999999999', 'budi@gmail.com', 'BNI', '8712937912', 1),
-('ID123', 'Andi', 'Cirebon', 'Laki-laki', '081234567890', 'andi@gmail.com', 'BRI', '398127832', 1);
+(1, 'Budi', 'Kuningan', 'Laki-laki', '089999999999', '-', 'BNI', '8712937912', 1),
+(2, 'Andi', 'Cirebon', 'Laki-laki', '081234567890', '-', 'BRI', '398127832', 1);
 
 -- --------------------------------------------------------
 
@@ -410,8 +413,8 @@ ALTER TABLE `category`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`barcode`),
-  ADD KEY `product_ibfk_3` (`supplier_id`),
-  ADD KEY `product_ibfk_2` (`category_id`);
+  ADD KEY `product_ibfk_2` (`category_id`),
+  ADD KEY `supplier_id` (`supplier_id`);
 
 --
 -- Indexes for table `promotion`
@@ -473,7 +476,13 @@ ALTER TABLE `sale`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+
+--
+-- AUTO_INCREMENT for table `supplier`
+--
+ALTER TABLE `supplier`
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

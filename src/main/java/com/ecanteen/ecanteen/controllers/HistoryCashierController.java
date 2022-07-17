@@ -4,6 +4,7 @@ import com.ecanteen.ecanteen.dao.IncomeDaoImpl;
 import com.ecanteen.ecanteen.entities.Income;
 import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,6 +39,8 @@ public class HistoryCashierController implements Initializable {
     @FXML
     private TableView<Income> incomeTableView;
     @FXML
+    private TableColumn<Income, Integer> noTableColumn;
+    @FXML
     private TableColumn<Income, String> dateTableColumn;
     @FXML
     private TableColumn<Income, String> incomeTableColumn;
@@ -56,6 +59,7 @@ public class HistoryCashierController implements Initializable {
 
         incomeTableView.setPlaceholder(new Label("Tidak ada data."));
         incomeTableView.setItems(incomes);
+        noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(incomeTableView.getItems().indexOf(data.getValue()) + 1));
         dateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDate()));
         incomeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIncome()));
     }

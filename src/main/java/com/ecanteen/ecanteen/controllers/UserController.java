@@ -4,6 +4,7 @@ import com.ecanteen.ecanteen.dao.UserDaoImpl;
 import com.ecanteen.ecanteen.entities.User;
 import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -99,6 +100,8 @@ public class UserController implements Initializable {
     @FXML
     private TableView<User> userTableView;
     @FXML
+    private TableColumn<User, Integer> noTableColumn;
+    @FXML
     private TableColumn<User, String> usernameTableColumn;
     @FXML
     private TableColumn<User, String> nameTableColumn;
@@ -106,8 +109,6 @@ public class UserController implements Initializable {
     private TableColumn<User, String> addressTableColumn;
     @FXML
     private TableColumn<User, String> phoneTableColumn;
-    @FXML
-    private TableColumn<User, String> emailTableColumn;
     @FXML
     private TableColumn<User, String> levelTableColumn;
     @FXML
@@ -140,11 +141,11 @@ public class UserController implements Initializable {
         statusComboBox.setItems(FXCollections.observableArrayList("Aktif", "Tidak Aktif"));
         userTableView.setPlaceholder(new Label("Tidak ada data."));
         userTableView.setItems(users);
+        noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(userTableView.getItems().indexOf(data.getValue()) + 1));
         usernameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         addressTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAddress()));
         phoneTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPhone()));
-        emailTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
         levelTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLevel()));
         statusTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStatus()));
     }

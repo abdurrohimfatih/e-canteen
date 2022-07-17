@@ -91,8 +91,8 @@
             </HBox>
             <TableView fx:id="saleTableView" editable="true" onKeyReleased="#saleTableViewKeyReleased" styleClass="table-cashier" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="430.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="70.0">
                 <columns>
-                    <TableColumn fx:id="barcodeSaleTableColumn" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" styleClass="column-left" text="Barcode" />
-                    <TableColumn fx:id="nameSaleTableColumn" prefWidth="75.0" styleClass="column-left" text="Nama Produk" />
+                    <TableColumn fx:id="barcodeSaleTableColumn" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Barcode" />
+                    <TableColumn fx:id="nameSaleTableColumn" prefWidth="75.0" text="Nama Produk" />
                     <TableColumn fx:id="sellingPriceSaleTableColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" styleClass="column-right" text="Harga (Rp)" />
                     <TableColumn fx:id="quantitySaleTableColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" styleClass="column-center" text="Kuantitas" />
                     <TableColumn fx:id="subtotalSaleTableColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" styleClass="column-right" text="Subtotal (Rp)" />

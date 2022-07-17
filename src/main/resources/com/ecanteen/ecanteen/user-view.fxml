@@ -221,11 +221,11 @@
       <AnchorPane BorderPane.alignment="CENTER">
          <TableView fx:id="userTableView" layoutX="34.0" layoutY="57.0" onMouseClicked="#userTableViewClicked" prefWidth="439.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
             <columns>
+               <TableColumn fx:id="noTableColumn" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" styleClass="column-center" text="No" />
                <TableColumn fx:id="usernameTableColumn" prefWidth="75.0" text="Username" />
                <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="Nama" />
                <TableColumn fx:id="addressTableColumn" prefWidth="75.0" text="Alamat" />
-               <TableColumn fx:id="phoneTableColumn" prefWidth="75.0" text="No Telp" />
-               <TableColumn fx:id="emailTableColumn" prefWidth="75.0" text="Email" />
+               <TableColumn fx:id="phoneTableColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="No Telp" />
                <TableColumn fx:id="levelTableColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Level" />
                <TableColumn fx:id="statusTableColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Status" />
             </columns>

@@ -8,6 +8,7 @@ import com.ecanteen.ecanteen.entities.Category;
 import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Supplier;
 import com.ecanteen.ecanteen.utils.Helper;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -94,6 +95,8 @@ public class ProductController implements Initializable {
     @FXML
     private TableView<Product> productTableView;
     @FXML
+    private TableColumn<Product, Integer> noTableColumn;
+    @FXML
     private TableColumn<Product, String> barcodeTableColumn;
     @FXML
     private TableColumn<Product, String> nameTableColumn;
@@ -142,6 +145,7 @@ public class ProductController implements Initializable {
         supplierComboBox.setItems(suppliers);
         productTableView.setPlaceholder(new Label("Tidak ada data."));
         productTableView.setItems(products);
+        noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(productTableView.getItems().indexOf(data.getValue()) + 1));
         barcodeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBarcode()));
         nameTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         purchasePriceTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPurchasePrice()));
