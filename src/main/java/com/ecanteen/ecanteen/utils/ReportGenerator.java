@@ -39,9 +39,12 @@ public class ReportGenerator {
 
                 JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(saleList);
 
+                String[] nameArray = Common.user.getName().split(" ");
+                String name = nameArray[0];
+
                 param.put("DS", itemsJRBean);
                 param.put("transactionId", transaction.getId());
-                param.put("username", transaction.getUsername());
+                param.put("name", name);
                 param.put("date", transaction.getDate());
                 param.put("time", transaction.getTime());
                 param.put("totalAmount", Common.totalAmountString);
