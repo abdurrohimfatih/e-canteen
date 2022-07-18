@@ -3,11 +3,11 @@ package com.ecanteen.ecanteen.utils;
 import com.ecanteen.ecanteen.Main;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -24,9 +24,8 @@ public class Helper {
     public static void changePage(Control control, String title, String fxmlFile) throws IOException {
         Stage stage = (Stage) control.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlFile));
-        Scene scene = new Scene(fxmlLoader.load());
+        stage.getScene().setRoot(fxmlLoader.load());
         stage.setTitle(title + " | IDC");
-        stage.setScene(scene);
         stage.show();
     }
 
@@ -197,6 +196,8 @@ public class Helper {
         alert.setHeaderText(null);
         alert.setGraphic(null);
         alert.setContentText(content);
+        alert.initOwner(Main.getStage());
+        alert.initModality(Modality.APPLICATION_MODAL);
 
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(image);

@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Main extends Application {
+    public static Stage stage;
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login-view.fxml"));
@@ -17,6 +19,7 @@ public class Main extends Application {
         if (Screen.getPrimary().getBounds().getWidth() == 1366 &&
                 Screen.getPrimary().getBounds().getHeight() == 768) {
             stage.setMaximized(true);
+            stage.setFullScreen(true);
         }
 
         stage.getIcons().add(new Image(String.valueOf(Main.class.getResource("image/logo.png"))));
@@ -24,9 +27,15 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.centerOnScreen();
         stage.show();
+
+        Main.stage = stage;
     }
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public static Stage getStage() {
+        return stage;
     }
 }

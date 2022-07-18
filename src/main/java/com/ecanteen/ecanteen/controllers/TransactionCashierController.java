@@ -84,7 +84,6 @@ public class TransactionCashierController implements Initializable {
     private ProductDaoImpl productDao;
     private TransactionDaoImpl transactionDao;
     private ObservableList<Sale> saleData = FXCollections.observableArrayList();
-    private Sale selectedItem;
     private String content;
     private StockDaoImpl stockDao;
 
@@ -418,7 +417,7 @@ public class TransactionCashierController implements Initializable {
 
     @FXML
     private void saleTableViewKeyReleased(KeyEvent keyEvent) {
-        selectedItem = saleTableView.getSelectionModel().getSelectedItem();
+        Sale selectedItem = saleTableView.getSelectionModel().getSelectedItem();
 
         if (selectedItem == null) {
             return;
