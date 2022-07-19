@@ -432,8 +432,8 @@ public class SupplierController implements Initializable {
             genderComboBox.setValue(selectedSupplier.getGender());
             phoneTextField.setText(selectedSupplier.getPhone());
             emailTextField.setText(selectedSupplier.getEmail().equals("-") ? "" : selectedSupplier.getEmail());
-            bankAccountTextField.setText(selectedSupplier.getBankAccount());
-            accountNumberTextField.setText(selectedSupplier.getAccountNumber());
+            bankAccountTextField.setText(selectedSupplier.getBankAccount().equals("-") ? "" : selectedSupplier.getBankAccount());
+            accountNumberTextField.setText(selectedSupplier.getAccountNumber().equals("-") ? "" : selectedSupplier.getAccountNumber());
             statusComboBox.setValue(selectedSupplier.getStatus());
             idTextField.setDisable(true);
             warningLabel.setText("");
