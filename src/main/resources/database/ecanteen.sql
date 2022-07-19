@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 17, 2022 at 05:12 PM
+-- Generation Time: Jul 19, 2022 at 10:43 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -50,12 +50,12 @@ INSERT INTO `category` (`id`, `name`, `date_created`) VALUES
 
 CREATE TABLE `product` (
   `barcode` varchar(20) NOT NULL,
-  `name` varchar(25) NOT NULL,
+  `name` varchar(35) NOT NULL,
   `category_id` int(5) NOT NULL,
   `purchase_price` varchar(9) NOT NULL,
   `selling_price` varchar(9) NOT NULL,
   `stock_amount` int(11) NOT NULL,
-  `supplier_id` int(5) NOT NULL,
+  `supplier_id` varchar(10) NOT NULL,
   `date_added` date NOT NULL,
   `expired_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -65,15 +65,15 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`barcode`, `name`, `category_id`, `purchase_price`, `selling_price`, `stock_amount`, `supplier_id`, `date_added`, `expired_date`) VALUES
-('1000', 'Kopi Panas', 1, '1.000', '2.000', 3306, 2, '2022-05-21', '0001-01-01'),
-('10000', 'Susu Frisian Flag', 1, '1.000', '1.500', 22, 2, '2022-05-21', '0001-01-01'),
-('123', 'Nu Milk Tea', 1, '4.500', '5.000', 3240, 1, '2022-05-22', '0001-01-01'),
-('12321093821', 'Teh Pucuk Harum', 1, '3.000', '5.000', 211, 2, '2022-05-30', '0001-01-01'),
-('12345678900000000000', 'ABC', 1, '1.000', '1.500', 0, 1, '2022-07-17', '0001-01-01'),
-('2343', 'Mountoya Cup', 1, '20.800', '22.000', 31, 2, '2022-07-01', '2023-06-03'),
-('321', 'Kopi Luwak', 1, '1.000', '2.000', 281, 2, '2022-07-01', '0001-01-01'),
-('456', 'Beras', 3, '8.650', '9.500', 135, 2, '2022-07-01', '0001-01-01'),
-('4569871023', 'Oreo Manis', 3, '2.000', '3.000', 1215, 1, '2022-06-13', '0001-01-01');
+('1000', 'Kopi', 1, '1.000', '2.000', 3306, 'ANDI21132', '2022-07-17', '0001-01-01'),
+('10000', 'Susu Frisian Flag', 1, '1.000', '1.500', 21, 'ANDI21132', '2022-05-21', '0001-01-01'),
+('123', 'Nu Milk Tea', 1, '4.500', '5.000', 3238, 'BUDI17471', '2022-05-22', '0001-01-01'),
+('12321093821', 'Teh Pucuk Harum', 1, '3.000', '5.000', 211, 'ANDI21132', '2022-05-30', '0001-01-01'),
+('12345678900000000000', 'ABC', 1, '1.000', '1.500', 0, 'BUDI17471', '2022-07-17', '0001-01-01'),
+('2343', 'Mountoya Cup', 1, '20.800', '22.000', 31, 'ANDI21132', '2022-07-01', '2023-06-03'),
+('321', 'Kopi Luwak', 1, '1.000', '2.000', 281, 'ANDI21132', '2022-07-01', '0001-01-01'),
+('456', 'Beras', 3, '8.650', '9.500', 135, 'ANDI21132', '2022-07-01', '0001-01-01'),
+('4569871023', 'Oreo Manis', 3, '2.000', '3.000', 1215, 'BUDI17471', '2022-06-13', '0001-01-01');
 
 -- --------------------------------------------------------
 
@@ -153,7 +153,9 @@ INSERT INTO `sale` (`id`, `transaction_id`, `barcode`, `quantity`, `subtotal`) V
 (36, 22, '321', 1, '2.000'),
 (37, 23, '123', 1, '5.000'),
 (38, 24, '2343', 15, '330.000'),
-(39, 25, '2343', 2, '44.000');
+(39, 25, '2343', 2, '44.000'),
+(40, 26, '123', 1, '5.000'),
+(41, 27, '123', 1, '5.000');
 
 -- --------------------------------------------------------
 
@@ -292,7 +294,10 @@ INSERT INTO `stock` (`id`, `barcode`, `previous_stock`, `qty`, `date`, `type`) V
 (115, '2343', 33, 2, '2022-07-01', 'sale'),
 (116, '456', 0, 123, '2022-07-13', 'add'),
 (117, '456', 123, 12, '2022-07-17', 'add'),
-(118, '123', 3252, 12, '2022-07-17', 'return');
+(118, '123', 3252, 12, '2022-07-17', 'return'),
+(119, '123', 3240, 1, '2022-07-17', 'sale'),
+(120, '123', 3239, 1, '2022-07-17', 'sale'),
+(121, '10000', 22, 1, '2022-07-19', 'sale');
 
 -- --------------------------------------------------------
 
@@ -301,7 +306,7 @@ INSERT INTO `stock` (`id`, `barcode`, `previous_stock`, `qty`, `date`, `type`) V
 --
 
 CREATE TABLE `supplier` (
-  `id` int(5) NOT NULL,
+  `id` varchar(10) NOT NULL,
   `name` varchar(30) NOT NULL,
   `address` varchar(15) NOT NULL,
   `gender` varchar(11) NOT NULL,
@@ -317,8 +322,15 @@ CREATE TABLE `supplier` (
 --
 
 INSERT INTO `supplier` (`id`, `name`, `address`, `gender`, `phone`, `email`, `bank_account`, `account_number`, `status`) VALUES
-(1, 'Budi', 'Kuningan', 'Laki-laki', '089999999999', '-', 'BNI', '8712937912', 1),
-(2, 'Andi', 'Cirebon', 'Laki-laki', '081234567890', '-', 'BRI', '398127832', 1);
+('A8219397', 'Aku', 'Kuningan', 'Laki-laki', '0811111111111', '-', '-', '-', 1),
+('ABC8219904', 'A B C D E', 'Indonesia', 'Laki-laki', '0899999999999', '-', '-', '-', 1),
+('ANDI21132', 'Andi', 'Cirebon', 'Laki-laki', '081234567890', '-', 'BRI', '398127832', 1),
+('AS8219943', 'Andri Setiawan', 'Cirebon', 'Laki-laki', '0800000000000', '-', '-', '-', 1),
+('BUDI17471', 'Budi', 'Kuningan', 'Laki-laki', '089999999999', 'budi@gmail.com', 'BNI', '8712937912', 1),
+('C8218813', 'A B C', 'Cirebon', 'Laki-laki', '0811111111111', '-', '-', '-', 1),
+('D8219554', 'A B C D', 'Cirebon', 'Laki-laki', '0899999999999', '-', '-', '-', 1),
+('E8218726', 'Edi', 'Kuningan', 'Laki-laki', '0811111111111', '-', '-', '-', 1),
+('MNS8219974', 'Muhammad Nur Sidik', 'Cirebon', 'Laki-laki', '0800000000000', '-', '-', '-', 1);
 
 -- --------------------------------------------------------
 
@@ -365,7 +377,10 @@ INSERT INTO `transaction` (`id`, `username`, `date`, `time`, `total_amount`, `cu
 (22, 'kasir', '2022-06-22', '15:42:21', 502000, 0, 0),
 (23, 'kasir', '2022-06-24', '09:54:41', 5000, 0, 0),
 (24, 'kasir', '2022-07-01', '17:13:19', 330000, 0, 0),
-(25, 'kasir', '2022-07-01', '17:14:37', 44000, 0, 0);
+(25, 'kasir', '2022-07-01', '17:14:37', 44000, 0, 0),
+(26, 'kasir', '2022-07-17', '22:24:43', 5000, 0, 0),
+(27, 'kasir', '2022-07-17', '22:51:46', 5000, 0, 0),
+(28, 'kasir', '2022-07-19', '15:40:16', 1500, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -470,19 +485,13 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `sale`
 --
 ALTER TABLE `sale`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
-
---
--- AUTO_INCREMENT for table `supplier`
---
-ALTER TABLE `supplier`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
 
 --
 -- Constraints for dumped tables
