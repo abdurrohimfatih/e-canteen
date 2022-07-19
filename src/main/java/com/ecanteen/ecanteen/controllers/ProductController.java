@@ -138,7 +138,7 @@ public class ProductController implements Initializable {
         Helper.addThousandSeparator(purchasePriceTextField);
         Helper.addThousandSeparator(sellingPriceTextField);
         Helper.addTextLimiter(barcodeTextField, 20);
-        Helper.addTextLimiter(nameTextField, 25);
+        Helper.addTextLimiter(nameTextField, 35);
         Helper.addTextLimiter(purchasePriceTextField, 9);
         Helper.addTextLimiter(sellingPriceTextField, 9);
         categoryComboBox.setItems(categories);

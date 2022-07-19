@@ -44,16 +44,17 @@ public class SupplierDaoImpl implements DaoService<Supplier> {
     public int addData(Supplier object) throws SQLException, ClassNotFoundException {
         int result = 0;
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "INSERT INTO supplier(name, address, gender, phone, email, bank_account, account_number, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO supplier(id, name, address, gender, phone, email, bank_account, account_number, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
-                ps.setString(1, object.getName());
-                ps.setString(2, object.getAddress());
-                ps.setString(3, object.getGender());
-                ps.setString(4, object.getPhone());
-                ps.setString(5, object.getEmail());
-                ps.setString(6, object.getBankAccount());
-                ps.setString(7, object.getAccountNumber());
-                ps.setString(8, object.getStatus());
+                ps.setString(1, object.getId());
+                ps.setString(2, object.getName());
+                ps.setString(3, object.getAddress());
+                ps.setString(4, object.getGender());
+                ps.setString(5, object.getPhone());
+                ps.setString(6, object.getEmail());
+                ps.setString(7, object.getBankAccount());
+                ps.setString(8, object.getAccountNumber());
+                ps.setString(9, object.getStatus());
 
                 if (ps.executeUpdate() != 0) {
                     connection.commit();

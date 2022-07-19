@@ -198,7 +198,23 @@ public class SupplierController implements Initializable {
             return;
         }
 
+        String fullName = nameTextField.getText().trim();
+        String[] nameArray = fullName.split(" ");
+        StringBuilder name = new StringBuilder();
+        for (String s : nameArray) {
+            name.append(s.charAt(0));
+        }
+        if (name.length() >= 3) {
+            name = new StringBuilder(name.substring(0, 3));
+        }
+
+        String fullTime = String.valueOf(System.currentTimeMillis() / 1000).toUpperCase();
+        String time = fullTime.substring(fullTime.length() - 7);
+
+        String id = name + time;
+
         Supplier supplier = new Supplier();
+        supplier.setId(id);
         supplier.setName(nameTextField.getText().trim());
         supplier.setAddress(addressTextField.getText().trim());
         supplier.setGender(genderComboBox.getValue());
