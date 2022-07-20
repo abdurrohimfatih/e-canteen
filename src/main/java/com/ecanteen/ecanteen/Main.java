@@ -19,7 +19,6 @@ public class Main extends Application {
         if (Screen.getPrimary().getBounds().getWidth() == 1366 &&
                 Screen.getPrimary().getBounds().getHeight() == 768) {
             stage.setMaximized(true);
-            stage.setFullScreen(true);
         }
 
         stage.getIcons().add(new Image(String.valueOf(Main.class.getResource("image/logo.png"))));

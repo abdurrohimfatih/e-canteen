@@ -435,7 +435,7 @@ public class UserController implements Initializable {
             ObservableList<TableColumn<User, ?>> columns = userTableView.getColumns();
 
             for (User value : users) {
-                for (int j = 0; j < 2; j++) {
+                for (int j = 1; j < 3; j++) {
                     TableColumn<User, ?> col = columns.get(j);
                     String cellValue = String.valueOf(col.getCellData(value)).toLowerCase();
 

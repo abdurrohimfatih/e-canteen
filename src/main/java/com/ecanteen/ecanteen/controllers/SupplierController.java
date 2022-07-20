@@ -456,7 +456,7 @@ public class SupplierController implements Initializable {
             ObservableList<TableColumn<Supplier, ?>> columns = supplierTableView.getColumns();
 
             for (Supplier value : suppliers) {
-                for (int j = 0; j < 2; j++) {
+                for (int j = 1; j < 3; j++) {
                     TableColumn<Supplier, ?> col = columns.get(j);
                     String cellValue = String.valueOf(col.getCellData(value)).toLowerCase();
 

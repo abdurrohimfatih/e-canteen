@@ -141,7 +141,7 @@ public class DetailProductCashierController implements Initializable {
             ObservableList<TableColumn<Product, ?>> columns = productTableView.getColumns();
 
             for (Product value : products) {
-                for (int j = 0; j < 2; j++) {
+                for (int j = 1; j < 3; j++) {
                     TableColumn<Product, ?> col = columns.get(j);
                     String cellValue = String.valueOf(col.getCellData(value)).toLowerCase();
 
