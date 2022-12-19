@@ -6,6 +6,7 @@ import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
 import com.ecanteen.ecanteen.utils.ReportGenerator;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,9 +18,6 @@ import javafx.scene.control.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
@@ -78,6 +76,10 @@ public class IncomeRecapController implements Initializable {
     @FXML
     private TableColumn<Income, String> dateTableColumn;
     @FXML
+    private TableColumn<Income, String> productTableColumn;
+    @FXML
+    private TableColumn<Income, Integer> qtyTableColumn;
+    @FXML
     private TableColumn<Income, String> incomeTableColumn;
     @FXML
     private TableColumn<Income, String> profitTableColumn;
@@ -118,6 +120,8 @@ public class IncomeRecapController implements Initializable {
         incomeTableView.setItems(incomes);
         noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(incomeTableView.getItems().indexOf(data.getValue()) + 1));
         dateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDate()));
+        productTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct().getName()));
+        qtyTableColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getQty()).asObject());
         incomeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIncome()));
         profitTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProfit()));
 
@@ -160,46 +164,29 @@ public class IncomeRecapController implements Initializable {
     static void getTotal(Button printButton, TableView<Income> incomeTableView, ObservableList<Income> incomes, TextField totalIncomeTextField, TextField totalProfitTextField) {
         printButton.setDisable(incomeTableView.getItems().isEmpty());
 
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator('.');
-        formatter.setDecimalFormatSymbols(symbols);
-
-        int incomeInt;
-        int profitInt;
         int totalIncomeInt = 0;
         int totalProfitInt = 0;
 
         for (Income i : incomes) {
-            String[] incomeArray = i.getIncome().split("\\.");
-            String[] profitArray = i.getProfit().split("\\.");
-            StringBuilder inc = new StringBuilder();
-            StringBuilder pro = new StringBuilder();
-            for (String s : incomeArray) {
-                inc.append(s);
-            }
-            for (String s : profitArray) {
-                pro.append(s);
-            }
-            incomeInt = Integer.parseInt(String.valueOf(inc));
-            profitInt = Integer.parseInt(String.valueOf(pro));
+            int incomeInt = Helper.currencyToInt(i.getIncome());
+            int profitInt = Helper.currencyToInt(i.getProfit());
             totalIncomeInt += incomeInt;
             totalProfitInt += profitInt;
         }
 
-        String totalIncomeString = formatter.format(totalIncomeInt);
-        String totalProfitString = formatter.format(totalProfitInt);
+        String totalIncomeString = Helper.currencyToString(totalIncomeInt);
+        String totalProfitString = Helper.currencyToString(totalProfitInt);
 
         if (totalIncomeInt != 0) {
             totalIncomeTextField.setText(totalIncomeString);
         } else {
-            totalIncomeTextField.setText("");
+            totalIncomeTextField.clear();
         }
 
         if (totalProfitInt != 0) {
             totalProfitTextField.setText(totalProfitString);
         } else {
-            totalProfitTextField.setText("");
+            totalProfitTextField.clear();
         }
     }
 
@@ -207,15 +194,22 @@ public class IncomeRecapController implements Initializable {
     private void printButtonAction(ActionEvent actionEvent) {
         incomes = incomeTableView.getItems();
 
+        int totalQtyInt = 0;
+        for (Income i : incomes) {
+            int qty = i.getQty();
+            totalQtyInt += qty;
+        }
+
         String fromDate = fromDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", new Locale("id")));
         String toDate = toDatePicker.getValue().format(DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", new Locale("id")));
         String employee = Common.user.getName();
+        String totalQty = String.valueOf(totalQtyInt);
         String totalIncome = totalIncomeTextField.getText();
         String totalProfit = totalProfitTextField.getText();
         String dateNow = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         String timeNow = Helper.formattedTimeNow();
 
-        new ReportGenerator().printIncomeRecap(incomes, totalIncome, totalProfit, fromDate, toDate, employee, dateNow, timeNow);
+        new ReportGenerator().printIncomeRecap(incomes, totalQty, totalIncome, totalProfit, fromDate, toDate, employee, dateNow, timeNow);
     }
 
     @FXML
@@ -241,6 +235,11 @@ public class IncomeRecapController implements Initializable {
     @FXML
     private void userButtonAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(userMenuButton, "Admin - User", "user-view.fxml");
+    }
+
+    @FXML
+    private void customerButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(customerMenuButton, "Admin - Pelanggan", "customer-view.fxml");
     }
 
     @FXML

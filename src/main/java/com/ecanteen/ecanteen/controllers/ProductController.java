@@ -7,6 +7,7 @@ import com.ecanteen.ecanteen.dao.TransactionDaoImpl;
 import com.ecanteen.ecanteen.entities.Category;
 import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Supplier;
+import com.ecanteen.ecanteen.utils.Common;
 import com.ecanteen.ecanteen.utils.Helper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -215,18 +216,20 @@ public class ProductController implements Initializable {
         selectedProduct.setDateAdded(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         content = "Anda yakin ingin mengubah?";
-        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) == ButtonType.OK) {
-            try {
-                if (productDao.updateData(selectedProduct) == 1) {
-                    products.clear();
-                    products.addAll(productDao.fetchAll());
-                    resetProduct();
-                    content = "Data berhasil diubah!";
-                    Helper.alert(Alert.AlertType.INFORMATION, content);
-                }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
+        if (Helper.alert(Alert.AlertType.CONFIRMATION, content) != ButtonType.OK) {
+            return;
+        }
+
+        try {
+            if (productDao.updateData(selectedProduct) == 1) {
+                products.clear();
+                products.addAll(productDao.fetchAll());
+                resetProduct();
+                content = "Data berhasil diubah!";
+                Helper.alert(Alert.AlertType.INFORMATION, content);
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -265,11 +268,10 @@ public class ProductController implements Initializable {
     @FXML
     private void productTableViewClicked(MouseEvent mouseEvent) {
         selectFromTableView();
-        productTableView.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
-                selectFromTableView();
-            }
 
+        productTableView.getSelectionModel().selectedItemProperty().addListener((observableValue, customer, t1) -> selectFromTableView());
+
+        productTableView.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 nameTextField.requestFocus();
             }
@@ -282,12 +284,16 @@ public class ProductController implements Initializable {
             barcodeTextField.setText(selectedProduct.getBarcode());
             nameTextField.setText(selectedProduct.getName());
             categoryComboBox.setValue(selectedProduct.getCategory());
-            purchasePriceTextField.setText(String.valueOf(selectedProduct.getPurchasePrice()));
-            sellingPriceTextField.setText(String.valueOf(selectedProduct.getSellingPrice()));
+            Common.oldPurchasePrice = selectedProduct.getPurchasePrice();
+            Common.oldSellingPrice = selectedProduct.getSellingPrice();
+            purchasePriceTextField.setText(selectedProduct.getPurchasePrice());
+            sellingPriceTextField.setText(selectedProduct.getSellingPrice());
             supplierComboBox.setValue(selectedProduct.getSupplier());
             barcodeTextField.setDisable(true);
             addButton.setDisable(true);
+            addButton.setDefaultButton(false);
             updateButton.setDisable(false);
+            updateButton.setDefaultButton(true);
             deleteButton.setDisable(false);
             resetButton.setDisable(false);
         }
@@ -332,7 +338,9 @@ public class ProductController implements Initializable {
         resetError();
         barcodeTextField.setDisable(false);
         addButton.setDisable(false);
+        addButton.setDefaultButton(true);
         updateButton.setDisable(true);
+        updateButton.setDefaultButton(false);
         deleteButton.setDisable(true);
         resetButton.setDisable(true);
         barcodeTextField.requestFocus();
@@ -414,6 +422,11 @@ public class ProductController implements Initializable {
     @FXML
     private void userButtonAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(userMenuButton, "Admin - User", "user-view.fxml");
+    }
+
+    @FXML
+    private void customerButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(customerMenuButton, "Admin - Pelanggan", "customer-view.fxml");
     }
 
     @FXML

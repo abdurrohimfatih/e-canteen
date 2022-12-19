@@ -20,9 +20,6 @@ import org.controlsfx.control.SearchableComboBox;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -145,22 +142,12 @@ public class SupplierReportController implements Initializable {
         supplyTableView.setItems(supplies);
         suppliesData = supplyTableView.getItems();
 
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator('.');
-        formatter.setDecimalFormatSymbols(symbols);
-
         int totalInt = 0;
         for (Supply i : suppliesData) {
-            String[] subtotalArray = i.getSubtotal().split("\\.");
-            StringBuilder sub = new StringBuilder();
-            for (String s : subtotalArray) {
-                sub.append(s);
-            }
-            int subtotalInt = Integer.parseInt(String.valueOf(sub));
+            int subtotalInt = Helper.currencyToInt(i.getSubtotal());
             totalInt += subtotalInt;
         }
-        String totalString = formatter.format(totalInt);
+        String totalString = Helper.currencyToString(totalInt);
 
         if (totalInt != 0) {
             totalTextField.setText(totalString);
@@ -190,22 +177,12 @@ public class SupplierReportController implements Initializable {
         supplyTableView.setItems(supplies);
         suppliesData = supplyTableView.getItems();
 
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator('.');
-        formatter.setDecimalFormatSymbols(symbols);
-
         int totalInt = 0;
         for (Supply i : suppliesData) {
-            String[] subtotalArray = i.getSubtotal().split("\\.");
-            StringBuilder sub = new StringBuilder();
-            for (String s : subtotalArray) {
-                sub.append(s);
-            }
-            int subtotalInt = Integer.parseInt(String.valueOf(sub));
+            int subtotalInt = Helper.currencyToInt(i.getSubtotal());
             totalInt += subtotalInt;
         }
-        String totalString = formatter.format(totalInt);
+        String totalString = Helper.currencyToString(totalInt);
 
         if (totalInt != 0) {
             totalTextField.setText(totalString);
@@ -262,6 +239,11 @@ public class SupplierReportController implements Initializable {
     @FXML
     private void userButtonAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(userMenuButton, "Admin - User", "user-view.fxml");
+    }
+
+    @FXML
+    private void customerButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(customerMenuButton, "Admin - Pelanggan", "customer-view.fxml");
     }
 
     @FXML

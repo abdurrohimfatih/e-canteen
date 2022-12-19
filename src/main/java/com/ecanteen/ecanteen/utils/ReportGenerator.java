@@ -47,9 +47,11 @@ public class ReportGenerator {
                 param.put("name", name);
                 param.put("date", transaction.getDate());
                 param.put("time", transaction.getTime());
-                param.put("totalAmount", Common.totalAmountString);
-                param.put("pay", transaction.getPayAmount());
-                param.put("change", transaction.getChange());
+                param.put("total", Common.total);
+                param.put("pay", Common.pay);
+                param.put("change", Common.change);
+                param.put("payOrOld", Common.payOrOld);
+                param.put("changeOrNew", Common.changeOrNew);
 
                 try {
                     InputStream inputStream = this.getClass().getResourceAsStream("/com/ecanteen/ecanteen/template/receipt-report.jasper");
@@ -185,7 +187,7 @@ public class ReportGenerator {
         service.shutdown();
     }
 
-    public void printIncomeReport(ObservableList<Income> incomes, String totalIncome, String totalProfit, String date, String employee, String dateNow, String timeNow) {
+    public void printIncomeReport(ObservableList<Income> incomes, String totalQty, String totalIncome, String totalProfit, String date, String employee, String dateNow, String timeNow) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -195,7 +197,8 @@ public class ReportGenerator {
 
                 for (Income item : incomes) {
                     Income income = new Income();
-                    income.setName(item.getCashier().getName());
+                    income.setProductName(item.getProduct().getName());
+                    income.setQty(item.getQty());
                     income.setIncome(item.getIncome());
                     income.setProfit(item.getProfit());
 
@@ -210,6 +213,7 @@ public class ReportGenerator {
                 param.put("date", date);
                 param.put("employee", employee);
                 param.put("bts-mart-dir", logoStream);
+                param.put("total-qty", totalQty);
                 param.put("total-income", totalIncome);
                 param.put("total-profit", totalProfit);
                 param.put("date-now", dateNow);
@@ -236,7 +240,7 @@ public class ReportGenerator {
         service.shutdown();
     }
 
-    public void printIncomeRecap(ObservableList<Income> incomes, String totalIncome, String totalProfit, String fromDate, String toDate, String employee, String dateNow, String timeNow) {
+    public void printIncomeRecap(ObservableList<Income> incomes, String totalQty, String totalIncome, String totalProfit, String fromDate, String toDate, String employee, String dateNow, String timeNow) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -247,6 +251,8 @@ public class ReportGenerator {
                 for (Income item : incomes) {
                     Income income = new Income();
                     income.setDate(item.getDate());
+                    income.setProductName(item.getProduct().getName());
+                    income.setQty(item.getQty());
                     income.setIncome(item.getIncome());
                     income.setProfit(item.getProfit());
 
@@ -262,6 +268,7 @@ public class ReportGenerator {
                 param.put("to-date", toDate);
                 param.put("employee", employee);
                 param.put("bts-mart-dir", logoStream);
+                param.put("total-qty", totalQty);
                 param.put("total-income", totalIncome);
                 param.put("total-profit", totalProfit);
                 param.put("date-now", dateNow);

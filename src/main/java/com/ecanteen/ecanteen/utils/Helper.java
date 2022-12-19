@@ -15,9 +15,13 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class Helper {
@@ -27,6 +31,25 @@ public class Helper {
         stage.getScene().setRoot(fxmlLoader.load());
         stage.setTitle(title + " | IDC");
         stage.show();
+    }
+
+    public static String currencyToString(int currency) {
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        formatter.setDecimalFormatSymbols(symbols);
+
+        return formatter.format(currency);
+    }
+
+    public static Integer currencyToInt(String currency) {
+        String[] currencyArray = currency.split("\\.");
+        StringBuilder curr = new StringBuilder();
+        for (String c : currencyArray) {
+            curr.append(c);
+        }
+
+        return Integer.parseInt(String.valueOf(curr));
     }
 
     public static void addTextLimiter(final TextInputControl tf, final int maxLength) {
@@ -187,6 +210,8 @@ public class Helper {
             ((Button) pane.lookupButton(ButtonType.YES)).setText("Ya");
             ((Button) pane.lookupButton(ButtonType.NO)).setText("Tidak");
             ((Button) pane.lookupButton(ButtonType.CANCEL)).setText("Batal");
+            pane.lookupButton(ButtonType.CANCEL).getStyleClass().add("delete");
+            pane.lookupButton(ButtonType.CANCEL).getStyleClass().add("cancel-button");
         } else {
             image = new Image(String.valueOf(Main.class.getResource("image/success.png")));
             title = "Sukses";
@@ -206,18 +231,25 @@ public class Helper {
         pane.getStyleClass().add("myDialog");
         pane.setPrefWidth(400);
 
-        if (content.equals("Kembalian Rp")) {
-            pane.setContent(hBox);
-            pane.getContent().setStyle("-fx-alignment: center;");
-        } else if (content.equals("Tidak jadi membeli ini?")) {
-            Label label1 = new Label(content);
-            Label label2 = new Label(Common.productName);
-            label2.setStyle("-fx-font-weight: bold");
-            VBox vBox = new VBox();
-            vBox.getChildren().add(label1);
-            vBox.getChildren().add(label2);
-
-            pane.setContent(vBox);
+        switch (content) {
+            case "Kembalian (Rp)" -> {
+                pane.setContent(hBox);
+                pane.getContent().setStyle("-fx-alignment: center;");
+            }
+            case "Sisa saldo (Rp)" -> {
+                textField.setText(Common.change);
+                pane.setContent(hBox);
+                pane.getContent().setStyle("-fx-alignment: center;");
+            }
+            case "Tidak jadi membeli ini?" -> {
+                Label label1 = new Label(content);
+                Label label2 = new Label(Common.productName);
+                label2.setStyle("-fx-font-weight: bold");
+                VBox vBox = new VBox();
+                vBox.getChildren().add(label1);
+                vBox.getChildren().add(label2);
+                pane.setContent(vBox);
+            }
         }
 
         alert.showAndWait();

@@ -60,7 +60,7 @@ public class UserDaoImpl implements LoginService, DaoService<User> {
                         } else {
                             user.setStatus("Tidak Aktif");
                         }
-                        user.setTransactionAmount(TransactionDaoImpl.getTransactionAmount(user));
+                        user.setTransactionAmount(TransactionDaoImpl.getUserTransactionAmount(user));
                         users.add(user);
                     }
                 }

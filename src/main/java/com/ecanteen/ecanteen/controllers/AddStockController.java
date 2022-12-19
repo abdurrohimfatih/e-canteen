@@ -10,6 +10,8 @@ import com.ecanteen.ecanteen.utils.ReportGenerator;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -314,11 +316,10 @@ public class AddStockController implements Initializable {
     @FXML
     private void stockTableViewClicked(MouseEvent mouseEvent) {
         selectFromTableView();
-        stockTableView.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
-                selectFromTableView();
-            }
 
+        stockTableView.getSelectionModel().selectedItemProperty().addListener((observableValue, stock, t1) -> selectFromTableView());
+
+        stockTableView.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 productComboBox.requestFocus();
             }
@@ -337,7 +338,9 @@ public class AddStockController implements Initializable {
                 expiredDateDatePicker.setValue(Helper.formatter(selectedStock.getProduct().getExpiredDate()));
             }
             addButton.setDisable(true);
+            addButton.setDefaultButton(false);
             updateButton.setDisable(false);
+            updateButton.setDefaultButton(true);
             deleteButton.setDisable(false);
             resetButton.setDisable(false);
         }
@@ -370,7 +373,9 @@ public class AddStockController implements Initializable {
         stockTableView.getSelectionModel().clearSelection();
         resetError();
         addButton.setDisable(false);
+        addButton.setDefaultButton(true);
         updateButton.setDisable(true);
+        updateButton.setDefaultButton(false);
         deleteButton.setDisable(true);
         resetButton.setDisable(true);
         productComboBox.requestFocus();
@@ -433,6 +438,21 @@ public class AddStockController implements Initializable {
             }
         } else {
             Helper.changePage(userMenuButton, "Admin - User", "user-view.fxml");
+        }
+    }
+
+    @FXML
+    private void customerButtonAction(ActionEvent actionEvent) throws IOException {
+        if (!stockTableView.getItems().isEmpty()) {
+            content = "Data belum dicetak. Apakah akan dicetak?";
+            ButtonType result = Helper.alert(Alert.AlertType.NONE, content);
+            if (result == ButtonType.YES) {
+                printButton.fire();
+            } else if (result == ButtonType.NO) {
+                Helper.changePage(customerMenuButton, "Admin - Pelanggan", "customer-view.fxml");
+            }
+        } else {
+            Helper.changePage(customerMenuButton, "Admin - Pelanggan", "customer-view.fxml");
         }
     }
 

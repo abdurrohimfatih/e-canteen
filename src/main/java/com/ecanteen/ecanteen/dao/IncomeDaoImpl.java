@@ -3,82 +3,54 @@ package com.ecanteen.ecanteen.dao;
 import com.ecanteen.ecanteen.entities.Income;
 import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Supply;
-import com.ecanteen.ecanteen.entities.User;
 import com.ecanteen.ecanteen.utils.Common;
+import com.ecanteen.ecanteen.utils.Helper;
 import com.ecanteen.ecanteen.utils.MySQLConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class IncomeDaoImpl {
     public List<Income> fetchIncomeAdmin(String date) throws SQLException, ClassNotFoundException {
         List<Income> incomes = new ArrayList<>();
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator('.');
-        formatter.setDecimalFormatSymbols(symbols);
 
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT t.username AS cashier, u.name, SUM(total_amount) AS income FROM transaction t JOIN user u ON u.username = t.username WHERE t.date = ? GROUP BY t.username";
-
-            String query2 = "SELECT s.quantity AS qty, p.purchase_price AS pp, p.selling_price AS sp FROM sale s JOIN product p ON s.barcode = p.barcode JOIN transaction t ON s.transaction_id = t.id WHERE t.date = ? AND t.username = ?";
+            String query = "SELECT p.name AS product_name, p.purchase_price AS ppp, p.selling_price AS spp, SUM(s.quantity) AS quantity, s.purchase_price, s.selling_price FROM sale s JOIN transaction t on s.transaction_id = t.id JOIN product p on p.barcode = s.barcode WHERE t.date = ? GROUP BY p.barcode ORDER BY p.barcode";
 
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setString(1, date);
 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
-                        User user = new User();
-                        user.setUsername(rs.getString("cashier"));
-                        user.setName(rs.getString("name"));
+                        Product product = new Product();
+                        product.setName(rs.getString("product_name"));
 
                         Income income = new Income();
-                        income.setCashier(user);
+                        income.setProduct(product);
+                        income.setQty(rs.getInt("quantity"));
 
-                        String incomeValue = formatter.format(rs.getInt("income"));
+                        String purchasePrice = rs.getString("purchase_price");
+                        String sellingPrice = rs.getString("selling_price");
 
-                        income.setIncome(incomeValue);
+                        int purchasePriceInt = Helper.currencyToInt(rs.getString("purchase_price"));
+                        int sellingPriceInt = Helper.currencyToInt(rs.getString("selling_price"));
 
-                        int profitInt = 0;
-
-                        try (PreparedStatement ps2 = connection.prepareStatement(query2)) {
-                            ps2.setString(1, date);
-                            ps2.setString(2, income.getCashier().getUsername());
-
-                            try (ResultSet rs2 = ps2.executeQuery()) {
-                                while (rs2.next()) {
-                                    int qty = rs2.getInt("qty");
-                                    String pp = rs2.getString("pp");
-                                    String sp = rs2.getString("sp");
-
-                                    String[] ppArray = pp.split("\\.");
-                                    String[] spArray = sp.split("\\.");
-                                    StringBuilder ppSb = new StringBuilder();
-                                    StringBuilder spSb = new StringBuilder();
-                                    for (String s : ppArray) {
-                                        ppSb.append(s);
-                                    }
-                                    for (String s : spArray) {
-                                        spSb.append(s);
-                                    }
-                                    int ppInt = Integer.parseInt(String.valueOf(ppSb));
-                                    int spInt = Integer.parseInt(String.valueOf(spSb));
-
-                                    int subProfitInt = (spInt - ppInt) * qty;
-                                    profitInt += subProfitInt;
-                                }
-                            }
+                        if (purchasePrice.equals("") || sellingPrice.equals("") || purchasePriceInt == 0 || sellingPriceInt == 0) {
+                            purchasePriceInt = Helper.currencyToInt(rs.getString("ppp"));
+                            sellingPriceInt = Helper.currencyToInt(rs.getString("spp"));
                         }
 
-                        String profitString = formatter.format(profitInt);
+                        int incomeInt = income.getQty() * sellingPriceInt;
+                        int profitInt = (sellingPriceInt - purchasePriceInt) * income.getQty();
+                        String incomeString = Helper.currencyToString(incomeInt);
+                        String profitString = Helper.currencyToString(profitInt);
+
+                        income.setIncome(incomeString);
                         income.setProfit(profitString);
                         incomes.add(income);
                     }
@@ -91,15 +63,8 @@ public class IncomeDaoImpl {
 
     public List<Income> fetchIncomeRecap(String fromDate, String toDate) throws SQLException, ClassNotFoundException {
         List<Income> incomes = new ArrayList<>();
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator('.');
-        formatter.setDecimalFormatSymbols(symbols);
-
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT DATE_FORMAT(t.date, '%d-%m-%Y') AS dt, t.date, SUM(total_amount) AS income FROM transaction t WHERE(t.date >= ? AND t.date <= ?) GROUP BY t.date";
-
-            String query2 = "SELECT s.quantity AS qty, p.purchase_price AS pp, p.selling_price AS sp FROM sale s JOIN product p ON s.barcode = p.barcode JOIN transaction t ON s.transaction_id = t.id WHERE t.date = ?";
+            String query = "SELECT DATE_FORMAT(t.date, '%d-%m-%Y') AS date, p.name AS product_name, p.purchase_price AS ppp, p.selling_price AS spp, SUM(s.quantity) AS quantity, s.purchase_price, s.selling_price FROM sale s JOIN transaction t on s.transaction_id = t.id JOIN product p on p.barcode = s.barcode WHERE(t.date >= ? AND t.date <= ?) GROUP BY p.barcode, t.date ORDER BY t.date, p.barcode";
 
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setString(1, fromDate);
@@ -107,45 +72,31 @@ public class IncomeDaoImpl {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
+                        Product product = new Product();
+                        product.setName(rs.getString("product_name"));
+
                         Income income = new Income();
-                        income.setDate(rs.getString("dt"));
+                        income.setProduct(product);
+                        income.setDate(rs.getString("date"));
+                        income.setQty(rs.getInt("quantity"));
 
-                        String incomeValue = formatter.format(rs.getInt("income"));
+                        String purchasePrice = rs.getString("purchase_price");
+                        String sellingPrice = rs.getString("selling_price");
 
-                        income.setIncome(incomeValue);
-                        int profitInt = 0;
+                        int purchasePriceInt = Helper.currencyToInt(rs.getString("purchase_price"));
+                        int sellingPriceInt = Helper.currencyToInt(rs.getString("selling_price"));
 
-                        try (PreparedStatement ps2 = connection.prepareStatement(query2)) {
-                            ps2.setString(1, rs.getString("date"));
-
-                            try (ResultSet rs2 = ps2.executeQuery()) {
-                                while (rs2.next()) {
-                                    int qty = rs2.getInt("qty");
-                                    String pp = rs2.getString("pp");
-                                    String sp = rs2.getString("sp");
-
-                                    String[] ppArray = pp.split("\\.");
-                                    String[] spArray = sp.split("\\.");
-                                    StringBuilder ppSb = new StringBuilder();
-                                    StringBuilder spSb = new StringBuilder();
-                                    for (String s : ppArray) {
-                                        ppSb.append(s);
-                                    }
-                                    for (String s : spArray) {
-                                        spSb.append(s);
-                                    }
-                                    int ppInt = Integer.parseInt(String.valueOf(ppSb));
-                                    int spInt = Integer.parseInt(String.valueOf(spSb));
-
-                                    int subProfitInt = (spInt - ppInt) * qty;
-                                    profitInt += subProfitInt;
-                                }
-                            }
+                        if (purchasePrice.equals("") || sellingPrice.equals("") || purchasePriceInt == 0 || sellingPriceInt == 0) {
+                            purchasePriceInt = Helper.currencyToInt(rs.getString("ppp"));
+                            sellingPriceInt = Helper.currencyToInt(rs.getString("spp"));
                         }
 
-                        String profitString = formatter.format(profitInt);
+                        int incomeInt = income.getQty() * sellingPriceInt;
+                        int profitInt = (sellingPriceInt - purchasePriceInt) * income.getQty();
+                        String incomeString = Helper.currencyToString(incomeInt);
+                        String profitString = Helper.currencyToString(profitInt);
+                        income.setIncome(incomeString);
                         income.setProfit(profitString);
-
                         incomes.add(income);
                     }
                 }
@@ -158,23 +109,31 @@ public class IncomeDaoImpl {
     public List<Income> fetchIncomeCashier() throws SQLException, ClassNotFoundException {
         List<Income> incomes = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT id, DATE_FORMAT(date, '%d-%m-%Y') AS date, SUM(total_amount) AS income FROM transaction WHERE username = ? GROUP BY date ORDER BY 1 DESC";
-            try (PreparedStatement ps = connection.prepareStatement(query)) {
+            String q = "SELECT p.name AS product_name, p.selling_price AS spp, SUM(s.quantity) AS quantity, s.selling_price FROM sale s JOIN transaction t on s.transaction_id = t.id JOIN product p on p.barcode = s.barcode WHERE  t.username = ? AND t.date = ? GROUP BY p.barcode ORDER BY p.barcode";
+
+            try (PreparedStatement ps = connection.prepareStatement(q)) {
                 ps.setString(1, Common.user.getUsername());
+                ps.setString(2, String.valueOf(LocalDate.now()));
 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
+                        Product product = new Product();
+                        product.setName(rs.getString("product_name"));
+
                         Income income = new Income();
-                        income.setDate(rs.getString("date"));
+                        income.setProduct(product);
+                        income.setQty(rs.getInt("quantity"));
 
-                        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-                        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-                        symbols.setGroupingSeparator('.');
-                        formatter.setDecimalFormatSymbols(symbols);
-                        String incomeValue = formatter.format(rs.getInt("income"));
+                        String sellingPrice = rs.getString("selling_price");
+                        int sellingPriceInt = Helper.currencyToInt(rs.getString("selling_price"));
 
-                        income.setIncome(incomeValue);
+                        if (sellingPrice.equals("") || sellingPriceInt == 0) {
+                            sellingPriceInt = Helper.currencyToInt(rs.getString("spp"));
+                        }
 
+                        int incomeInt = income.getQty() * sellingPriceInt;
+                        String incomeString = Helper.currencyToString(incomeInt);
+                        income.setIncome(incomeString);
                         incomes.add(income);
                     }
                 }
@@ -187,7 +146,7 @@ public class IncomeDaoImpl {
     public List<Supply> fetchSupplierReport(String supplierId, String transactionDate) throws SQLException, ClassNotFoundException {
         List<Supply> supplies = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()) {
-            String querySold = "SELECT p.barcode, p.name, p.purchase_price, SUM(sa.quantity) AS sold FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN transaction t ON sa.transaction_id = t.id WHERE p.supplier_id = ? AND t.date = ? GROUP BY sa.barcode";
+            String querySold = "SELECT p.barcode, p.name, p.purchase_price AS ppp, sa.purchase_price, SUM(sa.quantity) AS sold FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN transaction t ON sa.transaction_id = t.id WHERE p.supplier_id = ? AND t.date = ? GROUP BY sa.barcode";
 
             String queryAdded = "SELECT SUM(st.qty) AS added FROM stock st WHERE st.barcode = ? AND st.date = ? AND st.type = ?";
 
@@ -211,20 +170,14 @@ public class IncomeDaoImpl {
 
                         String purchasePrice = rs.getString("purchase_price");
                         int sold = supply.getSold();
+                        int ppInt = Helper.currencyToInt(purchasePrice);
 
-                        String[] ppArray = purchasePrice.split("\\.");
-                        StringBuilder ppSb = new StringBuilder();
-                        for (String s : ppArray) {
-                            ppSb.append(s);
+                        if (ppInt == 0) {
+                            ppInt = Helper.currencyToInt(rs.getString("ppp"));
                         }
-                        int ppInt = Integer.parseInt(String.valueOf(ppSb));
-                        int subtotalInt = sold * ppInt;
 
-                        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-                        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-                        symbols.setGroupingSeparator('.');
-                        formatter.setDecimalFormatSymbols(symbols);
-                        String subtotalString = formatter.format(subtotalInt);
+                        int subtotalInt = sold * ppInt;
+                        String subtotalString = Helper.currencyToString(subtotalInt);
 
                         supply.setSubtotal(subtotalString);
 
@@ -269,7 +222,7 @@ public class IncomeDaoImpl {
     public List<Supply> fetchSupplierRecap(String supplierId, String fromDate, String toDate) throws SQLException, ClassNotFoundException {
         List<Supply> supplies = new ArrayList<>();
         try (Connection connection = MySQLConnection.createConnection()) {
-            String querySold = "SELECT DATE_FORMAT(t.date, '%d-%m-%Y') AS dt, t.date, p.barcode, p.name, p.purchase_price, SUM(sa.quantity) AS sold FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN transaction t ON sa.transaction_id = t.id WHERE p.supplier_id = ? AND (t.date >= ? AND t.date <= ?) GROUP BY t.date, sa.barcode";
+            String querySold = "SELECT DATE_FORMAT(t.date, '%d-%m-%Y') AS dt, t.date, p.barcode, p.name, p.purchase_price AS ppp, sa.purchase_price, SUM(sa.quantity) AS sold FROM sale sa JOIN product p ON p.barcode = sa.barcode JOIN transaction t ON sa.transaction_id = t.id WHERE p.supplier_id = ? AND (t.date >= ? AND t.date <= ?) GROUP BY t.date, sa.barcode";
 
             String queryAdded = "SELECT SUM(st.qty) AS added FROM stock st WHERE st.barcode = ? AND st.date = ? AND st.type = ?";
 
@@ -289,20 +242,14 @@ public class IncomeDaoImpl {
 
                         String purchasePrice = rs.getString("purchase_price");
                         int sold = supply.getSold();
+                        int ppInt = Helper.currencyToInt(purchasePrice);
 
-                        String[] ppArray = purchasePrice.split("\\.");
-                        StringBuilder ppSb = new StringBuilder();
-                        for (String s : ppArray) {
-                            ppSb.append(s);
+                        if (ppInt == 0) {
+                            ppInt = Helper.currencyToInt(rs.getString("ppp"));
                         }
-                        int ppInt = Integer.parseInt(String.valueOf(ppSb));
-                        int subtotalInt = sold * ppInt;
 
-                        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-                        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-                        symbols.setGroupingSeparator('.');
-                        formatter.setDecimalFormatSymbols(symbols);
-                        String subtotalString = formatter.format(subtotalInt);
+                        int subtotalInt = sold * ppInt;
+                        String subtotalString = Helper.currencyToString(subtotalInt);
 
                         supply.setSubtotal(subtotalString);
 

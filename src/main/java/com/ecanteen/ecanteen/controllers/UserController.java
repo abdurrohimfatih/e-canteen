@@ -389,11 +389,10 @@ public class UserController implements Initializable {
     @FXML
     private void userTableViewClicked(MouseEvent mouseEvent) {
         selectFromTableView();
-        userTableView.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
-                selectFromTableView();
-            }
 
+        userTableView.getSelectionModel().selectedItemProperty().addListener((observableValue, customer, t1) -> selectFromTableView());
+
+        userTableView.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 usernameTextField.requestFocus();
             }
@@ -417,7 +416,9 @@ public class UserController implements Initializable {
             statusComboBox.setValue(selectedUser.getStatus());
             warningLabel.setText("");
             addButton.setDisable(true);
+            addButton.setDefaultButton(false);
             updateButton.setDisable(false);
+            updateButton.setDefaultButton(true);
             deleteButton.setDisable(false);
             resetButton.setDisable(false);
         }
@@ -467,7 +468,9 @@ public class UserController implements Initializable {
         resetError();
         usernameTextField.setDisable(false);
         addButton.setDisable(false);
+        addButton.setDefaultButton(true);
         updateButton.setDisable(true);
+        updateButton.setDefaultButton(false);
         deleteButton.setDisable(true);
         resetButton.setDisable(true);
         usernameTextField.requestFocus();
@@ -502,6 +505,11 @@ public class UserController implements Initializable {
     @FXML
     private void returnStockMenuItemAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(stockMenuButton, "Admin - Return Stok", "return-stock-view.fxml");
+    }
+
+    @FXML
+    private void customerButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(customerMenuButton, "Admin - Pelanggan", "customer-view.fxml");
     }
 
     @FXML

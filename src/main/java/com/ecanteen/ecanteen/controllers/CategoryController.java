@@ -7,6 +7,8 @@ import com.ecanteen.ecanteen.utils.Helper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -243,11 +245,10 @@ public class CategoryController implements Initializable {
     @FXML
     private void categoryTableViewClicked(MouseEvent mouseEvent) {
         selectFromTableView();
-        categoryTableView.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
-                selectFromTableView();
-            }
 
+        categoryTableView.getSelectionModel().selectedItemProperty().addListener((observableValue, category, t1) -> selectFromTableView());
+
+        categoryTableView.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 nameTextField.requestFocus();
             }
@@ -277,7 +278,9 @@ public class CategoryController implements Initializable {
             idTextField.setText(String.valueOf(selectedCategory.getId()));
             nameTextField.setText(selectedCategory.getName());
             addButton.setDisable(true);
+            addButton.setDefaultButton(false);
             updateButton.setDisable(false);
+            updateButton.setDefaultButton(true);
             deleteButton.setDisable(false);
             resetButton.setDisable(false);
         }
@@ -289,7 +292,9 @@ public class CategoryController implements Initializable {
         selectedCategory = null;
         categoryTableView.getSelectionModel().clearSelection();
         addButton.setDisable(false);
+        addButton.setDefaultButton(true);
         updateButton.setDisable(true);
+        updateButton.setDefaultButton(false);
         deleteButton.setDisable(true);
         resetButton.setDisable(true);
         nameTextField.requestFocus();
@@ -313,6 +318,11 @@ public class CategoryController implements Initializable {
     @FXML
     private void userButtonAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(userMenuButton, "Admin - User", "user-view.fxml");
+    }
+
+    @FXML
+    private void customerButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(customerMenuButton, "Admin - Pelanggan", "customer-view.fxml");
     }
 
     @FXML

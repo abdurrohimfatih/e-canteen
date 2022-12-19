@@ -109,6 +109,23 @@ public class ProductDaoImpl implements DaoService<Product> {
         return result;
     }
 
+//    public void updatePrice(Price price, Product product) throws SQLException, ClassNotFoundException {
+//        try (Connection connection = MySQLConnection.createConnection()) {
+//            String query = "INSERT INTO price (barcode, purchase_price, selling_price) VALUES(?, ?, ?)";
+//            try (PreparedStatement ps = connection.prepareStatement(query)) {
+//                ps.setString(1, product.getBarcode());
+//                ps.setString(2, price.getPurchasePrice());
+//                ps.setString(3, price.getSellingPrice());
+//
+//                if (ps.executeUpdate() != 0) {
+//                    connection.commit();
+//                } else {
+//                    connection.rollback();
+//                }
+//            }
+//        }
+//    }
+
     @Override
     public int deleteData(Product object) throws SQLException, ClassNotFoundException {
         int result = 0;
@@ -246,7 +263,7 @@ public class ProductDaoImpl implements DaoService<Product> {
     public Product fetchProduct(String barcode) throws SQLException, ClassNotFoundException {
         Product product = null;
         try (Connection connection = MySQLConnection.createConnection()) {
-            String query = "SELECT p.barcode, p.name, p.selling_price FROM product p JOIN supplier s ON p.supplier_id = s.id WHERE p.barcode = ? && s.status = 1";
+            String query = "SELECT p.barcode, p.name, p.purchase_price, p.selling_price FROM product p JOIN supplier s ON p.supplier_id = s.id WHERE p.barcode = ? && s.status = 1";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
                 ps.setString(1, barcode);
 
@@ -255,6 +272,7 @@ public class ProductDaoImpl implements DaoService<Product> {
                         product = new Product();
                         product.setBarcode(rs.getString("barcode"));
                         product.setName(rs.getString("name"));
+                        product.setPurchasePrice(rs.getString("purchase_price"));
                         product.setSellingPrice(rs.getString("selling_price"));
                     }
                 }

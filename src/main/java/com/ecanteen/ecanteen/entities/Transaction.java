@@ -3,11 +3,10 @@ package com.ecanteen.ecanteen.entities;
 public class Transaction {
     private String id;
     private String username;
+    private Customer customer;
     private String date;
     private String time;
-    private String totalAmount;
-    private String payAmount;
-    private String change;
+    private int total;
 
     public String getId() {
         return id;
@@ -19,6 +18,13 @@ public class Transaction {
 
     public String getUsername() {
         return username;
+    }
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public void setUsername(String username) {
@@ -41,28 +47,12 @@ public class Transaction {
         this.time = time;
     }
 
-    public String getTotalAmount() {
-        return totalAmount;
+    public int getTotal() {
+        return total;
     }
 
-    public void setTotalAmount(String totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public String getPayAmount() {
-        return payAmount;
-    }
-
-    public void setPayAmount(String payAmount) {
-        this.payAmount = payAmount;
-    }
-
-    public String getChange() {
-        return change;
-    }
-
-    public void setChange(String change) {
-        this.change = change;
+    public void setTotal(int total) {
+        this.total = total;
     }
 
     @Override

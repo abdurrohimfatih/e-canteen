@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="containerPane" onKeyReleased="#containerPaneKeyReleased" prefHeight="600.0" prefWidth="1100.0" style="-fx-background-color: #75dfff;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.DetailProductCashierController">
+<AnchorPane fx:id="containerPane" onKeyReleased="#containerPaneKeyReleased" prefHeight="600.0" prefWidth="1100.0" styleClass="border-pane" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.DetailProductCashierController">
    <TextField fx:id="searchTextField" layoutX="24.0" layoutY="20.0" onKeyPressed="#searchTextFieldKeyPressed" prefHeight="37.0" prefWidth="275.0" promptText="Cari">
       <font>
          <Font size="16.0" />
@@ -22,12 +22,12 @@
       </Label>
     <TableView fx:id="productTableView" layoutX="300.0" layoutY="160.0" onKeyReleased="#productTableViewKeyReleased" onMouseClicked="#productTableViewClicked" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="77.0">
         <columns>
-         <TableColumn fx:id="noTableColumn" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" styleClass="column-center" text="No" />
-            <TableColumn fx:id="barcodeTableColumn" prefWidth="75.0" text="Barcode" />
+         <TableColumn fx:id="noTableColumn" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" styleClass="column-center" text="#" />
+            <TableColumn fx:id="barcodeTableColumn" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" text="Barcode" />
             <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="Nama Produk" />
-            <TableColumn fx:id="sellingPriceTableColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" styleClass="column-right" text="Harga" />
-            <TableColumn fx:id="stockAmountTableColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" styleClass="column-center" text="Stok" />
-         <TableColumn fx:id="expiredDateTableColumn" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" styleClass="column-center" text="Kedaluwarsa" />
+            <TableColumn fx:id="sellingPriceTableColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" styleClass="column-right" text="Harga" />
+            <TableColumn fx:id="stockAmountTableColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" styleClass="column-center" text="Stok" />
+         <TableColumn fx:id="expiredDateTableColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" styleClass="column-center" text="Kedaluwarsa" />
         </columns>
         <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

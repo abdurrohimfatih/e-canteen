@@ -395,11 +395,10 @@ public class SupplierController implements Initializable {
     @FXML
     private void supplierTableViewClicked(MouseEvent mouseEvent) {
         selectFromTableView();
-        supplierTableView.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
-                selectFromTableView();
-            }
 
+        supplierTableView.getSelectionModel().selectedItemProperty().addListener((observableValue, customer, t1) -> selectFromTableView());
+
+        supplierTableView.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 nameTextField.requestFocus();
             }
@@ -438,7 +437,9 @@ public class SupplierController implements Initializable {
             idTextField.setDisable(true);
             warningLabel.setText("");
             addButton.setDisable(true);
+            addButton.setDefaultButton(false);
             updateButton.setDisable(false);
+            updateButton.setDefaultButton(true);
             deleteButton.setDisable(false);
             resetButton.setDisable(false);
         }
@@ -486,7 +487,9 @@ public class SupplierController implements Initializable {
         resetError();
         idTextField.setDisable(false);
         addButton.setDisable(false);
+        addButton.setDefaultButton(true);
         updateButton.setDisable(true);
+        updateButton.setDefaultButton(false);
         deleteButton.setDisable(true);
         resetButton.setDisable(true);
         idTextField.requestFocus();
@@ -526,6 +529,11 @@ public class SupplierController implements Initializable {
     @FXML
     private void userButtonAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(supplierMenuButton, "Admin - User", "user-view.fxml");
+    }
+
+    @FXML
+    private void customerButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(customerMenuButton, "Admin - Pelanggan", "customer-view.fxml");
     }
 
     @FXML

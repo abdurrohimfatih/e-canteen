@@ -19,7 +19,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" styleClass="border-pane" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.SupplierReportController">
    <top>
-      <AnchorPane prefHeight="70.0" prefWidth="1366.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="70.0" prefWidth="1366.0" style="-fx-background-color: #0c80d4;" BorderPane.alignment="CENTER">
          <HBox alignment="CENTER" layoutX="334.0" layoutY="15.0" spacing="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
             <MenuButton fx:id="masterMenuButton" alignment="CENTER" contentDisplay="CENTER" minHeight="40.0" mnemonicParsing="false" styleClass="menu-button-menu" text="DATA MASTER" textAlignment="CENTER" textFill="WHITE">
                <items>
@@ -53,7 +53,7 @@
                   <Insets />
                </HBox.margin>
             </Button>
-            <Button fx:id="customerMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="40.0" styleClass="button-menu" text="DATA PELANGGAN" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="customerMenuButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#customerButtonAction" prefHeight="40.0" styleClass="button-menu" text="DATA PELANGGAN" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -83,7 +83,7 @@
                </HBox.margin>
                <styleClass>
                   <String fx:value="menu-button-menu" />
-                  <String fx:value="active" />
+                  <String fx:value="button-menu-active" />
                </styleClass>
             </MenuButton>
             <MenuButton fx:id="recapMenuButton" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" styleClass="menu-button-menu" text="REKAPITULASI" textAlignment="CENTER" textFill="WHITE">
@@ -99,14 +99,6 @@
                   <Insets />
                </HBox.margin>
             </MenuButton>
-            <Button fx:id="topUpMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="812.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" styleClass="button-menu" text="TOP UP" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Button>
          </HBox>
          <HBox alignment="CENTER" layoutX="1244.0" layoutY="15.0" spacing="10.0" AnchorPane.rightAnchor="15.0">
             <Button fx:id="settingsButton" alignment="CENTER" contentDisplay="CENTER" disable="true" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="40.0" styleClass="button-menu" textAlignment="CENTER">
@@ -157,13 +149,13 @@
          </HBox>
          <TableView fx:id="supplyTableView" prefWidth="439.0" styleClass="table-income" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="65.0">
             <columns>
-               <TableColumn fx:id="noTableColumn" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" styleClass="column-center" text="No" />
-               <TableColumn fx:id="barcodeTableColumn" prefWidth="75.0" text="Barcode" />
+               <TableColumn fx:id="noTableColumn" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" styleClass="column-center" text="#" />
+               <TableColumn fx:id="barcodeTableColumn" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Barcode" />
                <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="Nama Barang" />
-               <TableColumn fx:id="addedTableColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" styleClass="column-center" text="Masuk" />
-               <TableColumn fx:id="soldTableColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" styleClass="column-center" text="Terjual" />
-               <TableColumn fx:id="returnedTableColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" styleClass="column-center" text="Return" />
-               <TableColumn fx:id="subtotalTableColumn" prefWidth="75.0" styleClass="column-right" text="Subtotal" />
+               <TableColumn fx:id="addedTableColumn" maxWidth="140.0" minWidth="140.0" prefWidth="140.0" styleClass="column-center" text="Masuk" />
+               <TableColumn fx:id="soldTableColumn" maxWidth="140.0" minWidth="140.0" prefWidth="140.0" styleClass="column-center" text="Terjual" />
+               <TableColumn fx:id="returnedTableColumn" maxWidth="140.0" minWidth="140.0" prefWidth="140.0" styleClass="column-center" text="Return" />
+               <TableColumn fx:id="subtotalTableColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" styleClass="column-right" text="Subtotal" />
             </columns>
             <columnResizePolicy>
                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

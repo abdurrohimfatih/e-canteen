@@ -2,8 +2,9 @@ package com.ecanteen.ecanteen.entities;
 
 public class Income {
     private String date;
-    private User cashier;
-    private String name;
+    private Product product;
+    private String productName;
+    private int qty;
     private String income;
     private String profit;
 
@@ -15,20 +16,28 @@ public class Income {
         this.date = date;
     }
 
-    public User getCashier() {
-        return cashier;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setCashier(User cashier) {
-        this.cashier = cashier;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
     }
 
     public String getIncome() {

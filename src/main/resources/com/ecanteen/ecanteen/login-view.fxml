@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -14,18 +15,27 @@
 <?import javafx.scene.text.Font?>
 
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.LoginController">
-    <AnchorPane prefWidth="842.0" style="-fx-background-color: #75dfff;">
+    <AnchorPane prefWidth="842.0" style="-fx-background-color: #47cedf;">
         <VBox alignment="CENTER" layoutY="273.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <Label alignment="CENTER" contentDisplay="CENTER" text="HELLO !" textAlignment="CENTER" textFill="#000986">
+            <Label alignment="CENTER" contentDisplay="CENTER" text="HELLO !" textAlignment="CENTER" textFill="WHITE">
                 <font>
-                    <Font name="System Bold" size="64.0" />
+                    <Font name="System Bold" size="50.0" />
                 </font>
+            <effect>
+               <DropShadow height="10.0" offsetX="1.0" offsetY="1.0" radius="4.5" width="10.0" />
+            </effect>
             </Label>
-            <Label alignment="CENTER" contentDisplay="CENTER" text="WELCOME TO INTEGRATED DIGITAL CANTEEN" textAlignment="CENTER" textFill="#000986">
+            <Label alignment="CENTER" contentDisplay="CENTER" text="WELCOME TO INTEGRATED DIGITAL CANTEEN" textAlignment="CENTER" textFill="WHITE">
                 <font>
                     <Font size="36.0" />
                 </font>
+            <effect>
+               <DropShadow height="10.0" offsetX="1.0" offsetY="1.0" radius="4.5" width="10.0" />
+            </effect>
             </Label>
+            <ImageView fitHeight="179.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@image/cashier.png"/>
+            </ImageView>
         </VBox>
     </AnchorPane>
     <AnchorPane prefWidth="524.0">
@@ -39,7 +49,7 @@
                 </VBox.margin>
                 <Image url="@image/logo.png" />
             </ImageView>
-         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="60.0" layoutY="403.0" prefWidth="424.0" text="Please Login" textAlignment="CENTER" textFill="#23bbcf">
+         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="60.0" layoutY="403.0" prefWidth="424.0" text="Silakan Login" textAlignment="CENTER" textFill="#23bbcf">
             <font>
                <Font name="System Bold" size="28.0" />
             </font>

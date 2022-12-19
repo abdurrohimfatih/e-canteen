@@ -177,6 +177,11 @@ public class StockReportController implements Initializable {
     }
 
     @FXML
+    private void customerButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(customerMenuButton, "Admin - Pelanggan", "customer-view.fxml");
+    }
+
+    @FXML
     private void supplierButtonAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(supplierMenuButton, "Admin - Supplier", "supplier-view.fxml");
     }

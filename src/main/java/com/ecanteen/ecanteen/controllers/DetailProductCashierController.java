@@ -4,6 +4,7 @@ import com.ecanteen.ecanteen.dao.ProductDaoImpl;
 import com.ecanteen.ecanteen.entities.Product;
 import com.ecanteen.ecanteen.entities.Sale;
 import com.ecanteen.ecanteen.utils.Common;
+import com.ecanteen.ecanteen.utils.Helper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -21,10 +22,6 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class DetailProductCashierController implements Initializable {
@@ -90,9 +87,7 @@ public class DetailProductCashierController implements Initializable {
         selectedProduct = productTableView.getSelectionModel().getSelectedItem();
 
         if (selectedProduct != null) {
-            if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.UP) {
-                selectedProduct = productTableView.getSelectionModel().getSelectedItem();
-            }
+            productTableView.getSelectionModel().selectedItemProperty().addListener((observableValue, customer, t1) -> selectedProduct = productTableView.getSelectionModel().getSelectedItem());
 
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 Common.sale = addProduct(selectedProduct);
@@ -105,24 +100,14 @@ public class DetailProductCashierController implements Initializable {
         Sale sale = new Sale();
         sale.setBarcode(selectedProduct.getBarcode());
         sale.setName(selectedProduct.getName());
+        sale.setPurchasePrice(selectedProduct.getPurchasePrice());
         sale.setSellingPrice(selectedProduct.getSellingPrice());
         sale.setQuantity(1);
 
-        String subtotalString;
-        String[] selling = sale.getSellingPrice().split("\\.");
-        StringBuilder price = new StringBuilder();
-        for (String s : selling) {
-            price.append(s);
-        }
 
-        int sellingInt = Integer.parseInt(String.valueOf(price));
-        int subtotalStart = sellingInt * sale.getQuantity();
-
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator('.');
-        formatter.setDecimalFormatSymbols(symbols);
-        subtotalString = formatter.format(subtotalStart);
+        int sellingPriceInt = Helper.currencyToInt(sale.getSellingPrice());
+        int subtotalInt = sellingPriceInt * sale.getQuantity();
+        String subtotalString = Helper.currencyToString(subtotalInt);
 
         sale.setSubtotal(subtotalString);
 

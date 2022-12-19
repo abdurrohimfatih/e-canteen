@@ -20,7 +20,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" styleClass="border-pane" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecanteen.ecanteen.controllers.CategoryController">
    <top>
-      <AnchorPane prefHeight="70.0" prefWidth="1366.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="70.0" prefWidth="1366.0" style="-fx-background-color: #0c80d4;" BorderPane.alignment="CENTER">
          <HBox alignment="CENTER" layoutX="334.0" layoutY="15.0" spacing="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
             <MenuButton fx:id="masterMenuButton" alignment="CENTER" contentDisplay="CENTER" minHeight="40.0" mnemonicParsing="false" text="DATA MASTER" textAlignment="CENTER" textFill="WHITE">
               <items>
@@ -34,7 +34,7 @@
                   <Insets />
                </HBox.margin>
                <styleClass>
-                  <String fx:value="active" />
+                  <String fx:value="button-menu-active" />
                   <String fx:value="menu-button-menu" />
                </styleClass>
             </MenuButton>
@@ -58,7 +58,7 @@
                   <Insets />
                </HBox.margin>
             </Button>
-            <Button fx:id="customerMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="40.0" styleClass="button-menu" text="DATA PELANGGAN" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="customerMenuButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#customerButtonAction" prefHeight="40.0" styleClass="button-menu" text="DATA PELANGGAN" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -100,14 +100,6 @@
                   <Insets />
                </HBox.margin>
             </MenuButton>
-            <Button fx:id="topUpMenuButton" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="812.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" styleClass="button-menu" text="TOP UP" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Button>
          </HBox>
          <HBox alignment="CENTER" layoutX="1244.0" layoutY="15.0" spacing="10.0" AnchorPane.rightAnchor="15.0">
             <Button fx:id="settingsButton" alignment="CENTER" contentDisplay="CENTER" disable="true" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="40.0" styleClass="button-menu" textAlignment="CENTER">
@@ -130,7 +122,7 @@
       </AnchorPane>
    </top>
    <left>
-      <AnchorPane prefWidth="330.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefWidth="340.0" BorderPane.alignment="CENTER">
          <TextField fx:id="searchTextField" layoutX="15.0" layoutY="14.0" onKeyPressed="#searchTextFieldKeyPressed" promptText="Cari" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="16.0">
             <font>
                <Font size="16.0" />
@@ -156,7 +148,7 @@
             <TextField fx:id="nameTextField" GridPane.columnIndex="1" />
          </GridPane>
          <HBox alignment="CENTER" layoutX="20.0" layoutY="340.0" spacing="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
-            <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonAction" styleClass="add" text="TAMBAH" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="addButton" mnemonicParsing="false" defaultButton="true" onAction="#addButtonAction" styleClass="add" text="TAMBAH" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="13.0" />
                </font>
@@ -193,9 +185,9 @@
    </left>
    <center>
       <AnchorPane BorderPane.alignment="CENTER">
-         <TableView fx:id="categoryTableView" layoutX="34.0" layoutY="57.0" onMouseClicked="#categoryTableViewClicked" prefWidth="439.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+         <TableView fx:id="categoryTableView" layoutX="34.0" layoutY="57.0" onMouseClicked="#categoryTableViewClicked" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
             <columns>
-               <TableColumn fx:id="noTableColumn" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" sortable="false" styleClass="column-center" text="No" />
+               <TableColumn fx:id="noTableColumn" maxWidth="50.0" minWidth="50.0" prefWidth="-1.0" sortable="false" styleClass="column-center" text="#" />
                <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="Nama Kategori" />
                <TableColumn fx:id="productAmountTableColumn" prefWidth="75.0" styleClass="column-center" text="Jumlah Produk" />
                <TableColumn fx:id="dateCreatedTableColumn" prefWidth="75.0" styleClass="column-center" text="Tanggal Dibuat" />

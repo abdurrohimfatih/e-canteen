@@ -4,9 +4,10 @@ public class Sale {
     private Product product;
     private String barcode;
     private String name;
+    private int quantity;
+    private String purchasePrice;
     private String sellingPrice;
     private String subtotal;
-    private int quantity;
 
     public Product getProduct() {
         return product;
@@ -40,6 +41,14 @@ public class Sale {
         this.quantity = quantity;
     }
 
+    public String getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(String purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
     public String getSellingPrice() {
         return sellingPrice;
     }
@@ -47,22 +56,6 @@ public class Sale {
     public void setSellingPrice(String sellingPrice) {
         this.sellingPrice = sellingPrice;
     }
-
-//    public int getDiscount() {
-//        return discount;
-//    }
-//
-//    public void setDiscount(int discount) {
-//        this.discount = discount;
-//    }
-
-//    public String getDiscountAmount() {
-//        return discountAmount;
-//    }
-//
-//    public void setDiscountAmount(String discountAmount) {
-//        this.discountAmount = discountAmount;
-//    }
 
     public String getSubtotal() {
         return subtotal;

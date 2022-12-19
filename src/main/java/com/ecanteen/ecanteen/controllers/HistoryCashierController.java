@@ -1,10 +1,9 @@
 package com.ecanteen.ecanteen.controllers;
 
-import com.ecanteen.ecanteen.dao.IncomeDaoImpl;
-import com.ecanteen.ecanteen.entities.Income;
-import com.ecanteen.ecanteen.utils.Common;
+import com.ecanteen.ecanteen.dao.TransactionDaoImpl;
+import com.ecanteen.ecanteen.entities.Transaction;
 import com.ecanteen.ecanteen.utils.Helper;
-import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,51 +28,117 @@ public class HistoryCashierController implements Initializable {
     @FXML
     private Button historyMenuButton;
     @FXML
-    private Button topUpMenuButton;
+    private Button recapMenuButton;
     @FXML
     private Button settingsButton;
     @FXML
     private Button logoutButton;
     @FXML
-    private Label cashierNameLabel;
+    private TableView<Transaction> historyTableView;
     @FXML
-    private TableView<Income> incomeTableView;
+    private TableColumn<Transaction, String> idTableColumn;
     @FXML
-    private TableColumn<Income, Integer> noTableColumn;
+    private TableColumn<Transaction, String> customerTableColumn;
     @FXML
-    private TableColumn<Income, String> dateTableColumn;
+    private TableColumn<Transaction, String> totalTableColumn;
     @FXML
-    private TableColumn<Income, String> incomeTableColumn;
+    private TableColumn<Transaction, String> timeTableColumn;
+    @FXML
+    private TextField searchTextField;
+
+    private ObservableList<Transaction> transactions;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        IncomeDaoImpl incomeDao = new IncomeDaoImpl();
-        ObservableList<Income> incomes = FXCollections.observableArrayList();
-        cashierNameLabel.setText(cashierNameLabel.getText() + Common.user.getName().toUpperCase());
+        TransactionDaoImpl transactionDao = new TransactionDaoImpl();
+        transactions = FXCollections.observableArrayList();
 
         try {
-            incomes.addAll(incomeDao.fetchIncomeCashier());
+            transactions.addAll(transactionDao.fetchTransactionCashier());
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        incomeTableView.setPlaceholder(new Label("Tidak ada data."));
-        incomeTableView.setItems(incomes);
-        noTableColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(incomeTableView.getItems().indexOf(data.getValue()) + 1));
-        dateTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDate()));
-        incomeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIncome()));
+        historyTableView.setPlaceholder(new Label("Tidak ada data."));
+        historyTableView.setItems(transactions);
+        idTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId()));
+        customerTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCustomer().getName()));
+        totalTableColumn.setCellValueFactory(data -> new SimpleStringProperty(Helper.currencyToString(data.getValue().getTotal())));
+        timeTableColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTime()));
+
+        historyTableView.setRowFactory(historyTableView -> {
+            final TableRow<Transaction> row = new TableRow<>();
+            final ContextMenu contextMenu = new ContextMenu();
+            final MenuItem cancelMenuItem = new MenuItem("Batalkan Transaksi");
+            cancelMenuItem.setOnAction(actionEvent -> {
+                String content = "Anda yakin ingin membatalkan transaksi ini?" +
+                        "\n\nID Transaksi\t: " + row.getItem().getId() +
+                        "\nPembeli\t\t: " + row.getItem().getCustomer() +
+                        "\nTotal\t\t: " + Helper.currencyToString(row.getItem().getTotal()) +
+                        "\nWaktu\t\t: " + row.getItem().getTime();
+                ButtonType result = Helper.alert(Alert.AlertType.CONFIRMATION, content);
+                try {
+                    if (result == ButtonType.OK && transactionDao.deleteData(row.getItem()) == 1) {
+                        content = "Transaksi telah dibatalkan!" +
+                                "\nID Transaksi : " + row.getItem().getId();
+                        Helper.alert(Alert.AlertType.INFORMATION, content);
+                        historyTableView.getItems().remove(row.getItem());
+                    }
+                } catch (SQLException | ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                historyTableView.getSelectionModel().clearSelection();
+            });
+            contextMenu.getItems().add(cancelMenuItem);
+            row.contextMenuProperty().bind(
+                    Bindings.when(row.emptyProperty()).then((ContextMenu) null).otherwise(contextMenu)
+            );
+            return row;
+        });
     }
 
     @FXML
     private void containerPaneKeyReleased(KeyEvent keyEvent) throws IOException {
         if (keyEvent.getCode() == KeyCode.TAB && keyEvent.isShortcutDown()) {
-            Helper.changePage(transactionMenuButton, "Kasir - Transaksi", "transaction-cashier-view.fxml");
+            Helper.changePage(recapMenuButton, "Kasir - Rekap", "recap-cashier-view.fxml");
         }
+    }
+
+    @FXML
+    private void searchTextFieldKeyPressed(KeyEvent keyEvent) {
+        searchTextField.textProperty().addListener(observable -> {
+            if (searchTextField.textProperty().get().isEmpty()) {
+                historyTableView.setItems(transactions);
+                return;
+            }
+
+            ObservableList<Transaction> tableItems = FXCollections.observableArrayList();
+            ObservableList<TableColumn<Transaction, ?>> columns = historyTableView.getColumns();
+
+            for (Transaction value : transactions) {
+                for (int j = 0; j < 4; j++) {
+                    TableColumn<Transaction, ?> col = columns.get(j);
+                    String cellValue = String.valueOf(col.getCellData(value)).toLowerCase();
+
+                    if (cellValue.contains(searchTextField.getText().toLowerCase().trim())) {
+                        tableItems.add(value);
+                        break;
+                    }
+                }
+            }
+
+            historyTableView.setItems(tableItems);
+        });
     }
 
     @FXML
     private void transactionMenuButtonAction(ActionEvent actionEvent) throws IOException {
         Helper.changePage(transactionMenuButton, "Kasir - Transaksi", "transaction-cashier-view.fxml");
+    }
+
+    @FXML
+    private void recapMenuButtonAction(ActionEvent actionEvent) throws IOException {
+        Helper.changePage(recapMenuButton, "Kasir - Rekap", "recap-cashier-view.fxml");
     }
 
     @FXML
